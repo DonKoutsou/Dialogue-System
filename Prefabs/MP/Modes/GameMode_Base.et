@@ -1,0 +1,11 @@
+SCR_BaseGameMode {
+ ID "56B2B479C6B96951"
+ components {
+  SP_DialogueComponent "{5CEB33555F01AF14}" {
+   m_CharacterArchetypeList {
+    SP_CharacterArchetype "{5CF286005B6AA9EC}" : "{4118F9C0DD2C9AB7}Configs/CharacterTest.conf" {
+    }
+   }
+  }
+ }
+}
