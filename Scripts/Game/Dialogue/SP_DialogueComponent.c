@@ -1,7 +1,7 @@
-class SP_DialogueComponentClass: SCR_BaseGameModeComponentClass
+class SP_DialogueComponentClass: ScriptComponentClass
 {
 };
-class SP_DialogueComponent: SCR_BaseGameModeComponent
+class SP_DialogueComponent: ScriptComponent
 {
 	[Attribute( defvalue: "", desc: "Description of the task", category: "Task",  )]			//TODO: make config, memory
 	protected ref array<ref SP_CharacterArchetype> m_CharacterArchetypeList;
@@ -10,8 +10,9 @@ class SP_DialogueComponent: SCR_BaseGameModeComponent
 	protected BaseChatChannel m_ChatChannel;
 	protected int senderId;
 	protected string senderName;
-	protected SP_CharacterArchetype m_Character;
 	int DiagCount;
+	
+	
 	void SendText(IEntity pOwnerEntity, IEntity pUserEntity, BaseChatChannel ChatChannel, int CharID, int BranchID, bool MultipleChoise)
 	{
 		
@@ -29,7 +30,7 @@ class SP_DialogueComponent: SCR_BaseGameModeComponent
 		senderName = IDcomp.GetCharacterFullName();
 		SCR_ChatPanelManager.GetInstance().ShowDiagMessage(m_DialogTexttoshow, ChatChannel, senderId, senderName);
 	}
-	string GetActionName(int CharID, int BranchID,bool MultipleChoise)
+	string GetActionName(int CharID, int BranchID, bool MultipleChoise)
 	{
 		string m_sActionName;
 		
@@ -68,6 +69,18 @@ class SP_DialogueComponent: SCR_BaseGameModeComponent
 		}
 		return false;
 	}
-
+	override void EOnInit(IEntity owner)
+	{
+		foreach (SP_CharacterArchetype config: m_CharacterArchetypeList)
+		{
+			config.Init();
+		}
+	}
+	override void OnPostInit(IEntity owner)
+	{
+		super.OnPostInit(owner);
+		SetEventMask(owner, EntityEvent.INIT);
+		owner.SetFlags(EntityFlags.ACTIVE, true);
+	}
 	
 };

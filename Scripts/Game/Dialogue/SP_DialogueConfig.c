@@ -55,3 +55,8 @@ class SP_DialogueConfig: ScriptAndConfig
 	
 	
 };
+
+class SP_DialogueActionConfig : SP_DialogueConfig
+{
+    // Add extra functionality specific to this type of dialogue config
+}
