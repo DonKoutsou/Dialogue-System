@@ -5,14 +5,11 @@ class SP_CharacterArchetype
 	protected int m_sCharacterID;
 	[Attribute()]
 	protected ref array<ref SP_DialogueConfig> DialogueConfig;
+	[Attribute()]
+	protected ref array<ref int> CharacterDiagBranchStage;
 	
 	protected ref map<int, ref SP_DialogueConfig> DialogueConfigMap;
-    
-	
-	protected SP_DialogueComponent DiagComp;
-	protected int CharacterDiagStage = 1;
-	protected int CharacterDiagStageB1 = 1;
-	protected int CharacterDiagStageB2 = 1;
+    protected SP_DialogueComponent DiagComp;
 	
 	bool GetCharacterID()
 	{
@@ -42,118 +39,52 @@ class SP_CharacterArchetype
 
 	bool IncrementStage(int BranchID, int incrementamount, int MultipleChoise)
 	{	
-		switch	(BranchID)
+		SP_DialogueConfig config = GetDialogueConfig(CharacterDiagBranchStage[BranchID], BranchID, MultipleChoise);
+		if (config != null && config.IsInfluanceGlobal() == true)
 		{
-			case 0:
-			SP_DialogueConfig config = GetDialogueConfig(CharacterDiagStage, BranchID, MultipleChoise);
-			if (config != null && config.IsInfluanceGlobal() == true)
-			{
-				CharacterDiagStage += incrementamount;
-				CharacterDiagStageB1 += incrementamount;
-				CharacterDiagStageB2 += incrementamount;
-				break;
-			}
-			CharacterDiagStage += incrementamount;
-				break;
-			case 1:
-			SP_DialogueConfig config = GetDialogueConfig(CharacterDiagStageB1, BranchID, MultipleChoise);
-			if (config != null && config.IsInfluanceGlobal() == true)
-			{
-				CharacterDiagStage += incrementamount;
-				CharacterDiagStageB1 += incrementamount;
-				CharacterDiagStageB2 += incrementamount;
-				break;
-			}
-			CharacterDiagStageB1 += incrementamount;
-				break;
-			case 2:
-			SP_DialogueConfig config = GetDialogueConfig(CharacterDiagStageB2, BranchID, MultipleChoise);
-			if (config != null && config.IsInfluanceGlobal() == true)
-			{
-				CharacterDiagStage += incrementamount;
-				CharacterDiagStageB1 += incrementamount;
-				CharacterDiagStageB2 += incrementamount;
-				break;
-			}
-			CharacterDiagStageB2 += incrementamount;
-                break;
-		}	
+			for (int i, count = CharacterDiagBranchStage.Count(); i < count; i++)
+        	{	
+				CharacterDiagBranchStage[i] = CharacterDiagBranchStage[i] + 1;	
+        	}
+		}
+		else
+			CharacterDiagBranchStage[BranchID] = CharacterDiagBranchStage[BranchID] + 1;
 		return true;
 	}
 
 	int GetDiagStage(int branchId)
 	{
-		if (branchId == 0)
-			{
-				return CharacterDiagStage;
-			}
-		else if (branchId == 1)
-			{
-				return CharacterDiagStageB1;
-			}
-		else if (branchId == 2)
-			{
-				return CharacterDiagStageB2;
-			}
+		for (int i, count = CharacterDiagBranchStage.Count(); i < count; i++)
+		{
+			CharacterDiagBranchStage[branchId] = CharacterDiagBranchStage[branchId] + 1;
+
+		}
 		return 0;
 	}
 	string GetDialogueText(int BranchID, bool MultipleChoise)
 	{
 		string m_stexttoshow;
-		switch (BranchID)
-			{
-				case 0:
-					SP_DialogueConfig config = GetDialogueConfig(CharacterDiagStage, BranchID, MultipleChoise);
-					if (config != null)
-					{
-						m_stexttoshow = config.GetDialogueText(CharacterDiagStage);
-					}
-					break;
-				case 1:
-					SP_DialogueConfig config = GetDialogueConfig(CharacterDiagStageB1, BranchID, MultipleChoise);
-					if (config != null)
-					{
-						m_stexttoshow = config.GetDialogueText(CharacterDiagStageB1);
-					}
-					break;	
-				case 2:
-					SP_DialogueConfig config = GetDialogueConfig(CharacterDiagStageB2, BranchID, MultipleChoise);
-					if (config != null)
-					{
-						m_stexttoshow = config.GetDialogueText(CharacterDiagStageB2);
-					}
-					break;
-			}	
+		for (int i, count = CharacterDiagBranchStage.Count(); i < count; i++)
+		{
+			SP_DialogueConfig config = GetDialogueConfig(CharacterDiagBranchStage[BranchID], BranchID, MultipleChoise);
+			if (config != null)
+				{
+					m_stexttoshow = config.GetDialogueText(CharacterDiagBranchStage[BranchID]);
+				}
+		}	
 		return m_stexttoshow;
 	}
 	string GetActionTitle(int BranchID, bool MultipleChoise)
 	{
-		SP_DialogueConfig config;
 		string m_sActionTitle;
-		switch (BranchID)
-			{
-				case 0:
-					config = GetDialogueConfig(CharacterDiagStage, BranchID, MultipleChoise);
-					if (config != null)
-					{
-						m_sActionTitle = config.GetActionText(CharacterDiagStage);
-					}
-					break;
-				case 1:
-					config = GetDialogueConfig(CharacterDiagStageB1, BranchID, MultipleChoise);
-					if (config != null)
-					{
-						m_sActionTitle = config.GetActionText(CharacterDiagStageB1);
-					}
-					break;	
-				case 2:
-					config = GetDialogueConfig(CharacterDiagStageB2, BranchID, MultipleChoise);
-					if (config != null)
-					{
-						m_sActionTitle = config.GetActionText(CharacterDiagStageB2);
-					}
-					break;	
-			}
+		for (int i, count = CharacterDiagBranchStage.Count(); i < count; i++)
+		{
+			SP_DialogueConfig config = GetDialogueConfig(CharacterDiagBranchStage[BranchID], BranchID, MultipleChoise);
+			if (config != null)
+				{
+					m_sActionTitle = config.GetActionText(CharacterDiagBranchStage[BranchID]);
+				}
+		}
 		return m_sActionTitle;
 	}
 };
