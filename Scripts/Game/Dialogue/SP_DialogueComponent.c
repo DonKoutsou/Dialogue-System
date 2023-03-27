@@ -11,6 +11,7 @@ class SP_DialogueComponent: ScriptComponent
 	protected int senderId;
 	protected string senderName;
 	int DiagCount;
+	protected int GlobalDiagStage;
 	
 	
 	void SendText(IEntity pOwnerEntity, IEntity pUserEntity, BaseChatChannel ChatChannel, int CharID, int BranchID, bool MultipleChoise)
@@ -82,5 +83,4 @@ class SP_DialogueComponent: ScriptComponent
 		SetEventMask(owner, EntityEvent.INIT);
 		owner.SetFlags(EntityFlags.ACTIVE, true);
 	}
-	
 };

@@ -6,6 +6,8 @@ class SP_CharacterArchetype
 	[Attribute()]
 	protected ref array<ref SP_DialogueConfig> DialogueConfig;
 	[Attribute()]
+	protected ref array<ref SP_DialogueConfig> DialogueConfigGStage2;
+	[Attribute()]
 	protected ref array<ref int> CharacterDiagBranchStage;
 	
 	protected ref map<int, ref SP_DialogueConfig> DialogueConfigMap;
@@ -23,6 +25,7 @@ class SP_CharacterArchetype
 			int key = (DialogueConfig[i].GetDialogueStageKey() << 16) | (DialogueConfig[i].GetDialogueBranchKey() << 8) | DialogueConfig[i].IsthisMultiple();
         	DialogueConfigMap.Insert(key, DialogueConfig[i]);
         }
+		
 	}
 	
 	SP_DialogueConfig GetDialogueConfig(int StageKey, int BranchKey, bool MultiBool)

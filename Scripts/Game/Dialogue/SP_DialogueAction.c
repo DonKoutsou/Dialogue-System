@@ -9,12 +9,8 @@ class SP_DialogueAction : ScriptedUserAction
 	int ActionBranchID;
 	[Attribute()]
 	protected bool m_bMultipleChoise;
-	
-	protected int atcionstoshow;
 	protected SP_DialogueComponent DiagComp;
-	protected ActionsManagerComponent actmngr
 	protected SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
-	protected ref array<BaseUserAction> actions;
 
 	
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
@@ -22,23 +18,22 @@ class SP_DialogueAction : ScriptedUserAction
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		if (DiagComp)
 		{
+			//SendText function on dialogue component, sending all gathered data from action
 			DiagComp.SendText(pOwnerEntity, pUserEntity, m_ChatChannel, CharID, ActionBranchID, m_bMultipleChoise);
-			//sends text to chat bar, CharID, and Branch id are used to select correct dialogue config
+			//Makes sure to increment the stage of each branch
 			DiagComp.IncrementDiagStage(CharID, ActionBranchID, 1, m_bMultipleChoise);
-			//makes sure all the places where stage should be updated is updated
 		}
 		
 		return;
 	}
+	//if string that comes back from config is empty means that dialogue is finished so hide action
 	override bool CanBeShownScript(IEntity user)
 	{
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		string outName;
-		
 		if (DiagComp)
 		{
-			outName = DiagComp.GetActionName(CharID, ActionBranchID, m_bMultipleChoise);
-			
+			outName = DiagComp.GetActionName(CharID, ActionBranchID, m_bMultipleChoise);	
 		}
 		if (outName == STRING_EMPTY)
 			{
@@ -47,6 +42,7 @@ class SP_DialogueAction : ScriptedUserAction
 			else
 				return true;
 	}
+	//looks for the name of the action in the dialogue config
 	override event bool GetActionNameScript(out string outName)
 	{
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
