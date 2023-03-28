@@ -1,55 +1,33 @@
 SCR_ChimeraCharacter {
  ID "520EC961A090B1EE"
  components {
+  AIControlComponent "{520EA1D2DB109F34}" {
+   EnableAI 1
+  }
+  CharacterHeadAimingComponent "{520EA1D2F659CF99}" {
+   InitAiming 5.8 58.8
+   AimPivot PointInfo "{5990A4DF23E27E7E}" {
+    Offset 3.2006 0 0
+   }
+  }
+  CharacterPerceivableComponent "{566CCE2397E28600}" {
+   "Additional aim points" {
+    AimPoint "{5A1EF5F9AB26B70A}" {
+     AimPointPosition PointInfo "{5A1EF5F9A71AA60E}" {
+      Offset -1.238 0 0
+     }
+    }
+   }
+  }
   ActionsManagerComponent "{520EA1D2F659CE02}" {
    additionalActions {
-    SP_DialogueAction "{5CEB335761E7C89F}" {
-     ParentContextList {
-      "default"
-     }
-     UIInfo UIInfo "{5CEB335729A05288}" {
-      Name "Talk"
-     }
-     Duration 0.5
-     m_ChatChannel BaseChatChannel "{5CEB33572E008B75}" {
-      "Channel name" "Context"
-     }
-     CharID 0
-     ActionBranchID 1
+    SP_DialogueAction "{5CF893584759B1A5}" : "{47F45AFF6742655B}Configs/DialogueAction_1.conf" {
     }
-    SP_DialogueAction "{5CED1C3E5D606C80}" {
-     ParentContextList {
-      "default"
-     }
-     UIInfo UIInfo "{5CED1C3E5E568E6C}" {
-      Name "Talk"
-     }
-     Duration 0.5
-     CharID 0
-     ActionBranchID 2
+    SP_DialogueAction "{5CF893584671E1D7}" : "{191C73BCD8CFEB54}Configs/DialogueAction_2.conf" {
     }
-    SP_DialogueAction "{5CF28605AF1BADEE}" {
-     ParentContextList {
-      "default"
-     }
-     UIInfo UIInfo "{5CF286055AE6D052}" {
-      Name "Talk"
-     }
-     Duration 0.5
-     ActionBranchID 2
-     m_bMultipleChoise 1
+    SP_DialogueAction "{5CF8935846BDF9F5}" : "{ED143424D5128320}Configs/DialogueAction_3.conf" {
     }
-    SP_DialogueAction "{5CF2FCE08E8E1339}" {
-     ParentContextList {
-      "default"
-     }
-     UIInfo UIInfo "{5CF2FCE0B267B602}" {
-      Name "Talk"
-     }
-     Duration 0.5
-     m_ChatChannel BaseChatChannel "{5CF2FCE0A22134E5}" {
-     }
-     ActionBranchID 3
+    SP_DialogueAction "{5CF8935849F2F49A}" : "{A4CC213BA7D4F74A}Configs/DialogueAction_4.conf" {
     }
    }
   }

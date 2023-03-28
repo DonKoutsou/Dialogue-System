@@ -86,16 +86,6 @@ class SP_DialogueArchetype
 			CharacterDiagBranchStage[BranchID] = CharacterDiagBranchStage[BranchID] + 1;
 		return true;
 	}
-
-	int GetDiagStage(int branchId)
-	{
-		for (int i, count = CharacterDiagBranchStage.Count(); i < count; i++)
-		{
-			CharacterDiagBranchStage[branchId] = CharacterDiagBranchStage[branchId] + 1;
-
-		}
-		return 0;
-	}
 	string GetDialogueText(int BranchID, bool MultipleChoise)
 	{
 		string m_stexttoshow;

@@ -20,9 +20,9 @@ class SP_DialogueAction : ScriptedUserAction
 		if (DiagComp)
 		{
 			//SendText function on dialogue component, sending all gathered data from action
-			DiagComp.SendText(pOwnerEntity, pUserEntity, ActionBranchID, m_bMultipleChoise, CharID);
+			DiagComp.SendText(pOwnerEntity, ActionBranchID, m_bMultipleChoise, CharID);
 			//Makes sure to increment the stage of each branch
-			DiagComp.IncrementDiagStage(CharID, ActionBranchID, 1, m_bMultipleChoise);
+			DiagComp.IncrementDiagStage(pOwnerEntity, CharID, ActionBranchID, 1, m_bMultipleChoise);
 		}
 			
 		
