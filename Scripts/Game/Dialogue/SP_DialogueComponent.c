@@ -3,17 +3,17 @@ class SP_DialogueComponentClass: ScriptComponentClass
 };
 class SP_DialogueComponent: ScriptComponent
 {
-	[Attribute( defvalue: "", desc: "Description of the task", category: "Task",  )]			//TODO: make config, memory
+	[Attribute()]
 	protected ref array<ref SP_DialogueArchetype> m_CharacterArchetypeList;
 	[Attribute()]
 	ref BaseChatChannel m_ChatChannel;
 	
+	int DiagCount;
 	protected string m_DialogTexttoshow;
 	protected int senderId;
 	protected string senderName;
 	protected ECharacterRank senderRank;
 	protected FactionKey senderFaction;
-	int DiagCount;
 	protected int GlobalDiagStage;
 	protected SCR_CharacterIdentityComponent CharIDComp;
 	protected SCR_CharacterRankComponent CharRankComp;
@@ -96,6 +96,19 @@ class SP_DialogueComponent: ScriptComponent
 					DiagArch = m_CharacterArchetypeList[i];
 				}
 				break;
+			case 4:
+				FactComp = FactionAffiliationComponent.Cast(pOwnerEntity.FindComponent(FactionAffiliationComponent));
+				CharRankComp = SCR_CharacterRankComponent.Cast(pOwnerEntity.FindComponent(SCR_CharacterRankComponent));
+				if (FactComp && CharRankComp)
+				{
+					senderFaction = FactComp.GetAffiliatedFaction().GetFactionKey();
+					senderRank = CharRankComp.GetCharacterRank(pOwnerEntity);
+				}
+				if (m_CharacterArchetypeList[i].GetCharacterFaction() == senderFaction && m_CharacterArchetypeList[i].GetCharacterRank() == senderRank)
+				{
+					DiagArch = m_CharacterArchetypeList[i];
+				}
+				break;
 			}
 		}
 		return DiagArch;
@@ -106,5 +119,6 @@ enum EDiagIdentifier
 		OriginalCharID,
 		Name,
 		Rank,
-		"FactionKey"
+		"FactionKey",
+		"Faction and Rank"
 	};

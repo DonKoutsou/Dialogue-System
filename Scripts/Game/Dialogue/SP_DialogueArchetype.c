@@ -2,7 +2,7 @@
 class SP_DialogueArchetype
 {
 	[Attribute("50", UIWidgets.ComboBox, "ID of what type of identifier is going to be used", "", ParamEnumArray.FromEnum(EDiagIdentifier) )]
-	protected EDiagIdentifier m_sDiagID;
+	protected EDiagIdentifier DialogueIdentifier;
 	
 	[Attribute()]
 	protected int m_sCharacterID;
@@ -15,42 +15,47 @@ class SP_DialogueArchetype
 	
 	[Attribute("50", UIWidgets.ComboBox, "Specify a rank if you want to use character rank as identifier", "", ParamEnumArray.FromEnum(ECharacterRank) )]
 	protected ECharacterRank m_sCharacterRank;
-	
+
 	[Attribute()]
 	protected ref array<ref SP_DialogueConfig> DialogueConfig;
 	
 	[Attribute()]
-	protected ref array<ref SP_DialogueConfig> DialogueConfigGStage2;
-	
-	[Attribute()]
 	protected ref array<ref int> CharacterDiagBranchStage;
+	
+	//------------------------------------------------------------------//
 	
 	protected ref map<int, ref SP_DialogueConfig> DialogueConfigMap;
     protected SP_DialogueComponent DiagComp;
 	
+	//------------------------------------------------------------------//
+	
 	EDiagIdentifier GetIdentifier()
 	{
-		return m_sDiagID;
+		return DialogueIdentifier;
 	}
+	//------------------------------------------------------------------//
 	bool GetCharacterID()
 	{
 		return m_sCharacterID;
 	}
+	//------------------------------------------------------------------//
 	string GetCharacterName()
 	{
 		return m_sCharacterName;
 	}
+	//------------------------------------------------------------------//
 	FactionKey GetCharacterFaction()
 	{
 		return m_sCharacterFaction;
 	}
+	//------------------------------------------------------------------//
 	ECharacterRank GetCharacterRank()
 	{
 		return m_sCharacterRank;
 	}
-	
+	//------------------------------------------------------------------//
 	void Init()
-	{	
+	{
 		DialogueConfigMap = new map<int, ref SP_DialogueConfig>();
 		for (int i, count = DialogueConfig.Count(); i < count; i++)
         {
@@ -59,7 +64,7 @@ class SP_DialogueArchetype
         }
 		
 	}
-	
+	//------------------------------------------------------------------//
 	SP_DialogueConfig GetDialogueConfig(int StageKey, int BranchKey, bool MultiBool)
     {
 		int key = (StageKey << 16) | (BranchKey << 8) | MultiBool;
@@ -71,7 +76,7 @@ class SP_DialogueArchetype
 		
         return config;
     }
-
+	//------------------------------------------------------------------//
 	bool IncrementStage(int BranchID, int incrementamount, int MultipleChoise)
 	{	
 		SP_DialogueConfig config = GetDialogueConfig(CharacterDiagBranchStage[BranchID], BranchID, MultipleChoise);
@@ -86,6 +91,7 @@ class SP_DialogueArchetype
 			CharacterDiagBranchStage[BranchID] = CharacterDiagBranchStage[BranchID] + 1;
 		return true;
 	}
+	//------------------------------------------------------------------//
 	string GetDialogueText(int BranchID, bool MultipleChoise)
 	{
 		string m_stexttoshow;
@@ -99,6 +105,7 @@ class SP_DialogueArchetype
 		}	
 		return m_stexttoshow;
 	}
+	//------------------------------------------------------------------//
 	string GetActionTitle(int BranchID, bool MultipleChoise)
 	{
 		string m_sActionTitle;
@@ -112,5 +119,4 @@ class SP_DialogueArchetype
 		}
 		return m_sActionTitle;
 	}
-	
 };

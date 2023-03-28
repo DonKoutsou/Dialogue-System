@@ -25,9 +25,9 @@ SCR_ChimeraCharacter {
     }
     SP_DialogueAction "{5CF893584671E1D7}" : "{191C73BCD8CFEB54}Configs/DialogueAction_2.conf" {
     }
-    SP_DialogueAction "{5CF8935846BDF9F5}" : "{ED143424D5128320}Configs/DialogueAction_3.conf" {
+    SP_DialogueAction "{5CF8DB21B81EF33E}" : "{ED143424D5128320}Configs/DialogueAction_3.conf" {
     }
-    SP_DialogueAction "{5CF8935849F2F49A}" : "{A4CC213BA7D4F74A}Configs/DialogueAction_4.conf" {
+    SP_DialogueAction "{5CF8DB21BB7E91B7}" : "{A4CC213BA7D4F74A}Configs/DialogueAction_4.conf" {
     }
    }
   }
