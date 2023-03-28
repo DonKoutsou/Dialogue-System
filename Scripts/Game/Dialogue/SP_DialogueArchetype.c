@@ -1,22 +1,54 @@
 [BaseContainerProps(configRoot: true)]
-class SP_CharacterArchetype
+class SP_DialogueArchetype
 {
+	[Attribute("50", UIWidgets.ComboBox, "ID of what type of identifier is going to be used", "", ParamEnumArray.FromEnum(EDiagIdentifier) )]
+	protected EDiagIdentifier m_sDiagID;
+	
 	[Attribute()]
 	protected int m_sCharacterID;
+	
+	[Attribute()]
+	protected string m_sCharacterName;
+	
+	[Attribute()]
+	protected FactionKey m_sCharacterFaction;
+	
+	[Attribute("50", UIWidgets.ComboBox, "Specify a rank if you want to use character rank as identifier", "", ParamEnumArray.FromEnum(ECharacterRank) )]
+	protected ECharacterRank m_sCharacterRank;
+	
 	[Attribute()]
 	protected ref array<ref SP_DialogueConfig> DialogueConfig;
+	
 	[Attribute()]
 	protected ref array<ref SP_DialogueConfig> DialogueConfigGStage2;
+	
 	[Attribute()]
 	protected ref array<ref int> CharacterDiagBranchStage;
 	
 	protected ref map<int, ref SP_DialogueConfig> DialogueConfigMap;
     protected SP_DialogueComponent DiagComp;
 	
+	EDiagIdentifier GetIdentifier()
+	{
+		return m_sDiagID;
+	}
 	bool GetCharacterID()
 	{
 		return m_sCharacterID;
 	}
+	string GetCharacterName()
+	{
+		return m_sCharacterName;
+	}
+	FactionKey GetCharacterFaction()
+	{
+		return m_sCharacterFaction;
+	}
+	ECharacterRank GetCharacterRank()
+	{
+		return m_sCharacterRank;
+	}
+	
 	void Init()
 	{	
 		DialogueConfigMap = new map<int, ref SP_DialogueConfig>();
@@ -90,4 +122,5 @@ class SP_CharacterArchetype
 		}
 		return m_sActionTitle;
 	}
+	
 };

@@ -1,15 +1,16 @@
-[BaseContainerProps(), SP_CharacterArchetype()]
+[BaseContainerProps(), SP_DialogueArchetype()]
 class SP_DialogueConfig: ScriptAndConfig
 {
 	
-	[Attribute( defvalue: "", desc: "DialogueStageKey, defines at wich stage of the dialogue this config will be used", category: "Dialogue",  )]			//TODO: make config, memory
-	protected int m_iDialogueStageKey;
+	
 	[Attribute( defvalue: "", desc: "ActionText", category: "Dialogue",  )]
 	protected string m_sActionText;
 	[Attribute( defvalue: "", desc: "DialogueText", category: "Dialogue",  )]
 	protected string m_sDialogueText;
 	[Attribute( defvalue: "", desc: "DialogueBranchKey, Key used to define wich action should use this config", category: "Dialogue",  )]			//TODO: make config, memory
 	protected int m_iDialogueBranchKey;
+	[Attribute( defvalue: "", desc: "DialogueStageKey, defines at wich stage of the dialogue this config will be used", category: "Dialogue",  )]			//TODO: make config, memory
+	protected int m_iDialogueStageKey;
 	[Attribute()]
 	protected bool m_bMultipleChoise;
 	[Attribute()]

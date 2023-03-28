@@ -4,45 +4,107 @@ class SP_DialogueComponentClass: ScriptComponentClass
 class SP_DialogueComponent: ScriptComponent
 {
 	[Attribute( defvalue: "", desc: "Description of the task", category: "Task",  )]			//TODO: make config, memory
-	protected ref array<ref SP_CharacterArchetype> m_CharacterArchetypeList;
+	protected ref array<ref SP_DialogueArchetype> m_CharacterArchetypeList;
+	[Attribute()]
+	ref BaseChatChannel m_ChatChannel;
 	
 	protected string m_DialogTexttoshow;
-	protected BaseChatChannel m_ChatChannel;
 	protected int senderId;
 	protected string senderName;
+	protected ECharacterRank senderRank;
+	protected FactionKey senderFaction;
 	int DiagCount;
 	protected int GlobalDiagStage;
+	protected SCR_CharacterIdentityComponent CharIDComp;
+	protected SCR_CharacterRankComponent CharRankComp;
+	protected FactionAffiliationComponent FactComp;
+	protected EDiagIdentifier diagid;
 	
-	
-	void SendText(IEntity pOwnerEntity, IEntity pUserEntity, BaseChatChannel ChatChannel, int CharID, int BranchID, bool MultipleChoise)
+	void SendText(IEntity pOwnerEntity, IEntity pUserEntity, int BranchID, bool MultipleChoise, int CharID)
 	{
-		
 		for (int i, count = m_CharacterArchetypeList.Count(); i < count; i++)
 		{
-			if (m_CharacterArchetypeList[i].GetCharacterID() == CharID)
-			{
-					m_DialogTexttoshow = m_CharacterArchetypeList[i].GetDialogueText(BranchID, MultipleChoise);
-			}
 			
+			diagid = m_CharacterArchetypeList[i].GetIdentifier();
+			switch (diagid) 
+			{
+			case 0:
+				if (m_CharacterArchetypeList[i].GetCharacterID() == CharID)
+				{
+					m_DialogTexttoshow = m_CharacterArchetypeList[i].GetDialogueText(BranchID, MultipleChoise);
+				}
+				break;
+		    case 1:
+				CharIDComp = SCR_CharacterIdentityComponent.Cast(pOwnerEntity.FindComponent(SCR_CharacterIdentityComponent));
+				senderName = CharIDComp.GetCharacterFullName();
+				if (m_CharacterArchetypeList[i].GetCharacterName() == senderName)
+				{
+					m_DialogTexttoshow = m_CharacterArchetypeList[i].GetDialogueText(BranchID, MultipleChoise);
+				}
+				break;
+		    case 2:
+				CharRankComp = SCR_CharacterRankComponent.Cast(pOwnerEntity.FindComponent(SCR_CharacterRankComponent));
+				senderRank = CharRankComp.GetCharacterRank(pOwnerEntity);
+				if (m_CharacterArchetypeList[i].GetCharacterRank() == senderRank)
+				{
+					m_DialogTexttoshow = m_CharacterArchetypeList[i].GetDialogueText(BranchID, MultipleChoise);
+				}
+				break;	
+			case 3:
+				FactComp = FactionAffiliationComponent.Cast(pOwnerEntity.FindComponent(FactionAffiliationComponent));
+				senderFaction = FactComp.GetAffiliatedFaction().GetFactionKey();
+				if (m_CharacterArchetypeList[i].GetCharacterFaction() == senderFaction)
+				{
+					m_DialogTexttoshow = m_CharacterArchetypeList[i].GetDialogueText(BranchID, MultipleChoise);
+				}
+				break;
+			}
 		}
-		
-		SCR_CharacterIdentityComponent IDcomp = SCR_CharacterIdentityComponent.Cast(pOwnerEntity.FindComponent(SCR_CharacterIdentityComponent));
-		
-		senderName = IDcomp.GetCharacterFullName();
-		SCR_ChatPanelManager.GetInstance().ShowDiagMessage(m_DialogTexttoshow, ChatChannel, senderId, senderName);
+		SCR_ChatPanelManager.GetInstance().ShowDiagMessage(m_DialogTexttoshow, m_ChatChannel, senderId, senderName);
 	}
-	string GetActionName(int CharID, int BranchID, bool MultipleChoise)
+	string GetActionName(int CharID, int BranchID, bool MultipleChoise, IEntity Owner)
 	{
 		string m_sActionName;
-		
 		for (int i, count = m_CharacterArchetypeList.Count(); i < count; i++)
 		{
-			if (m_CharacterArchetypeList[i].GetCharacterID() == CharID)
+			diagid = m_CharacterArchetypeList[i].GetIdentifier();
+			switch (diagid) 
 			{
-				m_sActionName = m_CharacterArchetypeList[i].GetActionTitle(BranchID, MultipleChoise);
+				case 0:
+					if (m_CharacterArchetypeList[i].GetCharacterID() == CharID)
+					{
+						m_sActionName = m_CharacterArchetypeList[i].GetActionTitle(BranchID, MultipleChoise);
+					}
+					break;
+			    case 1:
+					CharIDComp = SCR_CharacterIdentityComponent.Cast(Owner.FindComponent(SCR_CharacterIdentityComponent));
+					senderName = CharIDComp.GetCharacterFullName();
+					if (m_CharacterArchetypeList[i].GetCharacterName() == senderName)
+					{
+						m_sActionName = m_CharacterArchetypeList[i].GetActionTitle(BranchID, MultipleChoise);
+					}
+					break;
+			    case 2:
+					CharRankComp = SCR_CharacterRankComponent.Cast(Owner.FindComponent(SCR_CharacterRankComponent));
+					senderRank = CharRankComp.GetCharacterRank(Owner);
+					if (m_CharacterArchetypeList[i].GetCharacterRank() == senderRank)
+					{
+						m_sActionName = m_CharacterArchetypeList[i].GetActionTitle(BranchID, MultipleChoise);
+					}
+					break;	
+				case 3:
+					FactComp = FactionAffiliationComponent.Cast(Owner.FindComponent(FactionAffiliationComponent));
+					senderFaction = FactComp.GetAffiliatedFaction().GetFactionKey();
+					if (m_CharacterArchetypeList[i].GetCharacterFaction() == senderFaction)
+					{
+						m_sActionName = m_CharacterArchetypeList[i].GetActionTitle(BranchID, MultipleChoise);
+					}
+					break;
 			}
+			return m_sActionName;
 		}
-		return m_sActionName;
+		return STRING_EMPTY;
+	
 	}
 	int GetDiagStage(int CharID, int BrachiD)
 	{
@@ -72,7 +134,8 @@ class SP_DialogueComponent: ScriptComponent
 	}
 	override void EOnInit(IEntity owner)
 	{
-		foreach (SP_CharacterArchetype config: m_CharacterArchetypeList)
+		
+		foreach (SP_DialogueArchetype config: m_CharacterArchetypeList)
 		{
 			config.Init();
 		}
@@ -84,3 +147,10 @@ class SP_DialogueComponent: ScriptComponent
 		owner.SetFlags(EntityFlags.ACTIVE, true);
 	}
 };
+enum EDiagIdentifier
+	{
+		OriginalCharID,
+		Name,
+		Rank,
+		FactionK
+	};

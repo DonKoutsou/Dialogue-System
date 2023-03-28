@@ -1,8 +1,7 @@
 class SP_DialogueAction : ScriptedUserAction
 {	
 
-	[Attribute()]
-	ref BaseChatChannel m_ChatChannel;
+	
 	[Attribute()]
 	int CharID;
 	[Attribute()]
@@ -11,18 +10,21 @@ class SP_DialogueAction : ScriptedUserAction
 	protected bool m_bMultipleChoise;
 	protected SP_DialogueComponent DiagComp;
 	protected SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
-
+	IEntity Owner;
+	
 	
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		
 		if (DiagComp)
 		{
 			//SendText function on dialogue component, sending all gathered data from action
-			DiagComp.SendText(pOwnerEntity, pUserEntity, m_ChatChannel, CharID, ActionBranchID, m_bMultipleChoise);
+			DiagComp.SendText(pOwnerEntity, pUserEntity, ActionBranchID, m_bMultipleChoise, CharID);
 			//Makes sure to increment the stage of each branch
 			DiagComp.IncrementDiagStage(CharID, ActionBranchID, 1, m_bMultipleChoise);
 		}
+			
 		
 		return;
 	}
@@ -33,7 +35,7 @@ class SP_DialogueAction : ScriptedUserAction
 		string outName;
 		if (DiagComp)
 		{
-			outName = DiagComp.GetActionName(CharID, ActionBranchID, m_bMultipleChoise);	
+			outName = DiagComp.GetActionName(CharID, ActionBranchID, m_bMultipleChoise, Owner);	
 		}
 		if (outName == STRING_EMPTY)
 			{
@@ -49,7 +51,7 @@ class SP_DialogueAction : ScriptedUserAction
 		
 		if (DiagComp)
 		{
-			outName = DiagComp.GetActionName(CharID, ActionBranchID, m_bMultipleChoise);
+			outName = DiagComp.GetActionName(CharID, ActionBranchID, m_bMultipleChoise, Owner);
 			
 		}
 		if (outName == STRING_EMPTY)
@@ -59,6 +61,11 @@ class SP_DialogueAction : ScriptedUserAction
 			else
 				return true;
 	}
+	override event void Init(IEntity pOwnerEntity, GenericComponent pManagerComponent)
+	{
+		Owner = IEntity.Cast(GetOwner());
+	}
+	
 	
 	
 }

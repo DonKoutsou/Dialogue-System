@@ -56,7 +56,7 @@ class SP_DialogueRadialAction : SCR_EditorActionRadialEntry
 		
 		if (DiagComp)
 		{
-			outName = DiagComp.GetActionName(CharID, ActionBranchID, m_bMultipleChoise);
+		//	outName = DiagComp.GetActionName(CharID, ActionBranchID, m_bMultipleChoise);
 			
 		}
 		if (outName == STRING_EMPTY)
@@ -72,7 +72,7 @@ class SP_DialogueRadialAction : SCR_EditorActionRadialEntry
 		
 		if (DiagComp)
 		{
-			outName = DiagComp.GetActionName(CharID, ActionBranchID, m_bMultipleChoise);
+	//		outName = DiagComp.GetActionName(CharID, ActionBranchID, m_bMultipleChoise);
 			
 		}
 		if (outName == STRING_EMPTY)
