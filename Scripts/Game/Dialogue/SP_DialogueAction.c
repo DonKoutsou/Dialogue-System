@@ -1,12 +1,10 @@
 class SP_DialogueAction : ScriptedUserAction
 {
 	//------------------------------------------------------------------//
-	[Attribute()]
-	int CharID;
-	[Attribute()]
+	[Attribute(defvalue: "0", desc: "Branch wich this action belongs to. Configs with same branch will be used on this action.", category: "Dialogue")]
 	int ActionBranchID;
-	[Attribute()]
-	protected bool m_bMultipleChoise;
+	[Attribute(defvalue: "1", desc: "Increment Amount, by how much should stage be progressed", category: "Dialogue")]
+	protected int m_bIncrementAmount;
 	//------------------------------------------------------------------//
 	protected SP_DialogueComponent DiagComp;
 	protected SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
@@ -15,16 +13,11 @@ class SP_DialogueAction : ScriptedUserAction
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
-		
 		if (DiagComp)
 		{
-			//SendText function on dialogue component, sending all gathered data from action
-			DiagComp.SendText(pOwnerEntity, ActionBranchID, m_bMultipleChoise, CharID);
-			//Makes sure to increment the stage of each branch
-			DiagComp.IncrementDiagStage(pOwnerEntity, CharID, ActionBranchID, 1, m_bMultipleChoise);
+			//DoDialogue function on dialogue component, sending all gathered data from action
+			DiagComp.DoDialogue(pOwnerEntity, pUserEntity, ActionBranchID, m_bIncrementAmount);
 		}
-			
-		
 		return;
 	}
 	//------------------------------------------------------------------//
@@ -35,7 +28,7 @@ class SP_DialogueAction : ScriptedUserAction
 		string outName;
 		if (DiagComp)
 		{
-			outName = DiagComp.GetActionName(CharID, ActionBranchID, m_bMultipleChoise, Owner);	
+			outName = DiagComp.GetActionName(ActionBranchID, Owner);	
 		}
 		if (outName == STRING_EMPTY)
 			{
@@ -50,9 +43,10 @@ class SP_DialogueAction : ScriptedUserAction
 	{
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		
+		
 		if (DiagComp)
 		{
-			outName = DiagComp.GetActionName(CharID, ActionBranchID, m_bMultipleChoise, Owner);
+			outName = DiagComp.GetActionName(ActionBranchID, Owner);
 			
 		}
 		if (outName == STRING_EMPTY)
@@ -66,5 +60,10 @@ class SP_DialogueAction : ScriptedUserAction
 	override event void Init(IEntity pOwnerEntity, GenericComponent pManagerComponent)
 	{
 		Owner = IEntity.Cast(GetOwner());
-	}	
+	}
+	override event void OnActionCanceled(IEntity pOwnerEntity, IEntity pUserEntity)
+	{
+		string feasf = STRING_EMPTY;
+		return;
+	}
 }

@@ -1,10 +1,77 @@
 SCR_BaseGameMode {
  ID "56B2B479C6B96951"
  components {
+  SCR_RadialMenuComponent "{5AA8AA57BE70F20E}" {
+   Enabled 0
+  }
+  SCR_RadialMenuComponent "{5CFEC98AE9C4E7EA}" {
+   m_pRadialMenu SP_RadialMenuDiags "{5CFEC9823A7C6814}" {
+    m_DialogueConfig SP_Dialogues "{5CFEC99D0735E0D1}" {
+     m_aDialogueCategories {
+      SP_DiagMenuCategory "{5CFEC99D0D41AFAB}" {
+       m_sDiagCategoryName "Diags"
+       m_aDiagCategoryContent {
+        SCR_DialogueSelectionMenuEntry "{5CFEC992048E4CF7}" {
+         m_sActionText "Speak"
+         m_sDialogueText "I spoke"
+         m_iDialogueBranchKey 2
+        }
+        SCR_DialogueSelectionMenuEntry "{5D02C3E784F01626}" {
+         m_sActionText "Speak1"
+         m_sDialogueText "I spoke 1"
+         m_iDialogueBranchKey 2
+         EntryID 1
+        }
+        SCR_DialogueSelectionMenuEntry "{5D02C3F0F7D377BD}" {
+         m_sActionText "Exit"
+         m_sDialogueText "I spoke 1"
+         m_iDialogueBranchKey 0
+         IsExit 1
+        }
+       }
+      }
+     }
+    }
+   }
+   m_RadialMenuVisuals SP_RadialMenuVisualsDialogues "{5CFEC99397EB2AC2}" {
+    m_LayoutPath "{C967377E3D96107D}UI/layouts/Common/RadialMenu/RadialMenuVisuals.layout"
+    m_eLayer ALWAYS_TOP
+    m_rElementLayoutPath "{95123068DC2C2ECF}UI/layouts/Common/RadialMenu/radialElementIcon.layout"
+    m_rBorderLinePath "{639717DA6610F1C1}UI/layouts/Common/RadialMenu/RadialMenuBorderLine.layout"
+    m_sPageIndicationLayout "{595FE46A06BE9DB3}UI/layouts/Common/RadialMenu/MenuPageIndication.layout"
+    m_sPageIconsSet "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
+    m_sTxtAction "TxtAction"
+    m_sTxtItemName "TxtItemName"
+    m_sImageSelector "ImgSelector"
+    m_sSelectLast "SelectLast"
+    m_fSizeMenu 660
+    m_fSizeEntries 660
+    m_fRadiusEntries 250
+    m_fSelectorDistance 185
+   }
+   m_bUseCategories 0
+   m_bUsingLeftStick 0
+   m_bEvenlyPlacedEntries 1
+   m_bShowEmptyEntries 0
+  }
   SP_DialogueComponent "{5CEB33555F01AF14}" {
    m_CharacterArchetypeList {
-    SP_CharacterArchetype "{5CF286005B6AA9EC}" : "{4118F9C0DD2C9AB7}Configs/CharacterTest.conf" {
+    SP_DialogueArchetype "{5CFEB06EA69171AD}" : "{4118F9C0DD2C9AB7}Configs/CharacterTest.conf" {
+     DialogueConfig {
+      SP_DialogueConfig "{5CF28600D2268CCF}" {
+       m_iDialogueStageKey 1
+      }
+      SP_DialogueConfig "{5CF28600D56F5C4F}" {
+       m_iDialogueStageKey 2
+      }
+      SP_DialogueConfig "{5CF2FCE0E551A1AE}" {
+       m_iDialogueStageKey 1
+      }
+     }
     }
+   }
+   m_ChatChannel LocalChatChannel "{5CFEB06EA8A2683A}" {
+    "Channel name" "Context"
    }
   }
  }

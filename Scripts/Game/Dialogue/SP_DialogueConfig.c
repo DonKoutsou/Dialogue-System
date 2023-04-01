@@ -1,19 +1,26 @@
-[BaseContainerProps(), SP_DialogueArchetype()]
+//Dialogue Configuration Entry, contains dialogue and action name for specified branch and stage.
+//If the dialogue branch ID and stage ID match this dialogue it should show up on the specified character archetype.
+[BaseContainerProps(configRoot: true)]
 class SP_DialogueConfig: ScriptAndConfig
 {
 	//------------------------------------------------------------------//
-	[Attribute( defvalue: "", desc: "ActionText", category: "Dialogue",  )]
+	//Action title
+	[Attribute(defvalue: "", desc: "ActionText", category: "Dialogue")]
 	protected string m_sActionText;
-	[Attribute( defvalue: "", desc: "DialogueText", category: "Dialogue",  )]
+	//Dialogue text that's going to be sent to chat
+	[Attribute(defvalue: "", desc: "DialogueText", category: "Dialogue")]
 	protected string m_sDialogueText;
+	//Branch that this action should show up in
 	[Attribute( defvalue: "", desc: "DialogueBranchKey, Key used to define wich action should use this config", category: "Dialogue",  )]			//TODO: make config, memory
 	protected int m_iDialogueBranchKey;
-	[Attribute( defvalue: "", desc: "DialogueStageKey, defines at wich stage of the dialogue this config will be used", category: "Dialogue",  )]			//TODO: make config, memory
+	//Stage at wich this configuration becomes relevant
+	[Attribute(defvalue: "", desc: "DialogueStageKey, defines at wich stage of the dialogue this config will be used", category: "Dialogue",  )]			//TODO: make config, memory
 	protected int m_iDialogueStageKey;
-	[Attribute()]
-	protected bool m_bMultipleChoise;
-	[Attribute()]
+	//if this configuration should progress the stage of all the branches on their character archetype
+	[Attribute(defvalue: "", desc: "Should this dialogue progress all branches when executed?", category: "Dialogue",  )]
 	protected bool m_bGlobalStageInfluance;
+	[Attribute()]
+	protected ref SP_RadialChoiceConfig m_RadialChoiceConfig;
 	//------------------------------------------------------------------//
 	int GetDialogueStageKey()
 	{
@@ -36,17 +43,21 @@ class SP_DialogueConfig: ScriptAndConfig
 	{
 		string actiontext;
 		actiontext = m_sActionText;
-		
 		return actiontext;
-	}
-	//------------------------------------------------------------------//
-	bool IsthisMultiple()
-	{
-		return m_bMultipleChoise;
 	}
 	//------------------------------------------------------------------//
 	bool IsInfluanceGlobal()
 	{
 		return m_bGlobalStageInfluance;
+	}
+	SP_RadialChoiceConfig GetRadialChoiceConfig()
+	{
+		if(m_RadialChoiceConfig == null)
+		{
+			return null;
+		}
+		else
+			return m_RadialChoiceConfig;
+		
 	}
 };

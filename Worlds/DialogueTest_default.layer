@@ -1,0 +1,20 @@
+SCR_AIWorld : "{E0A05C76552E7F58}Prefabs/AI/SCR_AIWorld.et" {
+ coords 132.245 1.001 131.366
+}
+SCR_ChimeraCharacter : "{37578B1666981FCE}Prefabs/Characters/Core/Character_Base.et" {
+ components {
+  SP_DialogueComponent "{5D026EF812B31454}" {
+   m_CharacterArchetypeList {
+    SP_DialogueArchetype "{5D026EF81B02CE8A}" : "{4118F9C0DD2C9AB7}Configs/CharacterTest.conf" {
+    }
+   }
+   m_ChatChannel LocalChatChannel "{5D026EF81A0F7134}" {
+    "Channel name" "Context"
+   }
+  }
+ }
+ coords 129.516 1.001 132.18
+}
+Vehicle Ural1 : "{4597626AF36C0858}Prefabs/Vehicles/Wheeled/Ural4320/Ural4320.et" {
+ coords 135.339 1.001 140.098
+}
