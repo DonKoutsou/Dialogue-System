@@ -22,8 +22,8 @@ class SP_DialogueComponent: ScriptComponent
 	IEntity TalkingCharacter;
 	//----------------------------------------------------------------------------------------------------------------//
 	//Dialogue System
-	protected EDiagIdentifier diagid;
-	protected ref map<int, ref SP_DialogueArchetype> DialogueArchetypeMap;
+	protected EArchetypeIdentifier Archid;
+	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;
     protected SP_DialogueArchetype DiagArch;
 	protected string m_DialogTexttoshow;
 	//Stage state???
@@ -34,12 +34,21 @@ class SP_DialogueComponent: ScriptComponent
 	SP_DialogueConfig DialogueConfig;
 	SP_RadialChoiceConfig RadialConfig;
 	
+	
 	//----------------------------------------------------------------------------------------------------------------//
+	//DoDialogue used in the dialogue action, initiates the whole process and doese all the required operations(incrementing stage, sending text)
 	void DoDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount)
 	{
+		//Get name of character that will send message to chat
 		senderName = GetCharacterName(Character);
-		DiagArch = GetArchetype(Character);
+		int senderID = Character.GetID();
+		//Find our Dialogue Archetype by matching it to characters info
+		DiagArch = LocateCharacterArchetype(Character);
+		//Get dialogue text from Archetype
 		m_DialogTexttoshow = DiagArch.GetDialogueText(BranchID);
+		
+		//Check if dialogue config has SP_RadialChoiceConfig atatched to it, meaning that is should launch the radial menu isntead of completing ActionsTuple
+		//Makes sure to return before incrementing stage to avoid changing wich config is used while in radial menu
 		if(DiagArch.GetDialogueConfigLite(BranchID) && DiagArch.CheckIfDialogueBranches(DiagArch.GetDialogueConfigLite(BranchID)) == true)
 		{
 			if (RadMenuDiags.IsOpen() == false)
@@ -58,13 +67,14 @@ class SP_DialogueComponent: ScriptComponent
 			
 	}
 	//----------------------------------------------------------------------------------------------------------------//
+	//DoDialogue duplicate used for radial meny entries
 	void DoRadialDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount, int EntryID)
 	{
 		//Get name of character that will send message to chat
 		senderName = GetCharacterName(Character);
 		
 		//Find our Diialogue Archetype by matching it to characters info
-		DiagArch = GetArchetype(Character);
+		DiagArch = LocateCharacterArchetype(Character);
 		
 		//Get Dialogue config with same branch id. Gives you config that has same stage id as current stage
 		DialogueConfig = DiagArch.GetDialogueConfigLite(BranchID);
@@ -95,6 +105,7 @@ class SP_DialogueComponent: ScriptComponent
 		
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderId, senderName);
 	}
+	//----------------------------------------------------------------------------------------------------------------//
 	// Used in action to send the text to chat
 	void SendText(string Text, BaseChatChannel Chanell, int SenderID, string SenderName)
 	{
@@ -105,7 +116,7 @@ class SP_DialogueComponent: ScriptComponent
 	string GetActionName(int BranchID, IEntity Owner)
 	{
 		string m_sActionName;
-		DiagArch = GetArchetype(Owner);
+		DiagArch = LocateCharacterArchetype(Owner);
 		m_sActionName = DiagArch.GetActionTitle(BranchID);
 		return m_sActionName;
 	}
@@ -115,15 +126,19 @@ class SP_DialogueComponent: ScriptComponent
 		string m_sMActionName;
 		SP_DialogueConfig DialogueConfiguration;
 		SP_RadialChoiceConfig RadialConfiguration;
-		DiagArch = GetArchetype(Owner);
+		//Find correct archetype
+		DiagArch = LocateCharacterArchetype(Owner);
+		//Find the correct configuration in the archetype for the current stage
 		DialogueConfiguration = DiagArch.GetDialogueConfigLite(BranchID);
 		if (DialogueConfiguration)
 		{
+			//look for SP_RadialChoiceConfig
 			RadialConfiguration = DialogueConfiguration.GetRadialChoiceConfig();
 			if(!RadialConfiguration)
 			{
 				return STRING_EMPTY;
 			}
+			//if foind get text from it
 			m_sMActionName = RadialConfiguration.GetActionText(RadialID);
 			if(!m_sMActionName)
 			{
@@ -137,7 +152,9 @@ class SP_DialogueComponent: ScriptComponent
 	//progress dialogue stage int, need to figure out where/how to store the stage
 	bool IncrementDiagStage(IEntity owner, int BranchID, int incrementamount)
 	{
-		DiagArch = GetArchetype(owner);
+		//find correct archetype
+		DiagArch = LocateCharacterArchetype(owner);
+		//Increment the stage of the correct branch
 		DiagArch.IncrementStage(BranchID, incrementamount);
 		return false;
 	}
@@ -152,6 +169,7 @@ class SP_DialogueComponent: ScriptComponent
 		{
 			config.Init();
 		}
+		DialogueArchetypeMap = new map<string, ref SP_DialogueArchetype>;
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	// set masks;
@@ -164,6 +182,7 @@ class SP_DialogueComponent: ScriptComponent
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//Getters for character info for identifiers, character name also used on sent text
+	//Character full name
 	string GetCharacterName(IEntity Character)
 	{
 		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
@@ -175,6 +194,7 @@ class SP_DialogueComponent: ScriptComponent
 		else
 			return STRING_EMPTY;
 	}
+	//Character rank
 	ECharacterRank GetCharacterRank(IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
@@ -184,6 +204,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return null;
 	}
+	//Character Faction
 	FactionKey GetCharacterFaction(IEntity Character)
 	{
 		FactionAffiliationComponent FactionComponent = FactionAffiliationComponent.Cast(Character.FindComponent(FactionAffiliationComponent));
@@ -196,18 +217,18 @@ class SP_DialogueComponent: ScriptComponent
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//Using Dialogue ID (EDiagIdentifier) figure out wich archetype matches provided character.
-	SP_DialogueArchetype GetArchetype(IEntity pOwnerEntity)
+	SP_DialogueArchetype GetArchetypeTemplate(IEntity pOwnerEntity)
 	{
 		for (int i, count = m_CharacterArchetypeList.Count(); i < count; i++)
 		{
-			diagid = m_CharacterArchetypeList[i].GetIdentifier();
-			switch (diagid) 
+			Archid = m_CharacterArchetypeList[i].GetIdentifier();
+			switch (Archid) 
 			{
 			//-----------------------------------------------------------------------------------------------------------//
 			// diagid 0 means we look for Character Name
 		    case 0:
 				senderName = GetCharacterName(pOwnerEntity);
-				if (m_CharacterArchetypeList[i].GetArchetypeName() == senderName)
+				if (m_CharacterArchetypeList[i].GetArchetypeTemplateName() == senderName)
 				{
 					DiagArch = m_CharacterArchetypeList[i];
 					return DiagArch;
@@ -217,7 +238,7 @@ class SP_DialogueComponent: ScriptComponent
 			// diagid 1 means we look for Character Rank
 		    case 1:
 				senderRank = GetCharacterRank(pOwnerEntity);
-				if (m_CharacterArchetypeList[i].GetArchetypeRank() == senderRank)
+				if (m_CharacterArchetypeList[i].GetArchetypeTemplateRank() == senderRank)
 				{
 					DiagArch = m_CharacterArchetypeList[i];
 					return DiagArch;
@@ -227,7 +248,7 @@ class SP_DialogueComponent: ScriptComponent
 			// diagid 2 means we look for Character Faction
 			case 2:
 				senderFaction = GetCharacterFaction(pOwnerEntity);
-				if (m_CharacterArchetypeList[i].GetArchetypeFaction() == senderFaction)
+				if (m_CharacterArchetypeList[i].GetArchetypeTemplateFaction() == senderFaction)
 				{
 					DiagArch = m_CharacterArchetypeList[i];
 					return DiagArch;
@@ -238,7 +259,7 @@ class SP_DialogueComponent: ScriptComponent
 			case 3:
 				senderFaction = GetCharacterFaction(pOwnerEntity);
 				senderRank = GetCharacterRank(pOwnerEntity);
-				if (m_CharacterArchetypeList[i].GetArchetypeFaction() == senderFaction && m_CharacterArchetypeList[i].GetArchetypeRank() == senderRank)
+				if (m_CharacterArchetypeList[i].GetArchetypeTemplateFaction() == senderFaction && m_CharacterArchetypeList[i].GetArchetypeTemplateRank() == senderRank)
 				{
 					DiagArch = m_CharacterArchetypeList[i];
 					return DiagArch;
@@ -249,9 +270,43 @@ class SP_DialogueComponent: ScriptComponent
 		}
 	return DiagArch;
 	}
+	//-----------------------------------------------------------------------------------------------------------//
+	// locate if there is already an Archetype instace for this specific charater and if not initiates the creation of one
+	SP_DialogueArchetype LocateCharacterArchetype(IEntity Character)
+	{
+		SP_DialogueArchetype CharDialogueArch;
+		//using character full name atm to match Character with Archetype
+		string LocCharacterName = GetCharacterName(Character);
+		//Check if an Archetype with out character's name exists
+		if (DialogueArchetypeMap.Contains(LocCharacterName))
+			{
+				//if yes assign it to CharDialogueArch so we can return it
+			    CharDialogueArch = DialogueArchetypeMap[LocCharacterName];
+			}
+			else
+			{
+				//if not find an ArchetypeTemplate, make a copy of it and instet it in DialogueArchetypeMap
+				//find character template using our character entity
+				CharDialogueArch = GetArchetypeTemplate(Character);
+				//create a new archetype and copy the stuff in it
+				SP_DialogueArchetype DiagArchNew = CopyArchetype(CharDialogueArch);
+				//initialise the newly made Archetype after its filled with all data
+				DiagArchNew.Init();
+				//instert it int the ArchetypeMap
+				DialogueArchetypeMap.Insert(LocCharacterName, DiagArchNew);
+			}
+	return CharDialogueArch;
+	}
+	//-----------------------------------------------------------------------------------------------------------//
+	//takes all info requred from Archetype and returns a newly made Archetype with the copied info
+	SP_DialogueArchetype CopyArchetype(SP_DialogueArchetype OriginalArchetype)
+	{
+		SP_DialogueArchetype DiagArchCopy = new SP_DialogueArchetype(OriginalArchetype, true);
+		return DiagArchCopy;
+	}
 }
 //----------------------------------------------------------------------------------------------------------------//
-enum EDiagIdentifier
+enum EArchetypeIdentifier
 	{
 		Name,
 		Rank,

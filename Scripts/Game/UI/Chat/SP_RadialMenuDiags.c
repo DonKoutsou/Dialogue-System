@@ -43,10 +43,9 @@ class SP_RadialMenuDiags : SCR_RadialMenuHandler
 		{
 			SCR_MenuPage newPage = new SCR_MenuPage(DialogueCategory.GetCategoryName());
 			m_aMenuPages.Insert(newPage);
-			newPage.SetIconName(DialogueCategory.GetIconName());
 			foreach (BaseSelectionMenuEntry entry : DialogueCategory.GetCategoryElements())
 			{
-				SCR_DialogueSelectionMenuEntry DiagEntry = SCR_DialogueSelectionMenuEntry.Cast(entry);
+				SP_DialogueSelectionMenuEntry DiagEntry = SP_DialogueSelectionMenuEntry.Cast(entry);
 				DiagEntry.SetEntryLayout(m_EntryLayout);
 				DiagEntry.m_sPageName = DialogueCategory.GetCategoryName();
 				newPage.AddEntry(DiagEntry);

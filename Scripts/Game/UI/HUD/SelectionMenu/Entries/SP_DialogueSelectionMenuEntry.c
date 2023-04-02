@@ -9,29 +9,8 @@ class SP_DiagMenuCategory : BaseSelectionMenuCategory
 {
 	[Attribute("", UIWidgets.EditBox, "")]
 	protected string m_sDiagCategoryName;
-	[Attribute("", UIWidgets.EditBox, "")]
-	protected string m_sIconName;
 	[Attribute("", UIWidgets.Object, "")]
 	protected ref array<ref BaseSelectionMenuEntry> m_aDiagCategoryContent;
-
-	//------------------------------------------------------------------------------------------------
-	string GetIconName()
-	{
-		return m_sIconName;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	override string GetCategoryName()
-	{
-		return m_sDiagCategoryName;
-	}
-
-	//------------------------------------------------------------------------------------------------
-	override void SetCategoryName(string name)
-	{
-		m_sDiagCategoryName = name;
-	}
-
 	//------------------------------------------------------------------------------------------------
 	override void AddElementToCategory(BaseSelectionMenuEntry element)
 	{
@@ -45,12 +24,9 @@ class SP_DiagMenuCategory : BaseSelectionMenuCategory
 	}
 }
 
-class SCR_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
+class SP_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 {
-	[Attribute( defvalue: "", desc: "ActionText", category: "Dialogue",  )]
-	protected string m_sActionText;
-	[Attribute( defvalue: "", desc: "DialogueText", category: "Dialogue",  )]
-	protected string m_sDialogueText;
+	
 	[Attribute( defvalue: "", desc: "DialogueBranchKey, Key used to define wich action should use this config", category: "Dialogue",  )]			//TODO: make config, memory
 	protected int m_iDialogueBranchKey;
 	[Attribute( defvalue: "", desc: "ID used to collect texts for DialogueComponent",  )]			//TODO: make config, memory
@@ -59,14 +35,19 @@ class SCR_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 	bool IsExit;
 	
 	string m_sPageName;
-	
-	
+	protected string m_sActionText;
+	protected string m_sDialogueText;
 	protected SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
 	protected SP_DialogueComponent DiagComp;
 	protected SCR_RadialMenuComponent RadComp;
 	protected SCR_RadialMenuHandler RadHand;
+	protected SP_DialogueConfig DiagConf;
 	//------------------------------------------------------------------//
-	
+	void SetDialogueConfig(SP_DialogueConfig DConf)
+	{
+		DiagConf = DConf;
+		return;
+	}
 	override void UpdateVisuals()
 	{
 		

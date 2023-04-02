@@ -22,23 +22,19 @@ class SP_DialogueConfig: ScriptAndConfig
 	[Attribute()]
 	protected ref SP_RadialChoiceConfig m_RadialChoiceConfig;
 	//------------------------------------------------------------------//
+	//Stage key is used to identify when this dialogue is relevant
 	int GetDialogueStageKey()
 	{
 		return m_iDialogueStageKey;
 	}
 	//------------------------------------------------------------------//
-	string GetDialogueText(int stageid)
-	{
-		string diagtext;
-		diagtext = m_sDialogueText;
-		return diagtext;
-	}
-	//------------------------------------------------------------------//
+	//Branch key is used to identify wich branch this config belongs to
 	int GetDialogueBranchKey()
 	{
 		return m_iDialogueBranchKey;
 	}
 	//------------------------------------------------------------------//
+	//Text that is going to be used as title for the action
 	string GetActionText(int stageid)
 	{
 		string actiontext;
@@ -46,10 +42,21 @@ class SP_DialogueConfig: ScriptAndConfig
 		return actiontext;
 	}
 	//------------------------------------------------------------------//
+	//Text that is going to be sent to chat
+	string GetDialogueText(int stageid)
+	{
+		string diagtext;
+		diagtext = m_sDialogueText;
+		return diagtext;
+	}
+	//------------------------------------------------------------------//
+	//Boolean about if this configuration should progress all branches when used
 	bool IsInfluanceGlobal()
 	{
 		return m_bGlobalStageInfluance;
 	}
+	//------------------------------------------------------------------//
+	//Getter for radial configuration file marking this config as branching and that it should open radial menu
 	SP_RadialChoiceConfig GetRadialChoiceConfig()
 	{
 		if(m_RadialChoiceConfig == null)

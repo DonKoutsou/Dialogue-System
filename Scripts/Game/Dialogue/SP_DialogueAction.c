@@ -61,9 +61,5 @@ class SP_DialogueAction : ScriptedUserAction
 	{
 		Owner = IEntity.Cast(GetOwner());
 	}
-	override event void OnActionCanceled(IEntity pOwnerEntity, IEntity pUserEntity)
-	{
-		string feasf = STRING_EMPTY;
-		return;
-	}
+	//------------------------------------------------------------------//
 }

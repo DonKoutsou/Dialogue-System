@@ -11,21 +11,15 @@ SCR_BaseGameMode {
       SP_DiagMenuCategory "{5CFEC99D0D41AFAB}" {
        m_sDiagCategoryName "Diags"
        m_aDiagCategoryContent {
-        SCR_DialogueSelectionMenuEntry "{5CFEC992048E4CF7}" {
-         m_sActionText "Speak"
-         m_sDialogueText "I spoke"
+        SP_DialogueSelectionMenuEntry "{5D049A3FC206E7C6}" {
          m_iDialogueBranchKey 2
         }
-        SCR_DialogueSelectionMenuEntry "{5D02C3E784F01626}" {
-         m_sActionText "Speak1"
-         m_sDialogueText "I spoke 1"
+        SP_DialogueSelectionMenuEntry "{5D049A3FCA718934}" {
          m_iDialogueBranchKey 2
          EntryID 1
         }
-        SCR_DialogueSelectionMenuEntry "{5D02C3F0F7D377BD}" {
-         m_sActionText "Exit"
-         m_sDialogueText "I spoke 1"
-         m_iDialogueBranchKey 0
+        SP_DialogueSelectionMenuEntry "{5D049A3FF62464C8}" {
+         EntryID 2
          IsExit 1
         }
        }
@@ -56,17 +50,9 @@ SCR_BaseGameMode {
   }
   SP_DialogueComponent "{5CEB33555F01AF14}" {
    m_CharacterArchetypeList {
-    SP_DialogueArchetype "{5CFEB06EA69171AD}" : "{4118F9C0DD2C9AB7}Configs/CharacterTest.conf" {
-     DialogueConfig {
-      SP_DialogueConfig "{5CF28600D2268CCF}" {
-       m_iDialogueStageKey 1
-      }
-      SP_DialogueConfig "{5CF28600D56F5C4F}" {
-       m_iDialogueStageKey 2
-      }
-      SP_DialogueConfig "{5CF2FCE0E551A1AE}" {
-       m_iDialogueStageKey 1
-      }
+    SP_DialogueArchetype "{5D04D9A5539C9A07}" : "{4118F9C0DD2C9AB7}Configs/CharacterTest.conf" {
+     CharacterDiagBranchStage {
+      1 1 1 1
      }
     }
    }
