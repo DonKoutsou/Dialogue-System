@@ -93,6 +93,7 @@ class SCR_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 	}
 	protected override event void OnPerform(IEntity user, BaseSelectionMenu sourceMenu)
 	{
+		
 
 		RadComp = SCR_RadialMenuComponent.Cast(GameMode.FindComponent(SCR_RadialMenuComponent));
 		SP_RadialMenuDiags RadMenuDiags = SP_RadialMenuDiags.Cast(RadComp.GetRadialMenuHandler());
@@ -154,3 +155,9 @@ class SCR_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 		return actiontext;
 	}
 };
+enum EChoiseBehavior
+	{
+		"Accept&Close",
+		"AlrernateDialogue",
+		"Stay"
+	};

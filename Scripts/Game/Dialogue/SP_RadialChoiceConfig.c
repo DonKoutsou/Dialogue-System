@@ -1,6 +1,8 @@
 [BaseContainerProps(configRoot: true)]
 class SP_RadialChoiceConfig: ScriptAndConfig
 {
+	[Attribute("", UIWidgets.ComboBox, "What is going to be the behavior of radial menu choise", "", ParamEnumArray.FromEnum(EChoiseBehavior) )]
+	protected EChoiseBehavior ChoiseBehavior;
 	//Action title
 	[Attribute(defvalue: "", desc: "Action Title and Dialogue Text for Radial menu choice", category: "Dialogue")]
 	protected ref array<ref RadialChoiceText> m_RadialChoiceTexts;
@@ -28,6 +30,10 @@ class SP_RadialChoiceConfig: ScriptAndConfig
             return STRING_EMPTY;
         }
     }
+	EChoiseBehavior GetChoiseBehavior()
+	{
+		return ChoiseBehavior;
+	}
 	
 };
 

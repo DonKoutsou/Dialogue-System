@@ -33,6 +33,7 @@ class SP_DialogueComponent: ScriptComponent
 	SCR_BaseGameMode GameMode;
 	SP_DialogueConfig DialogueConfig;
 	SP_RadialChoiceConfig RadialConfig;
+	
 	//----------------------------------------------------------------------------------------------------------------//
 	void DoDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount)
 	{
@@ -72,13 +73,26 @@ class SP_DialogueComponent: ScriptComponent
 		{
 			//find the configuration that contains the text we want
 			RadialConfig = DialogueConfig.GetRadialChoiceConfig();
-			
 			if(RadialConfig)
 			{	
 				m_DialogTexttoshow = RadialConfig.GetDialogueText(EntryID);
+				EChoiseBehavior ChoiseBehavior = RadialConfig.GetChoiseBehavior();
+				switch (ChoiseBehavior) 
+					{
+				    case 0:
+							//Accept & Close
+							RadMenuDiags.Close(Player);
+						break;
+					case 1:
+							//Alternate Dialogue WIP
+						break;
+					case 2:
+							//Stay
+						break;
+					}
 			}
 		}
-		//send text to chat
+		
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderId, senderName);
 	}
 	// Used in action to send the text to chat
