@@ -12,8 +12,6 @@ class SP_DialogueComponent: ScriptComponent
 	//----------------------------------------------------------------------------------------------------------------//
 	//Dialogue System
 	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;
-	//Stage state???
-	protected int GlobalDiagStage;
 	SCR_RadialMenuComponent RadComp;
 	SP_RadialMenuDiags RadMenuDiags;
 	SCR_BaseGameMode GameMode;
@@ -22,15 +20,12 @@ class SP_DialogueComponent: ScriptComponent
 		RadMenuDiags.Start(owner, user)
 	}
 	//----------------------------------------------------------------------------------------------------------------//
-	//DoDialogue used in the dialogue action, initiates the whole process and doese all the required operations(incrementing stage, sending text)
 	void DoDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount)
 	{
 		//Get name of character that will send message to chat
 		string senderName = GetCharacterName(Character);
 		int senderID = Character.GetID();
-		//Find our Dialogue Archetype by matching it to characters info
 		SP_DialogueArchetype DiagArch = LocateCharacterArchetype(Character);
-		//Get dialogue text from Archetype
 		string m_DialogTexttoshow;
 		if (DiagArch.IsCharacterBranched == true)
 		{
@@ -44,8 +39,6 @@ class SP_DialogueComponent: ScriptComponent
 		{
 			m_DialogTexttoshow = DiagArch.GetDialogueText(BranchID);
 		}
-		//Check if dialogue config has SP_RadialChoiceConfig atatched to it, meaning that is should launch the radial menu isntead of completing ActionsTuple
-		//Makes sure to return before incrementing stage to avoid changing wich config is used while in radial menu
 		if(DiagArch.GetDialogueConfigLite(BranchID) && DiagArch.CheckIfDialogueBranches(DiagArch.GetDialogueConfigLite(BranchID)) == true)
 		{
 			DiagArch.BranchCharacter(BranchID);
@@ -53,11 +46,6 @@ class SP_DialogueComponent: ScriptComponent
 			RadMenuDiags.UpdateDiag();
 			return;
 		}
-		//else
-		//	if (RadMenuDiags.IsOpen() == true)
-		//	{
-		//		RadMenuDiags.Close(Character)
-		//	}
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 		IncrementDiagStage(Character, BranchID, IncrementAmount);
 		RadMenuDiags.UpdateDiag();
@@ -163,28 +151,6 @@ class SP_DialogueComponent: ScriptComponent
 		//Increment the stage of the correct branch
 		DiagArch.IncrementStage(BranchID, incrementamount);
 		return false;
-	}
-	//----------------------------------------------------------------------------------------------------------------//
-	//initialise configuration to crate map of configuration's contents
-	override void EOnInit(IEntity owner)
-	{
-		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
-		RadComp = SCR_RadialMenuComponent.Cast(GameMode.FindComponent(SCR_RadialMenuComponent));
-		RadMenuDiags = SP_RadialMenuDiags.Cast(RadComp.GetRadialMenuHandler());
-		foreach (SP_DialogueArchetype config: m_CharacterArchetypeList)
-		{
-			config.Init();
-		}
-		DialogueArchetypeMap = new map<string, ref SP_DialogueArchetype>;
-	}
-	//----------------------------------------------------------------------------------------------------------------//
-	// set masks;
-	override void OnPostInit(IEntity owner)
-	{
-		super.OnPostInit(owner);
-		SetEventMask(owner, EntityEvent.INIT);
-		SetEventMask(owner, EntityEvent.POSTFIXEDFRAME);
-		owner.SetFlags(EntityFlags.ACTIVE, true);
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//Getters for character info for identifiers, character name also used on sent text
@@ -313,6 +279,28 @@ class SP_DialogueComponent: ScriptComponent
 	{
 		SP_DialogueArchetype DiagArchCopy = new SP_DialogueArchetype(OriginalArchetype, true);
 		return DiagArchCopy;
+	}
+	//----------------------------------------------------------------------------------------------------------------//
+	//initialise configuration to crate map of configuration's contents
+	override void EOnInit(IEntity owner)
+	{
+		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
+		RadComp = SCR_RadialMenuComponent.Cast(GameMode.FindComponent(SCR_RadialMenuComponent));
+		RadMenuDiags = SP_RadialMenuDiags.Cast(RadComp.GetRadialMenuHandler());
+		foreach (SP_DialogueArchetype config: m_CharacterArchetypeList)
+		{
+			config.Init();
+		}
+		DialogueArchetypeMap = new map<string, ref SP_DialogueArchetype>;
+	}
+	//----------------------------------------------------------------------------------------------------------------//
+	// set masks;
+	override void OnPostInit(IEntity owner)
+	{
+		super.OnPostInit(owner);
+		SetEventMask(owner, EntityEvent.INIT);
+		SetEventMask(owner, EntityEvent.POSTFIXEDFRAME);
+		owner.SetFlags(EntityFlags.ACTIVE, true);
 	}
 }
 //----------------------------------------------------------------------------------------------------------------//

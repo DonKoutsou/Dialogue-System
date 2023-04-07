@@ -1,16 +1,11 @@
 class SP_DialogueAction : ScriptedUserAction
 {
 	//------------------------------------------------------------------//
-	[Attribute(defvalue: "0", desc: "Branch wich this action belongs to. Configs with same branch will be used on this action.", category: "Dialogue")]
-	int ActionBranchID;
-	[Attribute(defvalue: "1", desc: "Increment Amount, by how much should stage be progressed", category: "Dialogue")]
-	protected int m_bIncrementAmount;
-	[Attribute(defvalue: "", desc: "ActionName.", category: "Dialogue")]
-	string ActionName;
-	//------------------------------------------------------------------//
 	protected SP_DialogueComponent DiagComp;
+	protected SCR_RadialMenuComponent RadComp
+	protected SP_RadialMenuDiags RadialMenuDiags;
 	protected SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
-	protected IEntity Owner;
+	
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
@@ -22,47 +17,23 @@ class SP_DialogueAction : ScriptedUserAction
 		}
 		return;
 	}
-	//------------------------------------------------------------------//
-	//if string that comes back from config is empty means that dialogue is finished so hide action
 	override bool CanBeShownScript(IEntity user)
 	{
-	//	DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
-	//	string outName;
-	//	if (DiagComp)
-	//	{
-	//		outName = DiagComp.GetActionName(ActionBranchID, Owner);	
-	//	}
-	//	if (outName == STRING_EMPTY)
-	//		{
-	//			return false;
-	//		}
-	//		else
-				return true;
-	}
-	//------------------------------------------------------------------//
-	//looks for the name of the action in the dialogue config
-	override event bool GetActionNameScript(out string outName)
-	{
-		outName = ActionName;
-	//	DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		if (RadialMenuDiags.IsDialogueHappening == true)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 		
-		
-	//	if (DiagComp)
-	//	{
-	//		outName = DiagComp.GetActionName(ActionBranchID, Owner);
-			
-	//	}
-		if (outName == STRING_EMPTY)
-			{
-				return false;
-			}
-			else
-				return true;
 	}
-	//------------------------------------------------------------------//
 	override event void Init(IEntity pOwnerEntity, GenericComponent pManagerComponent)
 	{
-		Owner = IEntity.Cast(GetOwner());
+		DiagComp = SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));
+		RadComp = SCR_RadialMenuComponent.Cast(GetGame().GetGameMode().FindComponent(SCR_RadialMenuComponent));
+		RadialMenuDiags = SP_RadialMenuDiags.Cast(RadComp.GetRadialMenuHandler());
 	}
 	//------------------------------------------------------------------//
 }

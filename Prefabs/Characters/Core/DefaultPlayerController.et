@@ -1,3 +1,11 @@
 SCR_PlayerController {
  ID "1A9BA6BEFA06E3B1"
+ components {
+  SCR_RadialMenuComponent "{56289B0048E95E96}" {
+   m_RadialMenuVisuals SCR_RadialMenuVisualsCommands "{56289B00431A60F2}" {
+    m_LayoutPath "{D430AA2CEA63CFBA}UI/layouts/Common/RadialMenu/RadialMenuVisuals2.layout"
+   }
+  }
+ }
+ coords 134.784 1.001 126.127
 }

@@ -30,7 +30,7 @@ FrameWidgetClass {
      Name "OverlayMenuBase"
      Slot OverlayWidgetSlot "{55DC7B26E4FD7595}" {
       HorizontalAlign 3
-      VerticalAlign 3
+      VerticalAlign 2
      }
      {
       BlurWidgetClass "{5D0E9D218E0C62D5}" : "{352322057FD78AE1}UI/layouts/WidgetLibrary/BaseElements/WLib_Blur.layout" {

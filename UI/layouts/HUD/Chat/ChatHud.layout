@@ -1,0 +1,25 @@
+FrameWidgetClass {
+ {
+  OverlayWidgetClass "{585F053862A9FD1C}" {
+   Prefab "{585F053862A9FD1C}"
+   Slot FrameWidgetSlot "{56150B208158A9EF}" {
+    PositionX 22.185
+    OffsetLeft 22.185
+    PositionY 708.497
+    OffsetTop 708.497
+    SizeX -48
+    OffsetRight 25.815
+    SizeY 310
+    OffsetBottom -1018.5
+   }
+   {
+    OverlayWidgetClass "{56150B2288F76A08}" {
+     Prefab "{56150B2288F76A08}"
+     Slot OverlayWidgetSlot "{56150B2288F76A55}" {
+      VerticalAlign 2
+     }
+    }
+   }
+  }
+ }
+}

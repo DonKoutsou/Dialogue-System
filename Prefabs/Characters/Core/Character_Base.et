@@ -21,8 +21,6 @@ SCR_ChimeraCharacter {
   ActionsManagerComponent "{520EA1D2F659CE02}" {
    additionalActions {
     SP_DialogueAction "{5D026EE20EFDD9C5}" : "{47F45AFF6742655B}Configs/DialogueAction_1.conf" {
-     m_bIncrementAmount 1
-     ActionName "Greet"
     }
    }
   }

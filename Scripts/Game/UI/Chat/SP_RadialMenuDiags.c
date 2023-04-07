@@ -5,11 +5,14 @@ class SP_RadialMenuDiags : SCR_RadialMenuHandler
 	protected ref SP_Dialogues m_DialogueConfig;
 	//----------------------------------------------------------------------------------------------------------------//
 	IEntity TalkingChar;
+	bool IsDialogueHappening = false;
 	
 	protected static ResourceName m_EntryLayout = "{D263AE2495703ECD}UI/layouts/Common/RadialMenu/RadialEntryElementTextOnly.layout";
 	//pseudo-Init sent from action
+	//setting up bool wich is used to show and hide initial Talk action
 	void Start(IEntity owner, IEntity user)
 	{
+		IsDialogueHappening = true;
 		TalkingChar = owner;
 		PageSetup();
 		Open(user);
@@ -65,7 +68,3 @@ class SP_RadialMenuDiags : SCR_RadialMenuHandler
 		UpdateEntries();
 	}
 }
-enum ERadialMenudDIAGSPages
-{
-	DIAGS = 0
-};

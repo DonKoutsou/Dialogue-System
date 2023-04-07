@@ -20,18 +20,15 @@ SCR_BaseGameMode {
          m_iDialogueBranchKey DialogueBranchKey "{5D0E9B68F09C61F8}" {
           BranchKey 2
          }
-         EntryID 1
         }
         SP_DialogueSelectionMenuEntry "{5D0E730AFD77DFDC}" {
          m_iDialogueBranchKey DialogueBranchKey "{5D0E9B68F2A3AF95}" {
           BranchKey 3
          }
-         EntryID 2
         }
         SP_DialogueSelectionMenuEntry "{5D049A3FF62464C8}" {
          m_iDialogueBranchKey DialogueBranchKey "{5D0E9B68E2CC7E51}" {
          }
-         EntryID 3
          IsExit 1
         }
        }

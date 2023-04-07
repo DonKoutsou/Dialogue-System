@@ -46,10 +46,10 @@ class SP_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 	
 	[Attribute(desc: "DialogueBranchKey, Key used to define wich action should use this config", category: "Dialogue",  )]			//TODO: make config, memory
 	ref DialogueBranchKey m_iDialogueBranchKey;
-	[Attribute( defvalue: "", desc: "ID used to collect texts for DialogueComponent",  )]			//TODO: make config, memory
-	protected int EntryID;
 	[Attribute()]
 	bool IsExit;
+	[Attribute()]
+	string namesomething;
 	
 	string m_sPageName;
 	protected string m_sActionText;
@@ -60,11 +60,6 @@ class SP_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 	protected SCR_RadialMenuHandler RadHand;
 	protected SP_DialogueConfig DiagConf;
 	//------------------------------------------------------------------//
-	void SetDialogueConfig(SP_DialogueConfig DConf)
-	{
-		DiagConf = DConf;
-		return;
-	}
 	override void UpdateVisuals()
 	{
 		
@@ -111,7 +106,7 @@ class SP_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 			{
 				RadMenuDiags.Close(user);
 				RadMenuDiags.OpenMenu(user, false);
-				
+				RadMenuDiags.IsDialogueHappening = false;
 				DiagComp.LocateCharacterArchetype(RadDiag.GetTalkingChar()).ResetStage(m_iDialogueBranchKey.GetBranchKey());
 				return;
 			}
@@ -130,6 +125,7 @@ class SP_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 		UpdateVisuals();
 		return;
 	}
+	//
 	override bool GetEntryNameScript(out string outName)
 	{
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
@@ -149,39 +145,11 @@ class SP_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 			}
 			else
 				return true;
-		//RadComp = SCR_RadialMenuComponent.Cast(GameMode.FindComponent(SCR_RadialMenuComponent));
-		//RadHand = SCR_RadialMenuHandler.Cast(RadComp.GetRadialMenuHandler());
-		//SP_RadialMenuDiags RadDiag = SP_RadialMenuDiags.Cast(RadHand);
-		//IEntity owner = RadDiag.GetTalkingChar();
-		//DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
-		//outName = DiagComp.GetActionName(m_iDialogueBranchKey, owner);
-		//if(!outName)
-		//{
-		//	return false;
-		//}
-		//return true;
-	}
-	override string GetName() 
-	{
-		 return m_sDialogueText;
 	}
 	override bool GetEntryDescriptionScript(out string outDescription)
 	{
-		outDescription = m_sDialogueText;
+		outDescription = namesomething;
 		return true;
-	}
-	//------------------------------------------------------------------//
-	int GetDialogueBranchKey()
-	{
-		return m_iDialogueBranchKey;
-	}
-	//------------------------------------------------------------------//
-	string GetActionText(int stageid)
-	{
-		string actiontext;
-		actiontext = m_sDialogueText;
-		
-		return actiontext;
 	}
 };
 enum EChoiseBehavior
