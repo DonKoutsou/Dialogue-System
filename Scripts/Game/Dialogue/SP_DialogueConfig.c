@@ -68,3 +68,10 @@ class SP_DialogueConfig: ScriptAndConfig
 		
 	}
 };
+enum ETextRiplaceID
+	{
+		Name,
+		Rank,
+		"FactionKey",
+		"Faction and Rank"
+	};

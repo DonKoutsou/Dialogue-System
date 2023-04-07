@@ -7,17 +7,22 @@ class SP_RadialMenuDiags : SCR_RadialMenuHandler
 	IEntity TalkingChar;
 	
 	protected static ResourceName m_EntryLayout = "{D263AE2495703ECD}UI/layouts/Common/RadialMenu/RadialEntryElementTextOnly.layout";
-	
+	//pseudo-Init sent from action
 	void Start(IEntity owner, IEntity user)
 	{
 		TalkingChar = owner;
+		PageSetup();
 		Open(user);
+		OpenMenu(user, true);
+		UpdateDiag();
 	}
+	//Gets character you are talking to. 
+	//Start void is basicly an init when radial menu is opened from dialogue action, it sets Talking character as the owner of action wich is the character you are talking to.
 	IEntity GetTalkingChar()
 	{
 		return TalkingChar;
 	}
-	override protected void OpenMenu(IEntity owner, bool isOpen)
+	override void OpenMenu(IEntity owner, bool isOpen)
 	{
 		super.OpenMenu(owner, isOpen);
 		
@@ -34,7 +39,7 @@ class SP_RadialMenuDiags : SCR_RadialMenuHandler
 		
 		m_pOwner = owner;
 	}
-	override protected void PageSetup()
+	override void PageSetup()
 	{
 		m_aMenuPages.Clear();
 		ClearEntries();
@@ -48,16 +53,17 @@ class SP_RadialMenuDiags : SCR_RadialMenuHandler
 				SP_DialogueSelectionMenuEntry DiagEntry = SP_DialogueSelectionMenuEntry.Cast(entry);
 				DiagEntry.SetEntryLayout(m_EntryLayout);
 				DiagEntry.m_sPageName = DialogueCategory.GetCategoryName();
+				DialogueCategory.UpdateVisuals();
 				newPage.AddEntry(DiagEntry);
 			}
 		}
 		SetPage(0);
 		UpdateEntries();
 	}
-	//SCR_RadialMenuComponent GetDiagMenu()
-	//{
-	//	return SP_RadialMenuDiags;
-	//}
+	void UpdateDiag()
+	{
+		UpdateEntries();
+	}
 }
 enum ERadialMenudDIAGSPages
 {

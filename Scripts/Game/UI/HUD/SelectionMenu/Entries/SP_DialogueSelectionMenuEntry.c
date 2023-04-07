@@ -3,6 +3,14 @@ class SP_Dialogues : ScriptAndConfig
 {
 	[Attribute("", UIWidgets.Object, "")]
 	ref array<ref SP_DiagMenuCategory> m_aDialogueCategories;
+	void UpdateDialogueEntries()
+	{
+		for (int i = 0, count = m_aDialogueCategories.Count(); i < count; i++)
+        	{
+			SP_DiagMenuCategory DiagCat = SP_DiagMenuCategory.Cast(m_aDialogueCategories[i]);
+			DiagCat.Update();
+			}
+	}
 }
 
 class SP_DiagMenuCategory : BaseSelectionMenuCategory
@@ -22,13 +30,22 @@ class SP_DiagMenuCategory : BaseSelectionMenuCategory
 	{
 		return m_aDiagCategoryContent;
 	}
+	void Update()
+	{
+		for (int i = 0, count = m_aDiagCategoryContent.Count(); i < count; i++)
+        	{
+			SP_DialogueSelectionMenuEntry DiagMenuEntry = SP_DialogueSelectionMenuEntry.Cast(m_aDiagCategoryContent[i]);
+			DiagMenuEntry.UpdateVisuals();
+			}
+		
+	}
 }
 
 class SP_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 {
 	
-	[Attribute( defvalue: "", desc: "DialogueBranchKey, Key used to define wich action should use this config", category: "Dialogue",  )]			//TODO: make config, memory
-	protected int m_iDialogueBranchKey;
+	[Attribute(desc: "DialogueBranchKey, Key used to define wich action should use this config", category: "Dialogue",  )]			//TODO: make config, memory
+	ref DialogueBranchKey m_iDialogueBranchKey;
 	[Attribute( defvalue: "", desc: "ID used to collect texts for DialogueComponent",  )]			//TODO: make config, memory
 	protected int EntryID;
 	[Attribute()]
@@ -56,7 +73,7 @@ class SP_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 		SP_RadialMenuDiags RadDiag = SP_RadialMenuDiags.Cast(RadHand);
 		IEntity owner = RadDiag.GetTalkingChar();
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
-		m_sDialogueText = DiagComp.GetRadialActionName(m_iDialogueBranchKey, owner, EntryID);
+		m_sDialogueText = DiagComp.GetActionName(m_iDialogueBranchKey.GetBranchKey(), owner);
 		if (IsExit == true)
 		{
 			m_sDialogueText = "Leave";
@@ -74,44 +91,75 @@ class SP_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 	}
 	protected override event void OnPerform(IEntity user, BaseSelectionMenu sourceMenu)
 	{
-		
-
 		RadComp = SCR_RadialMenuComponent.Cast(GameMode.FindComponent(SCR_RadialMenuComponent));
 		SP_RadialMenuDiags RadMenuDiags = SP_RadialMenuDiags.Cast(RadComp.GetRadialMenuHandler());
-		if (IsExit == true)
-		{
-			RadMenuDiags.Close(user);
-			return;
-		}
+		
 		RadHand = SCR_RadialMenuHandler.Cast(RadComp.GetRadialMenuHandler());
 		SP_RadialMenuDiags RadDiag = SP_RadialMenuDiags.Cast(RadHand);
 		IEntity owner = RadDiag.GetTalkingChar();
 		super.OnPerform(user, sourceMenu);
-		
+		if (IsExit == true)
+		{
+			SP_DialogueArchetype DArch = DiagComp.LocateCharacterArchetype(owner);
+			if (DArch.IsCharacterBranched == true)
+			{
+				DArch.IsCharacterBranched = false;
+				RadDiag.UpdateDiag();
+				return;
+			}
+			else
+			{
+				RadMenuDiags.Close(user);
+				RadMenuDiags.OpenMenu(user, false);
+				
+				DiagComp.LocateCharacterArchetype(RadDiag.GetTalkingChar()).ResetStage(m_iDialogueBranchKey.GetBranchKey());
+				return;
+			}
+			
+		}
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		
 		if (DiagComp)
 		{
 			IEntity talkingchar = RadMenuDiags.GetTalkingChar();
 			//SendText function on dialogue component, sending all gathered data from action
-			DiagComp.DoRadialDialogue(owner, talkingchar, m_iDialogueBranchKey, 1, EntryID);
+			//DiagComp.DoRadialDialogue(owner, talkingchar, m_iDialogueBranchKey, 1, EntryID);
+			DiagComp.DoDialogue(owner, talkingchar, m_iDialogueBranchKey.GetBranchKey(), 1);
 		}
-		
+		//RadDiag.PageSetup();
+		UpdateVisuals();
 		return;
 	}
 	override bool GetEntryNameScript(out string outName)
 	{
+		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		RadComp = SCR_RadialMenuComponent.Cast(GameMode.FindComponent(SCR_RadialMenuComponent));
 		RadHand = SCR_RadialMenuHandler.Cast(RadComp.GetRadialMenuHandler());
 		SP_RadialMenuDiags RadDiag = SP_RadialMenuDiags.Cast(RadHand);
 		IEntity owner = RadDiag.GetTalkingChar();
-		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
-		outName = DiagComp.GetActionName(m_iDialogueBranchKey, owner);
-		if(!outName)
+		
+		if (DiagComp)
 		{
-			return false;
+			outName = DiagComp.GetActionName(m_iDialogueBranchKey.GetBranchKey(), owner);
+			m_sDialogueText = outName;
 		}
-		return true;
+		if (outName == STRING_EMPTY)
+			{
+				return false;
+			}
+			else
+				return true;
+		//RadComp = SCR_RadialMenuComponent.Cast(GameMode.FindComponent(SCR_RadialMenuComponent));
+		//RadHand = SCR_RadialMenuHandler.Cast(RadComp.GetRadialMenuHandler());
+		//SP_RadialMenuDiags RadDiag = SP_RadialMenuDiags.Cast(RadHand);
+		//IEntity owner = RadDiag.GetTalkingChar();
+		//DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		//outName = DiagComp.GetActionName(m_iDialogueBranchKey, owner);
+		//if(!outName)
+		//{
+		//	return false;
+		//}
+		//return true;
 	}
 	override string GetName() 
 	{
@@ -131,7 +179,7 @@ class SP_DialogueSelectionMenuEntry : SCR_BaseGroupEntry
 	string GetActionText(int stageid)
 	{
 		string actiontext;
-		actiontext = m_sActionText;
+		actiontext = m_sDialogueText;
 		
 		return actiontext;
 	}

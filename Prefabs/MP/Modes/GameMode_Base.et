@@ -12,14 +12,26 @@ SCR_BaseGameMode {
        m_sDiagCategoryName "Diags"
        m_aDiagCategoryContent {
         SP_DialogueSelectionMenuEntry "{5D049A3FC206E7C6}" {
-         m_iDialogueBranchKey 2
+         m_iDialogueBranchKey DialogueBranchKey "{5D0E9B68CF9D611C}" {
+          BranchKey 1
+         }
         }
         SP_DialogueSelectionMenuEntry "{5D049A3FCA718934}" {
-         m_iDialogueBranchKey 2
+         m_iDialogueBranchKey DialogueBranchKey "{5D0E9B68F09C61F8}" {
+          BranchKey 2
+         }
          EntryID 1
         }
-        SP_DialogueSelectionMenuEntry "{5D049A3FF62464C8}" {
+        SP_DialogueSelectionMenuEntry "{5D0E730AFD77DFDC}" {
+         m_iDialogueBranchKey DialogueBranchKey "{5D0E9B68F2A3AF95}" {
+          BranchKey 3
+         }
          EntryID 2
+        }
+        SP_DialogueSelectionMenuEntry "{5D049A3FF62464C8}" {
+         m_iDialogueBranchKey DialogueBranchKey "{5D0E9B68E2CC7E51}" {
+         }
+         EntryID 3
          IsExit 1
         }
        }
@@ -28,8 +40,10 @@ SCR_BaseGameMode {
     }
    }
    m_RadialMenuVisuals SP_RadialMenuVisualsDialogues "{5CFEC99397EB2AC2}" {
-    m_LayoutPath "{C967377E3D96107D}UI/layouts/Common/RadialMenu/RadialMenuVisuals.layout"
+    m_LayoutPath "{D430AA2CEA63CFBA}UI/layouts/Common/RadialMenu/RadialMenuVisuals2.layout"
     m_eLayer ALWAYS_TOP
+    m_iContentWidthAdjustment -107
+    m_iContentHeightAdjustment -109
     m_rElementLayoutPath "{95123068DC2C2ECF}UI/layouts/Common/RadialMenu/radialElementIcon.layout"
     m_rBorderLinePath "{639717DA6610F1C1}UI/layouts/Common/RadialMenu/RadialMenuBorderLine.layout"
     m_sPageIndicationLayout "{595FE46A06BE9DB3}UI/layouts/Common/RadialMenu/MenuPageIndication.layout"
@@ -50,10 +64,7 @@ SCR_BaseGameMode {
   }
   SP_DialogueComponent "{5CEB33555F01AF14}" {
    m_CharacterArchetypeList {
-    SP_DialogueArchetype "{5D04D9A5539C9A07}" : "{4118F9C0DD2C9AB7}Configs/CharacterTest.conf" {
-     CharacterDiagBranchStage {
-      1 1 1 1
-     }
+    SP_DialogueArchetype "{5D0E730A984D3CAD}" : "{DE79E2CD29B2CA0D}Configs/CharacterTest2.conf" {
     }
    }
    m_ChatChannel LocalChatChannel "{5CFEB06EA8A2683A}" {

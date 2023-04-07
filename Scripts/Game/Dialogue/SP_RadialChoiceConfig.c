@@ -1,3 +1,4 @@
+//Used in Dialogue Archetype, in any SP_DialogueConfig
 //SP_RadialChoiceConfig is used to store the text that is going to be used in radial menu in dialogue.
 //Also  marks the config it is atatched to as branching dialogue so when that action is performed radial menu will open intead of progressing dialogue
 
@@ -42,10 +43,3 @@ class SP_RadialChoiceConfig: ScriptAndConfig
 	
 };
 
-class DialogueTextConfig: ScriptAndConfig
-{
-	[Attribute(defvalue: "", desc: "Action Title", category: "Dialogue")]
-	string ActionText;
-	[Attribute(defvalue: "", desc: "Dialogue Text", category: "Dialogue")]
-    string DialogueText;
-}

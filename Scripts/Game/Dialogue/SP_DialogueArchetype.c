@@ -28,7 +28,17 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//Map to be filled with all the configurations on Init
 	protected ref map<int, ref SP_DialogueConfig> DialogueConfigMap;
     protected SP_DialogueComponent DiagComp;
+	bool IsCharacterBranched;
+	int ArchBranchID;
 	//------------------------------------------------------------------//
+	void BranchCharacter(int branch)
+	{
+		if (IsCharacterBranched == false)
+		{
+			IsCharacterBranched = true;
+		}
+		ArchBranchID = branch;
+	}
 	//Dialogue identifier to be used for this archetype, can be set to something generic and provide its dialogues to a variety of entities
 	EArchetypeIdentifier GetIdentifier()
 	{
@@ -119,7 +129,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 		if (config != null && config.IsInfluanceGlobal() == true)
 		{
 			for (int i = 0, count = CharacterDiagBranchStage.Count(); i < count; i++)
-        	{	
+        	{
 				CharacterDiagBranchStage[i] = CharacterDiagBranchStage[i] + 1;	
         	}
 		}
@@ -144,7 +154,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 		string m_stexttoshow;
 		for (int i = 0, count = CharacterDiagBranchStage.Count(); i < count; i++)
 		{
-			SP_DialogueConfig config = GetDialogueConfig(CharacterDiagBranchStage[BranchID], BranchID);
+			SP_DialogueConfig config = GetDialogueConfigLite(BranchID);
 			if (config != null)
 				{
 					m_stexttoshow = config.GetDialogueText(CharacterDiagBranchStage[BranchID]);
@@ -159,7 +169,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 		string m_sActionTitle;
 		for (int i = 0, count = CharacterDiagBranchStage.Count(); i < count; i++)
 		{
-			SP_DialogueConfig config = GetDialogueConfig(CharacterDiagBranchStage[BranchID], BranchID);
+			SP_DialogueConfig config = GetDialogueConfigLite(BranchID);
 			if (config != null)
 				{
 					m_sActionTitle = config.GetActionText(CharacterDiagBranchStage[BranchID]);

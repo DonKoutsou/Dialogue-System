@@ -5,6 +5,8 @@ class SP_DialogueAction : ScriptedUserAction
 	int ActionBranchID;
 	[Attribute(defvalue: "1", desc: "Increment Amount, by how much should stage be progressed", category: "Dialogue")]
 	protected int m_bIncrementAmount;
+	[Attribute(defvalue: "", desc: "ActionName.", category: "Dialogue")]
+	string ActionName;
 	//------------------------------------------------------------------//
 	protected SP_DialogueComponent DiagComp;
 	protected SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
@@ -16,7 +18,7 @@ class SP_DialogueAction : ScriptedUserAction
 		if (DiagComp)
 		{
 			//DoDialogue function on dialogue component, sending all gathered data from action
-			DiagComp.DoDialogue(pOwnerEntity, pUserEntity, ActionBranchID, m_bIncrementAmount);
+			DiagComp.StartRadialMenu(pOwnerEntity, pUserEntity);
 		}
 		return;
 	}
@@ -24,31 +26,32 @@ class SP_DialogueAction : ScriptedUserAction
 	//if string that comes back from config is empty means that dialogue is finished so hide action
 	override bool CanBeShownScript(IEntity user)
 	{
-		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
-		string outName;
-		if (DiagComp)
-		{
-			outName = DiagComp.GetActionName(ActionBranchID, Owner);	
-		}
-		if (outName == STRING_EMPTY)
-			{
-				return false;
-			}
-			else
+	//	DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+	//	string outName;
+	//	if (DiagComp)
+	//	{
+	//		outName = DiagComp.GetActionName(ActionBranchID, Owner);	
+	//	}
+	//	if (outName == STRING_EMPTY)
+	//		{
+	//			return false;
+	//		}
+	//		else
 				return true;
 	}
 	//------------------------------------------------------------------//
 	//looks for the name of the action in the dialogue config
 	override event bool GetActionNameScript(out string outName)
 	{
-		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		outName = ActionName;
+	//	DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		
 		
-		if (DiagComp)
-		{
-			outName = DiagComp.GetActionName(ActionBranchID, Owner);
+	//	if (DiagComp)
+	//	{
+	//		outName = DiagComp.GetActionName(ActionBranchID, Owner);
 			
-		}
+	//	}
 		if (outName == STRING_EMPTY)
 			{
 				return false;
