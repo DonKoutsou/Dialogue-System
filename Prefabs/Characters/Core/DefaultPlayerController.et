@@ -3,7 +3,7 @@ SCR_PlayerController {
  components {
   SCR_RadialMenuComponent "{56289B0048E95E96}" {
    m_RadialMenuVisuals SCR_RadialMenuVisualsCommands "{56289B00431A60F2}" {
-    m_LayoutPath "{D430AA2CEA63CFBA}UI/layouts/Common/RadialMenu/RadialMenuVisuals2.layout"
+    m_LayoutPath "{B70A9A09346B07B5}UI/layouts/Common/RadialMenu/DialogueRadialMenuVisuals.layout"
    }
   }
  }

@@ -9,13 +9,17 @@ class SP_DialogueAction : ScriptedUserAction
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
-		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
-		if (DiagComp)
-		{
+		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
+		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
+		DiagUI.Init(pOwnerEntity, pUserEntity);
+		DiagUI.UpdateEntries();
+		//DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		//if (DiagComp)
+		//{
 			//DoDialogue function on dialogue component, sending all gathered data from action
-			DiagComp.StartRadialMenu(pOwnerEntity, pUserEntity);
-		}
-		return;
+		//	DiagComp.StartRadialMenu(pOwnerEntity, pUserEntity);
+		//}
+		//return;
 	}
 	override bool CanBeShownScript(IEntity user)
 	{

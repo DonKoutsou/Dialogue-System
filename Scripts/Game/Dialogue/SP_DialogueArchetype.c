@@ -39,6 +39,13 @@ class SP_DialogueArchetype: ScriptAndConfig
 		}
 		ArchBranchID = branch;
 	}
+	void UnBranchCharacter()
+	{
+		if (IsCharacterBranched == true)
+		{
+			IsCharacterBranched = false;
+		}
+	}
 	//Dialogue identifier to be used for this archetype, can be set to something generic and provide its dialogues to a variety of entities
 	EArchetypeIdentifier GetIdentifier()
 	{

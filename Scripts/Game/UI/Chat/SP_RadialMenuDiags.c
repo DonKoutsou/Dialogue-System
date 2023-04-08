@@ -10,6 +10,7 @@ class SP_RadialMenuDiags : SCR_RadialMenuHandler
 	protected static ResourceName m_EntryLayout = "{D263AE2495703ECD}UI/layouts/Common/RadialMenu/RadialEntryElementTextOnly.layout";
 	//pseudo-Init sent from action
 	//setting up bool wich is used to show and hide initial Talk action
+
 	void Start(IEntity owner, IEntity user)
 	{
 		IsDialogueHappening = true;

@@ -12,7 +12,6 @@ FrameWidgetClass {
     Anchor 0.5 0.5 0.5 0.5
     PositionX 0
     OffsetLeft 0
-    PositionY 0
     OffsetTop 0
     SizeX 200
     OffsetRight -200
@@ -28,22 +27,17 @@ FrameWidgetClass {
    Name "TxtLabel"
    Slot FrameWidgetSlot "{55EB1188DB40506C}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 0
     OffsetLeft 0
     PositionY 0
     OffsetTop 0
-    SizeX 100
-    OffsetRight -100
+    SizeX 250
+    OffsetRight -250
     SizeY 100
     OffsetBottom -100
     Alignment 0.5 0.5
-    SizeToContent 1
    }
    Text "Label"
-   "Font Size" 30
-   "Min Font Size" 30
-   "Horizontal Alignment" Center
-   "Vertical Alignment" Center
+   "Min Font Size" 20
   }
  }
 }

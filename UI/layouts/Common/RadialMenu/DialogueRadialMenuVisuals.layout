@@ -1,67 +1,71 @@
 FrameWidgetClass {
  Name "RadialMenu"
  {
-  OverlayWidgetClass "{5D0E9D218E0C62D2}" {
+  OverlayWidgetClass "{5D0F0AAFD30F874E}" {
    Name "OverlayWrap"
    Slot FrameWidgetSlot "{55DE89D7A2C5CD71}" {
     Anchor 0.5 0.5 0.5 0.5
-    PositionX 0
     OffsetLeft 0
     PositionY 0
     OffsetTop 0
-    OffsetRight -100
-    SizeY 100
-    OffsetBottom -100
+    SizeX 500
+    OffsetRight -500
+    SizeY 500
+    OffsetBottom -500
     Alignment 0.5 0.5
     SizeToContent 0
    }
    {
-    ImageWidgetClass "{5D0E9D218E0C62D0}" {
+    ImageWidgetClass "{5D0F0AAFD30F8753}" {
      Name "ImgCircleInner"
      Slot OverlayWidgetSlot "{55F68E16A631960F}" {
+      HorizontalAlign 2
+      Padding 0 140 100 0
      }
      Color 0 0 0 0.392
-     Texture "{844880BB8B2CFB4A}UI/Textures/RadialMenu/CircleBackground.edds"
-     Image ""
-     Size 360 360
+     Texture "{DE3386559B0D957A}UI/Textures/RadialMenu/BoxOutlined.edds"
+     Size 400 300
     }
-    OverlayWidgetClass "{5D0E9D218E0C62D7}" {
+    OverlayWidgetClass "{5D0F0AAFD30F8751}" {
      Name "OverlayMenuBase"
      Slot OverlayWidgetSlot "{55DC7B26E4FD7595}" {
       HorizontalAlign 3
-      VerticalAlign 2
+      VerticalAlign 3
      }
      {
-      BlurWidgetClass "{5D0E9D218E0C62D5}" : "{352322057FD78AE1}UI/layouts/WidgetLibrary/BaseElements/WLib_Blur.layout" {
+      BlurWidgetClass "{5D0F0AAFD30F8757}" : "{352322057FD78AE1}UI/layouts/WidgetLibrary/BaseElements/WLib_Blur.layout" {
        Name "Blur"
        Slot OverlayWidgetSlot "{55DE89D7E69C1EC5}" {
         HorizontalAlign 3
         VerticalAlign 3
        }
+       "Is Visible" 0
        Color 1 1 1 1
        Intensity 0.75
        Mask "{7C4E009245284055}UI/Textures/RadialMenu/RadialBase.edds"
       }
-      ImageWidgetClass "{5D0E9D218E0C62DB}" {
+      ImageWidgetClass "{5D0F0AAFD30F8755}" {
        Name "ImgCircleBackground"
        Slot OverlayWidgetSlot "{55DC7B07D6E4CC5D}" {
         HorizontalAlign 3
         VerticalAlign 3
        }
+       "Is Visible" 0
        Color 0 0 0 0.784
        Texture "{7C4E009245284055}UI/Textures/RadialMenu/RadialBase.edds"
        Image ""
        "Transition width" 0
        Progress 0.5
       }
-      OverlayWidgetClass "{5D0E9D218E0C62DA}" {
+      OverlayWidgetClass "{5D0F0AAFD30F8754}" {
        Name "OverlayContent"
        Slot OverlayWidgetSlot "{55DE89D59D46254A}" {
         HorizontalAlign 3
         VerticalAlign 3
        }
+       "Is Visible" 0
       }
-      OverlayWidgetClass "{5D0E9D218E0C62D9}" {
+      OverlayWidgetClass "{5D0F0AAFD30F875B}" {
        Name "SelectLast"
        Slot OverlayWidgetSlot "{55DC7B257DEF46CA}" {
         HorizontalAlign 3
@@ -70,7 +74,7 @@ FrameWidgetClass {
        "Is Visible" 0
        Color 0.579 0.579 0.579 1
        {
-        ImageWidgetClass "{5D0E9D218E0C62DF}" {
+        ImageWidgetClass "{5D0F0AAFD30F8759}" {
          Name "ImgLeft"
          Slot OverlayWidgetSlot "{55DC7B07D6E4CC5D}" {
           HorizontalAlign 3
@@ -87,7 +91,7 @@ FrameWidgetClass {
          Progress 0.9
          "Mask Mode" "Include Below"
         }
-        ImageWidgetClass "{5D0E9D218E0C62DE}" {
+        ImageWidgetClass "{5D0F0AAFD30F8758}" {
          Name "ImgRight"
          Slot OverlayWidgetSlot "{55DC7B07D6E4CC5D}" {
           HorizontalAlign 3
@@ -105,15 +109,16 @@ FrameWidgetClass {
         }
        }
       }
-      OverlayWidgetClass "{5D0E9D218E0C62DD}" {
+      OverlayWidgetClass "{5D0F0AAFD30F875F}" {
        Name "SelectCurrent"
        Slot OverlayWidgetSlot "{55DC7B257DEF46CA}" {
         HorizontalAlign 3
         VerticalAlign 3
        }
+       "Is Visible" 0
        Color 0.761 0.386 0.078 1
        {
-        ImageWidgetClass "{5D0E9D218E0C62DC}" {
+        ImageWidgetClass "{5D0F0AAFD30F875D}" {
          Name "ImgLeft"
          Slot OverlayWidgetSlot "{55DC7B07D6E4CC5D}" {
           HorizontalAlign 3
@@ -130,7 +135,7 @@ FrameWidgetClass {
          Progress 0.9
          "Mask Mode" "Include Below"
         }
-        ImageWidgetClass "{5D0E9D218E0C6223}" {
+        ImageWidgetClass "{5D0F0AAFD30F875C}" {
          Name "ImgRight"
          Slot OverlayWidgetSlot "{55DC7B07D6E4CC5D}" {
           HorizontalAlign 3
@@ -147,25 +152,26 @@ FrameWidgetClass {
         }
        }
       }
-      FrameWidgetClass "{5D0E9D218E0C6221}" {
+      FrameWidgetClass "{5D0F0AAFD30F80A3}" {
        Name "FrameSelector"
        Slot OverlayWidgetSlot "{55DC7B29C42BDD61}" {
         HorizontalAlign 3
         VerticalAlign 3
+        Padding 0 0 27.6 0
        }
        {
-        ImageWidgetClass "{5D0E9D218E0C6220}" {
+        ImageWidgetClass "{5D0F0AAFD30F80A1}" {
          Name "ImgSelector"
          Slot FrameWidgetSlot "{55DC7B29C42340E3}" {
           Anchor 0.5 0.5 0.5 0.5
           PositionX 0
           OffsetLeft 0
-          PositionY -38.4
-          OffsetTop -38.4
+          PositionY -185
+          OffsetTop -185
           SizeX 20
           OffsetRight -20
           SizeY 20
-          OffsetBottom 18.4
+          OffsetBottom 165
           Alignment 0.5 0.5
          }
          Color 0.761 0.386 0.078 1
@@ -177,27 +183,27 @@ FrameWidgetClass {
       }
      }
     }
-    SizeLayoutWidgetClass "{5D0E9D218E0C6227}" {
+    SizeLayoutWidgetClass "{5D0F0AAFD30F80A0}" {
      Name "SizeInfo"
      Slot OverlayWidgetSlot "{55F48BAC2E802FE2}" {
       VerticalAlign 3
      }
+     "Is Visible" 0
      AllowWidthOverride 1
      WidthOverride 300
      {
-      OverlayWidgetClass "{5D0E9D218E0C6226}" {
+      OverlayWidgetClass "{5D0F0AAFD30F80A7}" {
        Name "VInfo"
        Slot OverlayWidgetSlot "{55DC7B211062EFA0}" {
         HorizontalAlign 3
         VerticalAlign 3
        }
        {
-        TextWidgetClass "{5D0E9D218E0C6224}" : "{0D7FF083FDE39877}UI/layouts/WidgetLibrary/TextWidgets/Text_Heading4.layout" {
+        TextWidgetClass "{5D0F0AAFD30F80A5}" : "{0D7FF083FDE39877}UI/layouts/WidgetLibrary/TextWidgets/Text_Heading4.layout" {
          Name "TxtItemName"
          Slot OverlayWidgetSlot "{55F86C6858C2D87A}" {
           Padding 0 -50 0 0
          }
-         "Is Visible" 0
          Text "Item name"
          FontProperties FontProperties "{546AF489DFD25402}" {
           Bold 1
@@ -206,13 +212,12 @@ FrameWidgetClass {
           ShadowOpacity 0.5
          }
         }
-        TextWidgetClass "{5D0E9D218E0C622B}" : "{B537936D5B7E2BA1}UI/layouts/WidgetLibrary/TextWidgets/Text_BodySmall.layout" {
+        TextWidgetClass "{5D0F0AAFD30F80A4}" : "{B537936D5B7E2BA1}UI/layouts/WidgetLibrary/TextWidgets/Text_BodySmall.layout" {
          Name "TxtAction"
          Slot OverlayWidgetSlot "{55F87613B38A1FFA}" {
           VerticalAlign 0
           Padding 0 340 0 0
          }
-         "Is Visible" 0
          Text "Hint"
          "Horizontal Alignment" Center
          Wrap 1
@@ -228,7 +233,7 @@ FrameWidgetClass {
     }
    }
   }
-  HorizontalLayoutWidgetClass "{5D0E9D218E0C622A}" {
+  HorizontalLayoutWidgetClass "{5D0F0AAFD30F80AA}" {
    Name "HPages"
    Slot FrameWidgetSlot "{55EE744585355E13}" {
     Anchor 0.5 0.5 0.5 0.5
@@ -244,7 +249,7 @@ FrameWidgetClass {
     SizeToContent 1
    }
    {
-    RichTextWidgetClass "{5D0E9D218E0C6228}" {
+    RichTextWidgetClass "{5D0F0AAFD30F80A9}" {
      Name "ActionPagePrev"
      Slot LayoutSlot "{55EA7CD1A7CBD8A4}" {
       Padding 0 0 0 0
@@ -260,13 +265,13 @@ FrameWidgetClass {
      "Shadow Offset" 0 0
      "Shadow Color" 0 0 0 0.502
     }
-    HorizontalLayoutWidgetClass "{5D0E9D218E0C622F}" {
+    HorizontalLayoutWidgetClass "{5D0F0AAFD30F80A8}" {
      Name "HPageIndications"
      Slot LayoutSlot "{55EA7CD1E7F0097F}" {
       Padding 5 0 5 0
      }
     }
-    RichTextWidgetClass "{5D0E9D218E0C622E}" {
+    RichTextWidgetClass "{5D0F0AAFD30F80AE}" {
      Name "ActionPageNext"
      Slot LayoutSlot "{55EA7CD1A7CBD8A4}" {
       Padding 0 0 0 0

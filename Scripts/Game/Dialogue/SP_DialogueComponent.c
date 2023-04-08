@@ -32,7 +32,10 @@ class SP_DialogueComponent: ScriptComponent
 			SP_DialogueConfig DialogueConfig = DiagArch.GetDialogueConfigLite(DiagArch.ArchBranchID);
 			m_DialogTexttoshow = DialogueConfig.GetRadialChoiceConfig().GetDialogueText(BranchID - 1);
 			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
-			RadMenuDiags.UpdateDiag();
+			MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
+			DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
+			DiagUI.Init(Character, Player);
+			DiagUI.UpdateEntries();
 			return;
 		}
 		else
@@ -44,11 +47,19 @@ class SP_DialogueComponent: ScriptComponent
 			DiagArch.BranchCharacter(BranchID);
 			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 			RadMenuDiags.UpdateDiag();
+			MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
+			DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
+			DiagUI.Init(Character, Player);
+			DiagUI.UpdateEntries();
 			return;
 		}
+		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
+		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
+		DiagUI.Init(Character, Player);
+		DiagUI.UpdateEntries();
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 		IncrementDiagStage(Character, BranchID, IncrementAmount);
-		RadMenuDiags.UpdateDiag();
+		
 			
 	}
 	//----------------------------------------------------------------------------------------------------------------//
@@ -108,7 +119,7 @@ class SP_DialogueComponent: ScriptComponent
 		if (DiagArch.IsCharacterBranched == true)
 		{
 			SP_DialogueConfig DialogueConfig = DiagArch.GetDialogueConfigLite(DiagArch.ArchBranchID);
-			m_sActionName = DialogueConfig.GetRadialChoiceConfig().GetActionText(BranchID - 1);
+			m_sActionName = DialogueConfig.GetRadialChoiceConfig().GetActionText(BranchID);
 			return m_sActionName;
 		}
 		m_sActionName = DiagArch.GetActionTitle(BranchID);
