@@ -103,6 +103,8 @@ class DialogueUIClass: ChimeraMenuBase
     void myCustomFunction()
     {
 		GetGame().GetMenuManager().CloseAllMenus();
+		SP_DialogueArchetype DArch = DiagComp.LocateCharacterArchetype(myCallerEntity);
+		DArch.IsCharacterBranched = false;
     }
 	void BranchBack()
 	{

@@ -12,13 +12,7 @@ class SP_DialogueComponent: ScriptComponent
 	//----------------------------------------------------------------------------------------------------------------//
 	//Dialogue System
 	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;
-	SCR_RadialMenuComponent RadComp;
-	SP_RadialMenuDiags RadMenuDiags;
 	SCR_BaseGameMode GameMode;
-	void StartRadialMenu(IEntity owner, IEntity user)
-	{
-		RadMenuDiags.Start(owner, user)
-	}
 	//----------------------------------------------------------------------------------------------------------------//
 	void DoDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount)
 	{
@@ -46,7 +40,6 @@ class SP_DialogueComponent: ScriptComponent
 		{
 			DiagArch.BranchCharacter(BranchID);
 			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
-			RadMenuDiags.UpdateDiag();
 			MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 			DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 			DiagUI.Init(Character, Player);
@@ -296,8 +289,6 @@ class SP_DialogueComponent: ScriptComponent
 	override void EOnInit(IEntity owner)
 	{
 		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
-		RadComp = SCR_RadialMenuComponent.Cast(GameMode.FindComponent(SCR_RadialMenuComponent));
-		RadMenuDiags = SP_RadialMenuDiags.Cast(RadComp.GetRadialMenuHandler());
 		foreach (SP_DialogueArchetype config: m_CharacterArchetypeList)
 		{
 			config.Init();
