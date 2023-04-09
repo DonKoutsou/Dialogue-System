@@ -1,9 +1,9 @@
 //Used in Dialogue Archetype, in any SP_DialogueConfig
-//SP_RadialChoiceConfig is used to store the text that is going to be used in radial menu in dialogue.
+//SP_MultipleChoiceConfig is used to store the text that is going to be used in radial menu in dialogue.
 //Also  marks the config it is atatched to as branching dialogue so when that action is performed radial menu will open intead of progressing dialogue
 
 [BaseContainerProps(configRoot: true)]
-class SP_RadialChoiceConfig: ScriptAndConfig
+class SP_MultipleChoiceConfig: ScriptAndConfig
 {
 	//Behavior that this choice is going to use once performed. //eg. "Accept&close" takes the selection made by player and then closes radial menu, while "Stay" keep the menu open so player can keep using it
 	[Attribute("", UIWidgets.ComboBox, "What is going to be the behavior of radial menu choise", "", ParamEnumArray.FromEnum(EChoiseBehavior) )]

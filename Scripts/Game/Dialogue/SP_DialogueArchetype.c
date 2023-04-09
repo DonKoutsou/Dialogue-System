@@ -117,7 +117,7 @@ class SP_DialogueArchetype: ScriptAndConfig
         return config;
     }
 	//------------------------------------------------------------------//
-	//Checks if a SP_RadialChoiceConfig is hooked on this config, used to initiate radial menu insead of completing dialogue
+	//Checks if a SP_MultipleChoiceConfig is hooked on this config, used to initiate radial menu insead of completing dialogue
 	bool CheckIfDialogueBranches(SP_DialogueConfig DialogueConfiguration)
 	{
 		

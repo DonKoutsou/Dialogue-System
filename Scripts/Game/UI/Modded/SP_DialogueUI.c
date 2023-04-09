@@ -22,9 +22,6 @@ class DialogueUIClass: ChimeraMenuBase
 	string CharRank;
 	ECharacterRank rank;
 	FactionKey faction;
-	string Diag0;
-	string Diag1;
-	string Diag2;
 	protected SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
     //------------------------------------------------------------------------------------------------
     override void OnMenuOpen()
@@ -82,35 +79,55 @@ class DialogueUIClass: ChimeraMenuBase
 	} 
 	void UpdateEntries()
 	{
-		Diag0 = DiagComp.GetActionName(0, myCallerEntity);
-		Diag1 = DiagComp.GetActionName(1, myCallerEntity);
-		Diag2 = DiagComp.GetActionName(2, myCallerEntity);
-		m_ListBoxComponent.AddItem(Diag0);
-		m_ListBoxComponent.AddItem(Diag1);
-		m_ListBoxComponent.AddItem(Diag2);
-		m_ListBoxComponent.AddItem("Leave");
-		SCR_ListBoxElementComponent elComp0 = m_ListBoxComponent.GetElementComponent(0);
-		SCR_ListBoxElementComponent elComp1 = m_ListBoxComponent.GetElementComponent(1);
-		SCR_ListBoxElementComponent elComp2 = m_ListBoxComponent.GetElementComponent(2);
-		SCR_ListBoxElementComponent elComp3 = m_ListBoxComponent.GetElementComponent(3);
-		elComp0.m_OnClicked.Insert(DoDialogue0);
-		elComp1.m_OnClicked.Insert(DoDialogue1);
-		elComp2.m_OnClicked.Insert(DoDialogue2);
+		string Diag0 = DiagComp.GetActionName(0, myCallerEntity);
+		string Diag1 = DiagComp.GetActionName(1, myCallerEntity);
+		string Diag2 = DiagComp.GetActionName(2, myCallerEntity);
+		string Diag3 = DiagComp.GetActionName(3, myCallerEntity);
+		int entryamount;
+		if (Diag0 != STRING_EMPTY)
 		{
-		elComp3.m_OnClicked.Insert(myCustomFunction);
+			m_ListBoxComponent.AddItem(Diag0);
+			SCR_ListBoxElementComponent elComp0 = m_ListBoxComponent.GetElementComponent(entryamount);
+			elComp0.m_OnClicked.Insert(DoDialogue0);
+			entryamount = entryamount + 1;
 		}
+		if (Diag1 != STRING_EMPTY)
+		{
+			m_ListBoxComponent.AddItem(Diag1);
+			SCR_ListBoxElementComponent elComp1 = m_ListBoxComponent.GetElementComponent(entryamount);
+			elComp1.m_OnClicked.Insert(DoDialogue1);
+			entryamount = entryamount + 1;
+		}
+		if (Diag2 != STRING_EMPTY)
+		{
+			m_ListBoxComponent.AddItem(Diag2);
+			SCR_ListBoxElementComponent elComp2 = m_ListBoxComponent.GetElementComponent(entryamount);
+			elComp2.m_OnClicked.Insert(DoDialogue2);
+			entryamount = entryamount + 1;
+		}
+		if (Diag3 != STRING_EMPTY)
+		{
+			m_ListBoxComponent.AddItem(Diag3);
+			SCR_ListBoxElementComponent elComp3 = m_ListBoxComponent.GetElementComponent(entryamount);
+			elComp3.m_OnClicked.Insert(DoDialogue3);
+			entryamount = entryamount + 1;
+		}
+		SP_DialogueArchetype DArch = DiagComp.LocateCharacterArchetype(myCallerEntity);
+		if (DArch.IsCharacterBranched == true)
+		{
+			m_ListBoxComponent.AddItem("Go Back");
+			SCR_ListBoxElementComponent elComp4 = m_ListBoxComponent.GetElementComponent(entryamount);
+			elComp4.m_OnClicked.Insert(DoDialogueBack);
+			return;
+		}
+		m_ListBoxComponent.AddItem("Leave");
+		SCR_ListBoxElementComponent elComp4 = m_ListBoxComponent.GetElementComponent(entryamount);
+		elComp4.m_OnClicked.Insert(myCustomFunction);
 	} 
     void myCustomFunction()
     {
 		GetGame().GetMenuManager().CloseAllMenus();
-		SP_DialogueArchetype DArch = DiagComp.LocateCharacterArchetype(myCallerEntity);
-		DArch.IsCharacterBranched = false;
     }
-	void BranchBack()
-	{
-		SP_DialogueArchetype DArch = DiagComp.LocateCharacterArchetype(myCallerEntity);
-		DArch.IsCharacterBranched = false;
-	}
 	void DoDialogue0()
 	{
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 0, 1);
@@ -123,5 +140,12 @@ class DialogueUIClass: ChimeraMenuBase
 	{
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 2, 1);
 	}
-	
+	void DoDialogue3()
+	{
+		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 3, 1);
+	}
+	void DoDialogueBack()
+	{
+		DiagComp.DoBackDialogue(myCallerEntity, myUserEntity);
+	}
 }

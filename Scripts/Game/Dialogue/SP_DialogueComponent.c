@@ -14,6 +14,20 @@ class SP_DialogueComponent: ScriptComponent
 	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;
 	SCR_BaseGameMode GameMode;
 	//----------------------------------------------------------------------------------------------------------------//
+	void DoBackDialogue(IEntity Character, IEntity Player)
+	{
+		string senderName = GetCharacterName(Character);
+		int senderID = Character.GetID();
+		SP_DialogueArchetype DiagArch = LocateCharacterArchetype(Character);
+		string m_DialogTexttoshow = "Go Back";
+		
+		DiagArch.UnBranchCharacter();
+		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
+		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
+		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
+		DiagUI.Init(Character, Player);
+		DiagUI.UpdateEntries();
+	}
 	void DoDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount)
 	{
 		//Get name of character that will send message to chat
@@ -72,7 +86,7 @@ class SP_DialogueComponent: ScriptComponent
 		if (DialogueConfig)
 		{
 			//find the configuration that contains the text we want
-			SP_RadialChoiceConfig RadialConfig = DialogueConfig.GetRadialChoiceConfig();
+			SP_MultipleChoiceConfig RadialConfig = DialogueConfig.GetRadialChoiceConfig();
 			if(RadialConfig)
 			{
 				string m_DialogTexttoshow = RadialConfig.GetDialogueText(EntryID);
@@ -123,14 +137,14 @@ class SP_DialogueComponent: ScriptComponent
 	{
 		string m_sMActionName;
 		SP_DialogueConfig DialogueConfiguration;
-		SP_RadialChoiceConfig RadialConfiguration;
+		SP_MultipleChoiceConfig RadialConfiguration;
 		//Find correct archetype
 		SP_DialogueArchetype DiagArch = LocateCharacterArchetype(Owner);
 		//Find the correct configuration in the archetype for the current stage
 		DialogueConfiguration = DiagArch.GetDialogueConfigLite(BranchID);
 		if (DialogueConfiguration)
 		{
-			//look for SP_RadialChoiceConfig
+			//look for SP_MultipleChoiceConfig
 			RadialConfiguration = DialogueConfiguration.GetRadialChoiceConfig();
 			if(!RadialConfiguration)
 			{

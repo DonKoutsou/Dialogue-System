@@ -20,7 +20,7 @@ class SP_DialogueConfig: ScriptAndConfig
 	[Attribute(defvalue: "", desc: "Should this dialogue progress all branches when executed?", category: "Dialogue",  )]
 	protected bool m_bGlobalStageInfluance;
 	[Attribute()]
-	protected ref SP_RadialChoiceConfig m_RadialChoiceConfig;
+	protected ref SP_MultipleChoiceConfig m_RadialChoiceConfig;
 	//------------------------------------------------------------------//
 	//Stage key is used to identify when this dialogue is relevant
 	int GetDialogueStageKey()
@@ -57,7 +57,7 @@ class SP_DialogueConfig: ScriptAndConfig
 	}
 	//------------------------------------------------------------------//
 	//Getter for radial configuration file marking this config as branching and that it should open radial menu
-	SP_RadialChoiceConfig GetRadialChoiceConfig()
+	SP_MultipleChoiceConfig GetRadialChoiceConfig()
 	{
 		if(m_RadialChoiceConfig == null)
 		{
