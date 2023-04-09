@@ -12,11 +12,16 @@ class DialogueUIClass: ChimeraMenuBase
     protected SCR_ButtonTextComponent comp;
 	OverlayWidget m_ListBoxOverlay;
 	TextWidget m_CharacterName;
+	TextWidget m_CharacterRank;
+	ImageWidget m_CharacterFactionIcon;
 	SCR_ListBoxElementComponent m_ListBoxElement;
     SCR_ListBoxComponent m_ListBoxComponent;
     IEntity myCallerEntity;
 	IEntity myUserEntity;           
     string CharName;
+	string CharRank;
+	ECharacterRank rank;
+	FactionKey faction;
 	string Diag0;
 	string Diag1;
 	string Diag2;
@@ -36,9 +41,43 @@ class DialogueUIClass: ChimeraMenuBase
 		if(myCallerEntity)
 		{
 			CharName = DiagComp.GetCharacterName(myCallerEntity);
+			rank = DiagComp.GetCharacterRank(myCallerEntity);
+			faction = DiagComp.GetCharacterFaction(myCallerEntity);
+		}
+		switch(rank)
+		{
+			case 1:
+			{
+				CharRank = "Private";
+			}
+		}
+		m_CharacterFactionIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionIcon"));
+		if (m_CharacterFactionIcon)
+		{
+		switch(faction)
+		{
+			case "US":
+			{
+				m_CharacterFactionIcon.LoadImageTexture(0, "{EB7F65DBC9392557}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
+			}
+			break;
+			case "USSR":
+			{
+				m_CharacterFactionIcon.LoadImageTexture(0, "{40B12B0DF911B856}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
+			}
+			break;
+			case "FIA":
+			{
+				m_CharacterFactionIcon.LoadImageTexture(0, "{FB266CDD4502D60B}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_Fia.edds");
+			}
+			break;
+		}
 		}
 		m_CharacterName = TextWidget.Cast(m_wRoot.FindAnyWidget("CharacterName"));
 		m_CharacterName.SetText(CharName);
+		
+		m_CharacterName = TextWidget.Cast(m_wRoot.FindAnyWidget("CharacterRank"));
+		m_CharacterName.SetText(CharRank);
 		
 	} 
 	void UpdateEntries()
@@ -57,21 +96,19 @@ class DialogueUIClass: ChimeraMenuBase
 		elComp0.m_OnClicked.Insert(DoDialogue0);
 		elComp1.m_OnClicked.Insert(DoDialogue1);
 		elComp2.m_OnClicked.Insert(DoDialogue2);
+		{
 		elComp3.m_OnClicked.Insert(myCustomFunction);
+		}
 	} 
     void myCustomFunction()
     {
-		SP_DialogueArchetype DArch = DiagComp.LocateCharacterArchetype(myCallerEntity);
-			if (DArch.IsCharacterBranched == true)
-			{
-				UpdateEntries();
-				DArch.IsCharacterBranched = false;
-			}
-			else
-		{
-			GetGame().GetMenuManager().CloseAllMenus();
-		}
+		GetGame().GetMenuManager().CloseAllMenus();
     }
+	void BranchBack()
+	{
+		SP_DialogueArchetype DArch = DiagComp.LocateCharacterArchetype(myCallerEntity);
+		DArch.IsCharacterBranched = false;
+	}
 	void DoDialogue0()
 	{
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 0, 1);

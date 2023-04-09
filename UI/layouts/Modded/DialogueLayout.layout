@@ -9,15 +9,14 @@ FrameWidgetClass {
   OverlayWidgetClass "{5D10B3055CA98F1A}" {
    Name "Panel0"
    Slot FrameWidgetSlot "{5D10B3055CA98F76}" {
-    Anchor 0 0 1 1
-    PositionX 949
-    OffsetLeft 949
-    PositionY 916.861
-    OffsetTop 916.861
-    SizeX -1094
-    OffsetRight 145
-    SizeY -750.279
-    OffsetBottom -166.582
+    Anchor 0.5 1 0.5 1
+    OffsetLeft 0
+    PositionY -140.05
+    OffsetTop -140.1
+    SizeX 781
+    OffsetRight -781
+    SizeY 231.9
+    OffsetBottom -91.8
     Alignment 0.5 0.5
    }
    {
@@ -31,125 +30,29 @@ FrameWidgetClass {
      Pivot 0.5 0.5
      Texture "{307B3AFD133C1121}UI/Textures/LoadingScreen/MenuBackground.edds"
      Size 2640 1200
-     Mask "{081989E2168A288D}Assets/Decals/Asphalt/Patch/Data/Decal_Asphalt_Patch_Square_01_A.edds"
      "Transition width" 0
-     Progress 0.265
+     Progress 0.018
      "Mask Mode" "Include Below"
      Range 0.069
     }
-    ButtonWidgetClass "{5D0F0A3D9DC67285}" {
-     Name "DialogueExit"
-     Slot OverlayWidgetSlot "{5D10BE2BD518FB83}" {
-      VerticalAlign 2
-      Padding 0 0 0 5.5
+    BlurWidgetClass "{5D126EC6B88419F2}" {
+     Name "Blur0"
+     Slot OverlayWidgetSlot "{5D126EC6B88419CE}" {
+      HorizontalAlign 3
+      VerticalAlign 3
      }
-     "Is Enabled" 0
-     "Is Visible" 0
-     Color 0.381 0.381 0.381 1
-     components {
-      SCR_ButtonTextComponent "{5D0F0A3D50989B76}" {
-      }
-     }
-     {
-      TextWidgetClass "{5D10B304D69364A4}" {
-       Name "Text0"
-       Slot ButtonWidgetSlot "{5D10B304D693648E}" {
-        HorizontalAlign 3
-       }
-       Color 0 0 0 1
-       Text "LEAVE"
-       "Font Size" 20
-       "Min Font Size" 20
-      }
-     }
+     Intensity 0.265
+     "Smooth Border" 6 6 6 6
     }
     OverlayWidgetClass "{5D10CA10CABF9D5A}" : "{94CAAE4A601195D3}UI/layouts/ListBox/ListBox.layout" {
      Name "ListBox0"
      Slot OverlayWidgetSlot "{5D10CA10CABF9EB4}" {
       VerticalAlign 0
-      Padding 0 100 0 0
+      Padding 0 75 0 0
      }
      components {
       SCR_ListBoxComponent "{566C9415BAA54E1B}" {
        m_sElementLayout "{E3491D3D0D0DE552}UI/layouts/ListBox/ListBoxElement_TextDialogue.layout"
-      }
-     }
-    }
-    ButtonWidgetClass "{5D1104A76912DB9E}" {
-     Name "Dialogue0"
-     Slot OverlayWidgetSlot "{5D1104A167537CB5}" {
-      VerticalAlign 0
-      Padding 0 60 0 0
-     }
-     "Is Enabled" 0
-     "Is Visible" 0
-     Color 0.381 0.381 0.381 1
-     components {
-      SCR_ButtonTextComponent "{5D0F0A3D50989B76}" {
-      }
-     }
-     {
-      TextWidgetClass "{5D1104A76912DB9D}" {
-       Name "Text0"
-       Slot ButtonWidgetSlot "{5D10B304D693648E}" {
-        HorizontalAlign 3
-       }
-       Color 0 0 0 1
-       Text "LEAVE"
-       "Font Size" 20
-       "Min Font Size" 20
-      }
-     }
-    }
-    ButtonWidgetClass "{5D1104A7B52AF645}" {
-     Name "Dialogue1"
-     Slot OverlayWidgetSlot "{5D1104A167537CEC}" {
-      VerticalAlign 0
-      Padding 0 90 0 0
-     }
-     "Is Enabled" 0
-     "Is Visible" 0
-     Color 0.381 0.381 0.381 1
-     components {
-      SCR_ButtonTextComponent "{5D0F0A3D50989B76}" {
-      }
-     }
-     {
-      TextWidgetClass "{5D1104A7B52AF644}" {
-       Name "Text0"
-       Slot ButtonWidgetSlot "{5D10B304D693648E}" {
-        HorizontalAlign 3
-       }
-       Color 0 0 0 1
-       Text "LEAVE"
-       "Font Size" 20
-       "Min Font Size" 20
-      }
-     }
-    }
-    ButtonWidgetClass "{5D1104A6A161BA7B}" {
-     Name "Dialogue2"
-     Slot OverlayWidgetSlot "{5D1104A6A161BAAE}" {
-      VerticalAlign 0
-      Padding 0 120 0 0
-     }
-     "Is Enabled" 0
-     "Is Visible" 0
-     Color 0.381 0.381 0.381 1
-     components {
-      SCR_ButtonTextComponent "{5D0F0A3D50989B76}" {
-      }
-     }
-     {
-      TextWidgetClass "{5D1104A6A161BA79}" {
-       Name "Text0"
-       Slot ButtonWidgetSlot "{5D10B304D693648E}" {
-        HorizontalAlign 3
-       }
-       Color 0 0 0 1
-       Text "LEAVE"
-       "Font Size" 20
-       "Min Font Size" 20
       }
      }
     }
@@ -159,30 +62,30 @@ FrameWidgetClass {
    Name "Frame0"
    Slot FrameWidgetSlot "{5D10CA1DAB43D985}" {
     Anchor 0.5 1 0.5 1
-    PositionX -7.333
-    OffsetLeft -7.333
-    PositionY -256.417
-    OffsetTop -256.417
-    SizeX 176
-    OffsetRight -168.667
+    OffsetLeft 0
+    PositionY -224.5
+    OffsetTop -224.5
+    SizeX 72.888
+    OffsetRight -72.9
     SizeY 64
-    OffsetBottom 192.417
+    OffsetBottom 160.5
     Alignment 0.5 0.5
     SizeToContent 1
    }
+   Opacity 0.895
    {
     ImageWidgetClass "{5D10CA1D7B5AFCAF}" {
      Name "Image0"
      Slot FrameWidgetSlot "{5D10CA1D7B5AFC2D}" {
       Anchor 0.5 0.5 0.5 0.5
-      PositionX 0
-      OffsetLeft 0
+      PositionX 0.593
+      OffsetLeft 0.593
       PositionY 0
       OffsetTop 0
-      SizeX 833.333
-      OffsetRight -833.333
-      SizeY 63.167
-      OffsetBottom -63.167
+      SizeX 779.936
+      OffsetRight -780.529
+      SizeY 63
+      OffsetBottom -63
       Alignment 0.5 0.5
      }
      Color 0 0 0 1
@@ -191,25 +94,73 @@ FrameWidgetClass {
      "Blend Mode" Opaque
      "Flip Vertically" 1
      Saturation 0
-     Mask "{081989E2168A288D}Assets/Decals/Asphalt/Patch/Data/Decal_Asphalt_Patch_Square_01_A.edds"
      "Transition width" 0
      Progress 0.229
      "Mask Mode" "Include Below"
+    }
+    BlurWidgetClass "{5D126EC5A621ED82}" {
+     Name "Blur0"
+     Slot FrameWidgetSlot "{5D126EC5A621ED9E}" {
+      Anchor 0 0 1 1
+      PositionX 0
+      OffsetLeft 0
+      PositionY 0
+      OffsetTop 0
+      SizeX 0
+      OffsetRight 0
+      SizeY 0
+      OffsetBottom 0
+     }
+     Intensity 0.256
+     "Smooth Border" 6 6 6 6
     }
     TextWidgetClass "{5D10CA1D63DBBA26}" {
      Name "CharacterName"
      Slot FrameWidgetSlot "{5D10CA1D63DBBA3C}" {
       Anchor 0.5 0.5 0.5 0.5
       OffsetLeft 0
-      OffsetTop 0
+      PositionY -11.5
+      OffsetTop -11.5
       SizeX 100
       OffsetRight -100
       SizeY 30
-      OffsetBottom -30
+      OffsetBottom -18.5
       Alignment 0.5 0.5
       SizeToContent 1
      }
      Text "CharacterName"
+    }
+    ImageWidgetClass "{5D126ECA850604EF}" {
+     Name "FactionIcon"
+     Slot FrameWidgetSlot "{5D126ECA850604C0}" {
+      PositionX 0
+      OffsetLeft 0
+      PositionY 0
+      OffsetTop 0
+      SizeX 63
+      OffsetRight -63
+      SizeY 63
+      OffsetBottom -63
+     }
+     Texture "{FB266CDD4502D60B}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_Fia.edds"
+    }
+    TextWidgetClass "{5D126ECAF57D6258}" {
+     Name "CharacterRank"
+     Slot FrameWidgetSlot "{5D10CA1D63DBBA3C}" {
+      Anchor 0.5 0.5 0.5 0.5
+      OffsetLeft 0
+      PositionY 15.5
+      OffsetTop 15.5
+      SizeX 99.999
+      OffsetRight -100
+      SizeY 30
+      OffsetBottom -45.5
+      Alignment 0.5 0.5
+      SizeToContent 1
+     }
+     Text "CharacterRank"
+     "Font Size" 14
+     "Min Font Size" 14
     }
    }
   }

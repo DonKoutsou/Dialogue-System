@@ -59,7 +59,11 @@ SCR_BaseGameMode {
   }
   SP_DialogueComponent "{5CEB33555F01AF14}" {
    m_CharacterArchetypeList {
-    SP_DialogueArchetype "{5D0E730A984D3CAD}" : "{DE79E2CD29B2CA0D}Configs/CharacterTest2.conf" {
+    SP_DialogueArchetype "{5D0E730A984D3CAD}" : "{DE79E2CD29B2CA0D}Configs/CharacterTestUSSR.conf" {
+    }
+    SP_DialogueArchetype "{5D126EC324A05F38}" : "{8B47A3F75A9C2615}Configs/CharacterTestUS.conf" {
+    }
+    SP_DialogueArchetype "{5D126EC32672170C}" : "{329463647B42DB55}Configs/CharacterTestFIA.conf" {
     }
    }
    m_ChatChannel LocalChatChannel "{5CFEB06EA8A2683A}" {

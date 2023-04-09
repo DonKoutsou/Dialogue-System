@@ -55,10 +55,10 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
-		DiagUI.Init(Character, Player);
-		DiagUI.UpdateEntries();
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 		IncrementDiagStage(Character, BranchID, IncrementAmount);
+		DiagUI.Init(Character, Player);
+		DiagUI.UpdateEntries();
 		
 			
 	}

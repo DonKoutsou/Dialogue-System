@@ -7,13 +7,12 @@ ButtonWidgetClass {
   SCR_ListBoxElementComponent "{5D10C019C741C840}" : "{217E1BF1715F9C33}Configs/UI/ListBoxElement_DialogueModularButtonComponent.conf" {
    m_aEffects {
     SCR_ButtonEffectColor "{5D10C019DD0338BA}" {
-     m_eEvents EVENT_CLICKED
+     m_eEvents 24580
      m_cHovered 0 0 0 0
      m_cActivatedHovered 1 1 1 0
      m_cClicked 1 1 1 0
      m_cFocusGained 1 1 1 0
-     m_cToggledOn 1 1 1 1
-     m_cToggledOff 0 0 0 1
+     m_cToggledOn 0 0 0 1
     }
     SCR_ButtonEffectOpacity "{5D10C019DD0338BF}" {
      m_eEvents EVENT_CLICKED
@@ -36,7 +35,7 @@ ButtonWidgetClass {
     HorizontalAlign 3
    }
    AllowHeightOverride 1
-   HeightOverride 45
+   HeightOverride 35
    {
     OverlayWidgetClass "{5D10C018F39AE948}" {
      Name "Overlay"
@@ -52,12 +51,13 @@ ButtonWidgetClass {
         VerticalAlign 3
        }
        Color 0 0 0 1
-       Size 1000 600
-       Saturation 0
+       Size 1200 600
+       Saturation 0.005
        Mask "{081989E2168A288D}Assets/Decals/Asphalt/Patch/Data/Decal_Asphalt_Patch_Square_01_A.edds"
-       "Transition width" 0.172
-       Progress 0.87
-       "Mask Mode" "Include Below"
+       "Transition width" 0.162
+       Progress 0.878
+       "Mask Mode" "Include Range"
+       Range 1
       }
       PanelWidgetClass "{5D10C018F39AE94E}" {
        Name "Border"
@@ -76,8 +76,8 @@ ButtonWidgetClass {
         Padding 8 8 8 8
        }
        "Z Order" 8
-       "Font Size" 30
-       "Min Font Size" 20
+       "Font Size" 20
+       "Min Font Size" 10
       }
      }
     }
