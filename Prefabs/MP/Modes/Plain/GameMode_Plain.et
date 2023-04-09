@@ -1,0 +1,14 @@
+SCR_BaseGameMode : "{0F307326459A1395}Prefabs/MP/Modes/GameMode_Base.et" {
+ ID "56B2B479C6B96951"
+ components {
+  SP_DialogueComponent "{5D12DDEDF761CCE7}" {
+   m_CharacterArchetypeList {
+    SP_DialogueArchetype "{5D12DDEDFC0F0EF3}" : "{329463647B42DB55}Configs/CharacterTestFIA.conf" {
+    }
+   }
+   m_ChatChannel LocalChatChannel "{5D12DDEDFE595703}" {
+    "Channel name" "Context"
+   }
+  }
+ }
+}

@@ -42,8 +42,8 @@ class SP_DialogueComponent: ScriptComponent
 		//check if this achetype is branched. if yes get text from SP_MultipleChoiceConfig and return before incrementing stage
 		if (DiagArch.IsCharacterBranched == true)
 		{
-			SP_DialogueConfig DialogueConfig = DiagArch.GetDialogueConfigLite(DiagArch.ArchBranchID);
-			m_DialogTexttoshow = DialogueConfig.GetMultipleChoiceConfig().GetDialogueText(BranchID);
+			SP_DialogueBranch DialogueBranch = DiagArch.GetDialogueBranchLite(DiagArch.ArchBranchID);
+			m_DialogTexttoshow = DialogueBranch.GetMultiDialogueText(BranchID);
 			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 			MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 			DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
@@ -56,8 +56,9 @@ class SP_DialogueComponent: ScriptComponent
 		{
 			m_DialogTexttoshow = DiagArch.GetDialogueText(BranchID);
 		}
-		//Check if this DialogueConfig has a SP_MultipleChoiceConfig atatched to it, if yes cause branching to the character and return before incrementing stage
-		if(DiagArch.GetDialogueConfigLite(BranchID) && DiagArch.CheckIfDialogueBranches(DiagArch.GetDialogueConfigLite(BranchID)) == true)
+		SP_DialogueBranch DiagBranch = SP_DialogueBranch.Cast(DiagArch.GetDialogueBranch(BranchID));
+		//Check if this DialogueBranch has a SP_MultipleChoiceConfig atatched to it, if yes cause branching to the character and return before incrementing stage
+		if(DiagBranch.CheckIfTextConfigBranches() == true)
 		{
 			DiagArch.BranchDialogueArchetype(BranchID);
 			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
@@ -67,7 +68,7 @@ class SP_DialogueComponent: ScriptComponent
 			DiagUI.UpdateEntries();
 			return;
 		}
-		//if archetype is not branched and the DialogueConfig doesent have any SP_MultipleChoiceConfig atatched to it send mt message, increment stage and be done.
+		//if archetype is not branched and the DialogueBranch doesent have any SP_MultipleChoiceConfig atatched to it send mt message, increment stage and be done.
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
@@ -92,8 +93,8 @@ class SP_DialogueComponent: ScriptComponent
 		//check if archetype is branched so we can take text form different place
 		if (DiagArch.IsCharacterBranched == true)
 		{
-			SP_DialogueConfig DialogueConfig = DiagArch.GetDialogueConfigLite(DiagArch.ArchBranchID);
-			m_sActionName = DialogueConfig.GetMultipleChoiceConfig().GetActionText(BranchID);
+			SP_DialogueBranch DialogueBranch = DiagArch.GetDialogueBranchLite(DiagArch.ArchBranchID);
+			m_sActionName = DialogueBranch.GetMultiActionText(BranchID);
 			return m_sActionName;
 		}
 		m_sActionName = DiagArch.GetActionTitle(BranchID);
@@ -266,33 +267,3 @@ enum EArchetypeIdentifier
 		"FactionKey",
 		"Faction and Rank"
 	};
-class DialogueTextConfig: ScriptAndConfig
-{
-	[Attribute(defvalue: "", desc: "Action Title", category: "Dialogue")]
-	string ActionText;
-	[Attribute(defvalue: "", desc: "Dialogue Text", category: "Dialogue")]
-    string DialogueText;
-}
-class DialogueTextLayout: ScriptAndConfig
-{
-	DialogueTextConfig config1;
-	DialogueTextConfig config2;
-	DialogueTextConfig config3;
-	void init()
-	{
-	};
-}
-class DialogueBranchKey: ScriptAndConfig
-{
-	[Attribute(defvalue: "", desc: "Action Title", category: "Dialogue")]
-	int BranchKey;
-	int OriginalBranchKey;
-	int GetBranchKey()
-	{
-		return BranchKey;
-	}
-	void SaveOriginalBranchKey()
-	{
-		BranchKey = OriginalBranchKey;
-	}
-}

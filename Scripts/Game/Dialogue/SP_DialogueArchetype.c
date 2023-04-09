@@ -20,23 +20,20 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//------------------------------------------------------------------//
 	//Different configuration containing dialogue texts
 	[Attribute()]
-	private ref array<ref SP_DialogueConfig> DialogueConfig;
-	//Configuration of existing branches and their initial state
-	[Attribute()]
-	private ref array<int> CharacterDiagBranchStage;
+	private ref array<ref SP_DialogueBranch> DialogueBranch;
 	//------------------------------------------------------------------//
 	//Map to be filled with all the configurations on Init
-	protected ref map<int, ref SP_DialogueConfig> DialogueConfigMap;
+	protected ref map<int, ref SP_DialogueBranch> DialogueBranchMap;
     protected SP_DialogueComponent DiagComp;
 	//------------------------------------------------------------------//
 	//Branching bool. If a Dialogue Archetype has its IsCharacterBranched set to true it will give text from SP_MultipleChoiceConfig
-	//Selecting from wich SP_DialogueConfig to take the SP_MultipleChoiceConfig happens using current dialogue stage and branch ID specified when the branching happened
+	//Selecting from wich SP_DialogueBranch to take the SP_MultipleChoiceConfig happens using current dialogue stage and branch ID specified when the branching happened
 	bool IsCharacterBranched;
 	//Branch ID that is set when the Archtype gets branched
 	int ArchBranchID;
 	//------------------------------------------------------------------//
 	//Function used to branch this archetype. Called used a branchID wich sets from wich branch to take data
-	//If branch is set to 1 Action,Dialogue text will be taken from SP_DialogueConfig with BranchID == 1 and StageID == Current Stage
+	//If branch is set to 1 Action,Dialogue text will be taken from SP_DialogueBranch with BranchID == 1 and StageID == Current Stage
 	void BranchDialogueArchetype(int branch)
 	{
 		if (IsCharacterBranched == false)
@@ -76,59 +73,58 @@ class SP_DialogueArchetype: ScriptAndConfig
 	{
 		return m_sCharacterRank;
 	}
-	array<ref SP_DialogueConfig> GetDialogueConfigArray()
+	array<ref SP_DialogueBranch> GetDialogueBranchArray()
 	{
-		return DialogueConfig;
+		return DialogueBranch;
 	}
-	array<int> GetCharacterDiagBranchStageArray()
+	map<int, ref SP_DialogueBranch> GetDialogueBranchMap()
 	{
-		return CharacterDiagBranchStage;
+		return DialogueBranchMap;
 	}
 	//------------------------------------------------------------------//
 	//Mapping all configrations existing uder this character archetype
 	void Init()
 	{
-		DialogueConfigMap = new map<int, ref SP_DialogueConfig>();
-		for (int i = 0, count = DialogueConfig.Count(); i < count; i++)
+		DialogueBranchMap = new map<int, ref SP_DialogueBranch>();
+		for (int i = 0, count = DialogueBranch.Count(); i < count; i++)
         {
 			//using 2 values to create key, branch and stage IDs
-			int key = (DialogueConfig[i].GetDialogueStageKey() << 16) | (DialogueConfig[i].GetDialogueBranchKey());
-        	DialogueConfigMap.Insert(key, DialogueConfig[i]);
+			int key = (i);
+        	DialogueBranchMap.Insert(key, DialogueBranch[i]);
         }
 	}
 	//------------------------------------------------------------------//
 	//Find the Config you are looking for using the map made above
-	SP_DialogueConfig GetDialogueConfig(int StageKey, int BranchKey)
+	SP_DialogueBranch GetDialogueBranch(int BranchKey)
     {
-		int key = (StageKey << 16) | (BranchKey);
-        SP_DialogueConfig config;
-		if (!DialogueConfigMap.Find(key, config))
+		int key = (BranchKey);
+        SP_DialogueBranch branch;
+		if (!DialogueBranchMap.Find(key, branch))
 		{
         	return null;
     	}
 		
-        return config;
+        return branch;
     }
 	//------------------------------------------------------------------//
 	//Find the Config you are looking for using the map made above using the current stage
-	SP_DialogueConfig GetDialogueConfigLite(int BranchKey)
+	SP_DialogueBranch GetDialogueBranchLite(int BranchKey)
     {
-		int StageKey = CharacterDiagBranchStage[BranchKey];
-		int key = (StageKey << 16) | (BranchKey);
-        SP_DialogueConfig config;
-		if (!DialogueConfigMap.Find(key, config))
+		int key = (BranchKey);
+        SP_DialogueBranch branch;
+		if (!DialogueBranchMap.Find(key, branch))
 		{
         	return null;
     	}
 		
-        return config;
+        return branch;
     }
 	//------------------------------------------------------------------//
-	//Checks if a SP_MultipleChoiceConfig is hooked on this config, used to initiate radial menu insead of completing dialogue
-	bool CheckIfDialogueBranches(SP_DialogueConfig DialogueConfiguration)
+	//Checks if a SP_MultipleChoiceConfig is hooked on this branch, used to initiate radial menu insead of completing dialogue
+	bool CheckIfDialogueBranches(DialogueTextConfig DialogueConf)
 	{
 		
-		if (DialogueConfiguration.GetMultipleChoiceConfig() == null)
+		if (DialogueConf.GetMultipleChoiceConfig() == null)
 		{
 			return false;
 		}
@@ -139,55 +135,46 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//Check if IsInfluanceGlobal is true wich means that all branches should progress, if not progres only the branch provided
 	bool IncrementStage(int BranchID, int incrementamount)
 	{	
-		SP_DialogueConfig config = GetDialogueConfig(CharacterDiagBranchStage[BranchID], BranchID);
-		if (config != null && config.IsInfluanceGlobal() == true)
+		SP_DialogueBranch branch = GetDialogueBranch(BranchID);
+		if (branch != null && branch.IsInfluanceGlobal() == true)
 		{
-			for (int i = 0, count = CharacterDiagBranchStage.Count(); i < count; i++)
+			for (int i = 0, count = DialogueBranch.Count(); i < count; i++)
         	{
-				CharacterDiagBranchStage[i] = CharacterDiagBranchStage[i] + 1;	
+				DialogueBranch[i].IncrementConfigStage(incrementamount);	
         	}
 		}
-		else
-			CharacterDiagBranchStage[BranchID] = CharacterDiagBranchStage[BranchID] + 1;
+		branch.IncrementConfigStage(incrementamount);
 		return true;
 	}
 	//------------------------------------------------------------------//
 	//resets stage of branches
 	bool ResetStage(int BranchID)
-	{	
-		for (int i = 0, count = CharacterDiagBranchStage.Count(); i < count; i++)
-        	{	
-				CharacterDiagBranchStage[i] = 1;	
-        	}
+	{
+		GetDialogueBranchLite(BranchID).ResetBranchStage();
 		return true;
 	}
 	//------------------------------------------------------------------//
-	//Find correct config using currect stage and take dialogue text from it 
+	//Find correct branch using currect stage and take dialogue text from it 
 	string GetDialogueText(int BranchID)
 	{
 		string m_stexttoshow;
-		for (int i = 0, count = CharacterDiagBranchStage.Count(); i < count; i++)
-		{
-			SP_DialogueConfig config = GetDialogueConfigLite(BranchID);
-			if (config != null)
-				{
-					m_stexttoshow = config.GetDialogueText(CharacterDiagBranchStage[BranchID]);
-				}
-		}	
+		SP_DialogueBranch branch = GetDialogueBranchLite(BranchID);
+		m_stexttoshow = branch.GetDialogueText();	
 		return m_stexttoshow;
 	}
 	//------------------------------------------------------------------//
-	//Find correct config using current stage and take action title from it 
+	//Find correct branch using current stage and take action title from it 
 	string GetActionTitle(int BranchID)
 	{
 		string m_sActionTitle;
-		for (int i = 0, count = CharacterDiagBranchStage.Count(); i < count; i++)
+		SP_DialogueBranch Branch = GetDialogueBranchLite(BranchID);
+		if (Branch)
 		{
-			SP_DialogueConfig config = GetDialogueConfigLite(BranchID);
-			if (config != null)
-				{
-					m_sActionTitle = config.GetActionText(CharacterDiagBranchStage[BranchID]);
-				}
+			m_sActionTitle = Branch.GetActionText();
+		}
+		else
+		{
+			m_sActionTitle = STRING_EMPTY;
 		}
 		return m_sActionTitle;
 	}
@@ -201,9 +188,8 @@ class SP_DialogueArchetype: ScriptAndConfig
         m_sCharacterName = original.GetArchetypeTemplateName();
         m_sCharacterRank = original.GetArchetypeTemplateRank();
         m_sCharacterFaction = original.GetArchetypeTemplateFaction();
-        DialogueConfig = original.GetDialogueConfigArray();
-		CharacterDiagBranchStage = new array<int>;
-        CharacterDiagBranchStage.Copy(original.GetCharacterDiagBranchStageArray());
+        DialogueBranch = original.GetDialogueBranchArray();
+		DialogueBranchMap = original.GetDialogueBranchMap();
 		}
     }
 };
