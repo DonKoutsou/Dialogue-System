@@ -57,7 +57,7 @@ class SP_DialogueConfig: ScriptAndConfig
 	}
 	//------------------------------------------------------------------//
 	//Getter for radial configuration file marking this config as branching and that it should open radial menu
-	SP_MultipleChoiceConfig GetRadialChoiceConfig()
+	SP_MultipleChoiceConfig GetMultipleChoiceConfig()
 	{
 		if(m_RadialChoiceConfig == null)
 		{
@@ -68,10 +68,3 @@ class SP_DialogueConfig: ScriptAndConfig
 		
 	}
 };
-enum ETextRiplaceID
-	{
-		Name,
-		Rank,
-		"FactionKey",
-		"Faction and Rank"
-	};

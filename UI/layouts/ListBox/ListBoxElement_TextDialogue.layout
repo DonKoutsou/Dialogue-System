@@ -1,7 +1,6 @@
 ButtonWidgetClass {
  Name "ListBoxElement"
  Slot AlignableSlot "{554ADB1D2D5974C0}" {
-  HorizontalAlign 3
  }
  components {
   SCR_ListBoxElementComponent "{5D10C019C741C840}" : "{217E1BF1715F9C33}Configs/UI/ListBoxElement_DialogueModularButtonComponent.conf" {
@@ -32,7 +31,6 @@ ButtonWidgetClass {
   SizeLayoutWidgetClass "{5D10C018F39AE94A}" {
    Name "SizeLayout"
    Slot ButtonWidgetSlot "{5548E6E7E6AEDDC1}" {
-    HorizontalAlign 3
    }
    AllowHeightOverride 1
    HeightOverride 35
@@ -59,6 +57,16 @@ ButtonWidgetClass {
        "Mask Mode" "Include Range"
        Range 1
       }
+      BlurWidgetClass "{5D128E0C40525C3B}" {
+       Name "Blur0"
+       Slot OverlayWidgetSlot "{5D128E0C40525C16}" {
+        HorizontalAlign 3
+        VerticalAlign 3
+       }
+       "Is Enabled" 0
+       "Is Visible" 0
+       Intensity 0.1
+      }
       PanelWidgetClass "{5D10C018F39AE94E}" {
        Name "Border"
        Slot OverlayWidgetSlot "{5548E6E7D859FCD2}" {
@@ -75,7 +83,6 @@ ButtonWidgetClass {
        Slot OverlayWidgetSlot "{569519C7FDE79DBD}" {
         Padding 8 8 8 8
        }
-       "Z Order" 8
        "Font Size" 20
        "Min Font Size" 10
       }

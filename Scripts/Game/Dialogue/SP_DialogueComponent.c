@@ -14,6 +14,8 @@ class SP_DialogueComponent: ScriptComponent
 	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;
 	SCR_BaseGameMode GameMode;
 	//----------------------------------------------------------------------------------------------------------------//
+	//Function used for leaving a branch and going back to initial menu
+	//Unbranches character and updates UI
 	void DoBackDialogue(IEntity Character, IEntity Player)
 	{
 		string senderName = GetCharacterName(Character);
@@ -21,13 +23,15 @@ class SP_DialogueComponent: ScriptComponent
 		SP_DialogueArchetype DiagArch = LocateCharacterArchetype(Character);
 		string m_DialogTexttoshow = "Go Back";
 		
-		DiagArch.UnBranchCharacter();
+		DiagArch.UnBranchDialogueArchetype();
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		DiagUI.Init(Character, Player);
 		DiagUI.UpdateEntries();
 	}
+	//Main function used to send text to chat. 
+	//Has the logic for branching the dialogue Archetype(Branching cuases UI entries to get text and button logic from SP_MultipleChoiceConfig
 	void DoDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount)
 	{
 		//Get name of character that will send message to chat
@@ -35,10 +39,11 @@ class SP_DialogueComponent: ScriptComponent
 		int senderID = Character.GetID();
 		SP_DialogueArchetype DiagArch = LocateCharacterArchetype(Character);
 		string m_DialogTexttoshow;
+		//check if this achetype is branched. if yes get text from SP_MultipleChoiceConfig and return before incrementing stage
 		if (DiagArch.IsCharacterBranched == true)
 		{
 			SP_DialogueConfig DialogueConfig = DiagArch.GetDialogueConfigLite(DiagArch.ArchBranchID);
-			m_DialogTexttoshow = DialogueConfig.GetRadialChoiceConfig().GetDialogueText(BranchID);
+			m_DialogTexttoshow = DialogueConfig.GetMultipleChoiceConfig().GetDialogueText(BranchID);
 			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 			MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 			DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
@@ -47,12 +52,14 @@ class SP_DialogueComponent: ScriptComponent
 			return;
 		}
 		else
+		//If not get text normaly
 		{
 			m_DialogTexttoshow = DiagArch.GetDialogueText(BranchID);
 		}
+		//Check if this DialogueConfig has a SP_MultipleChoiceConfig atatched to it, if yes cause branching to the character and return before incrementing stage
 		if(DiagArch.GetDialogueConfigLite(BranchID) && DiagArch.CheckIfDialogueBranches(DiagArch.GetDialogueConfigLite(BranchID)) == true)
 		{
-			DiagArch.BranchCharacter(BranchID);
+			DiagArch.BranchDialogueArchetype(BranchID);
 			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 			MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 			DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
@@ -60,6 +67,7 @@ class SP_DialogueComponent: ScriptComponent
 			DiagUI.UpdateEntries();
 			return;
 		}
+		//if archetype is not branched and the DialogueConfig doesent have any SP_MultipleChoiceConfig atatched to it send mt message, increment stage and be done.
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
@@ -70,49 +78,7 @@ class SP_DialogueComponent: ScriptComponent
 			
 	}
 	//----------------------------------------------------------------------------------------------------------------//
-	//DoDialogue duplicate used for radial meny entries
-	void DoRadialDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount, int EntryID)
-	{
-		//Get name of character that will send message to chat
-		string senderName = GetCharacterName(Character);
-		int senderID = Character.GetID();
-		
-		//Find our Diialogue Archetype by matching it to characters info
-		SP_DialogueArchetype DiagArch = LocateCharacterArchetype(Character);
-		
-		//Get Dialogue config with same branch id. Gives you config that has same stage id as current stage
-		SP_DialogueConfig DialogueConfig = DiagArch.GetDialogueConfigLite(BranchID);
-		
-		if (DialogueConfig)
-		{
-			//find the configuration that contains the text we want
-			SP_MultipleChoiceConfig RadialConfig = DialogueConfig.GetRadialChoiceConfig();
-			if(RadialConfig)
-			{
-				string m_DialogTexttoshow = RadialConfig.GetDialogueText(EntryID);
-				SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
-				//EChoiseBehavior ChoiseBehavior = RadialConfig.GetChoiseBehavior();
-				//switch (ChoiseBehavior) 
-				//	{
-				//    case 0:
-				//			//Accept & Close
-				//			RadMenuDiags.Close(Player);
-				//		break;
-				//	case 1:
-				//			//Alternate Dialogue WIP
-				//		break;
-				//	case 2:
-							//Stay
-				//		break;
-				//	}
-			}
-		}
-		
-		
-		IncrementDiagStage(Character, BranchID, IncrementAmount);
-	}
-	//----------------------------------------------------------------------------------------------------------------//
-	// Used in action to send the text to chat
+	// Used to send text to chat, used on DoDialogue and DoBackDialogue
 	void SendText(string Text, BaseChatChannel Chanell, int SenderID, string SenderName)
 	{
 		SCR_ChatPanelManager.GetInstance().ShowDiagMessage(Text, m_ChatChannel, SenderID, SenderName);
@@ -123,42 +89,15 @@ class SP_DialogueComponent: ScriptComponent
 	{
 		string m_sActionName;
 		SP_DialogueArchetype DiagArch = LocateCharacterArchetype(Owner);
+		//check if archetype is branched so we can take text form different place
 		if (DiagArch.IsCharacterBranched == true)
 		{
 			SP_DialogueConfig DialogueConfig = DiagArch.GetDialogueConfigLite(DiagArch.ArchBranchID);
-			m_sActionName = DialogueConfig.GetRadialChoiceConfig().GetActionText(BranchID);
+			m_sActionName = DialogueConfig.GetMultipleChoiceConfig().GetActionText(BranchID);
 			return m_sActionName;
 		}
 		m_sActionName = DiagArch.GetActionTitle(BranchID);
 		return m_sActionName;
-	}
-	//Get title for radial meny action
-	string GetRadialActionName(int BranchID, IEntity Owner, int RadialID)
-	{
-		string m_sMActionName;
-		SP_DialogueConfig DialogueConfiguration;
-		SP_MultipleChoiceConfig RadialConfiguration;
-		//Find correct archetype
-		SP_DialogueArchetype DiagArch = LocateCharacterArchetype(Owner);
-		//Find the correct configuration in the archetype for the current stage
-		DialogueConfiguration = DiagArch.GetDialogueConfigLite(BranchID);
-		if (DialogueConfiguration)
-		{
-			//look for SP_MultipleChoiceConfig
-			RadialConfiguration = DialogueConfiguration.GetRadialChoiceConfig();
-			if(!RadialConfiguration)
-			{
-				return STRING_EMPTY;
-			}
-			//if foind get text from it
-			m_sMActionName = RadialConfiguration.GetActionText(RadialID);
-			if(!m_sMActionName)
-			{
-				return STRING_EMPTY;
-			}
-		}
-		
-		return m_sMActionName;
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//progress dialogue stage int, need to figure out where/how to store the stage

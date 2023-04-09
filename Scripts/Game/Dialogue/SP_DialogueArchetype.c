@@ -28,10 +28,16 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//Map to be filled with all the configurations on Init
 	protected ref map<int, ref SP_DialogueConfig> DialogueConfigMap;
     protected SP_DialogueComponent DiagComp;
+	//------------------------------------------------------------------//
+	//Branching bool. If a Dialogue Archetype has its IsCharacterBranched set to true it will give text from SP_MultipleChoiceConfig
+	//Selecting from wich SP_DialogueConfig to take the SP_MultipleChoiceConfig happens using current dialogue stage and branch ID specified when the branching happened
 	bool IsCharacterBranched;
+	//Branch ID that is set when the Archtype gets branched
 	int ArchBranchID;
 	//------------------------------------------------------------------//
-	void BranchCharacter(int branch)
+	//Function used to branch this archetype. Called used a branchID wich sets from wich branch to take data
+	//If branch is set to 1 Action,Dialogue text will be taken from SP_DialogueConfig with BranchID == 1 and StageID == Current Stage
+	void BranchDialogueArchetype(int branch)
 	{
 		if (IsCharacterBranched == false)
 		{
@@ -39,7 +45,8 @@ class SP_DialogueArchetype: ScriptAndConfig
 		}
 		ArchBranchID = branch;
 	}
-	void UnBranchCharacter()
+	//Function used to unbranch this archetype and allow it to provide text from all branches
+	void UnBranchDialogueArchetype()
 	{
 		if (IsCharacterBranched == true)
 		{
@@ -121,7 +128,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 	bool CheckIfDialogueBranches(SP_DialogueConfig DialogueConfiguration)
 	{
 		
-		if (DialogueConfiguration.GetRadialChoiceConfig() == null)
+		if (DialogueConfiguration.GetMultipleChoiceConfig() == null)
 		{
 			return false;
 		}

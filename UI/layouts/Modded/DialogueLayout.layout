@@ -35,13 +35,21 @@ FrameWidgetClass {
      "Mask Mode" "Include Below"
      Range 0.069
     }
-    BlurWidgetClass "{5D126EC6B88419F2}" {
-     Name "Blur0"
-     Slot OverlayWidgetSlot "{5D126EC6B88419CE}" {
+    PanelWidgetClass "{5D128E0CC9EBE7F7}" {
+     Name "Panel0"
+     Slot OverlayWidgetSlot {
       HorizontalAlign 3
       VerticalAlign 3
      }
-     Intensity 0.265
+     Color 0.761 0.386 0.078 1
+    }
+    BlurWidgetClass "{5D128E0CC9EBE7A5}" {
+     Name "Blur0"
+     Slot OverlayWidgetSlot {
+      HorizontalAlign 3
+      VerticalAlign 3
+     }
+     Intensity 0.1
      "Smooth Border" 6 6 6 6
     }
     OverlayWidgetClass "{5D10CA10CABF9D5A}" : "{94CAAE4A601195D3}UI/layouts/ListBox/ListBox.layout" {
@@ -98,6 +106,20 @@ FrameWidgetClass {
      Progress 0.229
      "Mask Mode" "Include Below"
     }
+    PanelWidgetClass "{5D128E0D4C99F2C4}" {
+     Name "Panel0"
+     Slot FrameWidgetSlot "{5D128E0D74D4A16D}" {
+      Anchor 0 0 1 1
+      PositionX 390.264
+      PositionY 31.5
+      SizeX -680.529
+      OffsetRight 0
+      SizeY -33
+      OffsetBottom 0
+      Alignment 0 0
+     }
+     Color 0.761 0.386 0.078 1
+    }
     BlurWidgetClass "{5D126EC5A621ED82}" {
      Name "Blur0"
      Slot FrameWidgetSlot "{5D126EC5A621ED9E}" {
@@ -133,14 +155,14 @@ FrameWidgetClass {
     ImageWidgetClass "{5D126ECA850604EF}" {
      Name "FactionIcon"
      Slot FrameWidgetSlot "{5D126ECA850604C0}" {
-      PositionX 0
-      OffsetLeft 0
-      PositionY 0
-      OffsetTop 0
-      SizeX 63
-      OffsetRight -63
-      SizeY 63
-      OffsetBottom -63
+      PositionX 6
+      OffsetLeft 6
+      PositionY 6
+      OffsetTop 6
+      SizeX 50
+      OffsetRight -56
+      SizeY 50
+      OffsetBottom -56
      }
      Texture "{FB266CDD4502D60B}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_Fia.edds"
     }

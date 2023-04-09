@@ -11,13 +11,6 @@ class SP_DialogueAction : ScriptedUserAction
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		DiagUI.Init(pOwnerEntity, pUserEntity);
 		DiagUI.UpdateEntries();
-		//DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
-		//if (DiagComp)
-		//{
-			//DoDialogue function on dialogue component, sending all gathered data from action
-		//	DiagComp.StartRadialMenu(pOwnerEntity, pUserEntity);
-		//}
-		//return;
 	}
 	override event void Init(IEntity pOwnerEntity, GenericComponent pManagerComponent)
 	{

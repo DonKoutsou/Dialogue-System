@@ -3,30 +3,33 @@ modded enum ChimeraMenuPreset
     DialogueLayout
 }
 class DialogueUIClass: ChimeraMenuBase
-{
-	SP_DialogueComponent DiagComp;
-	SP_DialogueArchetype DiagArch;
-	IEntity TalkingChar;
-	bool IsDialogueHappening = false;
-    protected Widget m_wRoot;    
-    protected SCR_ButtonTextComponent comp;
+{ 
+	//-----------------------------------------------//
+	//UI Widgets
+	protected Widget m_wRoot; 
 	OverlayWidget m_ListBoxOverlay;
 	TextWidget m_CharacterName;
 	TextWidget m_CharacterRank;
 	ImageWidget m_CharacterFactionIcon;
 	SCR_ListBoxElementComponent m_ListBoxElement;
     SCR_ListBoxComponent m_ListBoxComponent;
-    IEntity myCallerEntity;
+    //-----------------------------------------------//
+	//PlayerCharacter
 	IEntity myUserEntity;           
-    string CharName;
+	//-----------------------------------------------//
+	//Charactaer we are talking to
+	IEntity myCallerEntity;
+	string CharName;
 	string CharRank;
 	ECharacterRank rank;
 	FactionKey faction;
+	//-----------------------------------------------//
+	//DialogueStystem
+	SP_DialogueComponent DiagComp;
+	SP_DialogueArchetype DiagArch;
 	protected SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
-    //------------------------------------------------------------------------------------------------
-    override void OnMenuOpen()
-    {
-    };
+    //------------------------------------------------------------------------------------------------//
+	
 	void Init(IEntity Owner, IEntity User)
 	{
 		myCallerEntity = Owner;
@@ -84,6 +87,7 @@ class DialogueUIClass: ChimeraMenuBase
 		string Diag2 = DiagComp.GetActionName(2, myCallerEntity);
 		string Diag3 = DiagComp.GetActionName(3, myCallerEntity);
 		int entryamount;
+		//Check if any there arent inputs comming form GetActionName, if not do not create the item
 		if (Diag0 != STRING_EMPTY)
 		{
 			m_ListBoxComponent.AddItem(Diag0);
@@ -112,6 +116,7 @@ class DialogueUIClass: ChimeraMenuBase
 			elComp3.m_OnClicked.Insert(DoDialogue3);
 			entryamount = entryamount + 1;
 		}
+		//Check if Archtype is branched an choose to create a Leave button or a Go Back button
 		SP_DialogueArchetype DArch = DiagComp.LocateCharacterArchetype(myCallerEntity);
 		if (DArch.IsCharacterBranched == true)
 		{
@@ -122,24 +127,29 @@ class DialogueUIClass: ChimeraMenuBase
 		}
 		m_ListBoxComponent.AddItem("Leave");
 		SCR_ListBoxElementComponent elComp4 = m_ListBoxComponent.GetElementComponent(entryamount);
-		elComp4.m_OnClicked.Insert(myCustomFunction);
-	} 
-    void myCustomFunction()
+		elComp4.m_OnClicked.Insert(LeaveFunction);
+	}
+	//Function called to close menu
+    void LeaveFunction()
     {
 		GetGame().GetMenuManager().CloseAllMenus();
     }
+	//DoDialogue function wich branch ID 0
 	void DoDialogue0()
 	{
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 0, 1);
 	}
+	//DoDialogue function wich branch ID 1
 	void DoDialogue1()
 	{
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 1, 1);
 	}
+	//DoDialogue function wich branch ID 2
 	void DoDialogue2()
 	{
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 2, 1);
 	}
+	//DoDialogue function wich branch ID 3
 	void DoDialogue3()
 	{
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 3, 1);
