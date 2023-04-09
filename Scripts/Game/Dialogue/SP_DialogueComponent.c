@@ -38,7 +38,7 @@ class SP_DialogueComponent: ScriptComponent
 		if (DiagArch.IsCharacterBranched == true)
 		{
 			SP_DialogueConfig DialogueConfig = DiagArch.GetDialogueConfigLite(DiagArch.ArchBranchID);
-			m_DialogTexttoshow = DialogueConfig.GetRadialChoiceConfig().GetDialogueText(BranchID - 1);
+			m_DialogTexttoshow = DialogueConfig.GetRadialChoiceConfig().GetDialogueText(BranchID);
 			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 			MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 			DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);

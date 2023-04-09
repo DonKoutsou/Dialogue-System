@@ -11,12 +11,12 @@ FrameWidgetClass {
    Slot FrameWidgetSlot "{5D10B3055CA98F76}" {
     Anchor 0.5 1 0.5 1
     OffsetLeft 0
-    PositionY -140.05
-    OffsetTop -140.1
+    PositionY -164.05
+    OffsetTop -164.1
     SizeX 781
     OffsetRight -781
-    SizeY 231.9
-    OffsetBottom -91.8
+    SizeY 296
+    OffsetBottom -131.9
     Alignment 0.5 0.5
    }
    {
@@ -48,7 +48,7 @@ FrameWidgetClass {
      Name "ListBox0"
      Slot OverlayWidgetSlot "{5D10CA10CABF9EB4}" {
       VerticalAlign 0
-      Padding 0 75 0 0
+      Padding 0 89.8 0 0
      }
      components {
       SCR_ListBoxComponent "{566C9415BAA54E1B}" {
@@ -63,12 +63,12 @@ FrameWidgetClass {
    Slot FrameWidgetSlot "{5D10CA1DAB43D985}" {
     Anchor 0.5 1 0.5 1
     OffsetLeft 0
-    PositionY -224.5
-    OffsetTop -224.5
-    SizeX 72.888
+    PositionY -264.5
+    OffsetTop -264.5
+    SizeX 72.9
     OffsetRight -72.9
     SizeY 64
-    OffsetBottom 160.5
+    OffsetBottom 200.5
     Alignment 0.5 0.5
     SizeToContent 1
    }
