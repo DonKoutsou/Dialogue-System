@@ -5,11 +5,7 @@ SCR_BaseGameMode GameMode_Base1 : "{0F307326459A1395}Prefabs/MP/Modes/GameMode_B
  components {
   SP_DialogueComponent "{5D12DDEDA68A7294}" {
    m_CharacterArchetypeList {
-    SP_DialogueArchetype "{5D12DDE46B85F61F}" : "{8B47A3F75A9C2615}Configs/CharacterTestUS.conf" {
-    }
-    SP_DialogueArchetype "{5D12DDE46AEE5B4F}" : "{1796DE334DCE1541}Configs/CharacterTestUSSR.conf" {
-    }
-    SP_DialogueArchetype "{5D1477D5199EE99D}" : "{329463647B42DB55}Configs/CharacterTestFIA.conf" {
+    SP_DialogueArchetype "{5D1503FA75D137DB}" : "{329463647B42DB55}Configs/CharacterTestFIA.conf" {
     }
    }
    m_ChatChannel LocalChatChannel "{5D12DDEDAE79394A}" {

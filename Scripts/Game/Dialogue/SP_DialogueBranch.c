@@ -1,5 +1,6 @@
-//Dialogue Configuration Entry, contains dialogue and action name for specified branch and stage.
-//If the dialogue branch ID and stage ID match this dialogue it should show up on the specified character archetype.
+//Dialogue Branch is used to store a menu entry. In any dialogue branch a multiple stages can be concifgured.
+//In Dialogue branch the dialogues progession can be configured, at any stage a Multiple choice config can be introduces to create another branch.
+//Each branch tracks its own stage
 [BaseContainerProps(configRoot:true)]
 class SP_DialogueBranch
 {
@@ -7,73 +8,86 @@ class SP_DialogueBranch
 	//if this configuration should progress the stage of all the branches on their character archetype
 	[Attribute(defvalue: "", desc: "Should this dialogue progress all branches when executed?", category: "Dialogue",  )]
 	protected bool m_bGlobalStageInfluance;
-	[Attribute(desc: "Filtered selection test")]
-	ref array<ref DialogueTextConfig> m_DialogueTexts;
+	//Array containing the texts of each stage this branch will have
+	[Attribute()]
+	ref array<ref DialogueStageConfig> m_DialogueStageConfig;
+	//Stage of this config
 	int DialogueBranchStage;
 	
-	void ResetBranchStage()
-	{
-		DialogueBranchStage = 0;
-	}
+	
 	//------------------------------------------------------------------//
 	//Text that is going to be used as title for the action
-	
 	string GetActionText()
 	{
 		string ActText;
-		if (m_DialogueTexts[DialogueBranchStage] && m_DialogueTexts.GetRefCount() >= DialogueBranchStage)
+		//check if this config is out of texts(stage has progressed further than the available entries
+		if (m_DialogueStageConfig[DialogueBranchStage] && m_DialogueStageConfig.GetRefCount() >= DialogueBranchStage)
 		{
-			ActText = m_DialogueTexts[DialogueBranchStage].GetActionText();
+			//Go in config number (current stage) and look for the action text
+			ActText = m_DialogueStageConfig[DialogueBranchStage].GetActionText();
 		}
 		else
 		{
+			//else return emty string
 			ActText = STRING_EMPTY;
 		}
 		
 		return ActText;
 	}
+	//------------------------------------------------------------------//
+	//Used to take the action title from SP_MultipleChoiceConfig inside the branch instead of the DialogueStageConfig
 	string GetMultiActionText(int TextKey)
 	{
-		string ActText = m_DialogueTexts[DialogueBranchStage].GetMultiActionText(TextKey);
+		string ActText = m_DialogueStageConfig[DialogueBranchStage].GetMultiActionText(TextKey);
 		return ActText;
 	}
-	string GetMultiDialogueText(int TextKey)
-	{
-		string Diagtext = m_DialogueTexts[DialogueBranchStage].GetMultiDialogueText(TextKey);
-		return Diagtext;
-	}
 	//------------------------------------------------------------------//
-	//Text that is going to be sent to chat
+	//Text that is going to be sent in the chat
 	string GetDialogueText()
 	{
 		string DiagText;
-		if (m_DialogueTexts[DialogueBranchStage] && m_DialogueTexts.GetRefCount() >= DialogueBranchStage)
+		//check if this config is out of texts(stage has progressed further than the available entries
+		if (m_DialogueStageConfig[DialogueBranchStage] && m_DialogueStageConfig.GetRefCount() >= DialogueBranchStage)
 		{
-			DiagText = m_DialogueTexts[DialogueBranchStage].GetDialogueText();
+			//Go in config number (current stage) and look for the action text
+			DiagText = m_DialogueStageConfig[DialogueBranchStage].GetDialogueText();
 		}
 		else
 		{
+			//else return emty string
 			DiagText = STRING_EMPTY;
 		}
 		return DiagText;
 	}
 	//------------------------------------------------------------------//
-	//Boolean about if this configuration should progress all branches when used
+	//Used to take the dialogue text from SP_MultipleChoiceConfig inside the branch instead of the DialogueStageConfig
+	string GetMultiDialogueText(int TextKey)
+	{
+		string Diagtext = m_DialogueStageConfig[DialogueBranchStage].GetMultiDialogueText(TextKey);
+		return Diagtext;
+	}
+	//------------------------------------------------------------------//
+	//weather this branch should progress all other branches
 	bool IsInfluanceGlobal()
 	{
 		return m_bGlobalStageInfluance;
 	}
-	DialogueTextConfig GetDialogueTextConfig()
+	//------------------------------------------------------------------//
+	DialogueStageConfig GetDialogueStageConfig()
 	{
-		return m_DialogueTexts[DialogueBranchStage];
+		return m_DialogueStageConfig[DialogueBranchStage];
 	}
+	//------------------------------------------------------------------//
+	//Increments stage of this branch
 	void IncrementConfigStage(int incrementamount)
 	{
 		DialogueBranchStage = DialogueBranchStage + 1;
 	}
+	//------------------------------------------------------------------//
+	//Checks if a SP_MultipleChoiceConfig exists in the current DialogueStageConfig
 	bool CheckIfTextConfigBranches()
 	{
-		if(m_DialogueTexts[DialogueBranchStage].GetMultipleChoiceConfig())
+		if(m_DialogueStageConfig[DialogueBranchStage].GetMultipleChoiceConfig())
 		{
 			return true;
 		}
@@ -82,22 +96,32 @@ class SP_DialogueBranch
 			return false;
 		}
 	}
+	//------------------------------------------------------------------//
+	//resets stage of this branch
+	void ResetBranchStage()
+	{
+		DialogueBranchStage = 0;
+	}
 	
 };
-[BaseContainerProps(configRoot:true), DialogueTextConfigTitleAttribute()]
-class DialogueTextConfig
+[BaseContainerProps(configRoot:true), DialogueStageConfigTitleAttribute()]
+class DialogueStageConfig
 {
-	//Behavior that this choice is going to use once performed. //eg. "Accept&close" takes the selection made by player and then closes radial menu, while "Stay" keep the menu open so player can keep using it
-	[Attribute("0", UIWidgets.ComboBox, "What is going to be the behavior of radial menu choise", "", ParamEnumArray.FromEnum(EChoiseBehavior) )]
+	//------------------------------------------------------------------//
+	//Behavior that this choice is going to use once performed. //eg. "IncrementDialogueStage" increments the stage of the branch and progresses further down the dialogue, while "Stay" keep the menu open so player can keep using it
+	[Attribute("0", UIWidgets.ComboBox, "What is going to be the behavior of this choice", "", ParamEnumArray.FromEnum(EChoiseBehavior) )]
 	protected EChoiseBehavior ChoiseBehavior;
+	//------------------------------------------------------------------//
 	[Attribute(defvalue: "Action Text", desc: "Action Title", category: "Dialogue")]
 	string ActionText;
+	//------------------------------------------------------------------//
 	[Attribute(defvalue: "Dialogue Text", desc: "Dialogue Text", category: "Dialogue")]
     string DialogueText;
+	//------------------------------------------------------------------//
 	[Attribute()]
 	protected ref SP_MultipleChoiceConfig m_MultipleChoiceConfig;
 	//------------------------------------------------------------------//
-	//Getter for radial configuration file marking this config as branching and that it should open radial menu
+	//Returns the m_MultipleChoiceConfig hooked in this DialogueStageConfig.
 	SP_MultipleChoiceConfig GetMultipleChoiceConfig()
 	{
 		if(m_MultipleChoiceConfig == null)
@@ -108,10 +132,14 @@ class DialogueTextConfig
 			return m_MultipleChoiceConfig;
 		
 	}
+	//------------------------------------------------------------------//
+	//Get action text from DialogueStageConfig
 	string GetActionText()
 	{
 	 return ActionText;
 	}
+	//------------------------------------------------------------------//
+	//Get action text from SP_MultipleChoiceConfig, text key chooses the entry. TextKey = 0 will take the first entry in SP_MultipleChoiceConfig
 	string GetMultiActionText(int TextKey)
 	{
 		string ActText
@@ -126,10 +154,14 @@ class DialogueTextConfig
 		
 		return ActText;
 	}
+	//------------------------------------------------------------------//
+	//Get dialogue text from DialogueStageConfig
 	string GetDialogueText()
 	{
 	 return DialogueText;
 	}
+	//------------------------------------------------------------------//
+	//Get dialogue text from SP_MultipleChoiceConfig, text key chooses the entry. TextKey = 0 will take the first entry in SP_MultipleChoiceConfig
 	string GetMultiDialogueText(int TextKey)
 	{
 		string DiagText;
@@ -143,13 +175,15 @@ class DialogueTextConfig
 		}
 	 	return DiagText;
 	}
+	//------------------------------------------------------------------//
 	//Getter for choice behavior Enum
 	EChoiseBehavior GetChoiseBehavior()
 	{
 		return ChoiseBehavior;
 	}
 }
-class DialogueTextConfigTitleAttribute : BaseContainerCustomTitle
+//---------------------------------------------------------------------------------------------------//
+class DialogueStageConfigTitleAttribute : BaseContainerCustomTitle
 {
 	override bool _WB_GetCustomTitle(BaseContainer source, out string title)
 	{
@@ -180,7 +214,7 @@ class DialogueTextConfigTitleAttribute : BaseContainerCustomTitle
 		EChoiseBehavior behavior;
 		source.Get("ChoiseBehavior", behavior);
 		behaviorStr = typename.EnumToString(EChoiseBehavior, behavior);
-		title = string.Format("Branch: %1 : %2 : %3", actionName, behaviorStr, strEnabled);
+		title = string.Format("Stage: %1 : %2 : %3", actionName, behaviorStr, strEnabled);
 
 
 		return true;

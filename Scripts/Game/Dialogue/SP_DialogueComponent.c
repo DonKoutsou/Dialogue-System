@@ -30,9 +30,8 @@ class SP_DialogueComponent: ScriptComponent
 	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;
 	SCR_BaseGameMode GameMode;
 	//----------------------------------------------------------------------------------------------------------------//
-	//Function used for leaving a branch and going back to initial menu
+	//Function used for leaving a branch and going back to initial menu, and also leaving branch to go back to another branch
 	//Unbranches character and updates UI
-	
 	void DoBackDialogue(IEntity Character, IEntity Player)
 	{
 		string senderName = GetCharacterName(Character);
@@ -51,17 +50,16 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		else if (currentconfig && currentconfig.GetBranchState() == false)
 		{
-			currentconfig = currentconfig.GetPartnetConfg();
+			currentconfig = currentconfig.GetPartnerConfig();
 			currentconfig.UnbranchBranch();
 			currentconfig = null;
 		}
-		
-		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		DiagUI.Init(Character, Player);
 		DiagUI.UpdateEntries();
 	}
+	//------------------------------------------------------------------//
 	//Main function used to send text to chat. 
 	//Has the logic for branching the dialogue Archetype(Branching cuases UI entries to get text and button logic from SP_MultipleChoiceConfig
 	void DoDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount)
@@ -106,7 +104,7 @@ class SP_DialogueComponent: ScriptComponent
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 		
-		EChoiseBehavior ActionBehavior = DiagBranch.GetDialogueTextConfig().GetChoiseBehavior();
+		EChoiseBehavior ActionBehavior = DiagBranch.GetDialogueStageConfig().GetChoiseBehavior();
 		switch(ActionBehavior)
 		{
 			case 0:

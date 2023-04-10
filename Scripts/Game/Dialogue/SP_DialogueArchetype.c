@@ -43,17 +43,22 @@ class SP_DialogueArchetype: ScriptAndConfig
 			IsCharacterBranched = true;
 		}
 		SP_DialogueBranch DiagBranch = GetDialogueBranch(branch);
-		DiagBranch.GetDialogueTextConfig().GetMultipleChoiceConfig().InheritArchetype(OriginalArchetype);
+		DiagBranch.GetDialogueStageConfig().GetMultipleChoiceConfig().InheritArchetype(OriginalArchetype);
 		ArchBranchID = branch;
 	}
+	//------------------------------------------------------------------//
+	//Current config is the last config used.
 	SP_MultipleChoiceConfig GetCurrentConfig()
 	{
 		return CurentConfig;
 	}
+	//------------------------------------------------------------------//
+	//Whenever a config branches and unbranches it sends a ping, this is used to define the last entry used
 	void Ping(SP_MultipleChoiceConfig Config)
 	{
 		CurentConfig = Config;
 	}
+	//------------------------------------------------------------------//
 	//Function used to unbranch this archetype and allow it to provide text from all branches
 	void UnBranchDialogueArchetype()
 	{
@@ -67,6 +72,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 			IsCharacterBranched = false;
 		}
 	}
+	//------------------------------------------------------------------//
 	//Dialogue identifier to be used for this archetype, can be set to something generic and provide its dialogues to a variety of entities
 	EArchetypeIdentifier GetIdentifier()
 	{
@@ -139,7 +145,7 @@ class SP_DialogueArchetype: ScriptAndConfig
     }
 	//------------------------------------------------------------------//
 	//Checks if a SP_MultipleChoiceConfig is hooked on this branch, used to initiate radial menu insead of completing dialogue
-	bool CheckIfDialogueBranches(DialogueTextConfig DialogueConf)
+	bool CheckIfDialogueBranches(DialogueStageConfig DialogueConf)
 	{
 		
 		if (DialogueConf.GetMultipleChoiceConfig() == null)
