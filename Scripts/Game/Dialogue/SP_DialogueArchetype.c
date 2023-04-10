@@ -19,12 +19,14 @@ class SP_DialogueArchetype: ScriptAndConfig
 	private ECharacterRank m_sCharacterRank;
 	//------------------------------------------------------------------//
 	//Different configuration containing dialogue texts
-	[Attribute()]
+	[Attribute(desc: "Filtered selection test")]
 	private ref array<ref SP_DialogueBranch> DialogueBranch;
 	//------------------------------------------------------------------//
 	//Map to be filled with all the configurations on Init
 	protected ref map<int, ref SP_DialogueBranch> DialogueBranchMap;
     protected SP_DialogueComponent DiagComp;
+	SP_MultipleChoiceConfig CurentConfig;
+	SP_DialogueArchetype OriginalArchetype;
 	//------------------------------------------------------------------//
 	//Branching bool. If a Dialogue Archetype has its IsCharacterBranched set to true it will give text from SP_MultipleChoiceConfig
 	//Selecting from wich SP_DialogueBranch to take the SP_MultipleChoiceConfig happens using current dialogue stage and branch ID specified when the branching happened
@@ -40,11 +42,26 @@ class SP_DialogueArchetype: ScriptAndConfig
 		{
 			IsCharacterBranched = true;
 		}
+		SP_DialogueBranch DiagBranch = GetDialogueBranch(branch);
+		DiagBranch.GetDialogueTextConfig().GetMultipleChoiceConfig().InheritArchetype(OriginalArchetype);
 		ArchBranchID = branch;
+	}
+	SP_MultipleChoiceConfig GetCurrentConfig()
+	{
+		return CurentConfig;
+	}
+	void Ping(SP_MultipleChoiceConfig Config)
+	{
+		CurentConfig = Config;
 	}
 	//Function used to unbranch this archetype and allow it to provide text from all branches
 	void UnBranchDialogueArchetype()
 	{
+		if (CurentConfig)
+		{
+			CurentConfig.UnbranchBranch();
+			CurentConfig = null;
+		}
 		if (IsCharacterBranched == true)
 		{
 			IsCharacterBranched = false;
@@ -85,6 +102,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//Mapping all configrations existing uder this character archetype
 	void Init()
 	{
+		OriginalArchetype = this;
 		DialogueBranchMap = new map<int, ref SP_DialogueBranch>();
 		for (int i = 0, count = DialogueBranch.Count(); i < count; i++)
         {

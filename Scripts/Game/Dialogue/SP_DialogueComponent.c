@@ -1,3 +1,17 @@
+enum EArchetypeIdentifier
+	{
+		Name,
+		Rank,
+		"FactionKey",
+		"Faction and Rank"
+	};
+enum EChoiseBehavior
+	{
+		IncrementDialogueStage,
+		Stay,
+		IncrementDialogueStageandGoBack
+	};
+
 class SP_DialogueComponentClass: ScriptComponentClass
 {
 };
@@ -10,20 +24,38 @@ class SP_DialogueComponent: ScriptComponent
 	[Attribute()]
 	ref BaseChatChannel m_ChatChannel;
 	//----------------------------------------------------------------------------------------------------------------//
+	
+	//----------------------------------------------------------------------------------------------------------------//
 	//Dialogue System
 	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;
 	SCR_BaseGameMode GameMode;
 	//----------------------------------------------------------------------------------------------------------------//
 	//Function used for leaving a branch and going back to initial menu
 	//Unbranches character and updates UI
+	
 	void DoBackDialogue(IEntity Character, IEntity Player)
 	{
 		string senderName = GetCharacterName(Character);
 		int senderID = Character.GetID();
 		SP_DialogueArchetype DiagArch = LocateCharacterArchetype(Character);
 		string m_DialogTexttoshow = "Go Back";
+		SP_MultipleChoiceConfig currentconfig = DiagArch.GetCurrentConfig();
+		if (!currentconfig)
+		{
+			DiagArch.UnBranchDialogueArchetype();
+		}
+		else if (currentconfig && currentconfig.GetBranchState() == true)
+		{
+			currentconfig.UnbranchBranch();
+			currentconfig = null;
+		}
+		else if (currentconfig && currentconfig.GetBranchState() == false)
+		{
+			currentconfig = currentconfig.GetPartnetConfg();
+			currentconfig.UnbranchBranch();
+			currentconfig = null;
+		}
 		
-		DiagArch.UnBranchDialogueArchetype();
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
@@ -62,6 +94,7 @@ class SP_DialogueComponent: ScriptComponent
 		{
 			DiagArch.BranchDialogueArchetype(BranchID);
 			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
+			
 			MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 			DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 			DiagUI.Init(Character, Player);
@@ -72,7 +105,21 @@ class SP_DialogueComponent: ScriptComponent
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
-		IncrementDiagStage(Character, BranchID, IncrementAmount);
+		
+		EChoiseBehavior ActionBehavior = DiagBranch.GetDialogueTextConfig().GetChoiseBehavior();
+		switch(ActionBehavior)
+		{
+			case 0:
+			{
+				IncrementDiagStage(Character, BranchID, IncrementAmount);
+			}
+			break;
+			case 1:
+			{
+				
+			};
+			break;
+		}
 		DiagUI.Init(Character, Player);
 		DiagUI.UpdateEntries();
 		
@@ -260,10 +307,4 @@ class SP_DialogueComponent: ScriptComponent
 	}
 }
 //----------------------------------------------------------------------------------------------------------------//
-enum EArchetypeIdentifier
-	{
-		Name,
-		Rank,
-		"FactionKey",
-		"Faction and Rank"
-	};
+

@@ -1,6 +1,8 @@
 ButtonWidgetClass {
  Name "ListBoxElement"
  Slot AlignableSlot "{554ADB1D2D5974C0}" {
+  HorizontalAlign 3
+  VerticalAlign 3
  }
  components {
   SCR_ListBoxElementComponent "{5D10C019C741C840}" : "{217E1BF1715F9C33}Configs/UI/ListBoxElement_DialogueModularButtonComponent.conf" {
@@ -48,13 +50,13 @@ ButtonWidgetClass {
         HorizontalAlign 3
         VerticalAlign 3
        }
+       "Is Enabled" 0
+       "Is Visible" 0
        Color 0 0 0 1
-       Size 1200 600
+       Size 900 600
        Saturation 0.005
        Mask "{081989E2168A288D}Assets/Decals/Asphalt/Patch/Data/Decal_Asphalt_Patch_Square_01_A.edds"
-       "Transition width" 0.162
-       Progress 0.878
-       "Mask Mode" "Include Range"
+       "Transition width" 1
        Range 1
       }
       BlurWidgetClass "{5D128E0C40525C3B}" {
@@ -72,6 +74,7 @@ ButtonWidgetClass {
        Slot OverlayWidgetSlot "{5548E6E7D859FCD2}" {
         HorizontalAlign 3
         VerticalAlign 3
+        Padding -10 2 -10 2
        }
        "Is Enabled" 0
        "Is Visible" 0
@@ -85,6 +88,24 @@ ButtonWidgetClass {
        }
        "Font Size" 20
        "Min Font Size" 10
+       FontProperties FontProperties "{546AF489DFD25402}" {
+        OutlineSize 1
+        ShadowSize 32
+       }
+      }
+      TextWidgetClass "{5D1303B9CB9C181B}" {
+       Name "TextNumber"
+       Slot OverlayWidgetSlot "{5D1303B9CB9C1842}" {
+        Padding 0 0 710 0
+       }
+       Text "0"
+       "Font Size" 20
+       "Min Font Size" 10
+       FontProperties FontProperties "{5D1329762D9C23A5}" {
+        Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+        OutlineSize 1
+        ShadowSize 32
+       }
       }
      }
     }

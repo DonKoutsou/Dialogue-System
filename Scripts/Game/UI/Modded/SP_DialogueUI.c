@@ -93,6 +93,8 @@ class DialogueUIClass: ChimeraMenuBase
 			m_ListBoxComponent.AddItem(Diag0);
 			SCR_ListBoxElementComponent elComp0 = m_ListBoxComponent.GetElementComponent(entryamount);
 			elComp0.m_OnClicked.Insert(DoDialogue0);
+			string entrynumber = (entryamount + 1).ToString();
+			elComp0.SetTextNumber(entrynumber);
 			entryamount = entryamount + 1;
 		}
 		if (Diag1 != STRING_EMPTY)
@@ -100,6 +102,8 @@ class DialogueUIClass: ChimeraMenuBase
 			m_ListBoxComponent.AddItem(Diag1);
 			SCR_ListBoxElementComponent elComp1 = m_ListBoxComponent.GetElementComponent(entryamount);
 			elComp1.m_OnClicked.Insert(DoDialogue1);
+			string entrynumber = (entryamount + 1).ToString();
+			elComp1.SetTextNumber(entrynumber);
 			entryamount = entryamount + 1;
 		}
 		if (Diag2 != STRING_EMPTY)
@@ -107,6 +111,8 @@ class DialogueUIClass: ChimeraMenuBase
 			m_ListBoxComponent.AddItem(Diag2);
 			SCR_ListBoxElementComponent elComp2 = m_ListBoxComponent.GetElementComponent(entryamount);
 			elComp2.m_OnClicked.Insert(DoDialogue2);
+			string entrynumber = (entryamount + 1).ToString();
+			elComp2.SetTextNumber(entrynumber);
 			entryamount = entryamount + 1;
 		}
 		if (Diag3 != STRING_EMPTY)
@@ -114,6 +120,8 @@ class DialogueUIClass: ChimeraMenuBase
 			m_ListBoxComponent.AddItem(Diag3);
 			SCR_ListBoxElementComponent elComp3 = m_ListBoxComponent.GetElementComponent(entryamount);
 			elComp3.m_OnClicked.Insert(DoDialogue3);
+			string entrynumber = (entryamount + 1).ToString();
+			elComp3.SetTextNumber(entrynumber);
 			entryamount = entryamount + 1;
 		}
 		//Check if Archtype is branched an choose to create a Leave button or a Go Back button
@@ -123,11 +131,15 @@ class DialogueUIClass: ChimeraMenuBase
 			m_ListBoxComponent.AddItem("Go Back");
 			SCR_ListBoxElementComponent elComp4 = m_ListBoxComponent.GetElementComponent(entryamount);
 			elComp4.m_OnClicked.Insert(DoDialogueBack);
+			string entrynumber = (entryamount + 1).ToString();
+			elComp4.SetTextNumber(entrynumber);
 			return;
 		}
 		m_ListBoxComponent.AddItem("Leave");
 		SCR_ListBoxElementComponent elComp4 = m_ListBoxComponent.GetElementComponent(entryamount);
 		elComp4.m_OnClicked.Insert(LeaveFunction);
+		string entrynumber = (entryamount + 1).ToString();
+		elComp4.SetTextNumber(entrynumber);
 	}
 	//Function called to close menu
     void LeaveFunction()
