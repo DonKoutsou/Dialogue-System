@@ -1,0 +1,18 @@
+SCR_BaseGameMode {
+ ID "56B2B479C6B96951"
+ components {
+  SP_DialogueComponent "{5D1547897BFE725A}" {
+   m_CharacterArchetypeList {
+    SP_DialogueArchetype "{5D154789624B04EC}" : "{329463647B42DB55}Configs/CharacterTestFIA.conf" {
+    }
+    SP_DialogueArchetype "{5D154789629271CD}" : "{8B47A3F75A9C2615}Configs/CharacterTestUS.conf" {
+    }
+    SP_DialogueArchetype "{5D15478965E8B847}" : "{1796DE334DCE1541}Configs/CharacterTestUSSR.conf" {
+    }
+   }
+   m_ChatChannel LocalChatChannel "{5D1547897CBD7ACF}" {
+    "Channel name" "Context"
+   }
+  }
+ }
+}

@@ -3,14 +3,102 @@ SCR_AIWorld : "{E0A05C76552E7F58}Prefabs/AI/SCR_AIWorld.et" {
 }
 SCR_BaseGameMode GameMode_Base1 : "{0F307326459A1395}Prefabs/MP/Modes/GameMode_Base.et" {
  components {
-  SP_DialogueComponent "{5D12DDEDA68A7294}" {
-   m_CharacterArchetypeList {
-    SP_DialogueArchetype "{5D1503FA75D137DB}" : "{329463647B42DB55}Configs/CharacterTestFIA.conf" {
+  SCR_CallsignManagerComponent "{56B6E8B2652E1419}" {
+  }
+  SCR_DestructionManagerComponent "{56B6E8B263C4FF7D}" {
+  }
+  SCR_GameModeHealthSettings "{5A22E11F9ACBB1DF}" {
+  }
+  SCR_GameOverScreenManagerComponent "{56DEC646298AD219}" {
+   m_GameOverScreenConfig SCR_GameOverScreenConfig "{56DEC6462FFDD82D}" : "{651583FFFB7FC765}Configs/GameOverScreen/GameOverScreensConfig.conf" {
+   }
+  }
+  SCR_GroupsManagerComponent "{5706EC99934496F5}" {
+   m_sDefaultGroupPrefab "{8B4D49A9F324E7D5}Prefabs/Groups/PlayableGroup.et"
+   m_iPlayableGroupFrequencyOffset 500
+  }
+  SCR_HintManagerComponent "{5702B54C6CBC9D7F}" {
+  }
+  SCR_NametagConfigComponent "{571AA9E54FC9210D}" {
+  }
+  SCR_NotificationSenderComponent "{56FA84B04BE7D4C0}" {
+   m_aKillfeedTypeNames {
+    SCR_NotificationKillfeedTypeName "{5932B0310455E486}" {
+     m_iKillfeedType DISABLED
+     m_sKillfeedTypeName "#AR-Notification_KillfeedType_DISABLED"
+    }
+    SCR_NotificationKillfeedTypeName "{5932B0310491106B}" {
+     m_iKillfeedType UNKNOWN_KILLER
+     m_sKillfeedTypeName "#AR-Notification_KillfeedType_UNKNOWN_KILLER"
+    }
+    SCR_NotificationKillfeedTypeName "{5932B031048D51BD}" {
+     m_iKillfeedType FULL
+     m_sKillfeedTypeName "#AR-Notification_KillfeedType_FULL"
     }
    }
-   m_ChatChannel LocalChatChannel "{5D12DDEDAE79394A}" {
-    "Channel name" "Context"
+   m_aKillfeedReceiveTypeNames {
+    SCR_NotificationKillfeedreceiveTypeName "{5932B036B747E765}" {
+     m_iKillfeedreceiveType ALL
+     m_sKillfeedReceiveTypeName "#AR-Notification_KillfeedReceiveType_ALL"
+    }
+    SCR_NotificationKillfeedreceiveTypeName "{5932B036B7003ECC}" {
+     m_iKillfeedreceiveType ALLIES_ONLY
+     m_sKillfeedReceiveTypeName "#AR-Notification_KillfeedReceiveType_ALLIES_ONLY"
+    }
+    SCR_NotificationKillfeedreceiveTypeName "{5932B036B7D2B6CF}" {
+     m_iKillfeedreceiveType SAME_FACTION_ONLY
+     m_sKillfeedReceiveTypeName "#AR-Notification_KillfeedReceiveType_SAME_FACTION_ONLY"
+    }
+    SCR_NotificationKillfeedreceiveTypeName "{5932B036B6AB6528}" {
+     m_iKillfeedreceiveType GROUP_ONLY
+     m_sKillfeedReceiveTypeName "#AR-Notification_KillfeedReceiveType_GROUP_ONLY"
+    }
+    SCR_NotificationKillfeedreceiveTypeName "{5932B036A5A136C4}" {
+     m_iKillfeedreceiveType ENEMIES_ONLY
+     m_sKillfeedReceiveTypeName "#AR-Notification_KillfeedReceiveType_ENEMIES_ONLY"
+    }
    }
+  }
+  SCR_PlayersRestrictionZoneManagerComponent "{56D09BEE802CA7C5}" {
+  }
+  SCR_PossessingManagerComponent "{56E0B02F4D91C3EF}" {
+  }
+  SCR_RadialMenuComponent "{5AA8AA57BE70F20E}" {
+   m_pRadialMenu SCR_RadialMenuItems "{5AA8AA553079A57D}" {
+   }
+   m_RadialMenuVisuals SCR_RadialMenuVisualsItems "{5AA8AA552FD841C8}" {
+    m_LayoutPath "{C967377E3D96107D}UI/layouts/Common/RadialMenu/RadialMenuVisuals.layout"
+    m_eLayer HIGH
+    m_rElementLayoutPath "{95123068DC2C2ECF}UI/layouts/Common/RadialMenu/radialElementIcon.layout"
+    m_rBorderLinePath "{639717DA6610F1C1}UI/layouts/Common/RadialMenu/RadialMenuBorderLine.layout"
+    m_sPageIndicationLayout "{595FE46A06BE9DB3}UI/layouts/Common/RadialMenu/MenuPageIndication.layout"
+    m_sPageIconsSet "{2EFEA2AF1F38E7F0}UI/Textures/Icons/icons_wrapperUI-64.imageset"
+    m_sTxtAction "TxtAction"
+    m_sTxtItemName "TxtItemName"
+    m_sImageSelector "ImgSelector"
+    m_sSelectLast "SelectLast"
+    m_fSizeMenu 660
+    m_fSizeEntries 660
+    m_fRadiusEntries 250
+    m_fSelectorDistance 185
+   }
+   m_bUseCategories 0
+   m_sInput_Toggle "Inventory_WeaponSwitchingRadial"
+   m_bUsingLeftStick 0
+   m_bHoldToggleToOpen 1
+   m_iEntryPerformType OnClose
+   m_bEvenlyPlacedEntries 1
+   m_iSelectionBehavior FreeMove
+  }
+  SCR_RespawnSystemComponent "{56B2B4793051E7C9}" {
+  }
+  SCR_SaveLoadComponent "{58FA739CBE3E9FC5}" {
+  }
+  SCR_VotingManagerComponent "{5650BB6B6089393A}" : "{37037CBB8B4CD354}Prefabs/MP/Components/VotingManagerComponent.ct" {
+  }
+  RplComponent "{56B2B4793BF2E1B4}" {
+   "Rpl State Override" Static
+   Streamable Disabled
   }
  }
  coords 120.18 1.001 142.235

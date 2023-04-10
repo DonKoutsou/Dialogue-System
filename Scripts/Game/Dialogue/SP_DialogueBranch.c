@@ -1,19 +1,16 @@
 //Dialogue Branch is used to store a menu entry. In any dialogue branch a multiple stages can be concifgured.
 //In Dialogue branch the dialogues progession can be configured, at any stage a Multiple choice config can be introduces to create another branch.
 //Each branch tracks its own stage
-[BaseContainerProps(configRoot:true)]
+[BaseContainerProps(configRoot:true),  DialogueBranchConfigTitleAttribute()]
 class SP_DialogueBranch
 {
 	//------------------------------------------------------------------//
-	//if this configuration should progress the stage of all the branches on their character archetype
-	[Attribute(defvalue: "", desc: "Should this dialogue progress all branches when executed?", category: "Dialogue",  )]
-	protected bool m_bGlobalStageInfluance;
 	//Array containing the texts of each stage this branch will have
 	[Attribute()]
-	ref array<ref DialogueStageConfig> m_DialogueStageConfig;
+	ref array<ref DialogueStageConfig> m_BranchStageConfig;
 	//Stage of this config
 	int DialogueBranchStage;
-	
+	int Title = "GitGud";
 	
 	//------------------------------------------------------------------//
 	//Text that is going to be used as title for the action
@@ -21,10 +18,10 @@ class SP_DialogueBranch
 	{
 		string ActText;
 		//check if this config is out of texts(stage has progressed further than the available entries
-		if (m_DialogueStageConfig[DialogueBranchStage] && m_DialogueStageConfig.GetRefCount() >= DialogueBranchStage)
+		if (m_BranchStageConfig[DialogueBranchStage] && m_BranchStageConfig.GetRefCount() >= DialogueBranchStage)
 		{
 			//Go in config number (current stage) and look for the action text
-			ActText = m_DialogueStageConfig[DialogueBranchStage].GetActionText();
+			ActText = m_BranchStageConfig[DialogueBranchStage].GetActionText();
 		}
 		else
 		{
@@ -38,7 +35,7 @@ class SP_DialogueBranch
 	//Used to take the action title from SP_MultipleChoiceConfig inside the branch instead of the DialogueStageConfig
 	string GetMultiActionText(int TextKey)
 	{
-		string ActText = m_DialogueStageConfig[DialogueBranchStage].GetMultiActionText(TextKey);
+		string ActText = m_BranchStageConfig[DialogueBranchStage].GetMultiActionText(TextKey);
 		return ActText;
 	}
 	//------------------------------------------------------------------//
@@ -47,10 +44,10 @@ class SP_DialogueBranch
 	{
 		string DiagText;
 		//check if this config is out of texts(stage has progressed further than the available entries
-		if (m_DialogueStageConfig[DialogueBranchStage] && m_DialogueStageConfig.GetRefCount() >= DialogueBranchStage)
+		if (m_BranchStageConfig[DialogueBranchStage] && m_BranchStageConfig.GetRefCount() >= DialogueBranchStage)
 		{
 			//Go in config number (current stage) and look for the action text
-			DiagText = m_DialogueStageConfig[DialogueBranchStage].GetDialogueText();
+			DiagText = m_BranchStageConfig[DialogueBranchStage].GetDialogueText();
 		}
 		else
 		{
@@ -63,19 +60,13 @@ class SP_DialogueBranch
 	//Used to take the dialogue text from SP_MultipleChoiceConfig inside the branch instead of the DialogueStageConfig
 	string GetMultiDialogueText(int TextKey)
 	{
-		string Diagtext = m_DialogueStageConfig[DialogueBranchStage].GetMultiDialogueText(TextKey);
+		string Diagtext = m_BranchStageConfig[DialogueBranchStage].GetMultiDialogueText(TextKey);
 		return Diagtext;
-	}
-	//------------------------------------------------------------------//
-	//weather this branch should progress all other branches
-	bool IsInfluanceGlobal()
-	{
-		return m_bGlobalStageInfluance;
 	}
 	//------------------------------------------------------------------//
 	DialogueStageConfig GetDialogueStageConfig()
 	{
-		return m_DialogueStageConfig[DialogueBranchStage];
+		return m_BranchStageConfig[DialogueBranchStage];
 	}
 	//------------------------------------------------------------------//
 	//Increments stage of this branch
@@ -87,7 +78,7 @@ class SP_DialogueBranch
 	//Checks if a SP_MultipleChoiceConfig exists in the current DialogueStageConfig
 	bool CheckIfTextConfigBranches()
 	{
-		if(m_DialogueStageConfig[DialogueBranchStage].GetMultipleChoiceConfig())
+		if(m_BranchStageConfig[DialogueBranchStage].GetMultipleChoiceConfig())
 		{
 			return true;
 		}
@@ -119,17 +110,17 @@ class DialogueStageConfig
     string DialogueText;
 	//------------------------------------------------------------------//
 	[Attribute()]
-	protected ref SP_MultipleChoiceConfig m_MultipleChoiceConfig;
+	protected ref SP_MultipleChoiceConfig m_MultipleBranchConfig;
 	//------------------------------------------------------------------//
-	//Returns the m_MultipleChoiceConfig hooked in this DialogueStageConfig.
+	//Returns the m_MultipleBranchConfig hooked in this DialogueStageConfig.
 	SP_MultipleChoiceConfig GetMultipleChoiceConfig()
 	{
-		if(m_MultipleChoiceConfig == null)
+		if(m_MultipleBranchConfig == null)
 		{
 			return null;
 		}
 		else
-			return m_MultipleChoiceConfig;
+			return m_MultipleBranchConfig;
 		
 	}
 	//------------------------------------------------------------------//
@@ -143,9 +134,9 @@ class DialogueStageConfig
 	string GetMultiActionText(int TextKey)
 	{
 		string ActText
-		if(m_MultipleChoiceConfig)
+		if(m_MultipleBranchConfig)
 		{
-			ActText = m_MultipleChoiceConfig.GetActionText(TextKey);	
+			ActText = m_MultipleBranchConfig.GetActionText(TextKey);	
 		}
 		else
 		{
@@ -165,9 +156,9 @@ class DialogueStageConfig
 	string GetMultiDialogueText(int TextKey)
 	{
 		string DiagText;
-		if(m_MultipleChoiceConfig)
+		if(m_MultipleBranchConfig)
 		{
-			DiagText = m_MultipleChoiceConfig.GetDialogueText(TextKey);
+			DiagText = m_MultipleBranchConfig.GetDialogueText(TextKey);
 		}
 		else
 		{
@@ -187,19 +178,19 @@ class DialogueStageConfigTitleAttribute : BaseContainerCustomTitle
 {
 	override bool _WB_GetCustomTitle(BaseContainer source, out string title)
 	{
-		// Check if there is input in m_MultipleChoiceConfig
+		// Check if there is input in m_MultipleBranchConfig
 		bool hasMultiChoiceConfig = false;
 		SP_MultipleChoiceConfig ChoiceConf;
-		if (source.Get("m_MultipleChoiceConfig", ChoiceConf))
+		if (source.Get("m_MultipleBranchConfig", ChoiceConf))
 		{
 			SP_MultipleChoiceConfig multiChoiceConfig;
-			source.Get("m_MultipleChoiceConfig", multiChoiceConfig);
+			source.Get("m_MultipleBranchConfig", multiChoiceConfig);
 			hasMultiChoiceConfig = (multiChoiceConfig != null);
 		}
 		// Generate string according to enabled state
 		string strEnabled;
 		SP_MultipleChoiceConfig multiChoiceConfig;
-		source.Get("m_MultipleChoiceConfig", multiChoiceConfig);
+		source.Get("m_MultipleBranchConfig", multiChoiceConfig);
 		if (multiChoiceConfig)
 			strEnabled = "[X]";
 		else
@@ -214,7 +205,17 @@ class DialogueStageConfigTitleAttribute : BaseContainerCustomTitle
 		EChoiseBehavior behavior;
 		source.Get("ChoiseBehavior", behavior);
 		behaviorStr = typename.EnumToString(EChoiseBehavior, behavior);
-		title = string.Format("Stage: %1 : %2 : %3", actionName, behaviorStr, strEnabled);
+		title = string.Format("Stage: %1 - %2 - %3", actionName, behaviorStr, strEnabled);
+
+
+		return true;
+	}
+};
+class DialogueBranchConfigTitleAttribute : BaseContainerCustomTitle
+{
+	override bool _WB_GetCustomTitle(BaseContainer source, out string title)
+	{
+		title = string.Format("Branch");
 
 
 		return true;

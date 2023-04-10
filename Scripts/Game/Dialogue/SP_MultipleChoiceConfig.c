@@ -1,13 +1,13 @@
 //Used in Dialogue Archetype, in any SP_DialogueBranch
 //SP_MultipleChoiceConfig is used to store the text that is going to be used in radial menu in dialogue.
 //Also  marks the config it is atatched to as branching dialogue so when that action is performed radial menu will open intead of progressing dialogue
-[BaseContainerProps(configRoot: true)]
+[BaseContainerProps(configRoot: true), DialogueBranchConfigTitleAttribute()]
 class SP_MultipleChoiceConfig: ScriptAndConfig
 {
 	//------------------------------------------------------------------//
 	//Class containing both action and dialogue text for each radial menu entry
 	[Attribute(defvalue: "", desc: "Action Title and Dialogue Text for Radial menu choice", category: "Dialogue")]
-	protected ref array<ref SP_DialogueBranch> m_MultiChoiceTexts;
+	protected ref array<ref SP_DialogueBranch> m_Branches;
 	//------------------------------------------------------------------//
 	//Archetype wich this cofig belongs to
 	SP_DialogueArchetype OriginalArchetype;
@@ -46,16 +46,16 @@ class SP_MultipleChoiceConfig: ScriptAndConfig
 	//Get action title from this config used TextID. TextID = 0 will give first entry etc.....
 	string GetActionText(int TextID)
     {
-        if (TextID >= 0 && TextID < m_MultiChoiceTexts.Count()) 
+        if (TextID >= 0 && TextID < m_Branches.Count()) 
         {
 			if (IsBranchBranched == true)
 			{	
-				string acttext = m_MultiChoiceTexts[BranchBranchID].GetMultiActionText(TextID);
+				string acttext = m_Branches[BranchBranchID].GetMultiActionText(TextID);
 				return acttext;
 			}
 			else
 			{
-				string acttext = m_MultiChoiceTexts[TextID].GetActionText();
+				string acttext = m_Branches[TextID].GetActionText();
 				return acttext;
 			}
         }
@@ -69,32 +69,32 @@ class SP_MultipleChoiceConfig: ScriptAndConfig
 	string GetDialogueText(int TextID)
     {
 		//check if value is out of bounds
-        if (TextID >= 0 && TextID < m_MultiChoiceTexts.Count()) 
+        if (TextID >= 0 && TextID < m_Branches.Count()) 
         {
 			string diagtext;
 			//check if this config is branched, if yes look for text in next branch for text
 			if (IsBranchBranched == true)
 			{
-				diagtext = m_MultiChoiceTexts[BranchBranchID].GetMultiDialogueText(TextID);
+				diagtext = m_Branches[BranchBranchID].GetMultiDialogueText(TextID);
 			}
 			//else check for SP_MultipleChoiceConfig in next branch, if there is one take text from it and branch it
 			else
 			{
-				if (m_MultiChoiceTexts[TextID].CheckIfTextConfigBranches() == true)
+				if (m_Branches[TextID].CheckIfTextConfigBranches() == true)
 				{
-					diagtext = m_MultiChoiceTexts[TextID].GetDialogueText();
+					diagtext = m_Branches[TextID].GetDialogueText();
 					BranchBranch(TextID);
 				}
 				else
 				//else means that it shoulndt branch, so we take text from it and figure out if we should increment stage based on EChoiseBehavior
 				{
-					EChoiseBehavior ChoiseBehavior = m_MultiChoiceTexts[TextID].GetDialogueStageConfig().GetChoiseBehavior();
-					diagtext = m_MultiChoiceTexts[TextID].GetDialogueText();
+					EChoiseBehavior ChoiseBehavior = m_Branches[TextID].GetDialogueStageConfig().GetChoiseBehavior();
+					diagtext = m_Branches[TextID].GetDialogueText();
 					switch(ChoiseBehavior)
 					{
 						case 0:
 						{
-							m_MultiChoiceTexts[TextID].IncrementConfigStage(1);
+							m_Branches[TextID].IncrementConfigStage(1);
 						}
 						break;
 						case 1:
@@ -122,8 +122,8 @@ class SP_MultipleChoiceConfig: ScriptAndConfig
 			
 			BranchBranchID = BranchID;
 		}
-		m_MultiChoiceTexts[BranchID].GetDialogueStageConfig().GetMultipleChoiceConfig().InheritArchetype(OriginalArchetype);
-		m_MultiChoiceTexts[BranchID].GetDialogueStageConfig().GetMultipleChoiceConfig().InheritConfig(this);
+		m_Branches[BranchID].GetDialogueStageConfig().GetMultipleChoiceConfig().InheritArchetype(OriginalArchetype);
+		m_Branches[BranchID].GetDialogueStageConfig().GetMultipleChoiceConfig().InheritConfig(this);
 		OriginalArchetype.Ping(this);
 	}
 	//------------------------------------------------------------------//
@@ -133,7 +133,7 @@ class SP_MultipleChoiceConfig: ScriptAndConfig
 		if (IsBranchBranched == true)
 		{
 			IsBranchBranched = false;
-			m_MultiChoiceTexts[BranchBranchID].ResetBranchStage();
+			m_Branches[BranchBranchID].ResetBranchStage();
 			BranchBranchID = 0;
 			OriginalArchetype.Ping(ParentConfig);
 		}

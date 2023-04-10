@@ -160,13 +160,6 @@ class SP_DialogueArchetype: ScriptAndConfig
 	bool IncrementStage(int BranchID, int incrementamount)
 	{	
 		SP_DialogueBranch branch = GetDialogueBranch(BranchID);
-		if (branch != null && branch.IsInfluanceGlobal() == true)
-		{
-			for (int i = 0, count = DialogueBranch.Count(); i < count; i++)
-        	{
-				DialogueBranch[i].IncrementConfigStage(incrementamount);	
-        	}
-		}
 		branch.IncrementConfigStage(incrementamount);
 		return true;
 	}
