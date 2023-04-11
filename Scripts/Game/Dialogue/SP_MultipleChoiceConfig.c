@@ -4,58 +4,67 @@
 [BaseContainerProps(configRoot: true), DialogueBranchConfigTitleAttribute()]
 class SP_MultipleChoiceConfig: ScriptAndConfig
 {
+	[Attribute()]
+	ref DialogueMultiTextConfig MultipleChoiceConfig;
+	protected ref map<string, ref DialogueMultiTextConfig> DialogueMultiTextConfigMap;
+	IEntity TalkingCharacter;
 	//------------------------------------------------------------------//
-	//Class containing both action and dialogue text for each radial menu entry
-	[Attribute(defvalue: "", desc: "Action Title and Dialogue Text for Radial menu choice", category: "Dialogue")]
-	protected ref array<ref SP_DialogueBranch> m_Branches;
+	int GetBranchID()
+	{
+		return LocateConfig(TalkingCharacter).BranchBranchID;
+	}
 	//------------------------------------------------------------------//
-	//Archetype wich this cofig belongs to
-	SP_DialogueArchetype OriginalArchetype;
+	SP_DialogueArchetype GetOriginalArchetype()
+	{
+		return LocateConfig(TalkingCharacter).OriginalArchetype;
+	}
 	//------------------------------------------------------------------//
-	//SP_MultipleChoiceConfig that come before this one in a hierarchy. Used for DoBackDialogue in SP_DialogueComponent
-	SP_MultipleChoiceConfig ParentConfig;
-	//------------------------------------------------------------------//
-	//Branching info for this config. Once config gets branched the branch that caused it has its ID saved in BranchBranchID
-	bool IsBranchBranched;
-	int BranchBranchID
+	array<ref SP_DialogueBranch> GetBranches()
+	{
+		return LocateConfig(TalkingCharacter).m_Branches;
+	}
 	//------------------------------------------------------------------//
 	//returns the config one step above this one
-	SP_MultipleChoiceConfig GetPartnerConfig()
+	SP_MultipleChoiceConfig GetParentConfig()
 	{
-		return ParentConfig;
+		return LocateConfig(TalkingCharacter).ParentConfig;
 	}
 	//------------------------------------------------------------------//
 	//inherits config wich caused this one to branch
 	void InheritConfig(SP_MultipleChoiceConfig Config)
 	{
-		ParentConfig = Config;
+		LocateConfig(TalkingCharacter).ParentConfig = Config;
+	}
+	void InheritCharacter(IEntity Character)
+	{
+		TalkingCharacter = Character;
 	}
 	//------------------------------------------------------------------//
 	//check if branched
 	bool GetBranchState()
 	{
-		return IsBranchBranched;
+		return LocateConfig(TalkingCharacter).IsBranchBranched;
 	}
-	//------------------------------------------------------------------//
 	//Inherits Archetype from previus config once branched, used to ping call the ping function
 	void InheritArchetype(SP_DialogueArchetype Archetype)
 	{
-		OriginalArchetype = Archetype;
+		LocateConfig(TalkingCharacter).OriginalArchetype = Archetype;
 	}
 	//------------------------------------------------------------------//
 	//Get action title from this config used TextID. TextID = 0 will give first entry etc.....
 	string GetActionText(int TextID)
     {
-        if (TextID >= 0 && TextID < m_Branches.Count()) 
+		DialogueMultiTextConfig Conf = LocateConfig(TalkingCharacter);
+        if (TextID < Conf.m_Branches.Count()) 
         {
-			if (IsBranchBranched == true)
+			if (Conf.IsBranchBranched == true)
 			{	
-				string acttext = m_Branches[BranchBranchID].GetMultiActionText(TextID);
+				string acttext = Conf.m_Branches[GetBranchID()].GetMultiActionText(TextID);
 				return acttext;
 			}
 			else
 			{
-				string acttext = m_Branches[TextID].GetActionText();
+				string acttext = Conf.m_Branches[TextID].GetActionText();
 				return acttext;
 			}
         }
@@ -68,33 +77,34 @@ class SP_MultipleChoiceConfig: ScriptAndConfig
 	//Get dialogue besed on ID provided, also used to check if something needs to be branched
 	string GetDialogueText(int TextID)
     {
+		DialogueMultiTextConfig Conf = LocateConfig(TalkingCharacter);
 		//check if value is out of bounds
-        if (TextID >= 0 && TextID < m_Branches.Count()) 
+        if (TextID >= 0 && TextID < Conf.m_Branches.Count()) 
         {
 			string diagtext;
 			//check if this config is branched, if yes look for text in next branch for text
-			if (IsBranchBranched == true)
+			if (Conf.IsBranchBranched == true)
 			{
-				diagtext = m_Branches[BranchBranchID].GetMultiDialogueText(TextID);
+				diagtext = Conf.m_Branches[GetBranchID()].GetMultiDialogueText(TextID);
 			}
 			//else check for SP_MultipleChoiceConfig in next branch, if there is one take text from it and branch it
 			else
 			{
-				if (m_Branches[TextID].CheckIfTextConfigBranches() == true)
+				if (Conf.m_Branches[TextID].CheckIfTextConfigBranches() == true)
 				{
-					diagtext = m_Branches[TextID].GetDialogueText();
+					diagtext = Conf.m_Branches[TextID].GetDialogueText();
 					BranchBranch(TextID);
 				}
 				else
 				//else means that it shoulndt branch, so we take text from it and figure out if we should increment stage based on EChoiseBehavior
 				{
-					EChoiseBehavior ChoiseBehavior = m_Branches[TextID].GetDialogueStageConfig().GetChoiseBehavior();
-					diagtext = m_Branches[TextID].GetDialogueText();
+					EChoiseBehavior ChoiseBehavior = Conf.m_Branches[TextID].GetDialogueStageConfig().GetChoiseBehavior();
+					diagtext = Conf.m_Branches[TextID].GetDialogueText();
 					switch(ChoiseBehavior)
 					{
 						case 0:
 						{
-							m_Branches[TextID].IncrementConfigStage(1);
+							Conf.m_Branches[TextID].IncrementConfigStage(1);
 						}
 						break;
 						case 1:
@@ -116,28 +126,59 @@ class SP_MultipleChoiceConfig: ScriptAndConfig
 	//Branches this branch, sets the branchID and passes the owner Archetype and itself on the next config, finally pings the archetype
 	void BranchBranch(int BranchID)
 	{
-		if (IsBranchBranched == false)
+		DialogueMultiTextConfig Conf = LocateConfig(TalkingCharacter);
+		if (Conf.IsBranchBranched == false)
 		{
-			IsBranchBranched = true;
+			Conf.IsBranchBranched = true;
 			
-			BranchBranchID = BranchID;
+			Conf.BranchBranchID = BranchID;
 		}
-		m_Branches[BranchID].GetDialogueStageConfig().GetMultipleChoiceConfig().InheritArchetype(OriginalArchetype);
-		m_Branches[BranchID].GetDialogueStageConfig().GetMultipleChoiceConfig().InheritConfig(this);
-		OriginalArchetype.Ping(this);
+		Conf.m_Branches[BranchID].GetDialogueStageConfig().GetMultipleChoiceConfig().InheritCharacter(TalkingCharacter);
+		Conf.m_Branches[BranchID].GetDialogueStageConfig().GetMultipleChoiceConfig().InheritArchetype(Conf.OriginalArchetype);
+		Conf.m_Branches[BranchID].GetDialogueStageConfig().GetMultipleChoiceConfig().InheritConfig(this);
+		Conf.OriginalArchetype.Ping(this);
 	}
 	//------------------------------------------------------------------//
 	//Unbranches this branch, resets branch stage and resets BranchID value, also pings the Archetype
 	void UnbranchBranch()
 	{
-		if (IsBranchBranched == true)
+		DialogueMultiTextConfig Conf = LocateConfig(TalkingCharacter);
+		if (Conf.IsBranchBranched == true)
 		{
-			IsBranchBranched = false;
-			m_Branches[BranchBranchID].ResetBranchStage();
-			BranchBranchID = 0;
-			OriginalArchetype.Ping(ParentConfig);
+			Conf.IsBranchBranched = false;
+			Conf.m_Branches[Conf.BranchBranchID].ResetBranchStage();
+			Conf.BranchBranchID = 0;
+			Conf.OriginalArchetype.Ping(Conf.ParentConfig);
 		}
 		
+	}
+	// constructor for when creating new MultiBranch instance
+	
+	DialogueMultiTextConfig LocateConfig(IEntity Character)
+	{
+		if(!DialogueMultiTextConfigMap)
+		{
+			DialogueMultiTextConfigMap = new map<string, ref DialogueMultiTextConfig>();
+		}
+		DialogueMultiTextConfig config;
+		SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
+		SP_DialogueComponent DiagComp = SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));
+		string key = DiagComp.GetCharacterName(Character);
+		if (DialogueMultiTextConfigMap.Find(key, config))
+		{
+			return config;
+		}
+		else
+		{
+			DialogueMultiTextConfig configNew = CopyConfig(MultipleChoiceConfig);
+			DialogueMultiTextConfigMap.Insert(key, configNew);
+			return configNew;
+		}
+	}
+	DialogueMultiTextConfig CopyConfig(DialogueMultiTextConfig OriginalConfig)
+	{
+		DialogueMultiTextConfig DiagConfigCopy = new DialogueMultiTextConfig(OriginalConfig, true);
+		return DiagConfigCopy;
 	}
 };
 //-------------------------------------------------------------------------------------------------------------//
@@ -145,17 +186,30 @@ class SP_MultipleChoiceConfig: ScriptAndConfig
 [BaseContainerProps(configRoot:true), SCR_BaseContainerCustomTitleField("ActionText", "DialogueText")]
 class DialogueMultiTextConfig
 {
-	[Attribute(defvalue: "", desc: "Action Title", category: "Dialogue")]
-	string ActionText;
-	[Attribute(defvalue: "", desc: "Dialogue Text", category: "Dialogue")]
-    string DialogueText;
-	string GetActionText()
-	{
-	 return ActionText;
-	}
-	string GetDialogueText()
-	{
-	 return DialogueText;
-	}
+	//------------------------------------------------------------------//
+	//Class containing both action and dialogue text for each radial menu entry
+	[Attribute(defvalue: "", desc: "Action Title and Dialogue Text for Radial menu choice", category: "Dialogue")]
+	ref array<ref SP_DialogueBranch> m_Branches;
+	//------------------------------------------------------------------//
+	//Archetype wich this cofig belongs to
+	SP_DialogueArchetype OriginalArchetype;
+	//------------------------------------------------------------------//
+	//SP_MultipleChoiceConfig that come before this one in a hierarchy. Used for DoBackDialogue in SP_DialogueComponent
+	SP_MultipleChoiceConfig ParentConfig;
+	//------------------------------------------------------------------//
+	//Branching info for this config. Once config gets branched the branch that caused it has its ID saved in BranchBranchID
+	bool IsBranchBranched;
+	int BranchBranchID
+	//------------------------------------------------------------------//
+	void DialogueMultiTextConfig(DialogueMultiTextConfig original, bool isNew = false)
+    {
+		if (isNew) 
+		{
+        OriginalArchetype = original.OriginalArchetype;
+        m_Branches = original.m_Branches;
+        ParentConfig = original.ParentConfig;
+        IsBranchBranched = original.IsBranchBranched;
+        BranchBranchID = original.BranchBranchID;
+		}
+    }
 }
-

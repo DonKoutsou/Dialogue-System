@@ -24,7 +24,6 @@ class SP_DialogueComponent: ScriptComponent
 	[Attribute()]
 	ref BaseChatChannel m_ChatChannel;
 	//----------------------------------------------------------------------------------------------------------------//
-	
 	//----------------------------------------------------------------------------------------------------------------//
 	//Dialogue System
 	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;
@@ -50,7 +49,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		else if (currentconfig && currentconfig.GetBranchState() == false)
 		{
-			currentconfig = currentconfig.GetPartnerConfig();
+			currentconfig = currentconfig.GetParentConfig();
 			currentconfig.UnbranchBranch();
 			currentconfig = null;
 		}
@@ -270,9 +269,10 @@ class SP_DialogueComponent: ScriptComponent
 				//create a new archetype and copy the stuff in it
 				SP_DialogueArchetype DiagArchNew = CopyArchetype(CharDialogueArch);
 				//initialise the newly made Archetype after its filled with all data
-				DiagArchNew.Init();
+				DiagArchNew.Init(Character);
 				//instert it int the ArchetypeMap
 				DialogueArchetypeMap.Insert(LocCharacterName, DiagArchNew);
+				return DiagArchNew;
 			}
 	return CharDialogueArch;
 	}
@@ -290,7 +290,7 @@ class SP_DialogueComponent: ScriptComponent
 		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
 		foreach (SP_DialogueArchetype config: m_CharacterArchetypeList)
 		{
-			config.Init();
+			config.Init(owner);
 		}
 		DialogueArchetypeMap = new map<string, ref SP_DialogueArchetype>;
 	}

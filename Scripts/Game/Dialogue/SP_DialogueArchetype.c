@@ -27,6 +27,7 @@ class SP_DialogueArchetype: ScriptAndConfig
     protected SP_DialogueComponent DiagComp;
 	SP_MultipleChoiceConfig CurentConfig;
 	SP_DialogueArchetype OriginalArchetype;
+	IEntity TalkingCharacter;
 	//------------------------------------------------------------------//
 	//Branching bool. If a Dialogue Archetype has its IsCharacterBranched set to true it will give text from SP_MultipleChoiceConfig
 	//Selecting from wich SP_DialogueBranch to take the SP_MultipleChoiceConfig happens using current dialogue stage and branch ID specified when the branching happened
@@ -43,7 +44,9 @@ class SP_DialogueArchetype: ScriptAndConfig
 			IsCharacterBranched = true;
 		}
 		SP_DialogueBranch DiagBranch = GetDialogueBranch(branch);
+		DiagBranch.GetDialogueStageConfig().GetMultipleChoiceConfig().InheritCharacter(TalkingCharacter);
 		DiagBranch.GetDialogueStageConfig().GetMultipleChoiceConfig().InheritArchetype(OriginalArchetype);
+		
 		ArchBranchID = branch;
 	}
 	//------------------------------------------------------------------//
@@ -106,7 +109,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 	}
 	//------------------------------------------------------------------//
 	//Mapping all configrations existing uder this character archetype
-	void Init()
+	void Init(IEntity Character)
 	{
 		OriginalArchetype = this;
 		DialogueBranchMap = new map<int, ref SP_DialogueBranch>();
@@ -116,6 +119,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 			int key = (i);
         	DialogueBranchMap.Insert(key, DialogueBranch[i]);
         }
+		TalkingCharacter = Character;
 	}
 	//------------------------------------------------------------------//
 	//Find the Config you are looking for using the map made above
@@ -140,7 +144,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 		{
         	return null;
     	}
-		
+
         return branch;
     }
 	//------------------------------------------------------------------//
@@ -207,6 +211,9 @@ class SP_DialogueArchetype: ScriptAndConfig
         m_sCharacterFaction = original.GetArchetypeTemplateFaction();
         DialogueBranch = original.GetDialogueBranchArray();
 		DialogueBranchMap = original.GetDialogueBranchMap();
+		IsCharacterBranched = original.IsCharacterBranched;
+		ArchBranchID = original.ArchBranchID;
+		CurentConfig = original.CurentConfig;
 		}
     }
 };

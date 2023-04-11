@@ -10,7 +10,6 @@ class SP_DialogueBranch
 	ref array<ref DialogueStageConfig> m_BranchStageConfig;
 	//Stage of this config
 	int DialogueBranchStage;
-	int Title = "GitGud";
 	
 	//------------------------------------------------------------------//
 	//Text that is going to be used as title for the action
@@ -121,7 +120,6 @@ class DialogueStageConfig
 		}
 		else
 			return m_MultipleBranchConfig;
-		
 	}
 	//------------------------------------------------------------------//
 	//Get action text from DialogueStageConfig
@@ -142,7 +140,6 @@ class DialogueStageConfig
 		{
 			ActText = STRING_EMPTY;
 		}
-		
 		return ActText;
 	}
 	//------------------------------------------------------------------//
