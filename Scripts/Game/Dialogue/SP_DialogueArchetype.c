@@ -25,55 +25,42 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//Map to be filled with all the configurations on Init
 	protected ref map<int, ref SP_DialogueBranch> DialogueBranchMap;
     protected SP_DialogueComponent DiagComp;
-	SP_MultipleChoiceConfig CurentConfig;
 	SP_DialogueArchetype OriginalArchetype;
 	IEntity TalkingCharacter;
+	bool IsCharacterBranched;
+	int BranchedID;
 	//------------------------------------------------------------------//
 	//Branching bool. If a Dialogue Archetype has its IsCharacterBranched set to true it will give text from SP_MultipleChoiceConfig
 	//Selecting from wich SP_DialogueBranch to take the SP_MultipleChoiceConfig happens using current dialogue stage and branch ID specified when the branching happened
-	bool IsCharacterBranched;
 	//Branch ID that is set when the Archtype gets branched
-	int ArchBranchID;
 	//------------------------------------------------------------------//
 	//Function used to branch this archetype. Called used a branchID wich sets from wich branch to take data
 	//If branch is set to 1 Action,Dialogue text will be taken from SP_DialogueBranch with BranchID == 1 and StageID == Current Stage
-	void BranchDialogueArchetype(int branch)
+	//------------------------------------------------------------------//
+	//Current config is the last config used.
+	bool IsCharacterBranched()
+	{
+		return IsCharacterBranched;
+	}
+	void BranchArchetype(int Branch)
 	{
 		if (IsCharacterBranched == false)
 		{
 			IsCharacterBranched = true;
+			BranchedID = Branch;
 		}
-		SP_DialogueBranch DiagBranch = GetDialogueBranch(branch);
-		DiagBranch.GetDialogueStageConfig().GetMultipleChoiceConfig().InheritCharacter(TalkingCharacter);
-		DiagBranch.GetDialogueStageConfig().GetMultipleChoiceConfig().InheritArchetype(OriginalArchetype);
-		
-		ArchBranchID = branch;
 	}
-	//------------------------------------------------------------------//
-	//Current config is the last config used.
-	SP_MultipleChoiceConfig GetCurrentConfig()
+	void UnBranchArchetype()
 	{
-		return CurentConfig;
-	}
-	//------------------------------------------------------------------//
-	//Whenever a config branches and unbranches it sends a ping, this is used to define the last entry used
-	void Ping(SP_MultipleChoiceConfig Config)
-	{
-		CurentConfig = Config;
-	}
-	//------------------------------------------------------------------//
-	//Function used to unbranch this archetype and allow it to provide text from all branches
-	void UnBranchDialogueArchetype()
-	{
-		if (CurentConfig)
-		{
-			CurentConfig.UnbranchBranch();
-			CurentConfig = null;
-		}
 		if (IsCharacterBranched == true)
 		{
 			IsCharacterBranched = false;
+			BranchedID = null;
 		}
+	}
+	int GetBranchedID()
+	{
+		return BranchedID;
 	}
 	//------------------------------------------------------------------//
 	//Dialogue identifier to be used for this archetype, can be set to something generic and provide its dialogues to a variety of entities
@@ -123,36 +110,30 @@ class SP_DialogueArchetype: ScriptAndConfig
 	}
 	//------------------------------------------------------------------//
 	//Find the Config you are looking for using the map made above
-	SP_DialogueBranch GetDialogueBranch(int BranchKey)
+	SP_DialogueBranch GetDialogueBranch(IEntity Character, int BranchKey)
     {
 		int key = (BranchKey);
         SP_DialogueBranch branch;
-		if (!DialogueBranchMap.Find(key, branch))
+		if (IsCharacterBranched == true)
 		{
-        	return null;
-    	}
-		
-        return branch;
-    }
-	//------------------------------------------------------------------//
-	//Find the Config you are looking for using the map made above using the current stage
-	SP_DialogueBranch GetDialogueBranchLite(int BranchKey)
-    {
-		int key = (BranchKey);
-        SP_DialogueBranch branch;
+			if (!DialogueBranchMap.Find(BranchedID, branch))
+			{
+	        	return null;
+	    	}
+			return branch.GetCurrentDialogueBranch(Character, BranchKey);
+		}
 		if (!DialogueBranchMap.Find(key, branch))
-		{
-        	return null;
-    	}
-
+			{
+	        	return null;
+	    	}
         return branch;
     }
 	//------------------------------------------------------------------//
 	//Checks if a SP_MultipleChoiceConfig is hooked on this branch, used to initiate radial menu insead of completing dialogue
-	bool CheckIfDialogueBranches(DialogueStageConfig DialogueConf)
+	bool CheckIfDialogueBranches(SP_DialogueBranch DialogueBranch)
 	{
 		
-		if (DialogueConf.GetMultipleChoiceConfig() == null)
+		if (DialogueBranch.CheckIfStageBranches() == false)
 		{
 			return false;
 		}
@@ -163,15 +144,8 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//Check if IsInfluanceGlobal is true wich means that all branches should progress, if not progres only the branch provided
 	bool IncrementStage(int BranchID, int incrementamount)
 	{	
-		SP_DialogueBranch branch = GetDialogueBranch(BranchID);
-		branch.IncrementConfigStage(incrementamount);
-		return true;
-	}
-	//------------------------------------------------------------------//
-	//resets stage of branches
-	bool ResetStage(int BranchID)
-	{
-		GetDialogueBranchLite(BranchID).ResetBranchStage();
+		SP_DialogueBranch branch = GetDialogueBranch(TalkingCharacter, BranchID);
+		branch.IncrementBranchStage(incrementamount);
 		return true;
 	}
 	//------------------------------------------------------------------//
@@ -179,8 +153,8 @@ class SP_DialogueArchetype: ScriptAndConfig
 	string GetDialogueText(int BranchID)
 	{
 		string m_stexttoshow;
-		SP_DialogueBranch branch = GetDialogueBranchLite(BranchID);
-		m_stexttoshow = branch.GetDialogueText();	
+		SP_DialogueBranch branch = GetDialogueBranch(TalkingCharacter, BranchID);
+		m_stexttoshow = branch.GetDialogueText(TalkingCharacter, BranchID);	
 		return m_stexttoshow;
 	}
 	//------------------------------------------------------------------//
@@ -188,10 +162,10 @@ class SP_DialogueArchetype: ScriptAndConfig
 	string GetActionTitle(int BranchID)
 	{
 		string m_sActionTitle;
-		SP_DialogueBranch Branch = GetDialogueBranchLite(BranchID);
+		SP_DialogueBranch Branch = GetDialogueBranch(TalkingCharacter, BranchID);
 		if (Branch)
 		{
-			m_sActionTitle = Branch.GetActionText();
+			m_sActionTitle = Branch.GetActionText(TalkingCharacter, BranchID);
 		}
 		else
 		{
@@ -211,9 +185,6 @@ class SP_DialogueArchetype: ScriptAndConfig
         m_sCharacterFaction = original.GetArchetypeTemplateFaction();
         DialogueBranch = original.GetDialogueBranchArray();
 		DialogueBranchMap = original.GetDialogueBranchMap();
-		IsCharacterBranched = original.IsCharacterBranched;
-		ArchBranchID = original.ArchBranchID;
-		CurentConfig = original.CurentConfig;
 		}
     }
 };

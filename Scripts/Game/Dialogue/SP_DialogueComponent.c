@@ -28,6 +28,8 @@ class SP_DialogueComponent: ScriptComponent
 	//Dialogue System
 	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;
 	SCR_BaseGameMode GameMode;
+	
+	
 	//----------------------------------------------------------------------------------------------------------------//
 	//Function used for leaving a branch and going back to initial menu, and also leaving branch to go back to another branch
 	//Unbranches character and updates UI
@@ -37,21 +39,15 @@ class SP_DialogueComponent: ScriptComponent
 		int senderID = Character.GetID();
 		SP_DialogueArchetype DiagArch = LocateCharacterArchetype(Character);
 		string m_DialogTexttoshow = "Go Back";
-		SP_MultipleChoiceConfig currentconfig = DiagArch.GetCurrentConfig();
-		if (!currentconfig)
+		SP_DialogueBranch Branch = DiagArch.GetDialogueBranch(Character, DiagArch.GetBranchedID());
+		if (!Branch)
 		{
-			DiagArch.UnBranchDialogueArchetype();
+			DiagArch.UnBranchArchetype();
 		}
-		else if (currentconfig && currentconfig.GetBranchState() == true)
+		else if (Branch && Branch.CheckIfParentBranched() == true)
 		{
-			currentconfig.UnbranchBranch();
-			currentconfig = null;
-		}
-		else if (currentconfig && currentconfig.GetBranchState() == false)
-		{
-			currentconfig = currentconfig.GetParentConfig();
-			currentconfig.UnbranchBranch();
-			currentconfig = null;
+			DialogueBranchInfoConfig m_BranchStageConfig = Branch.LocateConfig(Character);
+			m_BranchStageConfig.GetParentConfig().Unbranch();
 		}
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
@@ -68,42 +64,31 @@ class SP_DialogueComponent: ScriptComponent
 		int senderID = Character.GetID();
 		SP_DialogueArchetype DiagArch = LocateCharacterArchetype(Character);
 		string m_DialogTexttoshow;
-		//check if this achetype is branched. if yes get text from SP_MultipleChoiceConfig and return before incrementing stage
-		if (DiagArch.IsCharacterBranched == true)
-		{
-			SP_DialogueBranch DialogueBranch = DiagArch.GetDialogueBranchLite(DiagArch.ArchBranchID);
-			m_DialogTexttoshow = DialogueBranch.GetMultiDialogueText(BranchID);
-			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
-			MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
-			DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
-			DiagUI.Init(Character, Player);
-			DiagUI.UpdateEntries();
-			return;
-		}
-		else
-		//If not get text normaly
-		{
-			m_DialogTexttoshow = DiagArch.GetDialogueText(BranchID);
-		}
-		SP_DialogueBranch DiagBranch = SP_DialogueBranch.Cast(DiagArch.GetDialogueBranch(BranchID));
-		//Check if this DialogueBranch has a SP_MultipleChoiceConfig atatched to it, if yes cause branching to the character and return before incrementing stage
-		if(DiagBranch.CheckIfTextConfigBranches() == true)
-		{
-			DiagArch.BranchDialogueArchetype(BranchID);
-			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
-			
-			MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
-			DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
-			DiagUI.Init(Character, Player);
-			DiagUI.UpdateEntries();
-			return;
-		}
-		//if archetype is not branched and the DialogueBranch doesent have any SP_MultipleChoiceConfig atatched to it send mt message, increment stage and be done.
+		SP_DialogueBranch Branch;
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
+		//check if this achetype is branched. if yes get text from SP_MultipleChoiceConfig and return before incrementing stage
+		Branch = DiagArch.GetDialogueBranch(Character, BranchID);
+		if (Branch.CheckIfStageBranches() == true)
+		{
+			if(DiagArch.IsCharacterBranched() == false)
+			{
+				DiagArch.BranchArchetype(BranchID);
+			}
+			m_DialogTexttoshow = Branch.GetDialogueText(Character, BranchID);
+			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
+			Branch.CauseBranch(DiagArch, Branch.LocateConfig(Character));
+			DiagUI.Init(Character, Player);
+			DiagUI.UpdateEntries();
+			Branch.OnPerform(Character, Player);
+			
+			return;
+		}
+		m_DialogTexttoshow = Branch.GetDialogueText(Character,BranchID);
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
-		
-		EChoiseBehavior ActionBehavior = DiagBranch.GetDialogueStageConfig().GetChoiseBehavior();
+		Branch.OnPerform(Character, Player);
+		//if archetype is not branched and the DialogueBranch doesent have any SP_MultipleChoiceConfig atatched to it send mt message, increment stage and be done.
+		EChoiseBehavior ActionBehavior = Branch.GetDialogueStage().GetChoiseBehavior();
 		switch(ActionBehavior)
 		{
 			case 0:
@@ -134,14 +119,13 @@ class SP_DialogueComponent: ScriptComponent
 	{
 		string m_sActionName;
 		SP_DialogueArchetype DiagArch = LocateCharacterArchetype(Owner);
+		SP_DialogueBranch Branch;
+		Branch = DiagArch.GetDialogueBranch(Owner, BranchID);
 		//check if archetype is branched so we can take text form different place
-		if (DiagArch.IsCharacterBranched == true)
+		if (Branch)
 		{
-			SP_DialogueBranch DialogueBranch = DiagArch.GetDialogueBranchLite(DiagArch.ArchBranchID);
-			m_sActionName = DialogueBranch.GetMultiActionText(BranchID);
-			return m_sActionName;
+			m_sActionName = Branch.GetActionText(Owner, BranchID);
 		}
-		m_sActionName = DiagArch.GetActionTitle(BranchID);
 		return m_sActionName;
 	}
 	//----------------------------------------------------------------------------------------------------------------//
