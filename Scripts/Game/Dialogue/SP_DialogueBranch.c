@@ -5,72 +5,49 @@
 class SP_DialogueBranch
 {
 	//------------------------------------------------------------------//
-	[Attribute()]
-	ref array<ref DialogueStageConfig> m_BranchStageConfig;
+	[Attribute(desc: "Dialogue Stage, Depending on the stage of the branch the apropriate stage will be selected. Stage = 0 means first entry etc...")]
+	ref array<ref DialogueStage> m_BranchStages;
 	
-	ref DialogueBranchInfoConfig BranchInfoConfig;
-	protected ref map<string, ref DialogueBranchInfoConfig> BranchInfoConfigMap;
+	ref DialogueBranchInfo BranchInfoConfig;
+	protected ref map<string, ref DialogueBranchInfo> BranchInfoConfigMap;
 	IEntity TalkingCharacter;
 	//------------------------------------------------------------------//
 	//Text that is going to be used as title for the action
 	void OnPerform(IEntity Character, IEntity Player)
 	{
-		DialogueBranchInfoConfig Conf = LocateConfig(Character);
-		m_BranchStageConfig[Conf.GetDialogueBranchStage()].Perform(Character, Player)
+		DialogueBranchInfo Conf = LocateConfig(Character);
+		if(m_BranchStages.Count() >= Conf.GetDialogueBranchStage())
+		{
+			m_BranchStages[Conf.GetDialogueBranchStage()].Perform(Character, Player);
+		}
 	};
+	//------------------------------------------------------------------//
 	void CanBeShown()
 	{
 	
 	};
-	DialogueStageConfig GetDialogueStage()
-	{
-		DialogueBranchInfoConfig Conf = LocateConfig(TalkingCharacter);
-		return m_BranchStageConfig[Conf.GetDialogueBranchStage()];
-		
-	}
-	SP_DialogueBranch GetCurrentDialogueBranch(IEntity Character, int BranchID)
-	{
-		TalkingCharacter = Character;
-		SP_DialogueBranch branch;
-		DialogueBranchInfoConfig Conf = LocateConfig(TalkingCharacter);
-		
-		branch = this;
-		if (Conf.CheckifBranched() == true)
-		{
-			branch = m_BranchStageConfig[Conf.GetDialogueBranchStage()].GetBranch(BranchID).GetCurrentDialogueBranch(Character, BranchID);
-		}
-		return branch;
-	}
-	string GetActionText(IEntity Character, int KeyID)
+	//------------------------------------------------------------------//
+	string GetActionText(IEntity Character)
 	{
 		string ActText;
 		TalkingCharacter = Character;
-		DialogueBranchInfoConfig Conf = LocateConfig(TalkingCharacter);
-		if (Conf.CheckifBranched() == false)
+		DialogueBranchInfo Conf = LocateConfig(TalkingCharacter);
+		if(m_BranchStages.Count() >= Conf.GetDialogueBranchStage())
 		{
-			ActText = m_BranchStageConfig[Conf.GetDialogueBranchStage()].GetActionText();
+			ActText = m_BranchStages[Conf.GetDialogueBranchStage()].GetActionText();
 		}
-		else
-		{
-			ActText = m_BranchStageConfig[Conf.GetDialogueBranchStage()].GetStageBranchActionText(KeyID, TalkingCharacter);
-		}
-		
 		return ActText;
 	}
 	//------------------------------------------------------------------//
 	//Text that is going to be sent in the chat
-	string GetDialogueText(IEntity Character, int KeyID)
+	string GetDialogueText(IEntity Character)
 	{
 		string DiagText;
 		TalkingCharacter = Character;
-		DialogueBranchInfoConfig Conf = LocateConfig(TalkingCharacter);
-		if (Conf.CheckifBranched() == false)
+		DialogueBranchInfo Conf = LocateConfig(TalkingCharacter);
+		if(m_BranchStages.Count() >= Conf.GetDialogueBranchStage())
 		{
-			DiagText = m_BranchStageConfig[Conf.GetDialogueBranchStage()].GetDialogueText();
-		}
-		else
-		{
-			DiagText = m_BranchStageConfig[Conf.GetDialogueBranchStage()].GetStageBranchDialogueText(KeyID, TalkingCharacter);
+		DiagText = m_BranchStages[Conf.GetDialogueBranchStage()].GetDialogueText();
 		}
 		return DiagText;
 	}
@@ -81,12 +58,12 @@ class SP_DialogueBranch
 		LocateConfig(TalkingCharacter).IncrementStage(incrementamount);
 	}
 	//------------------------------------------------------------------//
-	//Checks if a SP_MultipleChoiceConfig exists in the current DialogueStageConfig
+	//Checks if a SP_MultipleChoiceConfig exists in the current DialogueStage
 	bool CheckIfStageBranches()
 	{
 		int currentstage = LocateConfig(TalkingCharacter).GetDialogueBranchStage();
 		
-		if(m_BranchStageConfig[currentstage].CheckIfStageCanBranch() == true)
+		if(m_BranchStages[currentstage].CheckIfStageCanBranch() == true)
 		{
 			return true;
 		}
@@ -95,26 +72,90 @@ class SP_DialogueBranch
 			return false;
 		}
 	}
+	//------------------------------------------------------------------//
+	void CauseBranch(int BranchID)
+	{
+		LocateConfig(TalkingCharacter).CauseBranch(BranchID);
+	}
+	//------------------------------------------------------------------//
 	bool CheckIfBranched(IEntity Character)
 	{
 		return LocateConfig(Character).CheckifBranched();
 	}
-	bool CheckIfParentBranched()
+	//------------------------------------------------------------------//
+	DialogueBranchInfo GetParent()
 	{
-		return LocateConfig(TalkingCharacter).GetParentConfig().CheckifBranched();
-	}
-	void CauseBranch(SP_DialogueArchetype Archetype, DialogueBranchInfoConfig Config)
-	{
-		LocateConfig(TalkingCharacter).CauseBranch(Archetype, Config);
+		DialogueBranchInfo Parent = LocateConfig(TalkingCharacter).GetParentConfig();
+		if (Parent)
+		{
+			return Parent;
+		}
+		else
+		{
+			return null;
+		}
 	}
 	//------------------------------------------------------------------//
-	DialogueBranchInfoConfig LocateConfig(IEntity Character)
+	DialogueStage GetDialogueStage()
+	{
+		DialogueBranchInfo Conf = LocateConfig(TalkingCharacter);
+		if(m_BranchStages.Count() >= Conf.GetDialogueBranchStage())
+		{
+			return m_BranchStages[Conf.GetDialogueBranchStage()];
+		}
+		return null;
+	}
+	//------------------------------------------------------------------//
+	//Return the current Branch. Meaning, it keeps looking deeper for a branch that doesent branch further (IsBranchBranched = false)
+	SP_DialogueBranch GetCurrentDialogueBranch(IEntity Character, int BranchID)
+	{
+		TalkingCharacter = Character;
+		SP_DialogueBranch branch;
+		//Get the config for this dialogue branch
+		DialogueBranchInfo Conf = LocateConfig(TalkingCharacter);
+		//Get the stage valufe of this branch, use this to get the correct m_BranchStages
+		int DiagStage = Conf.GetDialogueBranchStage();
+		//Define the branch that we return as this one, if any of the conditions we check for later is true that will be updated, but if not, means that there is no branch that branches further so this is the one that we will return
+		branch = this;
+		//We check if this branch has IsBranchBranched = true
+		if (Conf.CheckifBranched() == true)
+		{
+			//if its branched it means if has a Branched ID, we take it to use int
+			//If a branch is branched we need to look further down on the corrent branch, branched ID is used for that.
+			int BranchedID = Conf.GetBranchedID();
+			//Go in m_BranchStages Get one of the branches nested there using the BranchedID that this branch has
+			//Check if that branch has IsBranchBranched = true or false
+			//IF true it means that we need to go deeper using our BranchedID, if false it means that we are on the branch we want, so we take branch using branch ID
+			bool BranchState = m_BranchStages[DiagStage].GetBranch(BranchedID).CheckIfBranched(Character);
+			if (BranchState == true)
+			{
+				branch = m_BranchStages[DiagStage].GetBranch(BranchedID);
+				if (branch)
+				{
+					branch = branch.GetCurrentDialogueBranch(Character, BranchID);
+				}
+				
+			}
+			else
+			{
+				branch = m_BranchStages[DiagStage].GetBranch(BranchID);
+				if(branch)
+				{
+					branch = branch.GetCurrentDialogueBranch(Character, BranchID);
+				}
+				
+			}
+		}
+		return branch;
+	}
+	//------------------------------------------------------------------//
+	DialogueBranchInfo LocateConfig(IEntity Character)
 	{
 		if(!BranchInfoConfigMap)
 		{
-			BranchInfoConfigMap = new map<string, ref DialogueBranchInfoConfig>();
+			BranchInfoConfigMap = new map<string, ref DialogueBranchInfo>();
 		}
-		DialogueBranchInfoConfig config;
+		DialogueBranchInfo config;
 		SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
 		SP_DialogueComponent DiagComp = SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));
 		string key = DiagComp.GetCharacterName(Character);
@@ -124,24 +165,27 @@ class SP_DialogueBranch
 		}
 		else
 		{
-			DialogueBranchInfoConfig configNew = CopyConfig(BranchInfoConfig);
+			DialogueBranchInfo configNew = CopyConfig(BranchInfoConfig);
 			BranchInfoConfigMap.Insert(key, configNew);
 			return configNew;
 		}
 	}
-	DialogueBranchInfoConfig CopyConfig(DialogueBranchInfoConfig OriginalConfig)
+	//------------------------------------------------------------------//
+	DialogueBranchInfo CopyConfig(DialogueBranchInfo OriginalConfig)
 	{
-		DialogueBranchInfoConfig DiagConfigCopy = new DialogueBranchInfoConfig(OriginalConfig, true);
+		DialogueBranchInfo DiagConfigCopy = new DialogueBranchInfo(OriginalConfig, true);
 		return DiagConfigCopy;
 	}
-};
-[BaseContainerProps(configRoot:true), DialogueStageConfigTitleAttribute()]
-class DialogueStageConfig
-{
 	//------------------------------------------------------------------//
-	//Behavior that this choice is going to use once performed. //eg. "IncrementDialogueStage" increments the stage of the branch and progresses further down the dialogue, while "Stay" keep the menu open so player can keep using it
-	[Attribute("0", UIWidgets.ComboBox, "What is going to be the behavior of this choice", "", ParamEnumArray.FromEnum(EChoiseBehavior) )]
-	protected EChoiseBehavior ChoiseBehavior;
+	void InheritData(SP_DialogueArchetype Archetype, DialogueBranchInfo Config)
+	{
+		LocateConfig(TalkingCharacter).ParentConfig = Config;
+		LocateConfig(TalkingCharacter).OriginalArchetype = Archetype;
+	}
+};
+[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
+class DialogueStage
+{
 	//------------------------------------------------------------------//
 	[Attribute(defvalue: "Action Text", desc: "Action Title", category: "Dialogue")]
 	string ActionText;
@@ -149,39 +193,55 @@ class DialogueStageConfig
 	[Attribute(defvalue: "Dialogue Text", desc: "Dialogue Text", category: "Dialogue")]
     string DialogueText;
 	//------------------------------------------------------------------//
-	[Attribute(desc: "Filtered selection test")]
-	private ref array<ref SP_DialogueBranch> m_StageBranch;
+	[Attribute(desc: "Dialogue Branch, if present will cause branch to split instead of progressing its stage. When a branch splits, the dialogue system will only look in the entries of this branch only")]
+	private ref array<ref SP_DialogueBranch> m_Branch;
 	//------------------------------------------------------------------//
-	//Get action text from DialogueStageConfig
+	//Get action text from DialogueStage
 	void Perform(IEntity Character, IEntity Player)
 	{
-		string bullet;
-		bullet = Character.GetName();
 	};
+	//------------------------------------------------------------------//
 	string GetActionText()
 	{
 	 return ActionText;
 	}
+	void InheritData(SP_DialogueArchetype Archetype, DialogueBranchInfo Config)
+	{
+		if(m_Branch && m_Branch.Count() > 0)
+			{
+				foreach (int i, SP_DialogueBranch DiagBranch: m_Branch)
+				{
+					DiagBranch.InheritData(Archetype, Config)
+				}
+			}
+	}
+	
+	//------------------------------------------------------------------//
 	bool CheckIfStageCanBranch()
 	{
-		if (m_StageBranch != null)
+		if (m_Branch.Count() > 0)
 		{
 			return true;
 		}
 		return false;
 	}
+	//------------------------------------------------------------------//
 	SP_DialogueBranch GetBranch(int BranchID)
 	{
-		return m_StageBranch[BranchID];
+		if(m_Branch.Count() >= BranchID + 1)
+		{
+			return m_Branch[BranchID];
+		}
+		return null;
 	}
 	//------------------------------------------------------------------//
 	//Get action text from SP_MultipleChoiceConfig, text key chooses the entry. TextKey = 0 will take the first entry in SP_MultipleChoiceConfig
 	string GetStageBranchActionText(int TextKey, IEntity Character)
 	{
 		string ActText
-		if(m_StageBranch[TextKey])
+		if(m_Branch[TextKey])
 		{
-			ActText = m_StageBranch[TextKey].GetActionText(Character, TextKey);	
+			ActText = m_Branch[TextKey].GetActionText(Character);	
 		}
 		else
 		{
@@ -190,7 +250,7 @@ class DialogueStageConfig
 		return ActText;
 	}
 	//------------------------------------------------------------------//
-	//Get dialogue text from DialogueStageConfig
+	//Get dialogue text from DialogueStage
 	string GetDialogueText()
 	{
 	 return DialogueText;
@@ -200,9 +260,9 @@ class DialogueStageConfig
 	string GetStageBranchDialogueText(int TextKey, IEntity Character)
 	{
 		string DiagText;
-		if(m_StageBranch[TextKey])
+		if(m_Branch[TextKey])
 		{
-			DiagText = m_StageBranch[TextKey].GetDialogueText(Character, TextKey);
+			DiagText = m_Branch[TextKey].GetDialogueText(Character);
 		}
 		else
 		{
@@ -210,44 +270,26 @@ class DialogueStageConfig
 		}
 	 	return DiagText;
 	}
-	//------------------------------------------------------------------//
-	//Getter for choice behavior Enum
-	EChoiseBehavior GetChoiseBehavior()
-	{
-		return ChoiseBehavior;
-	}
 }
 //Used as text container 
 [BaseContainerProps(configRoot:true), SCR_BaseContainerCustomTitleField("ActionText", "DialogueText")]
-class DialogueBranchInfoConfig
+class DialogueBranchInfo
 {
-	//------------------------------------------------------------------//
-	//Class containing both action and dialogue text for each radial menu entry
-	[Attribute(defvalue: "", desc: "Action Title and Dialogue Text for Radial menu choice", category: "Dialogue")]
-	ref array<ref SP_DialogueBranch> m_Branches;
 	//------------------------------------------------------------------//
 	//Archetype wich this cofig belongs to
 	SP_DialogueArchetype OriginalArchetype;
 	//------------------------------------------------------------------//
 	//SP_MultipleChoiceConfig that come before this one in a hierarchy. Used for DoBackDialogue in SP_DialogueComponent
-	DialogueBranchInfoConfig ParentConfig;
+	DialogueBranchInfo ParentConfig;
 	//------------------------------------------------------------------//
 	//Branching info for this config. Once config gets branched the branch that caused it has its ID saved in BranchBranchID
 	bool IsBranchBranched;
 	int BranchBranchID
 	int DialogueBranchStage;
 	//------------------------------------------------------------------//
-	void DialogueBranchInfoConfig(DialogueBranchInfoConfig original, bool isNew = false)
+	void DialogueBranchInfo(DialogueBranchInfo original, bool isNew = false)
     {
-		if (isNew) 
-		{
-        OriginalArchetype = original.OriginalArchetype;
-        m_Branches = original.m_Branches;
-        ParentConfig = original.ParentConfig;
-        IsBranchBranched = original.IsBranchBranched;
-        BranchBranchID = original.BranchBranchID;
-		}
-    }
+    };
 	void IncrementStage(int amount)
 	{
 		DialogueBranchStage = DialogueBranchStage + 1;
@@ -260,17 +302,19 @@ class DialogueBranchInfoConfig
 	{
 		return  IsBranchBranched;
 	}
-	void CauseBranch(SP_DialogueArchetype Archetype, DialogueBranchInfoConfig Config)
+	void CauseBranch(int BranchID)
 	{
 		if(IsBranchBranched == false)
 		{
 			IsBranchBranched = true;
-			OriginalArchetype = Archetype;
-			ParentConfig = Config;
-			BranchBranchID = DialogueBranchStage;
+			BranchBranchID = BranchID;
 		}
 	}
-	DialogueBranchInfoConfig GetParentConfig()
+	int GetBranchedID()
+	{
+		return BranchBranchID;
+	}
+	DialogueBranchInfo GetParentConfig()
 	{
 		return ParentConfig;
 	}
@@ -283,11 +327,10 @@ class DialogueBranchInfoConfig
 	}
 }
 //---------------------------------------------------------------------------------------------------//
-class DialogueStageConfigTitleAttribute : BaseContainerCustomTitle
+class DialogueStageTitleAttribute : BaseContainerCustomTitle
 {
 	override bool _WB_GetCustomTitle(BaseContainer source, out string title)
 	{
-
 		// Get ActionName
 		string actionName;
 		source.Get("ActionText", actionName);
@@ -298,8 +341,6 @@ class DialogueStageConfigTitleAttribute : BaseContainerCustomTitle
 		source.Get("ChoiseBehavior", behavior);
 		behaviorStr = typename.EnumToString(EChoiseBehavior, behavior);
 		title = string.Format("Stage: %1 - %2", actionName, behaviorStr,);
-
-
 		return true;
 	}
 }
