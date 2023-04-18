@@ -7,7 +7,7 @@ class SP_DialogueAction : ScriptedUserAction
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
-		DiagComp.LocateCharacterArchetype(pOwnerEntity);
+		DiagComp.LocateDialogueArchetype(pOwnerEntity);
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		DiagUI.Init(pOwnerEntity, pUserEntity);

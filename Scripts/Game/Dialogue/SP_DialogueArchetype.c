@@ -17,6 +17,8 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//Character Rank
 	[Attribute("50", UIWidgets.ComboBox, "Character rank, used to identify character dialogue. Compared to rank in SCR_CharacterRankComponent", category:"CharacterInfo", ParamEnumArray.FromEnum(ECharacterRank))]
 	private ECharacterRank m_sCharacterRank;
+	[Attribute()]
+	ref SCR_MapLocationQuadHint Hint;
 	//------------------------------------------------------------------//
 	//Different configuration containing dialogue texts
 	[Attribute(desc: "Filtered selection test")]

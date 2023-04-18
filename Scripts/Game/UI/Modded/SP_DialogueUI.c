@@ -28,6 +28,7 @@ class DialogueUIClass: ChimeraMenuBase
 	SP_DialogueComponent DiagComp;
 	SP_DialogueArchetype DiagArch;
 	protected SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
+	int CurrentBranchID;
     //------------------------------------------------------------------------------------------------//
 	
 	void Init(IEntity Owner, IEntity User)
@@ -82,50 +83,59 @@ class DialogueUIClass: ChimeraMenuBase
 	} 
 	void UpdateEntries()
 	{
-		string Diag0 = DiagComp.GetActionName(0, myCallerEntity);
-		string Diag1 = DiagComp.GetActionName(1, myCallerEntity);
-		string Diag2 = DiagComp.GetActionName(2, myCallerEntity);
-		string Diag3 = DiagComp.GetActionName(3, myCallerEntity);
+		string DiagText;
 		int entryamount;
 		//Check if any there arent inputs comming form GetActionName, if not do not create the item
-		if (Diag0 != STRING_EMPTY)
+		DiagText = DiagComp.GetActionName(0, myCallerEntity);
+		if (DiagText != STRING_EMPTY)
 		{
-			m_ListBoxComponent.AddItem(Diag0);
+			m_ListBoxComponent.AddItem(DiagText);
+			CurrentBranchID = 0;
 			SCR_ListBoxElementComponent elComp0 = m_ListBoxComponent.GetElementComponent(entryamount);
-			elComp0.m_OnClicked.Insert(DoDialogue0);
+			elComp0.m_OnClicked.Insert(ExecuteDialogue0);
 			string entrynumber = (entryamount + 1).ToString();
 			elComp0.SetTextNumber(entrynumber);
 			entryamount = entryamount + 1;
+			DiagText = STRING_EMPTY;
 		}
-		if (Diag1 != STRING_EMPTY)
+		DiagText = DiagComp.GetActionName(1, myCallerEntity);
+		if (DiagText != STRING_EMPTY)
 		{
-			m_ListBoxComponent.AddItem(Diag1);
+			m_ListBoxComponent.AddItem(DiagText);
+			CurrentBranchID = 1;
 			SCR_ListBoxElementComponent elComp1 = m_ListBoxComponent.GetElementComponent(entryamount);
-			elComp1.m_OnClicked.Insert(DoDialogue1);
+			elComp1.m_OnClicked.Insert(ExecuteDialogue1);
 			string entrynumber = (entryamount + 1).ToString();
 			elComp1.SetTextNumber(entrynumber);
 			entryamount = entryamount + 1;
+			DiagText = STRING_EMPTY;
 		}
-		if (Diag2 != STRING_EMPTY)
+		DiagText = DiagComp.GetActionName(2, myCallerEntity);
+		if (DiagText != STRING_EMPTY)
 		{
-			m_ListBoxComponent.AddItem(Diag2);
+			m_ListBoxComponent.AddItem(DiagText);
+			CurrentBranchID = 2;
 			SCR_ListBoxElementComponent elComp2 = m_ListBoxComponent.GetElementComponent(entryamount);
-			elComp2.m_OnClicked.Insert(DoDialogue2);
+			elComp2.m_OnClicked.Insert(ExecuteDialogue2);
 			string entrynumber = (entryamount + 1).ToString();
 			elComp2.SetTextNumber(entrynumber);
 			entryamount = entryamount + 1;
+			DiagText = STRING_EMPTY;
 		}
-		if (Diag3 != STRING_EMPTY)
+		DiagText = DiagComp.GetActionName(3, myCallerEntity);
+		if (DiagText != STRING_EMPTY)
 		{
-			m_ListBoxComponent.AddItem(Diag3);
+			m_ListBoxComponent.AddItem(DiagText);
+			CurrentBranchID = 3;
 			SCR_ListBoxElementComponent elComp3 = m_ListBoxComponent.GetElementComponent(entryamount);
-			elComp3.m_OnClicked.Insert(DoDialogue3);
+			elComp3.m_OnClicked.Insert(ExecuteDialogue3);
 			string entrynumber = (entryamount + 1).ToString();
 			elComp3.SetTextNumber(entrynumber);
 			entryamount = entryamount + 1;
+			DiagText = STRING_EMPTY;
 		}
 		//Check if Archtype is branched an choose to create a Leave button or a Go Back button
-		SP_DialogueArchetype DArch = DiagComp.LocateCharacterArchetype(myCallerEntity);
+		SP_DialogueArchetype DArch = DiagComp.LocateDialogueArchetype(myCallerEntity);
 		if (DArch.IsCharacterBranched == true)
 		{
 			m_ListBoxComponent.AddItem("Go Back");
@@ -147,24 +157,21 @@ class DialogueUIClass: ChimeraMenuBase
 		GetGame().GetMenuManager().CloseAllMenus();
     }
 	//DoDialogue function wich branch ID 0
-	void DoDialogue0()
+	void ExecuteDialogue0()
 	{
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 0, 1);
+		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 0);
 	}
-	//DoDialogue function wich branch ID 1
-	void DoDialogue1()
+	void ExecuteDialogue1()
 	{
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 1, 1);
+		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 1);
 	}
-	//DoDialogue function wich branch ID 2
-	void DoDialogue2()
+	void ExecuteDialogue2()
 	{
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 2, 1);
+		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 2);
 	}
-	//DoDialogue function wich branch ID 3
-	void DoDialogue3()
+	void ExecuteDialogue3()
 	{
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 3, 1);
+		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 3);
 	}
 	void DoDialogueBack()
 	{

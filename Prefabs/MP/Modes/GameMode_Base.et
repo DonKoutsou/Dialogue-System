@@ -5,6 +5,10 @@ SCR_BaseGameMode {
    m_CharacterArchetypeList {
     SP_DialogueArchetype "{5D1D0E1C141A7A3C}" : "{329463647B42DB55}Configs/CharacterTestFIA.conf" {
     }
+    SP_DialogueArchetype "{5D24F6681FF37467}" : "{10825CF9ABF76189}Configs/CharacterTesUSSR.conf" {
+    }
+    SP_DialogueArchetype "{5D24F668102F4371}" : "{65CFF309C633A29E}Configs/CharacterTesUS.conf" {
+    }
    }
    m_ChatChannel LocalChatChannel "{5D1547897CBD7ACF}" {
     "Channel name" "Context"
