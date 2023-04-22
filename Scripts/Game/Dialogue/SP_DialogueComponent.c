@@ -39,6 +39,12 @@ class SP_DialogueComponent: ScriptComponent
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		//------------------------------------------------------------------//
+		if (Branch.CanBePerformed(Character, Player) == false)
+		{
+			DiagUI.Init(Character, Player);
+			DiagUI.UpdateEntries();
+			return;
+		}
 		if (Branch.CheckIfStageBranches() == true)
 		{
 			//--------------------------------------//
@@ -69,8 +75,8 @@ class SP_DialogueComponent: ScriptComponent
 		//--------------------------------------//
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 		//--------------------------------------//
-		int stage = Conf.GetDialogueBranchStage();
-		if (Branch.m_BranchStages[stage + 1])
+		int stage = Conf.GetDialogueBranchStage() + 1;
+		if (Branch.CheckNextStage(stage) == true)
 		{
 			IncrementDiagStage(Character, BranchID, IncrementAmount);
 		}

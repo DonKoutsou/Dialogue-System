@@ -31,4 +31,8 @@ class DialogueStageTeleportAction : DialogueStage
 				char.Teleport(mat);
 		}		
 	};
+	override bool CanBePerformed()
+	{
+		return false;
+	}
 };

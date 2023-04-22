@@ -15,10 +15,19 @@ class DialogueStage
 	void Perform(IEntity Character, IEntity Player)
 	{
 	};
+	bool CanBePerformed()
+	{
+		return true;
+	}
 	//------------------------------------------------------------------//
 	string GetActionText()
 	{
-	 return ActionText;
+		if (CanBePerformed() == false)
+		{
+			string acttext = ActionText + " " + "(Cant Be Performed)";
+			return acttext;
+		}
+	 	return ActionText;
 	}
 	void InheritData(SP_DialogueArchetype Archetype, DialogueBranchInfo Config, IEntity Char)
 	{

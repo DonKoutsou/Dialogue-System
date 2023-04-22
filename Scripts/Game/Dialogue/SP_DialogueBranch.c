@@ -22,9 +22,10 @@ class SP_DialogueBranch
 		}
 	};
 	//------------------------------------------------------------------//
-	void CanBeShown()
+	bool CanBePerformed(IEntity Character, IEntity Player)
 	{
-	
+		DialogueBranchInfo Conf = LocateConfig(Character);
+		return m_BranchStages[Conf.GetDialogueBranchStage()].CanBePerformed();
 	};
 	//------------------------------------------------------------------//
 	string GetActionText(IEntity Character)
@@ -62,8 +63,13 @@ class SP_DialogueBranch
 	bool CheckIfStageBranches()
 	{
 		int currentstage = LocateConfig(TalkingCharacter).GetDialogueBranchStage();
+		DialogueStage Diagstage;
+		if (m_BranchStages.Count() >= currentstage)
+		{
+			Diagstage = m_BranchStages[currentstage];
+		}
 		
-		if(m_BranchStages[currentstage].CheckIfStageCanBranch() == true)
+		if(Diagstage && Diagstage.CheckIfStageCanBranch() == true)
 		{
 			return true;
 		}
@@ -104,6 +110,14 @@ class SP_DialogueBranch
 			return m_BranchStages[Conf.GetDialogueBranchStage()];
 		}
 		return null;
+	}
+	bool CheckNextStage(int stageID)
+	{
+		if (m_BranchStages.Count() >= stageID + 1)
+		{
+			return true;
+		}
+		return false;
 	}
 	//------------------------------------------------------------------//
 	//Return the current Branch. Meaning, it keeps looking deeper for a branch that doesent branch further (IsBranchBranched = false)
