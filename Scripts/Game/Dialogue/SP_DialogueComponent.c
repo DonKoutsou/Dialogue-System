@@ -1,17 +1,16 @@
 enum EArchetypeIdentifier
-	{
-		Name,
-		Rank,
-		"FactionKey",
-		"Faction and Rank"
-	};
+{
+	Name,
+	Rank,
+	"FactionKey",
+	"Faction and Rank"
+};
 enum EChoiseBehavior
-	{
-		IncrementDialogueStage,
-		Stay,
-		IncrementDialogueStageandGoBack
-	};
-
+{
+	IncrementDialogueStage,
+	Stay,
+	IncrementDialogueStageandGoBack
+};
 class SP_DialogueComponentClass: ScriptComponentClass
 {
 };
@@ -21,48 +20,62 @@ class SP_DialogueComponent: ScriptComponent
 	[Attribute()]
 	protected ref array<ref SP_DialogueArchetype> m_CharacterArchetypeList;
 	//----------------------------------------------------------------------------------------------------------------//
+	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;	
+	//----------------------------------------------------------------------------------------------------------------//
 	[Attribute()]
 	ref BaseChatChannel m_ChatChannel;
-	//----------------------------------------------------------------------------------------------------------------//
-	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;
 	SCR_BaseGameMode GameMode;
 	//----------------------------------------------------------------------------------------------------------------//
+	//Main function. Its called in SP_DialogueUI when an input is pressed. Branch ID will be different based on the input pressed
 	void DoDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount = 1)
 	{
 		//------------------------------------------------------------------//
+		//SenderID needed to send text to chat
 		int senderID;
-		string m_DialogTexttoshow;
-		string senderName = GetCharacterName(Character);
-		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(Character);
-		SP_DialogueBranch Branch = DiagArch.GetDialogueBranch(BranchID);
+		//String to store the text we want to send on chat
+		string 					m_DialogTexttoshow;
+		//Name of character we are talking to 
+		string 					senderName = GetCharacterName(Character);
+		//Dialogue Archetype matching the charcter we are talking to 
+		SP_DialogueArchetype 	DiagArch = LocateDialogueArchetype(Character);
+		//Get branch located in found archetype using ID
+		SP_DialogueBranch 		Branch = DiagArch.GetDialogueBranch(BranchID);
 		//------------------------------------------------------------------//
-		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
-		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
+		//For UI
+		MenuBase 				myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
+		DialogueUIClass 			DiagUI = DialogueUIClass.Cast(myMenu);
 		//------------------------------------------------------------------//
+		//If CanBePerformed is false dialogue wont be executed
 		if (Branch.CanBePerformed(Character, Player) == false)
 		{
 			DiagUI.Init(Character, Player);
-			DiagUI.UpdateEntries();
+			DiagUI.UpdateEntries(Character, Player);
 			return;
 		}
+		//------------------------------------------------------------------//
+		//Check if branch has another branch in its current stage. If yes we will have to cause a branch after getting our text
 		if (Branch.CheckIfStageBranches() == true)
 		{
 			//--------------------------------------//
+			//If our branch should be branched it means that our character will need to be branched as well
 			if(DiagArch.IsCharacterBranched() == false)
 			{
 				DiagArch.BranchArchetype(BranchID);
 			}
 			//--------------------------------------//
+			//Look for the config that matches our character. Config hold info about progression of dialogue for the Specific AI we are talking to.			
 			DialogueBranchInfo Conf = Branch.LocateConfig(Character);
 			m_DialogTexttoshow = Branch.GetDialogueText(Character);
 			SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
+			// Cause a branch of the config
 			Conf.CauseBranch(BranchID);
+			//Call OnPerform function of the branch stage
 			Branch.OnPerform(Character, Player);
 			//--------------------------------------//
 			DiagUI.Init(Character, Player);
-			DiagUI.UpdateEntries();
-			
+			DiagUI.UpdateEntries(Character, Player);
 			//--------------------------------------//
+			//Inherit needed data to next config
 			Branch.GetCurrentDialogueBranch(Character, BranchID).InheritData(DiagArch, Conf, Character);
 			return;
 			//--------------------------------------//
@@ -76,15 +89,17 @@ class SP_DialogueComponent: ScriptComponent
 		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
 		//--------------------------------------//
 		int stage = Conf.GetDialogueBranchStage() + 1;
+		//If a stage exists it means that dialogue can increment
 		if (Branch.CheckNextStage(stage) == true)
 		{
 			IncrementDiagStage(Character, BranchID, IncrementAmount);
 		}
 		//--------------------------------------//
 		DiagUI.Init(Character, Player);
-		DiagUI.UpdateEntries();
+		DiagUI.UpdateEntries(Character, Player);
 	}
 	//----------------------------------------------------------------------------------------------------------------//
+	//Function used for "GoBack" and "Leave" dialogue options
 	void DoBackDialogue(IEntity Character, IEntity Player)
 	{
 		string senderName = GetCharacterName(Character);
@@ -112,22 +127,26 @@ class SP_DialogueComponent: ScriptComponent
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		DiagUI.Init(Character, Player);
-		DiagUI.UpdateEntries();
+		DiagUI.UpdateEntries(Character, Player);
 	}
 	//----------------------------------------------------------------------------------------------------------------//
+	//Send text function for sending the provided text to chat 
 	void SendText(string Text, BaseChatChannel Chanell, int SenderID, string SenderName)
 	{
 		SCR_ChatPanelManager.GetInstance().ShowDiagMessage(Text, m_ChatChannel, SenderID, SenderName);
 	}
 	//----------------------------------------------------------------------------------------------------------------//
-	string GetActionName(int BranchID, IEntity Owner)
+	//Get ActionName function used in SP_DialogueUI to check if provided branch ID gives us any text.
+	string GetActionName(int BranchID, IEntity Character, IEntity Player)
 	{
 		string m_sActionName;
-		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(Owner);
-		m_sActionName = DiagArch.GetActionTitle(BranchID);
+		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(Character);
+		m_sActionName = DiagArch.GetActionTitle(BranchID, Character, Player);
 		return m_sActionName;
 	}
 	//----------------------------------------------------------------------------------------------------------------//
+	//Locates Archetype using LocateDialogueArchetype function using Ientity provided.
+	//Increments stage of branch in the archetype
 	bool IncrementDiagStage(IEntity owner, int BranchID, int incrementamount)
 	{
 		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(owner);

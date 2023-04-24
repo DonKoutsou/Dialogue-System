@@ -143,13 +143,13 @@ class SP_DialogueArchetype: ScriptAndConfig
 	}
 	//------------------------------------------------------------------//
 	//Find correct branch using current stage and take action title from it 
-	string GetActionTitle(int BranchID)
+	string GetActionTitle(int BranchID, IEntity Character, IEntity Player)
 	{
 		string m_sActionTitle;
 		SP_DialogueBranch Branch = GetDialogueBranch(BranchID);
 		if (Branch)
 		{
-			m_sActionTitle = Branch.GetActionText(TalkingCharacter);
+			m_sActionTitle = Branch.GetActionText(Character, Player);
 		}
 		else
 		{

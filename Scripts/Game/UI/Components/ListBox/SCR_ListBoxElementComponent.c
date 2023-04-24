@@ -12,6 +12,7 @@ class SCR_ListBoxElementComponent : SCR_ModularButtonComponent
 	[Attribute("TextNumber")]
 	protected string m_sWidgetTextNumber;
 	
+	ref ScriptInvoker m_OnKeyDown = new ScriptInvoker();		// (SCR_ModularButtonComponent comp)
 	//------------------------------------------------------------------------------------------------
 	override void HandlerAttached(Widget w)
 	{
@@ -53,6 +54,15 @@ class SCR_ListBoxElementComponent : SCR_ModularButtonComponent
 		if (w)
 			w.SetText(Number);
 	}
-	
+	override event bool OnKeyDown(Widget w, int x, int y, int key)
+	{
+		if (key == 1)
+		{
+			OnClick(w, x, y, 0);
+			m_OnKeyDown.Invoke(this);
+			return true;
+		}
+		return false;
+	}
 	
 };

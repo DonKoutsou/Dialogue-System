@@ -10,8 +10,9 @@ FrameWidgetClass {
    Name "Panel0"
    Slot FrameWidgetSlot "{5D10B3055CA98F76}" {
     Anchor 0.5 1 0.5 1
+    PositionX 0
     OffsetLeft 0
-    PositionY -164.05
+    PositionY -164.1
     OffsetTop -164.1
     SizeX 781
     OffsetRight -781
@@ -79,6 +80,7 @@ FrameWidgetClass {
      components {
       SCR_ListBoxComponent "{566C9415BAA54E1B}" {
        m_sElementLayout "{E3491D3D0D0DE552}UI/layouts/ListBox/ListBoxElement_TextDialogue.layout"
+       m_bMultiSelection 1
       }
      }
     }

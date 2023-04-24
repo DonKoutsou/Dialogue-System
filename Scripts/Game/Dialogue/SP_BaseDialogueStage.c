@@ -11,24 +11,45 @@ class DialogueStage
 	[Attribute(desc: "Dialogue Branch, if present will cause branch to split instead of progressing its stage. When a branch splits, the dialogue system will only look in the entries of this branch only")]
 	private ref array<ref SP_DialogueBranch> m_Branch;
 	//------------------------------------------------------------------//
+	string m_sCantBePerformedReason = "(Cant Be Performed)";
+	//------------------------------------------------------------------//
 	//Get action text from DialogueStage
 	void Perform(IEntity Character, IEntity Player)
 	{
 	};
-	bool CanBePerformed()
+	//------------------------------------------------------------------//
+	bool CanBePerformed(IEntity Character, IEntity Player)
 	{
 		return true;
 	}
 	//------------------------------------------------------------------//
-	string GetActionText()
+	bool CanBeShown(IEntity Character, IEntity Player)
 	{
-		if (CanBePerformed() == false)
+		return true;
+	}
+	void SetCannotPerformReason(string reason)
+	{
+		m_sCantBePerformedReason = reason;
+	}
+	string GetCannotPerformReason()
+	{
+		return m_sCantBePerformedReason;
+	}
+	//------------------------------------------------------------------//
+	string GetActionText(IEntity Character, IEntity Player)
+	{
+		if (CanBePerformed(Character, Player) == false)
 		{
-			string acttext = ActionText + " " + "(Cant Be Performed)";
+			string acttext = ActionText + " " + m_sCantBePerformedReason;
 			return acttext;
+		}
+		if (CanBeShown(Character, Player) == false)
+		{
+		 return STRING_EMPTY;
 		}
 	 	return ActionText;
 	}
+	//------------------------------------------------------------------//
 	void InheritData(SP_DialogueArchetype Archetype, DialogueBranchInfo Config, IEntity Char)
 	{
 		if(m_Branch && m_Branch.Count() > 0)
@@ -39,7 +60,6 @@ class DialogueStage
 				}
 			}
 	}
-	
 	//------------------------------------------------------------------//
 	bool CheckIfStageCanBranch()
 	{
@@ -60,12 +80,12 @@ class DialogueStage
 	}
 	//------------------------------------------------------------------//
 	//Get action text from SP_MultipleChoiceConfig, text key chooses the entry. TextKey = 0 will take the first entry in SP_MultipleChoiceConfig
-	string GetStageBranchActionText(int TextKey, IEntity Character)
+	string GetStageBranchActionText(int TextKey, IEntity Character, IEntity Player)
 	{
 		string ActText
 		if(m_Branch[TextKey])
 		{
-			ActText = m_Branch[TextKey].GetActionText(Character);	
+			ActText = m_Branch[TextKey].GetActionText(Character, Player);	
 		}
 		else
 		{
@@ -105,11 +125,18 @@ class DialogueStageTitleAttribute : BaseContainerCustomTitle
 		source.Get("ActionText", actionName);
 
 		// Get selected behavior from EChoiseBehavior enum
-		string behaviorStr;
-		EChoiseBehavior behavior;
-		source.Get("ChoiseBehavior", behavior);
-		behaviorStr = typename.EnumToString(EChoiseBehavior, behavior);
-		title = string.Format("Stage: %1 - %2", actionName, behaviorStr,);
+		string branchesStr;
+		array<ref SP_DialogueBranch> branches;
+		source.Get("m_Branch", branches);
+		if (branches.Count() > 0)
+		{
+			branchesStr = "Stage Branches"
+		}
+		else
+		{
+			branchesStr = "Stage Increments"
+		}
+		title = string.Format("Stage: %1 - %2", actionName, branchesStr);
 		return true;
 	}
 }

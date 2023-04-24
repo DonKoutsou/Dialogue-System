@@ -11,11 +11,6 @@ SCR_ChimeraCharacter {
   }
   CharacterPerceivableComponent "{566CCE2397E28600}" {
    "Additional aim points" {
-    AimPoint "{5A1EF5F9AB26B70A}" {
-     AimPointPosition PointInfo "{5A1EF5F9A71AA60E}" {
-      Offset -1.238 0 0
-     }
-    }
    }
   }
   ActionsManagerComponent "{520EA1D2F659CE02}" {

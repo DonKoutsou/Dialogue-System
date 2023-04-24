@@ -1,14 +1,4 @@
 [BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageHealAction : DialogueStage
-{
-	override void Perform(IEntity Character, IEntity Player)
-	{
-		SCR_CharacterDamageManagerComponent CharDamageMnagr = SCR_CharacterDamageManagerComponent.Cast(Player.FindComponent(SCR_CharacterDamageManagerComponent));
-		CharDamageMnagr.FullHeal();
-	};
-};
-
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
 class DialogueStageTeleportAction : DialogueStage
 {
 	[Attribute("", UIWidgets.Coords, params: "inf inf inf purpose=coords space=world", desc: "")]
@@ -31,8 +21,8 @@ class DialogueStageTeleportAction : DialogueStage
 				char.Teleport(mat);
 		}		
 	};
-	override bool CanBePerformed()
+	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{
-		return false;
+		return true;
 	}
 };

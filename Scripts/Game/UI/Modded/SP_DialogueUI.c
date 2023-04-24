@@ -2,35 +2,42 @@ modded enum ChimeraMenuPreset
 {
     DialogueLayout
 }
+modded enum EModularButtonEventHandler
+{
+	BUTTON_1		= 1<<6,
+	BUTTON_2		= 1<<7,
+	BUTTON_3		= 1<<8,
+	BUTTON_4		= 1<<9
+};
 class DialogueUIClass: ChimeraMenuBase
 { 
-	//-----------------------------------------------//
+	//----------------------------------------------------------------//
 	//UI Widgets
-	protected Widget m_wRoot; 
-	OverlayWidget m_ListBoxOverlay;
-	TextWidget m_CharacterName;
-	TextWidget m_CharacterRank;
-	ImageWidget m_CharacterFactionIcon;
-	SCR_ListBoxElementComponent m_ListBoxElement;
-    SCR_ListBoxComponent m_ListBoxComponent;
-    //-----------------------------------------------//
+	protected Widget 							m_wRoot; 
+	OverlayWidget 								m_ListBoxOverlay;
+	TextWidget 									m_CharacterName;
+	TextWidget 									m_CharacterRank;
+	ImageWidget 								m_CharacterFactionIcon;
+	SCR_ListBoxElementComponent 				m_ListBoxElement;
+    SCR_ListBoxComponent 						m_ListBoxComponent;
+    //----------------------------------------------------------------//
 	//PlayerCharacter
-	IEntity myUserEntity;           
-	//-----------------------------------------------//
+	IEntity 									myUserEntity;           
+	//----------------------------------------------------------------//
 	//Charactaer we are talking to
-	IEntity myCallerEntity;
-	string CharName;
-	string CharRank;
-	ECharacterRank rank;
-	FactionKey faction;
-	//-----------------------------------------------//
+	IEntity 									myCallerEntity;
+	string 										CharName;
+	string 										CharRank;
+	ECharacterRank 								rank;
+	FactionKey 									faction;
+	//----------------------------------------------------------------//
 	//DialogueStystem
-	SP_DialogueComponent DiagComp;
-	SP_DialogueArchetype DiagArch;
-	protected SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
-	int CurrentBranchID;
+	SP_DialogueComponent 						DiagComp;
+	SP_DialogueArchetype 						DiagArch;
+	protected SCR_BaseGameMode 					GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
+	int 										CurrentBranchID;
+	ref ScriptInvoker 							m_OnKeyDown = new ScriptInvoker();
     //------------------------------------------------------------------------------------------------//
-	
 	void Init(IEntity Owner, IEntity User)
 	{
 		myCallerEntity = Owner;
@@ -80,13 +87,14 @@ class DialogueUIClass: ChimeraMenuBase
 		m_CharacterName = TextWidget.Cast(m_wRoot.FindAnyWidget("CharacterRank"));
 		m_CharacterName.SetText(CharRank);
 		
-	} 
-	void UpdateEntries()
+	}
+	//------------------------------------------------------------------------------------------------//
+	void UpdateEntries(IEntity Character, IEntity Player)
 	{
 		string DiagText;
 		int entryamount;
 		//Check if any there arent inputs comming form GetActionName, if not do not create the item
-		DiagText = DiagComp.GetActionName(0, myCallerEntity);
+		DiagText = DiagComp.GetActionName(0, myCallerEntity, Player);
 		if (DiagText != STRING_EMPTY)
 		{
 			m_ListBoxComponent.AddItem(DiagText);
@@ -98,7 +106,7 @@ class DialogueUIClass: ChimeraMenuBase
 			entryamount = entryamount + 1;
 			DiagText = STRING_EMPTY;
 		}
-		DiagText = DiagComp.GetActionName(1, myCallerEntity);
+		DiagText = DiagComp.GetActionName(1, myCallerEntity, Player);
 		if (DiagText != STRING_EMPTY)
 		{
 			m_ListBoxComponent.AddItem(DiagText);
@@ -110,7 +118,7 @@ class DialogueUIClass: ChimeraMenuBase
 			entryamount = entryamount + 1;
 			DiagText = STRING_EMPTY;
 		}
-		DiagText = DiagComp.GetActionName(2, myCallerEntity);
+		DiagText = DiagComp.GetActionName(2, myCallerEntity, Player);
 		if (DiagText != STRING_EMPTY)
 		{
 			m_ListBoxComponent.AddItem(DiagText);
@@ -122,7 +130,7 @@ class DialogueUIClass: ChimeraMenuBase
 			entryamount = entryamount + 1;
 			DiagText = STRING_EMPTY;
 		}
-		DiagText = DiagComp.GetActionName(3, myCallerEntity);
+		DiagText = DiagComp.GetActionName(3, myCallerEntity, Player);
 		if (DiagText != STRING_EMPTY)
 		{
 			m_ListBoxComponent.AddItem(DiagText);
@@ -151,30 +159,47 @@ class DialogueUIClass: ChimeraMenuBase
 		string entrynumber = (entryamount + 1).ToString();
 		elComp4.SetTextNumber(entrynumber);
 	}
+	//------------------------------------------------------------------------------------------------//
 	//Function called to close menu
     void LeaveFunction()
     {
 		GetGame().GetMenuManager().CloseAllMenus();
     }
+	//------------------------------------------------------------------------------------------------//
 	//DoDialogue function wich branch ID 0
 	void ExecuteDialogue0()
 	{
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 0);
 	}
+	//------------------------------------------------------------------------------------------------//
 	void ExecuteDialogue1()
 	{
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 1);
 	}
+	//------------------------------------------------------------------------------------------------//
 	void ExecuteDialogue2()
 	{
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 2);
 	}
+	//------------------------------------------------------------------------------------------------//
 	void ExecuteDialogue3()
 	{
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 3);
 	}
+	//------------------------------------------------------------------------------------------------//
 	void DoDialogueBack()
 	{
 		DiagComp.DoBackDialogue(myCallerEntity, myUserEntity);
+	}
+	//------------------------------------------------------------------------------------------------//
+	override event bool OnKeyDown(Widget w, int x, int y, int key)
+	{
+		if (key == 1)
+		{
+			OnClick(w, x, y, 0);
+			m_OnKeyDown.Invoke(this);
+			return true;
+		}
+		return false;
 	}
 }

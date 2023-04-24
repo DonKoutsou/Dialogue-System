@@ -6,11 +6,10 @@ class SP_DialogueBranch
 {
 	//------------------------------------------------------------------//
 	[Attribute(desc: "Dialogue Stage, Depending on the stage of the branch the apropriate stage will be selected. Stage = 0 means first entry etc...")]
-	ref array<ref DialogueStage> m_BranchStages;
-	
-	ref DialogueBranchInfo BranchInfoConfig;
-	protected ref map<string, ref DialogueBranchInfo> BranchInfoConfigMap;
-	IEntity TalkingCharacter;
+	ref array<ref DialogueStage> 						m_BranchStages;
+	ref DialogueBranchInfo 								BranchInfoConfig;
+	protected ref map<string, ref DialogueBranchInfo> 	BranchInfoConfigMap;
+	IEntity 											TalkingCharacter;
 	//------------------------------------------------------------------//
 	//Text that is going to be used as title for the action
 	void OnPerform(IEntity Character, IEntity Player)
@@ -25,17 +24,23 @@ class SP_DialogueBranch
 	bool CanBePerformed(IEntity Character, IEntity Player)
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
-		return m_BranchStages[Conf.GetDialogueBranchStage()].CanBePerformed();
+		return m_BranchStages[Conf.GetDialogueBranchStage()].CanBePerformed(Character, Player);
 	};
 	//------------------------------------------------------------------//
-	string GetActionText(IEntity Character)
+	bool CanBeShown(IEntity Character, IEntity Player)
+	{
+		DialogueBranchInfo Conf = LocateConfig(Character);
+		return m_BranchStages[Conf.GetDialogueBranchStage()].CanBeShown(Character, Player);
+	}
+	//------------------------------------------------------------------//
+	string GetActionText(IEntity Character, IEntity Player)
 	{
 		string ActText;
 		TalkingCharacter = Character;
 		DialogueBranchInfo Conf = LocateConfig(TalkingCharacter);
 		if(m_BranchStages.Count() >= Conf.GetDialogueBranchStage())
 		{
-			ActText = m_BranchStages[Conf.GetDialogueBranchStage()].GetActionText();
+			ActText = m_BranchStages[Conf.GetDialogueBranchStage()].GetActionText(Character, Player);
 		}
 		return ActText;
 	}
@@ -244,15 +249,20 @@ class DialogueBranchInfo
 		}
 	}
 }
-
-
 class DialogueBranchConfigTitleAttribute : BaseContainerCustomTitle
 {
 	override bool _WB_GetCustomTitle(BaseContainer source, out string title)
 	{
-		title = string.Format("Branch");
-
-
+		array <ref DialogueStage> Stages;
+		source.Get("m_BranchStages", Stages);
+		string texttoshow;
+		for (int i, count = Stages.Count(); i < count; i++)
+		{
+			if (Stages[i].CheckIfStageCanBranch() == true)
+			texttoshow = "Branches at stage" + " " + i;
+			
+		}
+		title = string.Format("Branch" + " " + texttoshow);
 		return true;
 	}
 };
