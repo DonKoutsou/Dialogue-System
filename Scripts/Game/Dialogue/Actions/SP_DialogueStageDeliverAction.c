@@ -2,7 +2,7 @@ class SP_ConsumablePredicate : InventorySearchPredicate
 {
 	EConsumableType m_ConsumableFilter;
 	
-	void KLM_ConsumablePredicate(EConsumableType type)
+	void SP_ConsumablePredicate(EConsumableType type)
 	{
 		QueryComponentTypes.Insert(SCR_ConsumableItemComponent);
 		m_ConsumableFilter = type;
@@ -17,7 +17,7 @@ class SP_ConsumablePredicate : InventorySearchPredicate
 class SP_PrefabResource_Predicate : InventorySearchPredicate
 {
 	ResourceName m_WantedPrefabName;
-	void PrefabResource_Predicate(ResourceName prefabName)
+	void SP_PrefabResource_Predicate(ResourceName prefabName)
 	{
 		m_WantedPrefabName = prefabName;
 	}
@@ -41,7 +41,7 @@ class DialogueStageDeliverAction : DialogueStage
 		if (!inv)
 			return;		
 		
-		PrefabResource_Predicate pred = new PrefabResource_Predicate(m_WantedItem);
+		SP_PrefabResource_Predicate pred = new SP_PrefabResource_Predicate(m_WantedItem);
 		array<IEntity> entitiesToDrop = new array<IEntity>;
 		inv.FindItems(entitiesToDrop, pred);
 		
@@ -82,7 +82,7 @@ class DialogueStageDeliverAction : DialogueStage
 		if (!inv)
 			return false;
 		
-		PrefabResource_Predicate pred = new PrefabResource_Predicate(m_WantedItem);
+		SP_PrefabResource_Predicate pred = new SP_PrefabResource_Predicate(m_WantedItem);
 		array<IEntity> entitiesToDrop = new array<IEntity>;
 		inv.FindItems(entitiesToDrop, pred);
 		if (entitiesToDrop.Count() < m_WantedAmount)

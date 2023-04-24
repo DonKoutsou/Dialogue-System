@@ -7,7 +7,28 @@ class SP_DialogueAction : ScriptedUserAction
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
-		DiagComp.LocateDialogueArchetype(pOwnerEntity);
+		AIControlComponent AiComp = AIControlComponent.Cast(pOwnerEntity.FindComponent(AIControlComponent));
+		AIAgent Agent = AiComp.GetControlAIAgent();
+		AIGroup group = AIGroup.Cast(Agent.GetParentGroup());
+        string NoTalkText = "Cant talk to you now";
+        if (group)
+		{
+			Agent = group.GetLeaderAgent();
+		}
+		if (Agent.HasOrders() == true)
+		{
+			string name = DiagComp.GetCharacterName(pOwnerEntity);
+			DiagComp.SendText(NoTalkText, DiagComp.m_ChatChannel, 0, name);
+			return;
+		}
+		//Agent.GetMovementComponent().ForceFollowPathOfEntity(pUserEntity) = true;
+		if (!DiagComp.LocateDialogueArchetype(pOwnerEntity))
+		{
+			string name = DiagComp.GetCharacterName(pOwnerEntity);
+			DiagComp.SendText(NoTalkText, DiagComp.m_ChatChannel, 0, name);
+			return;
+		}
+		
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		DiagUI.Init(pOwnerEntity, pUserEntity);

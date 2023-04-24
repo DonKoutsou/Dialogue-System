@@ -252,6 +252,10 @@ class SP_DialogueComponent: ScriptComponent
 		SP_DialogueArchetype CharDialogueArch;
 		//using character full name atm to match Character with Archetype
 		string LocCharacterName = GetCharacterName(Character);
+		if (!GetArchetypeTemplate(Character))
+		{
+			return CharDialogueArch;
+		}
 		//Check if an Archetype with out character's name exists
 		if (DialogueArchetypeMap.Contains(LocCharacterName))
 			{
@@ -265,6 +269,7 @@ class SP_DialogueComponent: ScriptComponent
 				//if not find an ArchetypeTemplate, make a copy of it and instet it in DialogueArchetypeMap
 				//find character template using our character entity
 				CharDialogueArch = GetArchetypeTemplate(Character);
+				
 				//-------------------------------------------------------------------------//
 				//create a new archetype and copy the stuff in it
 				SP_DialogueArchetype DiagArchNew = CopyArchetype(CharDialogueArch);
