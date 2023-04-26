@@ -11,6 +11,12 @@ enum EChoiseBehavior
 	Stay,
 	IncrementDialogueStageandGoBack
 };
+modded enum ECharacterRank
+{
+	MEDIC,
+	NAVIGATOR,
+	COMMANDER
+}
 class SP_DialogueComponentClass: ScriptComponentClass
 {
 };
@@ -48,7 +54,6 @@ class SP_DialogueComponent: ScriptComponent
 		//If CanBePerformed is false dialogue wont be executed
 		if (Branch.CanBePerformed(Character, Player) == false)
 		{
-			DiagUI.Init(Character, Player);
 			DiagUI.UpdateEntries(Character, Player);
 			return;
 		}
@@ -72,7 +77,6 @@ class SP_DialogueComponent: ScriptComponent
 			//Call OnPerform function of the branch stage
 			Branch.OnPerform(Character, Player);
 			//--------------------------------------//
-			DiagUI.Init(Character, Player);
 			DiagUI.UpdateEntries(Character, Player);
 			//--------------------------------------//
 			//Inherit needed data to next config
@@ -95,7 +99,6 @@ class SP_DialogueComponent: ScriptComponent
 			IncrementDiagStage(Character, BranchID, IncrementAmount);
 		}
 		//--------------------------------------//
-		DiagUI.Init(Character, Player);
 		DiagUI.UpdateEntries(Character, Player);
 	}
 	//----------------------------------------------------------------------------------------------------------------//
@@ -126,7 +129,6 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
-		DiagUI.Init(Character, Player);
 		DiagUI.UpdateEntries(Character, Player);
 	}
 	//----------------------------------------------------------------------------------------------------------------//

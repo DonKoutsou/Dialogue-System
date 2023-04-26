@@ -1,7 +1,3 @@
-modded enum ChimeraMenuPreset
-{
-    DialogueLayout
-}
 modded enum EModularButtonEventHandler
 {
 	BUTTON_1		= 1<<6,
@@ -38,14 +34,42 @@ class DialogueUIClass: ChimeraMenuBase
 	int 										CurrentBranchID;
 	ref ScriptInvoker 							m_OnKeyDown = new ScriptInvoker();
     //------------------------------------------------------------------------------------------------//
+	override void OnMenuUpdate(float tDelta)
+	{
+		GetGame().GetInputManager().ActivateContext("DialogueMenu", 0);
+	}
+	void RemoveListeners()
+	{
+		GetGame().GetInputManager().RemoveActionListener("Dialogue0", EActionTrigger.DOWN, ExecuteDialogue0);
+		GetGame().GetInputManager().RemoveActionListener("Dialogue1", EActionTrigger.DOWN, ExecuteDialogue1);
+		GetGame().GetInputManager().RemoveActionListener("Dialogue2", EActionTrigger.DOWN, ExecuteDialogue2);
+		GetGame().GetInputManager().RemoveActionListener("Dialogue3", EActionTrigger.DOWN, ExecuteDialogue3);
+		GetGame().GetInputManager().RemoveActionListener("DialogueBack", EActionTrigger.DOWN, DoDialogueBack);
+		GetGame().GetInputManager().RemoveActionListener("DialogueBack", EActionTrigger.DOWN, LeaveFunction);
+	}
 	void Init(IEntity Owner, IEntity User)
 	{
+		
 		myCallerEntity = Owner;
 		myUserEntity = User;
 		m_wRoot = GetRootWidget();
 		m_ListBoxOverlay = OverlayWidget.Cast(m_wRoot.FindAnyWidget("ListBox0")); 
 		m_ListBoxComponent = SCR_ListBoxComponent.Cast(m_ListBoxOverlay.FindHandler(SCR_ListBoxComponent));
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		
+	}
+	//------------------------------------------------------------------------------------------------//
+	void UpdateEntries(IEntity Character, IEntity Player)
+	{
+		myCallerEntity = Character;
+		myUserEntity = Player;
+		m_wRoot = GetRootWidget();
+		m_ListBoxOverlay = OverlayWidget.Cast(m_wRoot.FindAnyWidget("ListBox0")); 
+		m_ListBoxComponent = SCR_ListBoxComponent.Cast(m_ListBoxOverlay.FindHandler(SCR_ListBoxComponent));
+		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		string DiagText;
+		int entryamount;
+		//Check if any there arent inputs comming form GetActionName, if not do not create the item
 		if(myCallerEntity)
 		{
 			CharName = DiagComp.GetCharacterName(myCallerEntity);
@@ -87,13 +111,6 @@ class DialogueUIClass: ChimeraMenuBase
 		m_CharacterName = TextWidget.Cast(m_wRoot.FindAnyWidget("CharacterRank"));
 		m_CharacterName.SetText(CharRank);
 		
-	}
-	//------------------------------------------------------------------------------------------------//
-	void UpdateEntries(IEntity Character, IEntity Player)
-	{
-		string DiagText;
-		int entryamount;
-		//Check if any there arent inputs comming form GetActionName, if not do not create the item
 		DiagText = DiagComp.GetActionName(0, myCallerEntity, Player);
 		if (DiagText != STRING_EMPTY)
 		{
@@ -105,6 +122,7 @@ class DialogueUIClass: ChimeraMenuBase
 			elComp0.SetTextNumber(entrynumber);
 			entryamount = entryamount + 1;
 			DiagText = STRING_EMPTY;
+			GetGame().GetInputManager().AddActionListener("Dialogue0", EActionTrigger.DOWN, ExecuteDialogue0);
 		}
 		DiagText = DiagComp.GetActionName(1, myCallerEntity, Player);
 		if (DiagText != STRING_EMPTY)
@@ -117,6 +135,7 @@ class DialogueUIClass: ChimeraMenuBase
 			elComp1.SetTextNumber(entrynumber);
 			entryamount = entryamount + 1;
 			DiagText = STRING_EMPTY;
+			GetGame().GetInputManager().AddActionListener("Dialogue1", EActionTrigger.DOWN, ExecuteDialogue1);
 		}
 		DiagText = DiagComp.GetActionName(2, myCallerEntity, Player);
 		if (DiagText != STRING_EMPTY)
@@ -129,6 +148,7 @@ class DialogueUIClass: ChimeraMenuBase
 			elComp2.SetTextNumber(entrynumber);
 			entryamount = entryamount + 1;
 			DiagText = STRING_EMPTY;
+			GetGame().GetInputManager().AddActionListener("Dialogue2", EActionTrigger.DOWN, ExecuteDialogue2);
 		}
 		DiagText = DiagComp.GetActionName(3, myCallerEntity, Player);
 		if (DiagText != STRING_EMPTY)
@@ -141,6 +161,7 @@ class DialogueUIClass: ChimeraMenuBase
 			elComp3.SetTextNumber(entrynumber);
 			entryamount = entryamount + 1;
 			DiagText = STRING_EMPTY;
+			GetGame().GetInputManager().AddActionListener("Dialogue3", EActionTrigger.DOWN, ExecuteDialogue3);
 		}
 		//Check if Archtype is branched an choose to create a Leave button or a Go Back button
 		SP_DialogueArchetype DArch = DiagComp.LocateDialogueArchetype(myCallerEntity);
@@ -150,14 +171,16 @@ class DialogueUIClass: ChimeraMenuBase
 			SCR_ListBoxElementComponent elComp4 = m_ListBoxComponent.GetElementComponent(entryamount);
 			elComp4.m_OnClicked.Insert(DoDialogueBack);
 			string entrynumber = (entryamount + 1).ToString();
-			elComp4.SetTextNumber(entrynumber);
+			elComp4.SetTextNumber("[BACKSPACE]");
+			GetGame().GetInputManager().AddActionListener("DialogueBack", EActionTrigger.DOWN, DoDialogueBack);
 			return;
 		}
 		m_ListBoxComponent.AddItem("Leave");
 		SCR_ListBoxElementComponent elComp4 = m_ListBoxComponent.GetElementComponent(entryamount);
 		elComp4.m_OnClicked.Insert(LeaveFunction);
 		string entrynumber = (entryamount + 1).ToString();
-		elComp4.SetTextNumber(entrynumber);
+		elComp4.SetTextNumber("[BACKSPACE]");
+		GetGame().GetInputManager().AddActionListener("DialogueBack", EActionTrigger.DOWN, LeaveFunction);
 	}
 	//------------------------------------------------------------------------------------------------//
 	//Function called to close menu
@@ -165,30 +188,39 @@ class DialogueUIClass: ChimeraMenuBase
     {
 		GetGame().GetMenuManager().CloseAllMenus();
     }
+	override void OnMenuClose()
+	{
+		RemoveListeners();
+	}
 	//------------------------------------------------------------------------------------------------//
 	//DoDialogue function wich branch ID 0
 	void ExecuteDialogue0()
 	{
+		RemoveListeners();
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 0);
 	}
 	//------------------------------------------------------------------------------------------------//
 	void ExecuteDialogue1()
 	{
+		RemoveListeners();
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 1);
 	}
 	//------------------------------------------------------------------------------------------------//
 	void ExecuteDialogue2()
 	{
+		RemoveListeners();
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 2);
 	}
 	//------------------------------------------------------------------------------------------------//
 	void ExecuteDialogue3()
 	{
+		RemoveListeners();
 		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 3);
 	}
 	//------------------------------------------------------------------------------------------------//
 	void DoDialogueBack()
 	{
+		RemoveListeners();
 		DiagComp.DoBackDialogue(myCallerEntity, myUserEntity);
 	}
 	//------------------------------------------------------------------------------------------------//

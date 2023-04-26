@@ -96,7 +96,8 @@ ButtonWidgetClass {
       TextWidgetClass "{5D1303B9CB9C181B}" {
        Name "TextNumber"
        Slot OverlayWidgetSlot "{5D1303B9CB9C1842}" {
-        Padding 0 0 710 0
+        HorizontalAlign 0
+        Padding 0 0 650 0
        }
        Text "0"
        "Font Size" 20

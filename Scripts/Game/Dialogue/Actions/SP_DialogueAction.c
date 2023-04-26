@@ -4,6 +4,8 @@ class SP_DialogueAction : ScriptedUserAction
 	protected SP_DialogueComponent DiagComp;
 	protected SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
 	
+	protected int PrevWalkSpeed;
+	protected vector PrevWalkDir;
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
@@ -11,6 +13,9 @@ class SP_DialogueAction : ScriptedUserAction
 		AIAgent Agent = AiComp.GetControlAIAgent();
 		AIGroup group = AIGroup.Cast(Agent.GetParentGroup());
         string NoTalkText = "Cant talk to you now";
+		CharacterControllerComponent CharCont = CharacterControllerComponent.Cast(pOwnerEntity.FindComponent(CharacterControllerComponent));
+		PrevWalkSpeed = CharCont.GetMovementSpeed();
+		CharCont.SetMovement(0, "0 0 0");
         if (group)
 		{
 			Agent = group.GetLeaderAgent();
