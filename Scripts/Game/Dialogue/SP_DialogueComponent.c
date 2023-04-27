@@ -11,7 +11,7 @@ enum EChoiseBehavior
 	Stay,
 	IncrementDialogueStageandGoBack
 };
-modded enum ECharacterRank
+modded enum SCR_ECharacterRank
 {
 	MEDIC,
 	NAVIGATOR,
@@ -49,7 +49,7 @@ class SP_DialogueComponent: ScriptComponent
 		//------------------------------------------------------------------//
 		//For UI
 		MenuBase 				myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
-		DialogueUIClass 			DiagUI = DialogueUIClass.Cast(myMenu);
+		DialogueUIClass 		DiagUI = DialogueUIClass.Cast(myMenu);
 		//------------------------------------------------------------------//
 		//If CanBePerformed is false dialogue wont be executed
 		if (Branch.CanBePerformed(Character, Player) == false)
@@ -163,13 +163,14 @@ class SP_DialogueComponent: ScriptComponent
 		string CharacterFullName;
 		if(IdentityComponent)
 		{
-			return IdentityComponent.GetCharacterFullName();
+			string m_sName = IdentityComponent.GetIdentity().GetName();;
+			return m_sName;
 		}
 		else
 			return STRING_EMPTY;
 	}
 	//CHARACTER RANK
-	ECharacterRank GetCharacterRank(IEntity Character)
+	SCR_ECharacterRank GetCharacterRank(IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		if(RankComponent)
@@ -194,7 +195,7 @@ class SP_DialogueComponent: ScriptComponent
 	{
 		string senderName;
 		SP_DialogueArchetype DiagArch;
-		ECharacterRank senderRank;
+		SCR_ECharacterRank senderRank;
 		FactionKey senderFaction;
 		for (int i, count = m_CharacterArchetypeList.Count(); i < count; i++)
 		{

@@ -15,8 +15,8 @@ class SP_DialogueArchetype: ScriptAndConfig
 	[Attribute("", UIWidgets.Object, "Character faction, used to identify character dialogue. Compared to factionkey in FactionAffiliationComponent", category:"CharacterInfo")]
 	private FactionKey m_sCharacterFaction;
 	//Character Rank
-	[Attribute("50", UIWidgets.ComboBox, "Character rank, used to identify character dialogue. Compared to rank in SCR_CharacterRankComponent", category:"CharacterInfo", ParamEnumArray.FromEnum(ECharacterRank))]
-	private ECharacterRank m_sCharacterRank;
+	[Attribute("50", UIWidgets.ComboBox, "Character rank, used to identify character dialogue. Compared to rank in SCR_CharacterRankComponent", category:"CharacterInfo", ParamEnumArray.FromEnum(SCR_ECharacterRank))]
+	private SCR_ECharacterRank m_sCharacterRank;
 	//------------------------------------------------------------------//
 	//Different configuration containing dialogue texts
 	[Attribute(desc: "Filtered selection test")]
@@ -82,7 +82,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 	}
 	//------------------------------------------------------------------//
 	//Character Rank set for this Archetype, relevant only if ArchetypeIdentifier is looking for it
-	ECharacterRank GetArchetypeTemplateRank()
+	SCR_ECharacterRank GetArchetypeTemplateRank()
 	{
 		return m_sCharacterRank;
 	}

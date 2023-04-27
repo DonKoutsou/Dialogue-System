@@ -41,7 +41,7 @@ class SP_DialogueAction : ScriptedUserAction
 	}
 	override event void Init(IEntity pOwnerEntity, GenericComponent pManagerComponent)
 	{
-		DiagComp = SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));
+		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 	}
 	//------------------------------------------------------------------//
 	override bool CanBeShownScript(IEntity user)

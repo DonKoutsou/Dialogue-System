@@ -24,7 +24,7 @@ class DialogueUIClass: ChimeraMenuBase
 	IEntity 									myCallerEntity;
 	string 										CharName;
 	string 										CharRank;
-	ECharacterRank 								rank;
+	SCR_ECharacterRank 								rank;
 	FactionKey 									faction;
 	//----------------------------------------------------------------//
 	//DialogueStystem
