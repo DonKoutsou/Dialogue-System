@@ -2,13 +2,15 @@ class SP_DialogueAction : ScriptedUserAction
 {
 	//------------------------------------------------------------------//
 	protected SP_DialogueComponent DiagComp;
-	protected SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
+	protected SCR_BaseGameMode GameMode;
 	
 	protected int PrevWalkSpeed;
 	protected vector PrevWalkDir;
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
+		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
+		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		AIControlComponent AiComp = AIControlComponent.Cast(pOwnerEntity.FindComponent(AIControlComponent));
 		AIAgent Agent = AiComp.GetControlAIAgent();
 		AIGroup group = AIGroup.Cast(Agent.GetParentGroup());
@@ -41,8 +43,7 @@ class SP_DialogueAction : ScriptedUserAction
 	}
 	override event void Init(IEntity pOwnerEntity, GenericComponent pManagerComponent)
 	{
-		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
-	}
+	};
 	//------------------------------------------------------------------//
 	override bool CanBeShownScript(IEntity user)
 	{
