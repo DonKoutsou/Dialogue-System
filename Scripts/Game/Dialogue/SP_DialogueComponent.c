@@ -132,6 +132,25 @@ class SP_DialogueComponent: ScriptComponent
 		DiagUI.UpdateEntries(Character, Player);
 	}
 	//----------------------------------------------------------------------------------------------------------------//
+	void DoAnouncerDialogue(string Text)
+	{
+		//------------------------------------------------------------------//
+		//SenderID needed to send text to chat
+		int senderID;
+		//String to store the text we want to send on chat
+		string 					m_DialogTexttoshow;
+		//Name of character we are talking to 
+		string 					senderName = "Anouncer";
+		//------------------------------------------------------------------//
+		//For UI
+		MenuBase 				myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
+		DialogueUIClass 		DiagUI = DialogueUIClass.Cast(myMenu);
+		//--------------------------------------//
+		m_DialogTexttoshow = Text;
+		//--------------------------------------//
+		SendText(m_DialogTexttoshow, m_ChatChannel, senderID, senderName);
+	}
+	//----------------------------------------------------------------------------------------------------------------//
 	//Send text function for sending the provided text to chat 
 	void SendText(string Text, BaseChatChannel Chanell, int SenderID, string SenderName)
 	{
