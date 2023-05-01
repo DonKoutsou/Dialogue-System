@@ -141,10 +141,6 @@ class SP_DialogueComponent: ScriptComponent
 		string 					m_DialogTexttoshow;
 		//Name of character we are talking to 
 		string 					senderName = "Anouncer";
-		//------------------------------------------------------------------//
-		//For UI
-		MenuBase 				myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
-		DialogueUIClass 		DiagUI = DialogueUIClass.Cast(myMenu);
 		//--------------------------------------//
 		m_DialogTexttoshow = Text;
 		//--------------------------------------//
@@ -215,7 +211,9 @@ class SP_DialogueComponent: ScriptComponent
 		string senderName;
 		SP_DialogueArchetype DiagArch;
 		SCR_ECharacterRank senderRank;
+		array<string> m_aArchetypeFactionMatch;
 		FactionKey senderFaction;
+		senderFaction = GetCharacterFaction(pOwnerEntity);
 		for (int i, count = m_CharacterArchetypeList.Count(); i < count; i++)
 		{
 			EArchetypeIdentifier Archid = m_CharacterArchetypeList[i].GetIdentifier();
@@ -227,8 +225,21 @@ class SP_DialogueComponent: ScriptComponent
 				senderName = GetCharacterName(pOwnerEntity);
 				if (m_CharacterArchetypeList[i].GetArchetypeTemplateName() == senderName)
 				{
-					DiagArch = m_CharacterArchetypeList[i];
-					return DiagArch;
+					m_aArchetypeFactionMatch = m_CharacterArchetypeList[i].GetArchtypeFactionMatch();
+					if (m_aArchetypeFactionMatch.Count() <= 0)
+					{
+						DiagArch = m_CharacterArchetypeList[i];
+						return DiagArch;
+					}
+					for (int z = 0, amount = m_aArchetypeFactionMatch.Count(); z < amount; z++)
+        			{
+						if(m_aArchetypeFactionMatch[z] == senderFaction)
+						{
+							DiagArch = m_CharacterArchetypeList[i];
+							return DiagArch;
+						}
+					}
+					
 				}
 				break;
 			//-----------------------------------------------------------------------------------------------------------//
@@ -237,29 +248,63 @@ class SP_DialogueComponent: ScriptComponent
 				senderRank = GetCharacterRank(pOwnerEntity);
 				if (m_CharacterArchetypeList[i].GetArchetypeTemplateRank() == senderRank)
 				{
-					DiagArch = m_CharacterArchetypeList[i];
-					return DiagArch;
+					m_aArchetypeFactionMatch = m_CharacterArchetypeList[i].GetArchtypeFactionMatch();
+					if (m_aArchetypeFactionMatch.Count() <= 0)
+					{
+						DiagArch = m_CharacterArchetypeList[i];
+						return DiagArch;
+					}
+					for (int z = 0, amount = m_aArchetypeFactionMatch.Count(); z < amount; z++)
+        			{
+						if(m_aArchetypeFactionMatch[z] == senderFaction)
+						{
+							DiagArch = m_CharacterArchetypeList[i];
+							return DiagArch;
+						}
+					}
 				}
 				break;
 			//-----------------------------------------------------------------------------------------------------------//
 			// diagid 2 means we look for Character Faction
 			case 2:
-				senderFaction = GetCharacterFaction(pOwnerEntity);
 				if (m_CharacterArchetypeList[i].GetArchetypeTemplateFaction() == senderFaction)
 				{
-					DiagArch = m_CharacterArchetypeList[i];
-					return DiagArch;
+					m_aArchetypeFactionMatch = m_CharacterArchetypeList[i].GetArchtypeFactionMatch();
+					if (m_aArchetypeFactionMatch.Count() <= 0)
+					{
+						DiagArch = m_CharacterArchetypeList[i];
+						return DiagArch;
+					}
+					for (int z = 0, amount = m_aArchetypeFactionMatch.Count(); z < amount; z++)
+        			{
+						if(m_aArchetypeFactionMatch[z] == senderFaction)
+						{
+							DiagArch = m_CharacterArchetypeList[i];
+							return DiagArch;
+						}
+					}
 				}
 				break;
 			//-----------------------------------------------------------------------------------------------------------//
 			// diagid 3 means we look for Character Faction and Rank
 			case 3:
-				senderFaction = GetCharacterFaction(pOwnerEntity);
 				senderRank = GetCharacterRank(pOwnerEntity);
 				if (m_CharacterArchetypeList[i].GetArchetypeTemplateFaction() == senderFaction && m_CharacterArchetypeList[i].GetArchetypeTemplateRank() == senderRank)
 				{
-					DiagArch = m_CharacterArchetypeList[i];
-					return DiagArch;
+					m_aArchetypeFactionMatch = m_CharacterArchetypeList[i].GetArchtypeFactionMatch();
+					if (m_aArchetypeFactionMatch.Count() <= 0)
+					{
+						DiagArch = m_CharacterArchetypeList[i];
+						return DiagArch;
+					}
+					for (int z = 0, amount = m_aArchetypeFactionMatch.Count(); z < amount; z++)
+        			{
+						if(m_aArchetypeFactionMatch[z] == senderFaction)
+						{
+							DiagArch = m_CharacterArchetypeList[i];
+							return DiagArch;
+						}
+					}
 				}
 				break;
 			//-----------------------------------------------------------------------------------------------------------//

@@ -60,12 +60,6 @@ class DialogueStagePromotionAction : DialogueStage
 			break;
 		case SCR_ECharacterRank.COLONEL:
 			{
-				Rankcomp.SetCharacterRank(SCR_ECharacterRank.GENERAL);
-				m_text = m_AnouncerText + " " + "GENERAL"
-			}
-			break;
-		case SCR_ECharacterRank.GENERAL:
-			{
 				Rankcomp.SetCharacterRank(SCR_ECharacterRank.COMMANDER);
 				m_text = m_AnouncerText + " " + "COMMANDER"
 			}

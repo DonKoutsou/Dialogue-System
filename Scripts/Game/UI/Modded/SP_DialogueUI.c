@@ -103,6 +103,17 @@ class DialogueUIClass: ChimeraMenuBase
 				m_CharacterFactionIcon.LoadImageTexture(0, "{FB266CDD4502D60B}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_Fia.edds");
 			}
 			break;
+			case "BANDITS":
+			{
+				m_CharacterFactionIcon.LoadImageTexture(0, "{855625FE8D6A87A8}UI/Textures/DamageState/damageState-dead.edds");
+			}
+			break;
+			case "SPEIRA":
+			{
+				m_CharacterFactionIcon.LoadImageTexture(0, "{CEAC8771342689C5}Assets/Data/Faction_SPEIRA.edds");
+			}
+			break;
+				
 		}
 		}
 		m_CharacterName = TextWidget.Cast(m_wRoot.FindAnyWidget("CharacterName"));

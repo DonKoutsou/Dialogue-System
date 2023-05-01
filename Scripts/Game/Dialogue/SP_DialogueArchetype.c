@@ -17,6 +17,9 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//Character Rank
 	[Attribute("50", UIWidgets.ComboBox, "Character rank, used to identify character dialogue. Compared to rank in SCR_CharacterRankComponent", category:"CharacterInfo", ParamEnumArray.FromEnum(SCR_ECharacterRank))]
 	private SCR_ECharacterRank m_sCharacterRank;
+	//Factions this archetype is for
+	[Attribute("FactionKey", "Faction the player needs to be to get access to this archetype", category:"CharacterInfo")]
+	private ref array<string> m_aArchetypeFactionMatch;
 	//------------------------------------------------------------------//
 	//Different configuration containing dialogue texts
 	[Attribute(desc: "Filtered selection test")]
@@ -29,6 +32,10 @@ class SP_DialogueArchetype: ScriptAndConfig
 	IEntity TalkingCharacter;
 	bool IsCharacterBranched;
 	int BranchedID;
+	array<string> GetArchtypeFactionMatch()
+	{
+		return m_aArchetypeFactionMatch;
+	}
 	//------------------------------------------------------------------//
 	//Bool returning IsCharacterBranched, used to check if character is branched. True = Branched - False = Unbranched
 	bool IsCharacterBranched()
