@@ -15,7 +15,9 @@ SCR_ChimeraCharacter {
   }
   ActionsManagerComponent "{520EA1D2F659CE02}" {
    additionalActions {
-    SP_DialogueAction "{5D026EE20EFDD9C5}" : "{47F45AFF6742655B}Configs/DialogueAction_1.conf" {
+    SP_DialogueAction "{5D026EE20EFDD9C5}" : "{47F45AFF6742655B}Configs/Dilaogue_Configs/DialogueAction_1.conf" {
+     m_pDefaultWaypoint "{237004400BBCBDD9}prefabs/AI/Waypoints/AIWaypoint_Lookatme.et"
+     m_OrderType MOVEMENT_TYPE
     }
    }
   }

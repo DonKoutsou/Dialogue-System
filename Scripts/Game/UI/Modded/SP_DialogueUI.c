@@ -82,6 +82,17 @@ class DialogueUIClass: ChimeraMenuBase
 			{
 				CharRank = "Private";
 			}
+			break;
+			case 8:
+			{
+				CharRank = "GENERAL";
+			}
+			break;
+			case 22:
+			{
+				CharRank = "Commander";
+			}
+			break;
 		}
 		m_CharacterFactionIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionIcon"));
 		if (m_CharacterFactionIcon)
