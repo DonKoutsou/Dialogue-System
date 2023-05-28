@@ -1,51 +1,37 @@
 class SP_DialogueAction : ScriptedUserAction
 {
-	[Attribute("")]
-	private ResourceName m_pDefaultWaypoint;
-	
-	//[Attribute("0", UIWidgets.ComboBox, "Message type", "", ParamEnumArray.FromEnum(EOrderType_Character) )]
-	//private EOrderType_Character m_OrderType;
-	
 	private AIWaypoint DefWaypoint;
 	//------------------------------------------------------------------//
 	protected SP_DialogueComponent DiagComp;
 	protected SCR_BaseGameMode GameMode;
-	
-	protected int PrevWalkSpeed;
-	protected vector PrevWalkDir;
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
-
+		AIControlComponent comp = AIControlComponent.Cast(pOwnerEntity.FindComponent(AIControlComponent));
+		if (!comp)
+			return;
+		AIAgent agent = comp.GetAIAgent();
+		if (!agent)
+			return;
+		SCR_AIUtilityComponent utility = SCR_AIUtilityComponent.Cast(agent.FindComponent(SCR_AIUtilityComponent));
+		if (!utility)
+			return;
 		
-		//vector position[4];
-		//pUserEntity.GetTransform(position);
-		//EntitySpawnParams spawnParams = EntitySpawnParams();
-		//spawnParams.TransformMode = ETransformMode.WORLD;
-		//spawnParams.Transform = position;
-		//Resource WP = Resource.Load(m_pDefaultWaypoint);
-		//DefWaypoint = AIWaypoint.Cast(GetGame().SpawnEntityPrefab(WP, null, spawnParams));
+		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, pUserEntity.GetOrigin());
+
 		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
-		AIControlComponent AiComp = AIControlComponent.Cast(pOwnerEntity.FindComponent(AIControlComponent));
-		AIAgent Agent = AiComp.GetControlAIAgent();
-		//AICommunicationComponent comComp = AICommunicationComponent.Cast(Agent.GetCommunicationComponent());
-		//SCR_AIWorld m_aiWorld = SCR_AIWorld.Cast(GetGame().GetAIWorld());
-		//SCR_AIOrderBase msg = SCR_AIOrderBase.Cast(comComp.CreateMessage(m_aiWorld.GetOrderMessageOfType(m_OrderType)));	
-		//comComp.RequestBroadcast(msg, Agent);
-		AIGroup group = AIGroup.Cast(Agent.GetParentGroup());
+		
+		AIGroup group = AIGroup.Cast(agent.GetParentGroup());
 		group.AddWaypoint(DefWaypoint);
 		string NoTalkText = "Cant talk to you now";
 		string GreetText;
 		FactionKey SenderFaction = DiagComp.GetCharacterFaction(pOwnerEntity);
 		BaseChatChannel Channel;
 		string name = DiagComp.GetCharacterName(pOwnerEntity);
-		//CharacterControllerComponent CharCont = CharacterControllerComponent.Cast(pOwnerEntity.FindComponent(CharacterControllerComponent));
-		//PrevWalkSpeed = CharCont.GetMovementSpeed();
-		//CharCont.SetMovement(0, "0 0 0");
         if (group)
 		{
-			Agent = group.GetLeaderAgent();
+			agent = group.GetLeaderAgent();
 		}
 		switch (SenderFaction)
 			{
@@ -73,18 +59,12 @@ class SP_DialogueAction : ScriptedUserAction
 				}
 				break;
 			}
-		//if (Agent.HasOrders() == true)
-		//{
-		//	DiagComp.SendText(NoTalkText, Channel, 0, name);
-		//	return;
-		//}
-		//Agent.GetMovementComponent().ForceFollowPathOfEntity(pUserEntity) = true;
-		if (!DiagComp.LocateDialogueArchetype(pOwnerEntity))
+		if (!DiagComp.LocateDialogueArchetype(pOwnerEntity, pUserEntity))
 		{
 			DiagComp.SendText(NoTalkText, Channel, 0, name);
 			return;
 		}
-		
+		utility.AddAction(action);
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		DiagUI.Init(pOwnerEntity, pUserEntity);
@@ -93,8 +73,6 @@ class SP_DialogueAction : ScriptedUserAction
 		{
 			DiagComp.SendText(GreetText, Channel, 0, name);
 		}
-		//AIBaseMovementComponent movcomp = AIBaseMovementComponent.Cast(Agent.GetMovementComponent());
-		//movcomp.RequestFollowPathOfEntity(pUserEntity);
 	}
 	override event void Init(IEntity pOwnerEntity, GenericComponent pManagerComponent)
 	{

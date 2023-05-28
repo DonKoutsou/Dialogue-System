@@ -12,6 +12,60 @@ FrameWidgetClass {
     SizeY 310.003
     OffsetBottom -1014
    }
+   components {
+    SCR_ChatPanel "{585F32D2A6B295EC}" {
+     m_FIAChannelStyle SCR_ChatMessageStyle "{5D76CECF61E85342}" {
+      m_Color 0 0.44 0.078 1
+      m_bColoredBadge 1
+      m_bColoredIcon 1
+      m_IconImageset "{4C236DCD59B20AA0}UI/Textures/Chat/chat_32.imageset"
+      m_sIconName "local"
+      m_sName "FIA"
+      m_sNameLower "fia"
+      m_sPrefix "6"
+     }
+     m_USSRChannelStyle SCR_ChatMessageStyle "{5D76CECF3117D80B}" {
+      m_Color 0.855 0.032 0.027 1
+      m_bColoredBadge 1
+      m_bColoredIcon 1
+      m_IconImageset "{4C236DCD59B20AA0}UI/Textures/Chat/chat_32.imageset"
+      m_sIconName "local"
+      m_sName "USSR"
+      m_sNameLower "ussr"
+      m_sPrefix "7"
+     }
+     m_USChannelStyle SCR_ChatMessageStyle "{5D76CECF202EB52C}" {
+      m_Color 0.016 0.552 0.905 1
+      m_bColoredBadge 1
+      m_bColoredIcon 1
+      m_IconImageset "{4C236DCD59B20AA0}UI/Textures/Chat/chat_32.imageset"
+      m_sIconName "local"
+      m_sName "US"
+      m_sNameLower "us"
+      m_sPrefix "8"
+     }
+     m_BANDITSChannelStyle SCR_ChatMessageStyle "{5D76CECF2EB2132F}" {
+      m_Color 1 0.982 0.078 1
+      m_bColoredBadge 1
+      m_bColoredIcon 1
+      m_IconImageset "{4C236DCD59B20AA0}UI/Textures/Chat/chat_32.imageset"
+      m_sIconName "local"
+      m_sName "Bandits"
+      m_sNameLower "bandits"
+      m_sPrefix "9"
+     }
+     m_SPEIRAChannelStyle SCR_ChatMessageStyle "{5D76CECEC1E34A3D}" {
+      m_Color 0.474 0.258 0.687 1
+      m_bColoredBadge 1
+      m_bColoredIcon 1
+      m_IconImageset "{4C236DCD59B20AA0}UI/Textures/Chat/chat_32.imageset"
+      m_sIconName "local"
+      m_sName "SPEIRA"
+      m_sNameLower "speira"
+      m_sPrefix "10"
+     }
+    }
+   }
    {
     OverlayWidgetClass "{56150B2288F76A08}" {
      Prefab "{56150B2288F76A08}"

@@ -36,6 +36,9 @@ class SP_DialogueComponent: ScriptComponent
 	ref BaseChatChannel m_ChatChannelUSSR;
 	
 	[Attribute()]
+	ref BaseChatChannel m_ChatChannelUS;
+	
+	[Attribute()]
 	ref BaseChatChannel m_ChatChannelBANDITS;
 	
 	[Attribute()]
@@ -59,16 +62,16 @@ class SP_DialogueComponent: ScriptComponent
 		//Faction
 		FactionKey				senderFaction = GetCharacterFaction(Character);
 		//Dialogue Archetype matching the charcter we are talking to 
-		SP_DialogueArchetype 	DiagArch = LocateDialogueArchetype(Character);
+		SP_DialogueArchetype 	DiagArch = LocateDialogueArchetype(Character, Player);
 		//Get branch located in found archetype using ID
-		SP_DialogueBranch 		Branch = DiagArch.GetDialogueBranch(BranchID);
+		SP_DialogueBranch 		Branch;
+		DiagArch.GetDialogueBranch(BranchID, Branch);
 		//------------------------------------------------------------------//
 		//For UI
 		MenuBase 				myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		DialogueUIClass 		DiagUI = DialogueUIClass.Cast(myMenu);
 		//------------------------------------------------------------------//
 		BaseChatChannel Channel;
-		
 		//If CanBePerformed is false dialogue wont be executed
 		if (Branch.CanBePerformed(Character, Player) == false)
 		{
@@ -78,29 +81,24 @@ class SP_DialogueComponent: ScriptComponent
 		switch (senderFaction)
 			{
 				case "FIA":
-				{
 					Channel = m_ChatChannelFIA;
-				}
 				break;
 				case "USSR":
-				{
 					Channel = m_ChatChannelUSSR;
-				}
 				break;
 				case "BANDITS":
-				{
 					Channel = m_ChatChannelBANDITS;
-				}
 				break;
 				case "SPEIRA":
-				{
 					Channel = m_ChatChannelSPEIRA;
-				}
+				break;
+				case "US":
+					Channel = m_ChatChannelUS;
 				break;
 			}
 		//------------------------------------------------------------------//
 		//Check if branch has another branch in its current stage. If yes we will have to cause a branch after getting our text
-		if (Branch.CheckIfStageBranches() == true)
+		if (Branch.CheckIfStageBranches(Character) == true)
 		{
 			//--------------------------------------//
 			//If our branch should be branched it means that our character will need to be branched as well
@@ -110,59 +108,66 @@ class SP_DialogueComponent: ScriptComponent
 			}
 			//--------------------------------------//
 			//Look for the config that matches our character. Config hold info about progression of dialogue for the Specific AI we are talking to.			
-			DialogueBranchInfo Conf = Branch.LocateConfig(Character);
-			m_DialogTexttoshow = Branch.GetDialogueText(Character);
+			DialogueBranchInfo Conf;
+			Branch.LocateConfig(Character, Conf);
+			Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
 			SendText(m_DialogTexttoshow, Channel, senderID, senderName);
-			
 			// Cause a branch of the config
-			Conf.CauseBranch(BranchID);
+			Branch.CauseBranch(BranchID, Character);
 			//Call OnPerform function of the branch stage
 			Branch.OnPerform(Character, Player);
 			//--------------------------------------//
 			DiagUI.UpdateEntries(Character, Player);
 			//--------------------------------------//
-			//Inherit needed data to next config
-			Branch.GetCurrentDialogueBranch(Character, BranchID).InheritData(DiagArch, Conf, Character);
 			return;
 			//--------------------------------------//
 		}
-		
 		//--------------------------------------//
 		Branch.OnPerform(Character, Player);
-		DialogueBranchInfo Conf = Branch.LocateConfig(Character);
-		m_DialogTexttoshow = Branch.GetDialogueText(Character);
+		DialogueBranchInfo Conf;
+		Branch.LocateConfig(Character, Conf);
+		Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
 		//--------------------------------------//
 		SendText(m_DialogTexttoshow, Channel, senderID, senderName);
 		
 		//--------------------------------------//
-		int stage = Conf.GetDialogueBranchStage() + 1;
+		int Bstage;
+		Conf.GetDialogueBranchStage(Bstage);
 		//If a stage exists it means that dialogue can increment
-		if (Branch.CheckNextStage(stage) == true)
+		if (Branch.CheckNextStage(Bstage + 1) == true)
 		{
-			IncrementDiagStage(Character, BranchID, IncrementAmount);
+			IncrementDiagStage(Character, Player, BranchID, IncrementAmount);
 		}
 		//--------------------------------------//
 		DiagUI.UpdateEntries(Character, Player);
-		
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//Function used for "GoBack" and "Leave" dialogue options
 	void DoBackDialogue(IEntity Character, IEntity Player)
 	{
 		string senderName = GetCharacterName(Character);
-		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(Character);
+		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(Character, Player);
 		string m_DialogTexttoshow = "Go Back";
-		SP_DialogueBranch Branch = DiagArch.GetDialogueBranch(DiagArch.GetBranchedID());
-		DialogueBranchInfo ParentBranch = Branch.GetParent();
+		int BranchID;
+		DiagArch.GetBranchedID(BranchID);
+		SP_DialogueBranch Branch;
+		DiagArch.GetDialogueBranch(BranchID, Branch);
+		DialogueBranchInfo ParentBranch;
+		Branch.GetParent(Character, ParentBranch);
 		if (!Branch)
 		{
 			DiagArch.UnBranchArchetype();
 		}
 		else if (Branch && ParentBranch && ParentBranch.CheckifBranched() == true)
 		{
-			DialogueBranchInfo m_BranchStages = Branch.LocateConfig(Character);
-			m_BranchStages.GetParentConfig().Unbranch();
-			if (!ParentBranch.GetParentConfig())
+			DialogueBranchInfo Conf;
+			Branch.LocateConfig(Character, Conf);
+			DialogueBranchInfo PConf;
+			Conf.GetParentConfig(PConf);
+			PConf.Unbranch();
+			DialogueBranchInfo PofPConf;
+			PConf.GetParentConfig(PofPConf);
+			if (!PofPConf)
 			{
 				DiagArch.UnBranchArchetype();
 			}
@@ -175,6 +180,21 @@ class SP_DialogueComponent: ScriptComponent
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
 		DiagUI.UpdateEntries(Character, Player);
 		PlayDialogueSound();
+	}
+	void ReleaseAI(IEntity Character, IEntity Player)
+	{
+		AIControlComponent comp = AIControlComponent.Cast(Character.FindComponent(AIControlComponent));
+		if (!comp)
+			return;
+		AIAgent agent = comp.GetAIAgent();
+		if (!agent)
+			return;
+		SCR_AIUtilityComponent utility = SCR_AIUtilityComponent.Cast(agent.FindComponent(SCR_AIUtilityComponent));
+		if (!utility)
+			return;
+		SCR_AIConverseBehavior act = SCR_AIConverseBehavior.Cast(utility.FindActionOfType(SCR_AIConverseBehavior));
+		act.SetActionState(EAIActionState.FAILED);
+		//utility.SetStateAllActionsOfType(SCR_AIConverseBehavior, EAIActionState.FAILED, false);
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	void DoAnouncerDialogue(string Text)
@@ -207,20 +227,18 @@ class SP_DialogueComponent: ScriptComponent
 	
 	//----------------------------------------------------------------------------------------------------------------//
 	//Get ActionName function used in SP_DialogueUI to check if provided branch ID gives us any text.
-	string GetActionName(int BranchID, IEntity Character, IEntity Player)
+	void GetActionName(int BranchID, IEntity Character, IEntity Player, out string ActName)
 	{
-		string m_sActionName;
-		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(Character);
-		m_sActionName = DiagArch.GetActionTitle(BranchID, Character, Player);
-		return m_sActionName;
+		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(Character, Player);
+		DiagArch.GetActionTitle(BranchID, Character, Player, ActName);
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//Locates Archetype using LocateDialogueArchetype function using Ientity provided.
 	//Increments stage of branch in the archetype
-	bool IncrementDiagStage(IEntity owner, int BranchID, int incrementamount)
+	bool IncrementDiagStage(IEntity owner, IEntity Player, int BranchID, int incrementamount)
 	{
-		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(owner);
-		DiagArch.IncrementStage(BranchID, incrementamount);
+		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(owner, Player);
+		DiagArch.IncrementStage(BranchID, incrementamount, owner);
 		return false;
 	}
 	//----------------------------------------------------------------------------------------------------------------//
@@ -231,7 +249,7 @@ class SP_DialogueComponent: ScriptComponent
 		string CharacterFullName;
 		if(IdentityComponent)
 		{
-			string m_sName = IdentityComponent.GetIdentity().GetName();;
+			string m_sName = IdentityComponent.GetIdentity().GetName() + " " + IdentityComponent.GetIdentity().GetSurname();
 			return m_sName;
 		}
 		else
@@ -259,57 +277,70 @@ class SP_DialogueComponent: ScriptComponent
 			return STRING_EMPTY;	
 	}
 	//----------------------------------------------------------------------------------------------------------------//
-	SP_DialogueArchetype GetArchetypeTemplate(IEntity pOwnerEntity)
+	SP_DialogueArchetype GetArchetypeTemplate(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
-		string senderName;
+		string senderName = GetCharacterName(pOwnerEntity);
+		SCR_ECharacterRank senderRank = GetCharacterRank(pOwnerEntity);
+		FactionKey senderFaction = GetCharacterFaction(pOwnerEntity);
+		
+		FactionKey playerFaction = GetCharacterFaction(pUserEntity);
+		
 		SP_DialogueArchetype DiagArch;
-		SCR_ECharacterRank senderRank;
-		FactionKey senderFaction;
-		senderFaction = GetCharacterFaction(pOwnerEntity);
+		
 		for (int i, count = m_CharacterArchetypeList.Count(); i < count; i++)
 		{
-			EArchetypeIdentifier Archid = m_CharacterArchetypeList[i].GetIdentifier();
-			switch (Archid) 
+			array <string> factions;
+			m_CharacterArchetypeList[i].GetArchtypeFactionMatch(factions);
+			if (factions.Contains(playerFaction) == true)
 			{
-			//-----------------------------------------------------------------------------------------------------------//
-			// diagid 0 means we look for Character Name
-		    case 0:
-				senderName = GetCharacterName(pOwnerEntity);
-				if (m_CharacterArchetypeList[i].GetArchetypeTemplateName() == senderName)
+				EArchetypeIdentifier Archid;
+				m_CharacterArchetypeList[i].GetIdentifier(Archid);
+				string ArchTempN;
+				m_CharacterArchetypeList[i].GetArchetypeTemplateName(ArchTempN);
+				int ArchRank;
+				m_CharacterArchetypeList[i].GetArchetypeTemplateRank(ArchRank);
+				FactionKey ArchFaction;
+				m_CharacterArchetypeList[i].GetArchetypeTemplateFaction(ArchFaction);
+				
+				switch (Archid) 
 				{
-					DiagArch = m_CharacterArchetypeList[i];
-					return DiagArch;	
+				//-----------------------------------------------------------------------------------------------------------//
+				// diagid 0 means we look for Character Name
+			    case 0:
+					if (ArchTempN == senderName)
+					{
+						DiagArch = m_CharacterArchetypeList[i];
+						return DiagArch;	
+					}
+					break;
+				//-----------------------------------------------------------------------------------------------------------//
+				// diagid 1 means we look for Character Rank
+			    case 1:
+					if (ArchRank == senderRank)
+					{
+						DiagArch = m_CharacterArchetypeList[i];
+						return DiagArch;
+					}
+					break;
+				//-----------------------------------------------------------------------------------------------------------//
+				// diagid 2 means we look for Character Faction
+				case 2:
+					if (ArchFaction == senderFaction)
+					{
+						DiagArch = m_CharacterArchetypeList[i];
+						return DiagArch;
+					}
+					break;
+				//-----------------------------------------------------------------------------------------------------------//
+				// diagid 3 means we look for Character Faction and Rank
+				case 3:
+					if (ArchFaction == senderFaction && ArchRank == senderRank)
+					{
+						DiagArch = m_CharacterArchetypeList[i];
+						return DiagArch;
+					}
+					break;
 				}
-				break;
-			//-----------------------------------------------------------------------------------------------------------//
-			// diagid 1 means we look for Character Rank
-		    case 1:
-				senderRank = GetCharacterRank(pOwnerEntity);
-				if (m_CharacterArchetypeList[i].GetArchetypeTemplateRank() == senderRank)
-				{
-					DiagArch = m_CharacterArchetypeList[i];
-					return DiagArch;
-				}
-				break;
-			//-----------------------------------------------------------------------------------------------------------//
-			// diagid 2 means we look for Character Faction
-			case 2:
-				if (m_CharacterArchetypeList[i].GetArchetypeTemplateFaction() == senderFaction)
-				{
-					DiagArch = m_CharacterArchetypeList[i];
-					return DiagArch;
-				}
-				break;
-			//-----------------------------------------------------------------------------------------------------------//
-			// diagid 3 means we look for Character Faction and Rank
-			case 3:
-				senderRank = GetCharacterRank(pOwnerEntity);
-				if (m_CharacterArchetypeList[i].GetArchetypeTemplateFaction() == senderFaction && m_CharacterArchetypeList[i].GetArchetypeTemplateRank() == senderRank)
-				{
-					DiagArch = m_CharacterArchetypeList[i];
-					return DiagArch;
-				}
-				break;
 			}
 			//-----------------------------------------------------------------------------------------------------------//
 		}
@@ -317,12 +348,12 @@ class SP_DialogueComponent: ScriptComponent
 	}
 	//-----------------------------------------------------------------------------------------------------------//
 	// locate if there is already an Archetype instace for this specific charater and if not initiates the creation of one
-	SP_DialogueArchetype LocateDialogueArchetype(IEntity Character)
+	SP_DialogueArchetype LocateDialogueArchetype(IEntity Owner, IEntity User)
 	{
 		SP_DialogueArchetype CharDialogueArch;
-		//using character full name atm to match Character with Archetype
-		string LocCharacterName = GetCharacterName(Character);
-		if (!GetArchetypeTemplate(Character))
+		//using character full name atm to match Owner with Archetype
+		string LocCharacterName = GetCharacterName(Owner);
+		if (!GetArchetypeTemplate(Owner, User))
 		{
 			return CharDialogueArch;
 		}
@@ -338,14 +369,14 @@ class SP_DialogueComponent: ScriptComponent
 				//-------------------------------------------------------------------------//
 				//if not find an ArchetypeTemplate, make a copy of it and instet it in DialogueArchetypeMap
 				//find character template using our character entity
-				CharDialogueArch = GetArchetypeTemplate(Character);
+				CharDialogueArch = GetArchetypeTemplate(Owner, User);
 				
 				//-------------------------------------------------------------------------//
 				//create a new archetype and copy the stuff in it
 				SP_DialogueArchetype DiagArchNew = CopyArchetype(CharDialogueArch);
 				//-------------------------------------------------------------------------//
 				//initialise the newly made Archetype after its filled with all data
-				DiagArchNew.Init(Character);
+				DiagArchNew.Init(Owner);
 				//-------------------------------------------------------------------------//
 				//instert it int the ArchetypeMap
 				DialogueArchetypeMap.Insert(LocCharacterName, DiagArchNew);

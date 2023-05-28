@@ -6,23 +6,23 @@ class SP_DialogueArchetype: ScriptAndConfig
 {
 	//------------------------------------------------------------------//
 	//Dialogue Identifier
-	[Attribute("50", UIWidgets.ComboBox, "ID of what type of identifier is going to be used", "", ParamEnumArray.FromEnum(EArchetypeIdentifier) )]
+	[Attribute("50", UIWidgets.ComboBox, desc : "ID of what type of identifier is going to be used", "", ParamEnumArray.FromEnum(EArchetypeIdentifier) )]
 	private EArchetypeIdentifier ArchetypeIdentifier;
+
 	//Character Name
-	[Attribute("", UIWidgets.Object, "Character full name, used to identify character dialogue. Compared to name in identitycomponent", category:"CharacterInfo")]
+	[Attribute("", UIWidgets.Object, desc : "Character full name, used to identify character dialogue. Compared to name in identitycomponent", category:"CharacterInfo")]
 	private string m_sCharacterName;
 	//Character Faction
-	[Attribute("", UIWidgets.Object, "Character faction, used to identify character dialogue. Compared to factionkey in FactionAffiliationComponent", category:"CharacterInfo")]
+	[Attribute("", UIWidgets.Object, desc : "Character faction, used to identify character dialogue. Compared to factionkey in FactionAffiliationComponent", category:"CharacterInfo")]
 	private FactionKey m_sCharacterFaction;
 	//Character Rank
-	[Attribute("50", UIWidgets.ComboBox, "Character rank, used to identify character dialogue. Compared to rank in SCR_CharacterRankComponent", category:"CharacterInfo", ParamEnumArray.FromEnum(SCR_ECharacterRank))]
+	[Attribute("50", UIWidgets.ComboBox, desc : "Character rank, used to identify character dialogue. Compared to rank in SCR_CharacterRankComponent", category:"CharacterInfo", ParamEnumArray.FromEnum(SCR_ECharacterRank))]
 	private SCR_ECharacterRank m_sCharacterRank;
 	//Factions this archetype is for
-	[Attribute("FactionKey", "Faction the player needs to be to get access to this archetype", category:"CharacterInfo")]
+	[Attribute("FactionKey", desc : "Faction the player needs to be to get access to this archetype", category:"CharacterInfo")]
 	private ref array<string> m_aArchetypeFactionMatch;
 	//------------------------------------------------------------------//
-	//Different configuration containing dialogue texts
-	[Attribute(desc: "Filtered selection test")]
+	[Attribute("DialogueBranch")]
 	private ref array<ref SP_DialogueBranch> DialogueBranch;
 	//------------------------------------------------------------------//
 	//Map to be filled with all the configurations on Init
@@ -32,16 +32,25 @@ class SP_DialogueArchetype: ScriptAndConfig
 	IEntity TalkingCharacter;
 	bool IsCharacterBranched;
 	int BranchedID;
-	array<string> GetArchtypeFactionMatch()
-	{
-		return m_aArchetypeFactionMatch;
-	}
+	//------------------------------------------------------------------//
+	void GetDialogueBranchMap(out map<int, ref SP_DialogueBranch> DialogueMap){DialogueMap = DialogueBranchMap;}
+	//------------------------------------------------------------------//
+	void GetBranchedID(out int BID){BID = BranchedID;}
+	//------------------------------------------------------------------//
+	void GetIdentifier(out EArchetypeIdentifier ArchID){ArchID = ArchetypeIdentifier};
+	//------------------------------------------------------------------//
+	void GetArchetypeTemplateName(out string ArchName){ArchName = m_sCharacterName};
+	//------------------------------------------------------------------//
+	void GetArchetypeTemplateFaction(out FactionKey ArchFact){ArchFact = m_sCharacterFaction};
+	//------------------------------------------------------------------//
+	void GetArchetypeTemplateRank(out SCR_ECharacterRank ChRank){ChRank = m_sCharacterRank};
+	//------------------------------------------------------------------//
+	void GetArchtypeFactionMatch(out array<string> FactMatch) {FactMatch = m_aArchetypeFactionMatch;}
+	//------------------------------------------------------------------//
+	void GetDialogueBranchArray(out array<ref SP_DialogueBranch> Branches){Branches = DialogueBranch;}
 	//------------------------------------------------------------------//
 	//Bool returning IsCharacterBranched, used to check if character is branched. True = Branched - False = Unbranched
-	bool IsCharacterBranched()
-	{
-		return IsCharacterBranched;
-	}
+	bool IsCharacterBranched(){return IsCharacterBranched;}
 	//------------------------------------------------------------------//
 	//Branches Archetype, setting IsCharacterBranched to true if its not already, and sets ID of branch that dialogue should follow, if branch 0 gets branched we will want to look there for dialogue, this is where the ID is used.
 	//If dialogue branch 1 id branched, when we go look for dialogue in the archetype will will only look inside branch 1.
@@ -64,36 +73,90 @@ class SP_DialogueArchetype: ScriptAndConfig
 		}
 	}
 	//------------------------------------------------------------------//
-	//Returns BranchID
-	int GetBranchedID()
+	//Find Branch using Branch ID
+	//If character is branched we look for a branch using our BranchedID that we got once this Archetype got branched and we keep looking deeper using GetCurrentDialogueBranch
+	bool GetDialogueBranch(int BranchKey, out SP_DialogueBranch branch)
+    {
+		if (IsCharacterBranched == true)
+		{
+			if (!DialogueBranchMap.Find(BranchedID, branch))
+			{
+	        	return false;
+	    	}
+			branch.GetCurrentDialogueBranch(TalkingCharacter, BranchKey, branch);
+			return true;
+		}
+		if (!DialogueBranchMap.Find(BranchKey, branch))
+			{
+	        	return false;
+	    	}
+		if(branch)
+		{
+			return true;
+		}
+        return false;
+    }
+	//------------------------------------------------------------------//
+	//Find correct branch and get dialogue text from it
+	bool GetDialogueText(int BranchID, IEntity Character, IEntity Player, out string DiagText)
 	{
-		return BranchedID;
+		SP_DialogueBranch branch;
+		GetDialogueBranch(BranchID, branch);
+		if (branch)
+		{
+			branch.GetDialogueText(TalkingCharacter, Player, DiagText);
+			return true;
+		}
+		else
+		{
+			DiagText = STRING_EMPTY;
+			return false;
+		}
+		return false;
 	}
 	//------------------------------------------------------------------//
-	//Dialogue identifier to be used for this archetype, can be set to something generic and provide its dialogues to a variety of entities
-	EArchetypeIdentifier GetIdentifier()
+	//Find correct branch using current stage and take action title from it 
+	bool GetActionTitle(int BranchID, IEntity Character, IEntity Player, out string ActText)
 	{
-		return ArchetypeIdentifier;
+		SP_DialogueBranch Branch;
+		GetDialogueBranch(BranchID, Branch);
+		if (Branch)
+		{
+			Branch.GetActionText(Character, Player, ActText);
+			return true;
+		}
+		else
+		{
+			ActText = STRING_EMPTY;
+			return false;
+		}
+		return false;
 	}
 	//------------------------------------------------------------------//
-	//Character Name set for this Archetype, relevant only if ArchetypeIdentifier is looking for it
-	string GetArchetypeTemplateName()
-	{
-		return m_sCharacterName;
+	//Find branch using branchID and increment its stage
+	bool IncrementStage(int BranchID, int incrementamount, IEntity Character)
+	{	
+		SP_DialogueBranch branch
+		GetDialogueBranch(BranchID, branch);
+		branch.IncrementBranchStage(incrementamount, Character);
+		return true;
 	}
 	//------------------------------------------------------------------//
-	//Character Faction set for this Archetype, relevant only if ArchetypeIdentifier is looking for it
-	FactionKey GetArchetypeTemplateFaction()
-	{
-		return m_sCharacterFaction;
-	}
+	
 	//------------------------------------------------------------------//
-	//Character Rank set for this Archetype, relevant only if ArchetypeIdentifier is looking for it
-	SCR_ECharacterRank GetArchetypeTemplateRank()
-	{
-		return m_sCharacterRank;
-	}
-	//------------------------------------------------------------------//
+	// constructor for when creating new Archetype
+	void SP_DialogueArchetype(SP_DialogueArchetype original, bool isNew = false)
+    {
+		if (isNew) 
+		{
+        original.GetIdentifier(ArchetypeIdentifier);
+        original.GetArchetypeTemplateName(m_sCharacterName);
+        original.GetArchetypeTemplateRank(m_sCharacterRank);
+        original.GetArchetypeTemplateFaction(m_sCharacterFaction);
+        original.GetDialogueBranchArray(DialogueBranch);
+		original.GetDialogueBranchMap(DialogueBranchMap);
+		}
+    }
 	//Mapping all configrations existing uder this character archetype
 	//When using ArchetypeTemplate to create new archetype for specific AI, it is Initialised
 	void Init(IEntity Character)
@@ -108,92 +171,4 @@ class SP_DialogueArchetype: ScriptAndConfig
         }
 		TalkingCharacter = Character;
 	}
-	//------------------------------------------------------------------//
-	//Find Branch using Branch ID
-	//If character is branched we look for a branch using our BranchedID that we got once this Archetype got branched and we keep looking deeper using GetCurrentDialogueBranch
-	SP_DialogueBranch GetDialogueBranch(int BranchKey)
-    {
-        SP_DialogueBranch branch;
-		if (IsCharacterBranched == true)
-		{
-			if (!DialogueBranchMap.Find(BranchedID, branch))
-			{
-	        	return null;
-	    	}
-			return branch.GetCurrentDialogueBranch(TalkingCharacter, BranchKey);
-		}
-		if (!DialogueBranchMap.Find(BranchKey, branch))
-			{
-	        	return null;
-	    	}
-		if(branch)
-		{
-			return branch;
-		}
-        return null;
-    }
-	//------------------------------------------------------------------//
-	//Find correct branch and get dialogue text from it
-	string GetDialogueText(int BranchID)
-	{
-		string m_stexttoshow;
-		SP_DialogueBranch branch = GetDialogueBranch(BranchID);
-		if (branch)
-		{
-		m_stexttoshow = branch.GetDialogueText(TalkingCharacter);
-		}
-		else
-		{
-			m_stexttoshow = STRING_EMPTY;
-		}
-		return m_stexttoshow;
-	}
-	//------------------------------------------------------------------//
-	//Find correct branch using current stage and take action title from it 
-	string GetActionTitle(int BranchID, IEntity Character, IEntity Player)
-	{
-		string m_sActionTitle;
-		SP_DialogueBranch Branch = GetDialogueBranch(BranchID);
-		if (Branch)
-		{
-			m_sActionTitle = Branch.GetActionText(Character, Player);
-		}
-		else
-		{
-			m_sActionTitle = STRING_EMPTY;
-		}
-		return m_sActionTitle;
-	}
-	//------------------------------------------------------------------//
-	//Find branch using branchID and increment its stage
-	bool IncrementStage(int BranchID, int incrementamount)
-	{	
-		SP_DialogueBranch branch = GetDialogueBranch(BranchID);
-		branch.IncrementBranchStage(incrementamount);
-		return true;
-	}
-	//------------------------------------------------------------------//
-		array<ref SP_DialogueBranch> GetDialogueBranchArray()
-	{
-		return DialogueBranch;
-	}
-	//------------------------------------------------------------------//
-	map<int, ref SP_DialogueBranch> GetDialogueBranchMap()
-	{
-		return DialogueBranchMap;
-	}
-	//------------------------------------------------------------------//
-	// constructor for when creating new Archetype
-	void SP_DialogueArchetype(SP_DialogueArchetype original, bool isNew = false)
-    {
-		if (isNew) 
-		{
-        ArchetypeIdentifier = original.GetIdentifier();
-        m_sCharacterName = original.GetArchetypeTemplateName();
-        m_sCharacterRank = original.GetArchetypeTemplateRank();
-        m_sCharacterFaction = original.GetArchetypeTemplateFaction();
-        DialogueBranch = original.GetDialogueBranchArray();
-		DialogueBranchMap = original.GetDialogueBranchMap();
-		}
-    }
 };

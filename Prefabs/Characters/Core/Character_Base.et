@@ -1,23 +1,15 @@
 SCR_ChimeraCharacter {
  ID "520EC961A090B1EE"
  components {
-  AIControlComponent "{520EA1D2DB109F34}" {
-  }
-  CharacterHeadAimingComponent "{520EA1D2F659CF99}" {
-   InitAiming 5.8 58.8
-   AimPivot PointInfo "{5990A4DF23E27E7E}" {
-    Offset 3.2006 0 0
-   }
-  }
-  CharacterPerceivableComponent "{566CCE2397E28600}" {
-   "Additional aim points" {
-   }
-  }
   ActionsManagerComponent "{520EA1D2F659CE02}" {
    additionalActions {
-    SP_DialogueAction "{5D026EE20EFDD9C5}" : "{47F45AFF6742655B}Configs/Dilaogue_Configs/DialogueAction_1.conf" {
-     m_pDefaultWaypoint "{237004400BBCBDD9}prefabs/AI/Waypoints/AIWaypoint_Lookatme.et"
-     m_OrderType MOVEMENT_TYPE
+    SP_DialogueAction "{5D76C2C8573128D5}" {
+     ParentContextList {
+      "default"
+     }
+     UIInfo UIInfo "{5D76C2CBCDE9DE03}" {
+      Name "Talk"
+     }
     }
    }
   }

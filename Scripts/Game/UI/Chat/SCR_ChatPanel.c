@@ -42,6 +42,21 @@ class SCR_ChatPanel : ScriptedWidgetComponent
 	[Attribute()]
 	ref SCR_ChatMessageStyle m_DirectChannelStyle;
 	
+	[Attribute()]
+	ref SCR_ChatMessageStyle m_FIAChannelStyle;
+	
+	[Attribute()]
+	ref SCR_ChatMessageStyle m_USSRChannelStyle;
+	
+	[Attribute()]
+	ref SCR_ChatMessageStyle m_USChannelStyle;
+	
+	[Attribute()]
+	ref SCR_ChatMessageStyle m_BANDITSChannelStyle;
+	
+	[Attribute()]
+	ref SCR_ChatMessageStyle m_SPEIRAChannelStyle;
+	
 	// Other attributes
 	
 	[Attribute("9", UIWidgets.EditBox, "Max amount of message line widgets")]
@@ -827,6 +842,21 @@ class SCR_ChatPanel : ScriptedWidgetComponent
 				break;
 			case PrivateMessageChannel:
 				style = m_DirectChannelStyle;
+				break;
+			case FIAChatChannel:
+				style = m_FIAChannelStyle;
+				break;
+			case BANDITSChatChannel:
+				style = m_BANDITSChannelStyle;
+				break;
+			case USSRChatChannel:
+				style = m_USSRChannelStyle;
+				break;
+			case USChatChannel:
+				style = m_USChannelStyle;
+				break;
+			case SPEIRAChatChannel:
+				style = m_SPEIRAChannelStyle;
 				break;
 		}
 		

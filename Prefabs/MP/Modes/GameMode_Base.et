@@ -2,8 +2,35 @@ SCR_BaseGameMode {
  ID "56B2B479C6B96951"
  components {
   SP_DialogueComponent "{5D1547897BFE725A}" {
-   m_ChatChannel LocalChatChannel "{5D1547897CBD7ACF}" {
-    "Channel name" "Context"
+   m_ChatChannelFIA FIAChatChannel "{5D76C2C8CDC0AB5E}" {
+    "Channel name" "FIA"
+    Style BaseChatChannelStyle "{5D76C2C8CF56A2B8}" {
+    }
+   }
+   m_ChatChannelUSSR USSRChatChannel "{5D76C2C8F031F29E}" {
+    "Channel name" "USSR"
+    Style BaseChatChannelStyle "{5D76C2C8F270A3BA}" {
+    }
+   }
+   m_ChatChannelUS USChatChannel "{5D76C2C8F46C1450}" {
+    "Channel name" "US"
+    Style BaseChatChannelStyle "{5D76C2C8F7B0D2A5}" {
+    }
+   }
+   m_ChatChannelBANDITS BANDITSChatChannel "{5D76C2C8F9ADA1BF}" {
+    "Channel name" "BANDITS"
+    Style BaseChatChannelStyle "{5D76C2C8FBB5AE6E}" {
+    }
+   }
+   m_ChatChannelSPEIRA SPEIRAChatChannel "{5D76C2C8FCA0BA98}" {
+    "Channel name" "SPEIRA"
+    Style BaseChatChannelStyle "{5D76C2C8FEE0A33D}" {
+    }
+   }
+   m_ChatChannelANOUNCER LocalChatChannel "{5D76C2C8E07ECAFD}" {
+    "Channel name" "Local"
+    Style BaseChatChannelStyle "{5D76C2C8E2A0D2A7}" {
+    }
    }
   }
  }
