@@ -48,6 +48,14 @@ class SP_DialogueComponent: ScriptComponent
 	ref BaseChatChannel m_ChatChannelANOUNCER;
 	//----------------------------------------------------------------------------------------------------------------//
 	SCR_BaseGameMode GameMode;
+	
+	[Attribute("Item needed to be delivered", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
+	ref array <ref ResourceName> m_aWantedItemList;
+	
+	ResourceName GetRandomItem()
+	{
+		return m_aWantedItemList.GetRandomElement();
+	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//Main function. Its called in SP_DialogueUI when an input is pressed. Branch ID will be different based on the input pressed
 	void DoDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount = 1)
@@ -108,8 +116,7 @@ class SP_DialogueComponent: ScriptComponent
 			}
 			//--------------------------------------//
 			//Look for the config that matches our character. Config hold info about progression of dialogue for the Specific AI we are talking to.			
-			DialogueBranchInfo Conf;
-			Branch.LocateConfig(Character, Conf);
+			DialogueBranchInfo Conf = Branch.LocateConfig(Character);
 			Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
 			SendText(m_DialogTexttoshow, Channel, senderID, senderName);
 			// Cause a branch of the config
@@ -124,8 +131,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		//--------------------------------------//
 		Branch.OnPerform(Character, Player);
-		DialogueBranchInfo Conf;
-		Branch.LocateConfig(Character, Conf);
+		DialogueBranchInfo Conf = Branch.LocateConfig(Character);
 		Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
 		//--------------------------------------//
 		SendText(m_DialogTexttoshow, Channel, senderID, senderName);
@@ -160,8 +166,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		else if (Branch && ParentBranch && ParentBranch.CheckifBranched() == true)
 		{
-			DialogueBranchInfo Conf;
-			Branch.LocateConfig(Character, Conf);
+			DialogueBranchInfo Conf = Branch.LocateConfig(Character);
 			DialogueBranchInfo PConf;
 			Conf.GetParentConfig(PConf);
 			PConf.Unbranch();
