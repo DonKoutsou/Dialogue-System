@@ -1,77 +1,17 @@
-[BaseContainerProps(configRoot:true),  DialogueBranchConfigTitleAttribute()]
-class SP_ConditionedDialogueBranch : SP_DialogueBranch
-{
-	[Attribute()]
-	ref ItemConditionedDialogueBranchInfo 								CondBranchInfoConfig;
-	protected ref map<string, ref ItemConditionedDialogueBranchInfo> 	CondBranchInfoConfigMap;
-	
-	bool CheckCondition(IEntity Character, IEntity Player)
-	{
-		ItemConditionedDialogueBranchInfo CondConf = ItemConditionedDialogueBranchInfo.Cast(LocateConfig(Character));
-		return CondConf.CheckCondition(Character, Player);
-	};
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{
-		return CheckCondition(Character,Player);
-	};
-	override DialogueBranchInfo LocateConfig(IEntity Character)
-	{
-		ItemConditionedDialogueBranchInfo config;
-		if(!CondBranchInfoConfigMap)
-		{
-			CondBranchInfoConfigMap = new map<string, ref ItemConditionedDialogueBranchInfo>();
-		}
-		SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
-		SP_DialogueComponent DiagComp = SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));
-		string key = DiagComp.GetCharacterName(Character);
-		if (CondBranchInfoConfigMap.Find(key, config))
-		{
-			return config;
-		}
-		else
-		{
-			config = CopyCondConfig(CondBranchInfoConfig);
-			CondBranchInfoConfigMap.Insert(key, config);
-			return config;
-		}
-	}
-	ItemConditionedDialogueBranchInfo CopyCondConfig(ItemConditionedDialogueBranchInfo OriginalConfig)
-	{
-		ItemConditionedDialogueBranchInfo DiagConfigCopy = new ItemConditionedDialogueBranchInfo(OriginalConfig, true);
-		return DiagConfigCopy;
-	}
-};
 [BaseContainerProps(configRoot:true), SCR_BaseContainerCustomTitleField("ActionText", "DialogueText")]
-class ConditionedDialogueBranchInfo : DialogueBranchInfo
-{
-	bool CheckCondition(IEntity Character, IEntity Player)
-	{
-		
-	};
-};
-
-[BaseContainerProps(configRoot:true), SCR_BaseContainerCustomTitleField("ActionText", "DialogueText")]
-class ItemConditionedDialogueBranchInfo : ConditionedDialogueBranchInfo
+class ItemConditionedDialogueBranchInfo : DialogueBranchInfo
 {
 	ResourceName m_WantedItem;
 	
-	[Attribute("1", UIWidgets.EditBox, params: "1 1000", desc: "")]
 	int m_WantedAmount;
 	
-	void GetWantedAmount(out int amout){amout = m_WantedAmount;}
-	void ItemConditionedDialogueBranchInfo(ItemConditionedDialogueBranchInfo original, bool isNew = false)
-    {
-		if (isNew) 
-		{
-			ItemConditionedDialogueBranchInfo inf = ItemConditionedDialogueBranchInfo.Cast(original);
-        	inf.GetWantedAmount(m_WantedAmount);
-		}
-    }
+	void GetWantedAmount(out int amount){amount = m_WantedAmount;}
+
 	override bool CheckCondition(IEntity Character, IEntity Player)
 	{
 		if (!m_WantedItem)
 		{
-			m_WantedItem = SetupCondition();
+			SetupCondition();
 		}
 		InventoryStorageManagerComponent inv = InventoryStorageManagerComponent.Cast(Player.FindComponent(InventoryStorageManagerComponent));
 		if (!inv)
@@ -89,18 +29,17 @@ class ItemConditionedDialogueBranchInfo : ConditionedDialogueBranchInfo
 	};
 	void GetCondition(IEntity Character, IEntity Player, out string condition, out int amoutnt)
 	{
-		if (!m_WantedItem)
+		if (!m_WantedItem || !m_WantedAmount)
 		{
-			m_WantedItem = SetupCondition();
+			SetupCondition();
 		}
 		condition = m_WantedItem;
 		amoutnt = m_WantedAmount;
 	}
-	ResourceName SetupCondition()
+	override void SetupCondition()
 	{
-		int index;
+		m_WantedAmount = Math.RandomInt(1 ,10);
 		SP_DialogueComponent Diagcomp = SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));
-		ResourceName WantedItem = Diagcomp.GetRandomItem();
-		return WantedItem;
+		m_WantedItem = Diagcomp.GetRandomItem();
 	};
 };

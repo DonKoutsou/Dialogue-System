@@ -22,13 +22,18 @@ class SP_DialogueBranch
 		}
 	};
 	//------------------------------------------------------------------//
+	bool CheckCondition(IEntity Character, IEntity Player)
+	{
+		DialogueBranchInfo CondConf = LocateConfig(Character);
+		return CondConf.CheckCondition(Character, Player);
+	}
 	bool CanBePerformed(IEntity Character, IEntity Player)
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
 		Conf.GetDialogueBranchStage(Bstage);
 		return m_BranchStages[Bstage].CanBePerformed(Character, Player);
-	};
+	}
 	//------------------------------------------------------------------//
 	bool CanBeShown(IEntity Character, IEntity Player)
 	{
@@ -251,6 +256,14 @@ class DialogueBranchInfo
 			IsBranchBranched = false;
 		}
 	}
+	bool CheckCondition(IEntity Character, IEntity Player)
+	{
+		return true;
+	};
+	void SetupCondition()
+	{
+		
+	};
 }
 class DialogueBranchConfigTitleAttribute : BaseContainerCustomTitle
 {

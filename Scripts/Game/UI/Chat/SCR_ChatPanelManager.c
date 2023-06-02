@@ -161,8 +161,6 @@ class SCR_ChatPanelManager : SCR_GameCoreBase
 	
 	void ShowDiagMessage(string msg, BaseChatChannel channel, int senderId = -1, string senderName = "" )
 	{
-		
-		
 		ref SCR_ChatMessageGeneral m = new SCR_ChatMessageGeneral(msg, channel, senderId, senderName);
 		
 		this.OnNewMessage(m);

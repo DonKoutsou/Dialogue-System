@@ -1,12 +1,14 @@
-SCR_AIWorld : "{E0A05C76552E7F58}prefabs/AI/SCR_AIWorld.et" {
+SCR_AIWorld : "{E0A05C76552E7F58}Prefabs/AI/SCR_AIWorld.et" {
  coords 132.245 1.001 131.366
 }
-GenericEntity : "{6E932B6B724F4AE7}prefabs/Currency/Watch_Currency.et" {
- coords 130.389 0.826 128.402
+$grp GenericEntity {
+ {
+  coords 130.389 0.826 128.402
+ }
+ {
+  coords 130.543 0.809 128.879
+ }
 }
-GenericEntity : "{9DF239BE88931B81}prefabs/Items/Other/Meteor_Sample.et" {
- coords 130.543 0.809 128.879
-}
-GameEntity : "{D9842C11742C00CF}prefabs/Props/Civilian/Fireplace_01.et" {
- coords 129.162 0.865 127.522
+GameEntity : "{D9842C11742C00CF}Prefabs/Props/Civilian/Fireplace_01.et" {
+ coords 129.162 0.995 127.522
 }
