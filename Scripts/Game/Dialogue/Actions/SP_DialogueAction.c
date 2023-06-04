@@ -43,7 +43,7 @@ class SP_DialogueAction : ScriptedUserAction
 				break;
 				case "USSR":
 				{
-					GreetText = "Papers civilian. Quick!";
+					GreetText = "What do you need civilian?";
 					Channel = DiagComp.m_ChatChannelUSSR;
 				}
 				break;
@@ -55,6 +55,12 @@ class SP_DialogueAction : ScriptedUserAction
 				break;
 				case "SPEIRA":
 				{
+					Channel = DiagComp.m_ChatChannelSPEIRA;
+				}
+				break;
+				case "US":
+				{
+					GreetText = "What do you need?";
 					Channel = DiagComp.m_ChatChannelSPEIRA;
 				}
 				break;
