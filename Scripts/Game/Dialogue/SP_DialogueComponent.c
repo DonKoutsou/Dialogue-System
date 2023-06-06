@@ -68,7 +68,7 @@ class SP_DialogueComponent: ScriptComponent
 		//Name of character we are talking to 
 		string 					senderName = GetCharacterName(Character);
 		//Faction
-		FactionKey				senderFaction = GetCharacterFaction(Character);
+		FactionKey				senderFaction = GetCharacterFaction(Character).GetFactionKey();
 		//Dialogue Archetype matching the charcter we are talking to 
 		SP_DialogueArchetype 	DiagArch = LocateDialogueArchetype(Character, Player);
 		//Get branch located in found archetype using ID
@@ -271,24 +271,24 @@ class SP_DialogueComponent: ScriptComponent
 		return null;
 	}
 	//CHARACTER FACTION
-	FactionKey GetCharacterFaction(IEntity Character)
+	Faction GetCharacterFaction(IEntity Character)
 	{
 		FactionAffiliationComponent FactionComponent = FactionAffiliationComponent.Cast(Character.FindComponent(FactionAffiliationComponent));
 		if(FactionComponent)
 		{
-			return FactionComponent.GetAffiliatedFaction().GetFactionKey();
+			return FactionComponent.GetAffiliatedFaction();
 		}
 		else
-			return STRING_EMPTY;	
+			return null;	
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	SP_DialogueArchetype GetArchetypeTemplate(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
 		string senderName = GetCharacterName(pOwnerEntity);
 		SCR_ECharacterRank senderRank = GetCharacterRank(pOwnerEntity);
-		FactionKey senderFaction = GetCharacterFaction(pOwnerEntity);
+		FactionKey senderFaction = GetCharacterFaction(pOwnerEntity).GetFactionKey();
 		
-		FactionKey playerFaction = GetCharacterFaction(pUserEntity);
+		FactionKey playerFaction = GetCharacterFaction(pUserEntity).GetFactionKey();
 		
 		SP_DialogueArchetype DiagArch;
 		

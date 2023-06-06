@@ -26,7 +26,7 @@ class SP_DialogueAction : ScriptedUserAction
 		group.AddWaypoint(DefWaypoint);
 		string NoTalkText = "Cant talk to you now";
 		string GreetText;
-		FactionKey SenderFaction = DiagComp.GetCharacterFaction(pOwnerEntity);
+		FactionKey SenderFaction = DiagComp.GetCharacterFaction(pOwnerEntity).GetFactionKey();
 		BaseChatChannel Channel;
 		string name = DiagComp.GetCharacterName(pOwnerEntity);
         if (group)
