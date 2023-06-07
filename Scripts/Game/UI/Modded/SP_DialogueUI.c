@@ -31,8 +31,8 @@ class DialogueUIClass: ChimeraMenuBase
 	string 										PlName;
 	string 										CharRank;
 	string 										m_sPlRank;
-	SCR_ECharacterRank 							rank;
-	SCR_ECharacterRank 							PLrank;
+	string 										rank;
+	string		 								PLrank;
 	FactionKey 									faction;
 	FactionKey 									Plfaction;
 	//----------------------------------------------------------------//
@@ -82,7 +82,6 @@ class DialogueUIClass: ChimeraMenuBase
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		string DiagText;
 		int entryamount;
-		//Check if any there arent inputs comming form GetActionName, if not do not create the item
 		if(myCallerEntity)
 		{
 			CharName = DiagComp.GetCharacterName(myCallerEntity);
@@ -97,6 +96,7 @@ class DialogueUIClass: ChimeraMenuBase
 			PLrank = DiagComp.GetCharacterRank(myUserEntity);
 			Plfaction = DiagComp.GetCharacterFaction(myUserEntity).GetFactionKey(); 
 		}
+		
 		SCR_Faction SCRFact = SCR_Faction.Cast(DiagComp.GetCharacterFaction(myCallerEntity));
 		int FactionRep;
 		SCRFact.GetFactionRep(DiagComp.GetCharacterFaction(myUserEntity), FactionRep);
@@ -115,86 +115,11 @@ class DialogueUIClass: ChimeraMenuBase
 			m_FactionRep = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionRep()"));
 			m_FactionRep.SetColor(Color.DarkRed);
 		}
-		switch(rank)
-		{
-			case 1:
-			{
-				CharRank = "Private";
-			}
-			break;
-			case 8:
-			{
-				CharRank = "GENERAL";
-			}
-			break;
-			case 22:
-			{
-				CharRank = "Commander";
-			}
-			break;
-		}
-		switch(PLrank)
-		{
-			case 1:
-			{
-				m_sPlRank = "Private";
-			}
-			break;
-			case 8:
-			{
-				m_sPlRank = "GENERAL";
-			}
-			break;
-			case 22:
-			{
-				m_sPlRank = "Commander";
-			}
-			break;
-		}
-		m_CharacterFactionIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionIcon"));
-		m_PlayerFactionIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("PlayerFactionIcon0"));
-		if (m_CharacterFactionIcon)
-		{
-			switch(faction)
-			{
-				case "US":
-					m_CharacterFactionIcon.LoadImageTexture(0, "{EB7F65DBC9392557}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
-				break;
-				case "USSR":
-					m_CharacterFactionIcon.LoadImageTexture(0, "{40B12B0DF911B856}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
-				break;
-				case "FIA":
-					m_CharacterFactionIcon.LoadImageTexture(0, "{FB266CDD4502D60B}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_Fia.edds");
-				break;
-				case "BANDITS":
-					m_CharacterFactionIcon.LoadImageTexture(0, "{855625FE8D6A87A8}UI/Textures/DamageState/damageState-dead.edds");
-				break;
-				case "SPEIRA":
-					m_CharacterFactionIcon.LoadImageTexture(0, "{CEAC8771342689C5}Assets/Data/Faction_SPEIRA.edds");
-				break;	
-			}
-		}
-		if (m_PlayerFactionIcon)
-		{
-			switch(Plfaction)
-			{
-				case "US":
-					m_PlayerFactionIcon.LoadImageTexture(0, "{EB7F65DBC9392557}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
-				break;
-				case "USSR":
-					m_PlayerFactionIcon.LoadImageTexture(0, "{40B12B0DF911B856}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
-				break;
-				case "FIA":
-					m_PlayerFactionIcon.LoadImageTexture(0, "{FB266CDD4502D60B}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_Fia.edds");
-				break;
-				case "BANDITS":
-					m_PlayerFactionIcon.LoadImageTexture(0, "{855625FE8D6A87A8}UI/Textures/DamageState/damageState-dead.edds");
-				break;
-				case "SPEIRA":
-					m_PlayerFactionIcon.LoadImageTexture(0, "{CEAC8771342689C5}Assets/Data/Faction_SPEIRA.edds");
-				break;	
-			}
-		}
+		CharRank = rank;
+		PLrank = m_sPlRank;
+		
+		AssignIcons(faction, Plfaction);
+		
 		if(m_IDComp.GetRep() > 50)
 		{
 			m_PanelWidget = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
@@ -222,6 +147,7 @@ class DialogueUIClass: ChimeraMenuBase
 		m_PlayerRank = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerRank0"));
 		m_PlayerRank.SetText(m_sPlRank);
 		
+
 		DiagComp.GetActionName(0, myCallerEntity, Player, DiagText);
 		if (DiagText != STRING_EMPTY)
 		{
@@ -232,7 +158,7 @@ class DialogueUIClass: ChimeraMenuBase
 			string entrynumber = (entryamount + 1).ToString();
 			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 			{
-				elComp0.SetTextNumber("A");
+				elComp0.SetTextNumber(GetGamepadButtonText(entryamount));
 			}
 			else
 			{
@@ -252,7 +178,7 @@ class DialogueUIClass: ChimeraMenuBase
 			string entrynumber = (entryamount + 1).ToString();
 			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 			{
-				elComp1.SetTextNumber("X");
+				elComp1.SetTextNumber(GetGamepadButtonText(entryamount));
 			}
 			else
 			{
@@ -272,7 +198,7 @@ class DialogueUIClass: ChimeraMenuBase
 			string entrynumber = (entryamount + 1).ToString();
 			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 			{
-				elComp2.SetTextNumber("Y");
+				elComp2.SetTextNumber(GetGamepadButtonText(entryamount));
 			}
 			else
 			{
@@ -292,7 +218,7 @@ class DialogueUIClass: ChimeraMenuBase
 			string entrynumber = (entryamount + 1).ToString();
 			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 			{
-				elComp3.SetTextNumber("D-Pad Up");
+				elComp3.SetTextNumber(GetGamepadButtonText(entryamount));
 			}
 			else
 			{
@@ -312,7 +238,7 @@ class DialogueUIClass: ChimeraMenuBase
 			string entrynumber = (entryamount + 1).ToString();
 			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 			{
-				elComp4.SetTextNumber("D-Pad Down");
+				elComp4.SetTextNumber(GetGamepadButtonText(entryamount));
 			}
 			else
 			{
@@ -332,7 +258,7 @@ class DialogueUIClass: ChimeraMenuBase
 			string entrynumber = (entryamount + 1).ToString();
 			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 			{
-				elComp5.SetTextNumber("D-Pad Left");
+				elComp5.SetTextNumber(GetGamepadButtonText(entryamount));
 			}
 			else
 			{
@@ -352,7 +278,7 @@ class DialogueUIClass: ChimeraMenuBase
 			string entrynumber = (entryamount + 1).ToString();
 			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 			{
-				elComp6.SetTextNumber("D-Pad Right");
+				elComp6.SetTextNumber(GetGamepadButtonText(entryamount));
 			}
 			else
 			{
@@ -461,5 +387,87 @@ class DialogueUIClass: ChimeraMenuBase
 			return true;
 		}
 		return false;
+	}
+	string GetDialogueActionName(int index)
+	{
+	    return "Dialogue" + index.ToString();
+	}
+	string GetGamepadButtonText(int index)
+	{
+	    switch (index)
+	    {
+	        case 1:
+	            return "A";
+			break;
+	        case 2:
+	            return "X";
+			break;
+	        case 3:
+	            return "Y";
+			break;
+	        case 4:
+	            return "D-Pad Up";
+			break;
+	        case 5:
+	            return "D-Pad Down";
+			break;
+	        case 6:
+	            return "D-Pad Left";
+			break;
+	        case 7:
+	            return "D-Pad Right";
+			break;
+	        default:
+	            return STRING_EMPTY;
+			break;
+	    }
+		return STRING_EMPTY;
+	}
+	void AssignIcons(FactionKey factioncharacter, FactionKey factionplayer)
+	{
+		m_CharacterFactionIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionIcon"));
+		m_PlayerFactionIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("PlayerFactionIcon0"));
+		if (m_CharacterFactionIcon)
+		{
+			switch(factioncharacter)
+			{
+				case "US":
+					m_CharacterFactionIcon.LoadImageTexture(0, "{EB7F65DBC9392557}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
+				break;
+				case "USSR":
+					m_CharacterFactionIcon.LoadImageTexture(0, "{40B12B0DF911B856}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
+				break;
+				case "FIA":
+					m_CharacterFactionIcon.LoadImageTexture(0, "{FB266CDD4502D60B}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_Fia.edds");
+				break;
+				case "BANDITS":
+					m_CharacterFactionIcon.LoadImageTexture(0, "{855625FE8D6A87A8}UI/Textures/DamageState/damageState-dead.edds");
+				break;
+				case "SPEIRA":
+					m_CharacterFactionIcon.LoadImageTexture(0, "{CEAC8771342689C5}Assets/Data/Faction_SPEIRA.edds");
+				break;	
+			}
+		}
+		if (m_PlayerFactionIcon)
+		{
+			switch(factionplayer)
+			{
+				case "US":
+					m_PlayerFactionIcon.LoadImageTexture(0, "{EB7F65DBC9392557}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
+				break;
+				case "USSR":
+					m_PlayerFactionIcon.LoadImageTexture(0, "{40B12B0DF911B856}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
+				break;
+				case "FIA":
+					m_PlayerFactionIcon.LoadImageTexture(0, "{FB266CDD4502D60B}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_Fia.edds");
+				break;
+				case "BANDITS":
+					m_PlayerFactionIcon.LoadImageTexture(0, "{855625FE8D6A87A8}UI/Textures/DamageState/damageState-dead.edds");
+				break;
+				case "SPEIRA":
+					m_PlayerFactionIcon.LoadImageTexture(0, "{CEAC8771342689C5}Assets/Data/Faction_SPEIRA.edds");
+				break;	
+			}
+		}
 	}
 }

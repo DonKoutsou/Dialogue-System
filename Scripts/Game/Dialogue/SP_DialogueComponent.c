@@ -261,14 +261,14 @@ class SP_DialogueComponent: ScriptComponent
 			return STRING_EMPTY;
 	}
 	//CHARACTER RANK
-	SCR_ECharacterRank GetCharacterRank(IEntity Character)
+	string GetCharacterRank(IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		if(RankComponent)
 		{
-			return RankComponent.GetCharacterRank(Character);
+			return RankComponent.GetCharacterRankName(Character);
 		}
-		return null;
+		return STRING_EMPTY;
 	}
 	//CHARACTER FACTION
 	Faction GetCharacterFaction(IEntity Character)
