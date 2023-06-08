@@ -147,146 +147,76 @@ class DialogueUIClass: ChimeraMenuBase
 		m_PlayerRank = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerRank0"));
 		m_PlayerRank.SetText(m_sPlRank);
 		
-
-		DiagComp.GetActionName(0, myCallerEntity, Player, DiagText);
-		if (DiagText != STRING_EMPTY)
+		for (int i = 0; i < 7; i++)
 		{
-			m_ListBoxComponent.AddItem(DiagText);
-			CurrentBranchID = 0;
-			SCR_ListBoxElementComponent elComp0 = m_ListBoxComponent.GetElementComponent(entryamount);
-			elComp0.m_OnClicked.Insert(ExecuteDialogue0);
-			string entrynumber = (entryamount + 1).ToString();
-			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
+			DiagComp.GetActionName(i, myCallerEntity, Player, DiagText);
+			if (DiagText != STRING_EMPTY)
 			{
-				elComp0.SetTextNumber(GetGamepadButtonText(entryamount));
+				m_ListBoxComponent.AddItem(DiagText);
+				CurrentBranchID = i;
+				SCR_ListBoxElementComponent elComp = m_ListBoxComponent.GetElementComponent(entryamount);
+				switch(i)
+				{
+					case 0:
+					elComp.m_OnClicked.Insert(ExecuteDialogue0);
+					break;
+					case 1:
+					elComp.m_OnClicked.Insert(ExecuteDialogue1);
+					break;
+					case 2:
+					elComp.m_OnClicked.Insert(ExecuteDialogue2);
+					break;
+					case 3:
+					elComp.m_OnClicked.Insert(ExecuteDialogue3);
+					break;
+					case 4:
+					elComp.m_OnClicked.Insert(ExecuteDialogue4);
+					break;
+					case 5:
+					elComp.m_OnClicked.Insert(ExecuteDialogue5);
+					break;
+					case 6:
+					elComp.m_OnClicked.Insert(ExecuteDialogue6);
+					break;
+				}
+				string entrynumber = (entryamount + 1).ToString();
+				if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
+				{
+					elComp.SetTextNumber(GetGamepadButtonText(entryamount));
+				}
+				else
+				{
+					elComp.SetTextNumber(entrynumber);
+				}
+				
+				DiagText = STRING_EMPTY;
+				string actionname = "Dialogue" + entryamount.ToString();
+				switch(i)
+				{
+					case 0:
+					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue0);
+					break;
+					case 1:
+					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue1);
+					break;
+					case 2:
+					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue2);
+					break;
+					case 3:
+					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue3);
+					break;
+					case 4:
+					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue4);
+					break;
+					case 5:
+					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue5);
+					break;
+					case 6:
+					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue6);
+					break;
+				}
+				entryamount = entryamount + 1;
 			}
-			else
-			{
-				elComp0.SetTextNumber(entrynumber);
-			}
-			entryamount = entryamount + 1;
-			DiagText = STRING_EMPTY;
-			GetGame().GetInputManager().AddActionListener("Dialogue0", EActionTrigger.DOWN, ExecuteDialogue0);
-		}
-		DiagComp.GetActionName(1, myCallerEntity, Player, DiagText);
-		if (DiagText != STRING_EMPTY)
-		{
-			m_ListBoxComponent.AddItem(DiagText);
-			CurrentBranchID = 1;
-			SCR_ListBoxElementComponent elComp1 = m_ListBoxComponent.GetElementComponent(entryamount);
-			elComp1.m_OnClicked.Insert(ExecuteDialogue1);
-			string entrynumber = (entryamount + 1).ToString();
-			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
-			{
-				elComp1.SetTextNumber(GetGamepadButtonText(entryamount));
-			}
-			else
-			{
-				elComp1.SetTextNumber(entrynumber);
-			}
-			entryamount = entryamount + 1;
-			DiagText = STRING_EMPTY;
-			GetGame().GetInputManager().AddActionListener("Dialogue1", EActionTrigger.DOWN, ExecuteDialogue1);
-		}
-		DiagComp.GetActionName(2, myCallerEntity, Player, DiagText);
-		if (DiagText != STRING_EMPTY)
-		{
-			m_ListBoxComponent.AddItem(DiagText);
-			CurrentBranchID = 2;
-			SCR_ListBoxElementComponent elComp2 = m_ListBoxComponent.GetElementComponent(entryamount);
-			elComp2.m_OnClicked.Insert(ExecuteDialogue2);
-			string entrynumber = (entryamount + 1).ToString();
-			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
-			{
-				elComp2.SetTextNumber(GetGamepadButtonText(entryamount));
-			}
-			else
-			{
-				elComp2.SetTextNumber(entrynumber);
-			}
-			entryamount = entryamount + 1;
-			DiagText = STRING_EMPTY;
-			GetGame().GetInputManager().AddActionListener("Dialogue2", EActionTrigger.DOWN, ExecuteDialogue2);
-		}
-		DiagComp.GetActionName(3, myCallerEntity, Player, DiagText);
-		if (DiagText != STRING_EMPTY)
-		{
-			m_ListBoxComponent.AddItem(DiagText);
-			CurrentBranchID = 3;
-			SCR_ListBoxElementComponent elComp3 = m_ListBoxComponent.GetElementComponent(entryamount);
-			elComp3.m_OnClicked.Insert(ExecuteDialogue3);
-			string entrynumber = (entryamount + 1).ToString();
-			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
-			{
-				elComp3.SetTextNumber(GetGamepadButtonText(entryamount));
-			}
-			else
-			{
-				elComp3.SetTextNumber(entrynumber);
-			}
-			entryamount = entryamount + 1;
-			DiagText = STRING_EMPTY;
-			GetGame().GetInputManager().AddActionListener("Dialogue3", EActionTrigger.DOWN, ExecuteDialogue3);
-		}
-		DiagComp.GetActionName(4, myCallerEntity, Player, DiagText);
-		if (DiagText != STRING_EMPTY)
-		{
-			m_ListBoxComponent.AddItem(DiagText);
-			CurrentBranchID = 4;
-			SCR_ListBoxElementComponent elComp4 = m_ListBoxComponent.GetElementComponent(entryamount);
-			elComp4.m_OnClicked.Insert(ExecuteDialogue4);
-			string entrynumber = (entryamount + 1).ToString();
-			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
-			{
-				elComp4.SetTextNumber(GetGamepadButtonText(entryamount));
-			}
-			else
-			{
-				elComp4.SetTextNumber(entrynumber);
-			}
-			entryamount = entryamount + 1;
-			DiagText = STRING_EMPTY;
-			GetGame().GetInputManager().AddActionListener("Dialogue4", EActionTrigger.DOWN, ExecuteDialogue4);
-		}
-		DiagComp.GetActionName(5, myCallerEntity, Player, DiagText);
-		if (DiagText != STRING_EMPTY)
-		{
-			m_ListBoxComponent.AddItem(DiagText);
-			CurrentBranchID = 5;
-			SCR_ListBoxElementComponent elComp5 = m_ListBoxComponent.GetElementComponent(entryamount);
-			elComp5.m_OnClicked.Insert(ExecuteDialogue5);
-			string entrynumber = (entryamount + 1).ToString();
-			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
-			{
-				elComp5.SetTextNumber(GetGamepadButtonText(entryamount));
-			}
-			else
-			{
-				elComp5.SetTextNumber(entrynumber);
-			}
-			entryamount = entryamount + 1;
-			DiagText = STRING_EMPTY;
-			GetGame().GetInputManager().AddActionListener("Dialogue5", EActionTrigger.DOWN, ExecuteDialogue5);
-		}
-		DiagComp.GetActionName(6, myCallerEntity, Player, DiagText);
-		if (DiagText != STRING_EMPTY)
-		{
-			m_ListBoxComponent.AddItem(DiagText);
-			CurrentBranchID = 6;
-			SCR_ListBoxElementComponent elComp6 = m_ListBoxComponent.GetElementComponent(entryamount);
-			elComp6.m_OnClicked.Insert(ExecuteDialogue6);
-			string entrynumber = (entryamount + 1).ToString();
-			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
-			{
-				elComp6.SetTextNumber(GetGamepadButtonText(entryamount));
-			}
-			else
-			{
-				elComp6.SetTextNumber(entrynumber);
-			}
-			entryamount = entryamount + 1;
-			DiagText = STRING_EMPTY;
-			GetGame().GetInputManager().AddActionListener("Dialogue6", EActionTrigger.DOWN, ExecuteDialogue6);
 		}
 		//Check if Archtype is branched an choose to create a Leave button or a Go Back button
 		SP_DialogueArchetype DArch = DiagComp.LocateDialogueArchetype(myCallerEntity, Player);
