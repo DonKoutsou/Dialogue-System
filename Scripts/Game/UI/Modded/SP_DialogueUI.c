@@ -17,10 +17,12 @@ class DialogueUIClass: ChimeraMenuBase
 	TextWidget 									m_PlayerRank;
 	ImageWidget 								m_CharacterFactionIcon;
 	ImageWidget 								m_PlayerFactionIcon;
+	PanelWidget									m_CharacterRep;
+	PanelWidget									m_PlayerRep;
 	ImageWidget 								m_FactionRep;
 	SCR_ListBoxElementComponent 				m_ListBoxElement;
     SCR_ListBoxComponent 						m_ListBoxComponent;
-	PanelWidget									m_PanelWidget;
+	
     //----------------------------------------------------------------//
 	//PlayerCharacter
 	IEntity 									myUserEntity;           
@@ -40,6 +42,7 @@ class DialogueUIClass: ChimeraMenuBase
 	SP_DialogueComponent 						DiagComp;
 	SP_DialogueArchetype 						DiagArch;
 	SCR_CharacterIdentityComponent				m_IDComp;
+	SCR_CharacterIdentityComponent				m_CharIDComp;
 	protected SCR_BaseGameMode 					GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
 	int 										CurrentBranchID;
 	ref ScriptInvoker 							m_OnKeyDown = new ScriptInvoker();
@@ -76,6 +79,7 @@ class DialogueUIClass: ChimeraMenuBase
 		myCallerEntity = Character;
 		myUserEntity = Player;
 		m_IDComp = SCR_CharacterIdentityComponent.Cast(myUserEntity.FindComponent(SCR_CharacterIdentityComponent));
+		m_CharIDComp = SCR_CharacterIdentityComponent.Cast(myCallerEntity.FindComponent(SCR_CharacterIdentityComponent));
 		m_wRoot = GetRootWidget();
 		m_ListBoxOverlay = OverlayWidget.Cast(m_wRoot.FindAnyWidget("ListBox0")); 
 		m_ListBoxComponent = SCR_ListBoxComponent.Cast(m_ListBoxOverlay.FindHandler(SCR_ListBoxComponent));
@@ -122,19 +126,35 @@ class DialogueUIClass: ChimeraMenuBase
 		
 		if(m_IDComp.GetRep() > 50)
 		{
-			m_PanelWidget = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
-			m_PanelWidget.SetColor(Color.DarkGreen);
+			m_PlayerRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
+			m_PlayerRep.SetColor(Color.DarkGreen);
 		}
 		else if(m_IDComp.GetRep() <= 50 && m_IDComp.GetRep() > 20)
 		{
-			m_PanelWidget = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
-			m_PanelWidget.SetColor(Color.DarkYellow);
+			m_PlayerRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
+			m_PlayerRep.SetColor(Color.DarkYellow);
 		}
 		else if(m_IDComp.GetRep() <= 20)
 		{
-			m_PanelWidget = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
-			m_PanelWidget.SetColor(Color.DarkRed);
+			m_PlayerRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
+			m_PlayerRep.SetColor(Color.DarkRed);
 		}
+		if(m_CharIDComp.GetRep() > 50)
+		{
+			m_CharacterRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("CharReputationColor"));
+			m_CharacterRep.SetColor(Color.DarkGreen);
+		}
+		else if(m_CharIDComp.GetRep() <= 50 && m_CharIDComp.GetRep() > 20)
+		{
+			m_CharacterRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("CharReputationColor"));
+			m_CharacterRep.SetColor(Color.DarkYellow);
+		}
+		else if(m_CharIDComp.GetRep() <= 20)
+		{
+			m_CharacterRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("CharReputationColor"));
+			m_CharacterRep.SetColor(Color.DarkRed);
+		}
+		
 		m_CharacterName = TextWidget.Cast(m_wRoot.FindAnyWidget("CharacterName"));
 		m_CharacterName.SetText(CharName);
 		
