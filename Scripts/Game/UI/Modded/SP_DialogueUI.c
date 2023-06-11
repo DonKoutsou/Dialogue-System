@@ -89,7 +89,7 @@ class DialogueUIClass: ChimeraMenuBase
 		if(myCallerEntity)
 		{
 			CharName = DiagComp.GetCharacterName(myCallerEntity);
-			rank = DiagComp.GetCharacterRank(myCallerEntity);
+			rank = DiagComp.GetCharacterRankName(myCallerEntity);
 			faction = DiagComp.GetCharacterFaction(myCallerEntity).GetFactionKey();
 		}
 		if(myUserEntity)
@@ -97,7 +97,7 @@ class DialogueUIClass: ChimeraMenuBase
 			PlayerManager mngr = GetGame().GetPlayerManager();
 			int pid = mngr.GetPlayerIdFromControlledEntity(myUserEntity);
 			PlName = mngr.GetPlayerName(pid);
-			PLrank = DiagComp.GetCharacterRank(myUserEntity);
+			PLrank = DiagComp.GetCharacterRankName(myUserEntity);
 			Plfaction = DiagComp.GetCharacterFaction(myUserEntity).GetFactionKey(); 
 		}
 		

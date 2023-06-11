@@ -261,7 +261,16 @@ class SP_DialogueComponent: ScriptComponent
 			return STRING_EMPTY;
 	}
 	//CHARACTER RANK
-	string GetCharacterRank(IEntity Character)
+	SCR_ECharacterRank GetCharacterRank(IEntity Character)
+	{
+		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
+		if(RankComponent)
+		{
+			return RankComponent.GetCharacterRank(Character);
+		}
+		return null;
+	}
+	string GetCharacterRankName(IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		if(RankComponent)
@@ -302,7 +311,7 @@ class SP_DialogueComponent: ScriptComponent
 				m_CharacterArchetypeList[i].GetIdentifier(Archid);
 				string ArchTempN;
 				m_CharacterArchetypeList[i].GetArchetypeTemplateName(ArchTempN);
-				int ArchRank;
+				SCR_ECharacterRank ArchRank;
 				m_CharacterArchetypeList[i].GetArchetypeTemplateRank(ArchRank);
 				FactionKey ArchFaction;
 				m_CharacterArchetypeList[i].GetArchetypeTemplateFaction(ArchFaction);
