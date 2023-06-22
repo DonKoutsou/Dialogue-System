@@ -64,7 +64,7 @@ class SP_DialogueBranch
 		Conf.GetDialogueBranchStage(Bstage);
 		if(m_BranchStages.Count() >= Bstage)
 		{
-			DiagText = m_BranchStages[Bstage].GetDialogueText(Character, Player);
+			DiagText = m_BranchStages[Bstage].GetStageDialogueText(Character, Player);
 		}
 	}
 	//------------------------------------------------------------------//
@@ -111,6 +111,14 @@ class SP_DialogueBranch
 		DiagStage.InheritData(Conf.OriginalArchetype, Conf, Character);
 		Conf.CauseBranch(BranchID);
 	}
+	void UnBranch(IEntity Character)
+	{
+		DialogueBranchInfo Conf = LocateConfig(Character);
+		DialogueStage DiagStage;
+		GetDialogueStage(Character, DiagStage);
+		DiagStage.InheritData(Conf.OriginalArchetype, Conf, Character);
+		Conf.Unbranch();
+	}
 	
 	//------------------------------------------------------------------//
 	void GetParent(IEntity Character, out DialogueBranchInfo Parent)
@@ -119,7 +127,7 @@ class SP_DialogueBranch
 		Conf.GetParentConfig(Parent);
 	}
 	//------------------------------------------------------------------//
-	bool GetDialogueStage(IEntity Character, out DialogueStage DiagStage)
+	protected bool GetDialogueStage(IEntity Character, out DialogueStage DiagStage)
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;

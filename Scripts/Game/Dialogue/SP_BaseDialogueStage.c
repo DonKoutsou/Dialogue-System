@@ -22,6 +22,10 @@ class DialogueStage
 	void SetCannotPerformReason(string reason){m_sCantBePerformedReason = reason;}
 	//------------------------------------------------------------------//
 	void GetCannotPerformReason(out string CantBePReason){CantBePReason = m_sCantBePerformedReason;}
+	void SetActionText(string text)
+	{
+		ActionText = text;
+	}
 	//------------------------------------------------------------------//
 	bool GetActionText(IEntity Character, IEntity Player, out string acttext)
 	{
@@ -38,8 +42,12 @@ class DialogueStage
 		}
 	 	return true;
 	}
+	void SetDialogueText(string text)
+	{
+		DialogueText = text;
+	}
 	//------------------------------------------------------------------//
-	string GetDialogueText(IEntity Character, IEntity Player)
+	string GetStageDialogueText(IEntity Character, IEntity Player)
 	{
 	 return DialogueText;
 	}
@@ -82,6 +90,7 @@ class DialogueStage
 		}
 		return false;
 	}
+	
 }
 //---------------------------------------------------------------------------------------------------//
 class DialogueStageTitleAttribute : BaseContainerCustomTitle

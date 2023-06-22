@@ -5,7 +5,7 @@ class DialogueStagePaperCheckAction : DialogueStageItemCheckAction
 	string AltActionText;
 	[Attribute(defvalue: "AltDialogue Text", desc: "Dialogue Text", category: "Dialogue")]
     string AltDialogueText
-	override string GetDialogueText(IEntity Character, IEntity Player)
+	override string GetStageDialogueText(IEntity Character, IEntity Player)
 	{
 		if (IsPossible(Character, Player) == false)
 		{
