@@ -146,7 +146,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//------------------------------------------------------------------//
 	// constructor for when creating new Archetype
 	void SP_DialogueArchetype(SP_DialogueArchetype original, bool isNew = false)
-    {
+  {
 		if (isNew) 
 		{
         original.GetIdentifier(ArchetypeIdentifier);
@@ -156,7 +156,7 @@ class SP_DialogueArchetype: ScriptAndConfig
         original.GetDialogueBranchArray(DialogueBranch);
 		original.GetDialogueBranchMap(DialogueBranchMap);
 		}
-    }
+  }
 	//Mapping all configrations existing uder this character archetype
 	//When using ArchetypeTemplate to create new archetype for specific AI, it is Initialised
 	void Init(IEntity Character)

@@ -82,7 +82,7 @@ class SP_DialogueBranch
 	}
 	//------------------------------------------------------------------//
 	//Checks if a SP_MultipleChoiceConfig exists in the current DialogueStage
-	bool CheckIfStageBranches(IEntity Character)
+	bool CheckIfStageBranches(IEntity Character, IEntity Player)
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
@@ -93,7 +93,7 @@ class SP_DialogueBranch
 			Diagstage = m_BranchStages[Bstage];
 		}
 		
-		if(Diagstage && Diagstage.CheckIfStageCanBranch() == true)
+		if(Diagstage && Diagstage.CheckIfStageCanBranch(Character, Player) == true)
 		{
 			return true;
 		}
@@ -127,7 +127,7 @@ class SP_DialogueBranch
 		Conf.GetParentConfig(Parent);
 	}
 	//------------------------------------------------------------------//
-	protected bool GetDialogueStage(IEntity Character, out DialogueStage DiagStage)
+	bool GetDialogueStage(IEntity Character, out DialogueStage DiagStage)
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
@@ -169,9 +169,9 @@ class SP_DialogueBranch
 				{
 					branch.GetCurrentDialogueBranch(Character, BranchID, branch);
 				}
-				
 			}
-			else
+			BranchState = m_BranchStages[Bstage].CheckIfAnyBranchesBranch(Character, BranchID);
+			if(BranchState == false)
 			{
 				branch = m_BranchStages[Bstage].GetBranch(BranchID);
 				if(branch)
@@ -284,7 +284,7 @@ class DialogueBranchConfigTitleAttribute : BaseContainerCustomTitle
 		string Diagtext;
 		for (int i, count = Stages.Count(); i < count; i++)
 		{
-			if (Stages[i].CheckIfStageCanBranch() == true)
+			if (Stages[i].m_Branch.Count() > 0)
 			{
 				texttoshow = "| Branches at stage" + " " + i;
 			}

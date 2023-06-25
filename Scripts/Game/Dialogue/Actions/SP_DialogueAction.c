@@ -67,7 +67,7 @@ class SP_DialogueAction : ScriptedUserAction
 			}
 		if (!DiagComp.LocateDialogueArchetype(pOwnerEntity, pUserEntity))
 		{
-			DiagComp.SendText(NoTalkText, Channel, 0, name);
+			DiagComp.SendText(NoTalkText, Channel, 0, name, DiagComp.GetCharacterRankName(pOwnerEntity));
 			return;
 		}
 		utility.AddAction(action);
@@ -77,7 +77,7 @@ class SP_DialogueAction : ScriptedUserAction
 		DiagUI.UpdateEntries(pOwnerEntity, pUserEntity);
 		if (GreetText)
 		{
-			DiagComp.SendText(GreetText, Channel, 0, name);
+			DiagComp.SendText(GreetText, Channel, 0, name, DiagComp.GetCharacterRankName(pOwnerEntity));
 		}
 	}
 	override event void Init(IEntity pOwnerEntity, GenericComponent pManagerComponent)

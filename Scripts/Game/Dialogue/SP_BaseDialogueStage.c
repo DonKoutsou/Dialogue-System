@@ -69,7 +69,7 @@ class DialogueStage
 		}
 	}
 	//------------------------------------------------------------------//
-	bool CheckIfStageCanBranch()
+	bool CheckIfStageCanBranch(IEntity Character, IEntity Player)
 	{
 		if (m_Branch.Count() > 0)
 		{

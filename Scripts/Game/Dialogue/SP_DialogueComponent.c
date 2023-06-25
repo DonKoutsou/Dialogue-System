@@ -106,7 +106,7 @@ class SP_DialogueComponent: ScriptComponent
 			}
 		//------------------------------------------------------------------//
 		//Check if branch has another branch in its current stage. If yes we will have to cause a branch after getting our text
-		if (Branch.CheckIfStageBranches(Character) == true)
+		if (Branch.CheckIfStageBranches(Character, Player) == true)
 		{
 			//--------------------------------------//
 			//If our branch should be branched it means that our character will need to be branched as well
@@ -118,7 +118,7 @@ class SP_DialogueComponent: ScriptComponent
 			//Look for the config that matches our character. Config hold info about progression of dialogue for the Specific AI we are talking to.			
 			DialogueBranchInfo Conf = Branch.LocateConfig(Character);
 			Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
-			SendText(m_DialogTexttoshow, Channel, senderID, senderName);
+			SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
 			// Cause a branch of the config
 			Branch.CauseBranch(BranchID, Character);
 			//Call OnPerform function of the branch stage
@@ -134,7 +134,7 @@ class SP_DialogueComponent: ScriptComponent
 		DialogueBranchInfo Conf = Branch.LocateConfig(Character);
 		Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
 		//--------------------------------------//
-		SendText(m_DialogTexttoshow, Channel, senderID, senderName);
+		SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
 		
 		//--------------------------------------//
 		int Bstage;
@@ -157,7 +157,7 @@ class SP_DialogueComponent: ScriptComponent
 		int BranchID;
 		DiagArch.GetBranchedID(BranchID);
 		SP_DialogueBranch Branch;
-		DiagArch.GetDialogueBranch(BranchID, Branch);
+		DiagArch.GetDialogueBranch(0, Branch);
 		DialogueBranchInfo ParentBranch;
 		Branch.GetParent(Character, ParentBranch);
 		if (!Branch)
@@ -211,16 +211,17 @@ class SP_DialogueComponent: ScriptComponent
 		string 					m_DialogTexttoshow;
 		//Name of character we are talking to 
 		string 					senderName = "Anouncer";
+		string					senderRank = "PC";
 		//--------------------------------------//
 		m_DialogTexttoshow = Text;
 		//--------------------------------------//
-		SendText(m_DialogTexttoshow, m_ChatChannelANOUNCER, senderID, senderName);
+		SendText(m_DialogTexttoshow, m_ChatChannelANOUNCER, senderID, senderName, senderRank);
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//Send text function for sending the provided text to chat 
-	void SendText(string Text, BaseChatChannel Chanell, int SenderID, string SenderName)
+	void SendText(string Text, BaseChatChannel Chanell, int SenderID, string SenderName, string rank)
 	{
-		SCR_ChatPanelManager.GetInstance().ShowDiagMessage(Text, Chanell, SenderID, SenderName);
+		SCR_ChatPanelManager.GetInstance().ShowDiagMessage(Text, Chanell, SenderID, rank + " " + SenderName);
 		PlayDialogueSound();
 	}
 	void PlayDialogueSound()
@@ -251,14 +252,17 @@ class SP_DialogueComponent: ScriptComponent
 	string GetCharacterName(IEntity Character)
 	{
 		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
+		
 		string CharacterFullName;
 		if(IdentityComponent)
 		{
-			string m_sName = IdentityComponent.GetIdentity().GetName() + " " + IdentityComponent.GetIdentity().GetSurname();
-			return m_sName;
+			Identity ID = IdentityComponent.GetIdentity();
+			if(ID)
+			{
+				CharacterFullName = ID.GetFullName();
+			}
 		}
-		else
-			return STRING_EMPTY;
+		return CharacterFullName;
 	}
 	//CHARACTER RANK
 	SCR_ECharacterRank GetCharacterRank(IEntity Character)
@@ -266,18 +270,19 @@ class SP_DialogueComponent: ScriptComponent
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		if(RankComponent)
 		{
-			return RankComponent.GetCharacterRank(Character);
+			return RankComponent.GetCharacterRankNameShort(Character);
 		}
 		return null;
 	}
 	string GetCharacterRankName(IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
+		string CharacterRank;
 		if(RankComponent)
 		{
-			return RankComponent.GetCharacterRankName(Character);
+			CharacterRank = RankComponent.GetCharacterRankNameShort(Character);
 		}
-		return STRING_EMPTY;
+		return CharacterRank;
 	}
 	//CHARACTER FACTION
 	Faction GetCharacterFaction(IEntity Character)
@@ -410,7 +415,6 @@ class SP_DialogueComponent: ScriptComponent
 	//initialise configuration to crate map of configuration's contents
 	override void EOnInit(IEntity owner)
 	{
-		
 		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
 		foreach (SP_DialogueArchetype config: m_CharacterArchetypeList)
 		{
