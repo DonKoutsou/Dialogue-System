@@ -28,65 +28,69 @@ class SP_PrefabResource_Predicate : InventorySearchPredicate
 	}
 }
 [BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageDeliverTaskAction : DialogueStage
+class DialogueStageDeliverAction : DialogueStage
 {
+	[Attribute("Item needed to be delivered", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
+	ResourceName m_WantedItem;
+	[Attribute("1", UIWidgets.EditBox, params: "1 1000", desc: "")]
+	int m_WantedAmount;
+	
 	override void Perform(IEntity Character, IEntity Player)
 	{
-		SP_RequestManagerComponent requestman = SP_RequestManagerComponent.Cast(GetGame().GetGameMode().FindComponent(SP_RequestManagerComponent));
-		if(requestman.CharHasTask(Character))
-		{
-			array<ref SP_Task> MyTasks = new array<ref SP_Task>();
-			requestman.GetCharTasks(Character, MyTasks);
-			for (int i, count = MyTasks.Count(); i < count; i++)
-			{
-				if(MyTasks[i].ReadyToDeliver(Character, Player))
-				{
-					MyTasks[i].CompleteTask(Player);
-				}
-			}
-		}
-		if(requestman.CharIsTarget(Character))
-		{
-			array<ref SP_Task> MyTasks = new array<ref SP_Task>();
-			requestman.GetCharTargetTasks(Character, MyTasks);
-			for (int i, count = MyTasks.Count(); i < count; i++)
-			{
-				if(MyTasks[i].ReadyToDeliver(Character, Player))
-				{
-					MyTasks[i].CompleteTask(Player);
-				}
-			}
-		}
-	};
-	override bool CanBeShown(IEntity Character, IEntity Player)
-	{
-		SP_RequestManagerComponent requestman = SP_RequestManagerComponent.Cast(GetGame().GetGameMode().FindComponent(SP_RequestManagerComponent));
-		if(requestman.CharHasTask(Character))
-		{
-			array<ref SP_Task> MyTasks = new array<ref SP_Task>();
-			requestman.GetCharTasks(Character, MyTasks);
-			foreach (SP_Task Task : MyTasks)
-			{
-				if(Task.ReadyToDeliver(Character, Player))
-				{
-					return true;
-				}
-			}
-		}
-		if(requestman.CharIsTarget(Character))
-		{
-			array<ref SP_Task> MyTasks = new array<ref SP_Task>();
-			requestman.GetCharTargetTasks(Character, MyTasks);
-			foreach (SP_Task Task : MyTasks)
-			{
-				if(Task.ReadyToDeliver(Character, Player))
-				{
-					return true;
-				}
-			}
-		}
-		return false;
+		InventoryStorageManagerComponent inv = InventoryStorageManagerComponent.Cast(Player.FindComponent(InventoryStorageManagerComponent));
+		if (!inv)
+			return;		
 		
+		SP_PrefabResource_Predicate pred = new SP_PrefabResource_Predicate(m_WantedItem);
+		array<IEntity> entitiesToDrop = new array<IEntity>;
+		inv.FindItems(entitiesToDrop, pred);
+		
+		int movedCount = 0;
+		ref array<IEntity> givenItems = {};
+		
+		for (int i = 0; i < entitiesToDrop.Count(); i++)
+		{
+			IEntity item = entitiesToDrop[i];
+			if (!item) continue;
+			InventoryItemComponent pInvComp = InventoryItemComponent.Cast(item.FindComponent(InventoryItemComponent));
+			InventoryStorageSlot parentSlot = pInvComp.GetParentSlot();
+			bool removed = inv.TryRemoveItemFromStorage(item,parentSlot.GetStorage());
+			if (removed)
+			{
+				movedCount++;				
+				givenItems.Insert(item);
+				
+				if (movedCount >= m_WantedAmount)
+					break;
+			}
+		}				
+		
+		// todo: what to do next
+		if (movedCount >= m_WantedAmount)
+		{	
+			for (int i = 0; i < movedCount; i++)
+			{			
+				delete givenItems.Get(i);
+			}
+		}
+		givenItems.Clear();;
+		
+	};
+	override bool CanBePerformed(IEntity Character, IEntity Player)
+	{
+		InventoryStorageManagerComponent inv = InventoryStorageManagerComponent.Cast(Player.FindComponent(InventoryStorageManagerComponent));
+		if (!inv)
+			return false;
+		
+		SP_PrefabResource_Predicate pred = new SP_PrefabResource_Predicate(m_WantedItem);
+		array<IEntity> entitiesToDrop = new array<IEntity>;
+		inv.FindItems(entitiesToDrop, pred);
+		if (entitiesToDrop.Count() < m_WantedAmount)
+		{
+			m_sCantBePerformedReason = "[Missing Item]";
+			return false;
+		}		
+		return true;
 	}
 
 };
