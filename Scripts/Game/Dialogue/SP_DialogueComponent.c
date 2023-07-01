@@ -227,6 +227,10 @@ class SP_DialogueComponent: ScriptComponent
 	void PlayDialogueSound()
 	{
 		IEntity player = GetGame().GetPlayerController().GetControlledEntity();
+		if(!player)
+		{
+			return;
+		}
 		CharacterSoundComponent SoundC = CharacterSoundComponent.Cast(player.FindComponent(CharacterSoundComponent));
 		SoundC.SoundEvent("SOUND_RADIO_CHANGEFREQUENCY_ERROR");
 	}
@@ -428,7 +432,6 @@ class SP_DialogueComponent: ScriptComponent
 	{
 		super.OnPostInit(owner);
 		SetEventMask(owner, EntityEvent.INIT);
-		SetEventMask(owner, EntityEvent.POSTFIXEDFRAME);
 		owner.SetFlags(EntityFlags.ACTIVE, true);
 	}
 }
