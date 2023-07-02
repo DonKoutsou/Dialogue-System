@@ -1,9 +1,5 @@
 ButtonWidgetClass {
  Name "ListBoxElement"
- Slot AlignableSlot "{554ADB1D2D5974C0}" {
-  HorizontalAlign 3
-  VerticalAlign 3
- }
  components {
   SCR_ListBoxElementComponent "{5D10C019C741C840}" : "{217E1BF1715F9C33}Configs/UI/ListBoxElement_DialogueModularButtonComponent.conf" {
    m_aEffects {
@@ -33,6 +29,7 @@ ButtonWidgetClass {
   SizeLayoutWidgetClass "{5D10C018F39AE94A}" {
    Name "SizeLayout"
    Slot ButtonWidgetSlot "{5548E6E7E6AEDDC1}" {
+    HorizontalAlign 3
    }
    AllowHeightOverride 1
    HeightOverride 35
@@ -40,10 +37,50 @@ ButtonWidgetClass {
     OverlayWidgetClass "{5D10C018F39AE948}" {
      Name "Overlay"
      Slot ButtonWidgetSlot "{5548E6E7F213FB11}" {
+      HorizontalAlign 3
+      VerticalAlign 3
      }
-     Clipping False
+     Clipping True
      Color 0 0 0 1
      {
+      FrameWidgetClass "{5DC50309DE78CF96}" {
+       Name "Frame0"
+       Slot OverlayWidgetSlot "{5DC50309DE78CFF0}" {
+        HorizontalAlign 3
+        VerticalAlign 3
+        Padding 23.9 0 0 0
+       }
+       Clipping True
+       {
+        TextWidgetClass "{5D10C018F39AE94C}" : "{E64DA8292CD7DBDD}UI/layouts/WidgetLibrary/TextWidgets/Text_InteractiveSmall.layout" {
+         Name "Text"
+         Slot FrameWidgetSlot "{5DC506F8BAE11727}" {
+          Anchor 0 0 1 0
+          PositionX 0
+          OffsetLeft 0
+          PositionY 0
+          OffsetTop 0
+          SizeX 0
+          OffsetRight 0
+          SizeY 35
+          OffsetBottom -35
+         }
+         Clipping True
+         Text "Textawuhwaguawghuawhguawhgouqw3hogahoipgahigeagiahjgiawehgiahgiaeignpaenginpigae"
+         "Font Size" 16
+         "Min Font Size" 16
+         "Horizontal Alignment" Center
+         "Vertical Alignment" Center
+         Wrap 1
+         FontProperties FontProperties "{546AF489DFD25402}" {
+          Font "{CD2634D279AB011A}UI/Fonts/Roboto/Roboto_Bold.fnt"
+          OutlineSize 4
+          ShadowSize 32
+         }
+         "Line Spacing" 0
+        }
+       }
+      }
       ImageWidgetClass "{5D10C01E208EC8F3}" {
        Name "Image"
        Slot OverlayWidgetSlot "{5D10C01E208EC825}" {
@@ -81,18 +118,6 @@ ButtonWidgetClass {
        Color 0.761 0.386 0.08 1
        style outline_2px
       }
-      TextWidgetClass "{5D10C018F39AE94C}" : "{E64DA8292CD7DBDD}UI/layouts/WidgetLibrary/TextWidgets/Text_InteractiveSmall.layout" {
-       Name "Text"
-       Slot OverlayWidgetSlot "{569519C7FDE79DBD}" {
-        Padding 8 8 8 8
-       }
-       "Font Size" 20
-       "Min Font Size" 10
-       FontProperties FontProperties "{546AF489DFD25402}" {
-        OutlineSize 1
-        ShadowSize 32
-       }
-      }
       TextWidgetClass "{5D1303B9CB9C181B}" {
        Name "TextNumber"
        Slot OverlayWidgetSlot "{5D1303B9CB9C1842}" {
@@ -100,11 +125,11 @@ ButtonWidgetClass {
         Padding 0 0 650 0
        }
        Text "0"
-       "Font Size" 20
-       "Min Font Size" 10
+       "Font Size" 18
+       "Min Font Size" 18
        FontProperties FontProperties "{5D1329762D9C23A5}" {
-        Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
-        OutlineSize 1
+        Font "{CD2634D279AB011A}UI/Fonts/Roboto/Roboto_Bold.fnt"
+        OutlineSize 4
         ShadowSize 32
        }
       }
