@@ -18,7 +18,7 @@ class SP_DialogueAction : ScriptedUserAction
 			return;
 		
 		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, pUserEntity.GetOrigin());
-
+		
 		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		

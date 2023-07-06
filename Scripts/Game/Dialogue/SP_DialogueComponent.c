@@ -51,7 +51,18 @@ class SP_DialogueComponent: ScriptComponent
 	
 	[Attribute("Item needed to be delivered", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
 	ref array <ref ResourceName> m_aWantedItemList;
-	
+	void Escape(IEntity Char, IEntity Player)
+	{
+		DoBackDialogue(Char, Player);
+		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(Char, Player);
+		while(DiagArch.IsCharacterBranched == true)
+		{
+			DoBackDialogue(Char, Player);
+		}
+		DoBackDialogue(Char, Player);
+		ReleaseAI(Char, Player);
+		GetGame().GetMenuManager().CloseAllMenus();
+	}
 	ResourceName GetRandomItem()
 	{
 		return m_aWantedItemList.GetRandomElement();
