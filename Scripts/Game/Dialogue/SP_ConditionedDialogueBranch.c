@@ -40,6 +40,6 @@ class ItemConditionedDialogueBranchInfo : DialogueBranchInfo
 	{
 		m_WantedAmount = Math.RandomInt(1 ,10);
 		SP_DialogueComponent Diagcomp = SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));
-		m_WantedItem = Diagcomp.GetRandomItem();
+		//m_WantedItem = Diagcomp.GetRandomItem();
 	};
 };

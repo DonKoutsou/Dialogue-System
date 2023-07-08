@@ -47,10 +47,8 @@ class SP_DialogueComponent: ScriptComponent
 	[Attribute()]
 	ref BaseChatChannel m_ChatChannelANOUNCER;
 	//----------------------------------------------------------------------------------------------------------------//
-	SCR_BaseGameMode GameMode;
+	BaseGameMode GameMode;
 	
-	[Attribute("Item needed to be delivered", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
-	ref array <ref ResourceName> m_aWantedItemList;
 	void Escape(IEntity Char, IEntity Player)
 	{
 		DoBackDialogue(Char, Player);
@@ -62,10 +60,6 @@ class SP_DialogueComponent: ScriptComponent
 		DoBackDialogue(Char, Player);
 		ReleaseAI(Char, Player);
 		GetGame().GetMenuManager().CloseAllMenus();
-	}
-	ResourceName GetRandomItem()
-	{
-		return m_aWantedItemList.GetRandomElement();
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//Main function. Its called in SP_DialogueUI when an input is pressed. Branch ID will be different based on the input pressed
@@ -285,7 +279,7 @@ class SP_DialogueComponent: ScriptComponent
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		if(RankComponent)
 		{
-			return RankComponent.GetCharacterRankNameShort(Character);
+			return RankComponent.GetCharacterRank(Character);
 		}
 		return null;
 	}
@@ -430,7 +424,7 @@ class SP_DialogueComponent: ScriptComponent
 	//initialise configuration to crate map of configuration's contents
 	override void EOnInit(IEntity owner)
 	{
-		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
+		GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
 		foreach (SP_DialogueArchetype config: m_CharacterArchetypeList)
 		{
 			config.Init(owner);

@@ -3,7 +3,7 @@ class SP_DialogueAction : ScriptedUserAction
 	private AIWaypoint DefWaypoint;
 	//------------------------------------------------------------------//
 	protected SP_DialogueComponent DiagComp;
-	protected SCR_BaseGameMode GameMode;
+	protected BaseGameMode GameMode;
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
@@ -19,7 +19,7 @@ class SP_DialogueAction : ScriptedUserAction
 		
 		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, pUserEntity.GetOrigin());
 		
-		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
+		GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		
 		AIGroup group = AIGroup.Cast(agent.GetParentGroup());

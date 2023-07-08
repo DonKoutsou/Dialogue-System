@@ -43,7 +43,7 @@ class DialogueUIClass: ChimeraMenuBase
 	SP_DialogueArchetype 						DiagArch;
 	SCR_CharacterIdentityComponent				m_IDComp;
 	SCR_CharacterIdentityComponent				m_CharIDComp;
-	protected SCR_BaseGameMode 					GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
+	protected BaseGameMode 					GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
 	int 										CurrentBranchID;
 	ref ScriptInvoker 							m_OnKeyDown = new ScriptInvoker();
     //------------------------------------------------------------------------------------------------//
