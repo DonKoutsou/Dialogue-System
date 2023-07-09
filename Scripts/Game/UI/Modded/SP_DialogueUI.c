@@ -102,8 +102,7 @@ class DialogueUIClass: ChimeraMenuBase
 		}
 		
 		SCR_Faction SCRFact = SCR_Faction.Cast(DiagComp.GetCharacterFaction(myCallerEntity));
-		int FactionRep;
-		SCRFact.GetFactionRep(DiagComp.GetCharacterFaction(myUserEntity), FactionRep);
+		int FactionRep = SCRFact.GetFactionRep(DiagComp.GetCharacterFaction(myUserEntity));
 		if(FactionRep > 50)
 		{
 			m_FactionRep = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionRep()"));
