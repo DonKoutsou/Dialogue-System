@@ -88,9 +88,11 @@ class SCR_Faction : ScriptedFaction
 	{
 		return m_iOrder;
 	}
-	void GetFactionRep(Faction fact, out int rep)
+	int GetFactionRep(Faction fact)
 	{
+		int rep;
 		m_FriendlyMap.Find(fact, rep);
+		return rep;
 	}
 	void GetFriendlyFactions(out array<string> friendlyfactions)
 	{
