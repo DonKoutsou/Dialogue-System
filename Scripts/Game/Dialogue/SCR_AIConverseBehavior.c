@@ -15,7 +15,7 @@ class SCR_AIConverseBehavior : SCR_AIBehaviorBase
 		m_vPosition.Init(this, position);
 		m_fDuration.Init(this, 5000);
 		m_fRadius.Init(this, 0);
-		m_bUniqueInActionQueue = false;
+		//m_bUniqueInActionQueue = false;
 		//m_bUseBinoculars.Init(this, false);
 	}
 	
@@ -29,7 +29,7 @@ class SCR_AIConverseBehavior : SCR_AIBehaviorBase
 		m_sBehaviorTree = "{082A95ACDC49DBAB}AI/BehaviorTrees/klamaczTest.bt";
 		m_bAllowLook = true; // Disable standard looking
 		m_bResetLook = true;
-		m_bUniqueInActionQueue = true;
+		//m_bUniqueInActionQueue = true;
 		
 		m_bActiveConversation = true;
 	}
@@ -39,7 +39,7 @@ class SCR_AIConverseBehavior : SCR_AIBehaviorBase
 		m_bActiveConversation = state;
 	}
 	
-	override float Evaluate()
+	override float EvaluatePriorityLevel()
 	{
 		// Fail action if timeout has been reached
 		//float currentTime_ms = GetGame().GetWorld().GetWorldTime();

@@ -2,6 +2,10 @@ SCR_BaseGameMode {
  ID "56B2B479C6B96951"
  components {
   SP_DialogueComponent "{5D1547897BFE725A}" {
+   m_CharacterArchetypeList {
+    SP_DialogueArchetype "{5DE2CA50B7920D63}" : "{65CFF309C633A29E}Configs/CharacterTesUS.conf" {
+    }
+   }
    m_ChatChannelFIA FIAChatChannel "{5D76C2C8CDC0AB5E}" {
     "Channel name" "FIA"
     Style BaseChatChannelStyle "{5D76C2C8CF56A2B8}" {

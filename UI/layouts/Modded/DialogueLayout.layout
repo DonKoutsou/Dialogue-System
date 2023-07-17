@@ -29,8 +29,8 @@ FrameWidgetClass {
       Padding 0 0 0 0
      }
      Pivot 0.5 0.5
-     Texture "{307B3AFD133C1121}UI/Textures/LoadingScreen/MenuBackground.edds"
-     Size 2640 1200
+     Texture "{B98FB2CD75200E57}UI/Textures/MainMenu/MenuBackgroundBlank_UI.edds"
+     Size 3840 2160
      "Transition width" 0
      Progress 0.018
      "Mask Mode" "Include Below"

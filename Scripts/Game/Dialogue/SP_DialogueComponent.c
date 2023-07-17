@@ -441,4 +441,7 @@ class SP_DialogueComponent: ScriptComponent
 	}
 }
 //----------------------------------------------------------------------------------------------------------------//
-
+modded enum ChimeraMenuPreset : ScriptMenuPresetEnum
+{
+	DialogueMenu,
+}

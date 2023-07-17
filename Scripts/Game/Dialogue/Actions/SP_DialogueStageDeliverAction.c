@@ -1,8 +1,8 @@
 class SP_ConsumablePredicate : InventorySearchPredicate
 {
-	EConsumableType m_ConsumableFilter;
+	SCR_EConsumableType m_ConsumableFilter;
 	
-	void SP_ConsumablePredicate(EConsumableType type)
+	void SP_ConsumablePredicate(SCR_EConsumableType type)
 	{
 		QueryComponentTypes.Insert(SCR_ConsumableItemComponent);
 		m_ConsumableFilter = type;
@@ -10,7 +10,7 @@ class SP_ConsumablePredicate : InventorySearchPredicate
 
 	override protected bool IsMatch(BaseInventoryStorageComponent storage, IEntity item, array<GenericComponent> queriedComponents, array<BaseItemAttributeData> queriedAttributes)
 	{
-		return (SCR_ConsumableItemComponent.Cast(queriedComponents[0])).GetConsumableType() == m_ConsumableFilter);
+		return (SCR_ConsumableItemComponent.Cast(queriedComponents[0]).GetConsumableType() == m_ConsumableFilter);
 	}
 }
 

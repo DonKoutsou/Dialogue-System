@@ -1,7 +1,7 @@
 ButtonWidgetClass {
  Name "ListBoxElement"
  components {
-  SCR_ListBoxElementComponent "{5D10C019C741C840}" : "{217E1BF1715F9C33}Configs/UI/ListBoxElement_DialogueModularButtonComponent.conf" {
+  SP_ListBoxElementComponent "{5D10C019C741C840}" : "{217E1BF1715F9C33}Configs/UI/ListBoxElement_DialogueModularButtonComponent.conf" {
    m_aEffects {
     SCR_ButtonEffectColor "{5D10C019DD0338BA}" {
      m_eEvents 24580
@@ -43,6 +43,47 @@ ButtonWidgetClass {
      Clipping True
      Color 0 0 0 1
      {
+      FrameWidgetClass "{5DE2D8889350CACF}" {
+       Name "Frame1"
+       Slot OverlayWidgetSlot "{5DE2D8889350CAEB}" {
+        HorizontalAlign 3
+        VerticalAlign 3
+       }
+       {
+        PanelWidgetClass "{5D10C018F39AE94E}" {
+         Name "Border"
+         Slot FrameWidgetSlot "{5DE2D88894C8742F}" {
+          Anchor 0 0 1 0
+          PositionX 5.263
+          OffsetLeft 5.263
+          PositionY 2.6
+          OffsetTop 2.6
+          SizeX -5.474
+          OffsetRight 0.211
+          SizeY 30
+          OffsetBottom -32.6
+         }
+         "Is Visible" 0
+         Color 0.761 0.386 0.08 1
+         style outline_2px
+        }
+        BlurWidgetClass "{5DE2D88918EDFF58}" {
+         Name "Blur1"
+         Slot FrameWidgetSlot "{5DE2D88931AC2CC4}" {
+          Anchor 0 0 1 0
+          PositionX 5.218
+          OffsetLeft 5.218
+          PositionY 2.609
+          OffsetTop 2.609
+          SizeX 100
+          OffsetRight -105.218
+          SizeY 30
+          OffsetBottom -32.609
+         }
+         Intensity 0.2
+        }
+       }
+      }
       FrameWidgetClass "{5DC50309DE78CF96}" {
        Name "Frame0"
        Slot OverlayWidgetSlot "{5DC50309DE78CFF0}" {
@@ -106,23 +147,11 @@ ButtonWidgetClass {
        "Is Visible" 0
        Intensity 0.1
       }
-      PanelWidgetClass "{5D10C018F39AE94E}" {
-       Name "Border"
-       Slot OverlayWidgetSlot "{5548E6E7D859FCD2}" {
-        HorizontalAlign 3
-        VerticalAlign 3
-        Padding -10 2 -10 2
-       }
-       "Is Enabled" 0
-       "Is Visible" 0
-       Color 0.761 0.386 0.08 1
-       style outline_2px
-      }
       TextWidgetClass "{5D1303B9CB9C181B}" {
        Name "TextNumber"
        Slot OverlayWidgetSlot "{5D1303B9CB9C1842}" {
         HorizontalAlign 0
-        Padding 0 0 650 0
+        Padding 10 0 650 0
        }
        Text "0"
        "Font Size" 18

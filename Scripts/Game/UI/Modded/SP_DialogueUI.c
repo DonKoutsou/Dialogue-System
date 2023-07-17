@@ -49,7 +49,12 @@ class DialogueUIClass: ChimeraMenuBase
     //------------------------------------------------------------------------------------------------//
 	override void OnMenuUpdate(float tDelta)
 	{
-		GetGame().GetInputManager().ActivateContext("DialogueMenu", 0);
+		bool ctxActive = GetGame().GetInputManager().IsContextActive("DialogueMenu");
+		m_OnTextEditContextChange.Invoke(ctxActive);
+
+		// Invoke OnUpdate
+		m_OnUpdate.Invoke(tDelta);
+		GetGame().GetInputManager().ActivateContext("DialogueMenu");
 	}
 	void RemoveListeners()
 	{
@@ -102,7 +107,7 @@ class DialogueUIClass: ChimeraMenuBase
 		}
 		
 		SCR_Faction SCRFact = SCR_Faction.Cast(DiagComp.GetCharacterFaction(myCallerEntity));
-		int FactionRep = SCRFact.GetFactionRep(DiagComp.GetCharacterFaction(myUserEntity));
+		/*int FactionRep = SCRFact.GetFactionRep(DiagComp.GetCharacterFaction(myUserEntity));
 		if(FactionRep > 50)
 		{
 			m_FactionRep = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionRep()"));
@@ -118,6 +123,7 @@ class DialogueUIClass: ChimeraMenuBase
 			m_FactionRep = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionRep()"));
 			m_FactionRep.SetColor(Color.DarkRed);
 		}
+		*/
 		CharRank = rank;
 		PLrank = m_sPlRank;
 		
@@ -173,7 +179,7 @@ class DialogueUIClass: ChimeraMenuBase
 			{
 				m_ListBoxComponent.AddItem(DiagText);
 				CurrentBranchID = i;
-				SCR_ListBoxElementComponent elComp = m_ListBoxComponent.GetElementComponent(entryamount);
+				SP_ListBoxElementComponent elComp = SP_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
 				switch(i)
 				{
 					case 0:
@@ -209,7 +215,7 @@ class DialogueUIClass: ChimeraMenuBase
 				}
 				
 				DiagText = STRING_EMPTY;
-				string actionname = "Dialogue" + entryamount.ToString();
+				string actionname = string.Format("Dialogue%1", entryamount.ToString());
 				switch(i)
 				{
 					case 0:
@@ -242,7 +248,7 @@ class DialogueUIClass: ChimeraMenuBase
 		if (DArch.IsCharacterBranched == true)
 		{
 			m_ListBoxComponent.AddItem("Go Back");
-			SCR_ListBoxElementComponent elComp7 = m_ListBoxComponent.GetElementComponent(entryamount);
+			SP_ListBoxElementComponent elComp7 = SP_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
 			elComp7.m_OnClicked.Insert(DoDialogueBack);
 			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 			{
@@ -256,7 +262,7 @@ class DialogueUIClass: ChimeraMenuBase
 			return;
 		}
 		m_ListBoxComponent.AddItem("Leave");
-		SCR_ListBoxElementComponent elComp7 = m_ListBoxComponent.GetElementComponent(entryamount);
+		SP_ListBoxElementComponent elComp7 = SP_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
 		elComp7.m_OnClicked.Insert(LeaveFunction);
 		if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 			{
