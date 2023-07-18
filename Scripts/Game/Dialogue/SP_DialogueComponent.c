@@ -231,13 +231,7 @@ class SP_DialogueComponent: ScriptComponent
 	}
 	void PlayDialogueSound()
 	{
-		IEntity player = GetGame().GetPlayerController().GetControlledEntity();
-		if(!player)
-		{
-			return;
-		}
-		CharacterSoundComponent SoundC = CharacterSoundComponent.Cast(player.FindComponent(CharacterSoundComponent));
-		SoundC.SoundEvent("SOUND_RADIO_CHANGEFREQUENCY_ERROR");
+		SCR_UISoundEntity.SoundEvent(SCR_SoundEvent.SOUND_RADIO_CHANGEFREQUENCY_ERROR);
 	}
 	
 	//----------------------------------------------------------------------------------------------------------------//
@@ -441,7 +435,7 @@ class SP_DialogueComponent: ScriptComponent
 	}
 }
 //----------------------------------------------------------------------------------------------------------------//
-modded enum ChimeraMenuPreset : ScriptMenuPresetEnum
+modded enum ChimeraMenuPreset
 {
 	DialogueMenu,
 }

@@ -78,9 +78,8 @@ FrameWidgetClass {
       Padding 0 80 0 0
      }
      components {
-      SCR_ListBoxComponent "{566C9415BAA54E1B}" {
+      SP_ListBoxComponent "{566C9415BAA54E1B}" {
        m_sElementLayout "{E3491D3D0D0DE552}UI/layouts/ListBox/ListBoxElement_TextDialogue.layout"
-       m_bMultiSelection 1
       }
      }
     }

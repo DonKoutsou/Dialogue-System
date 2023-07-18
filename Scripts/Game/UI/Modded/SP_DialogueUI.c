@@ -49,12 +49,12 @@ class DialogueUIClass: ChimeraMenuBase
     //------------------------------------------------------------------------------------------------//
 	override void OnMenuUpdate(float tDelta)
 	{
-		bool ctxActive = GetGame().GetInputManager().IsContextActive("DialogueMenu");
+		bool ctxActive = GetGame().GetInputManager().IsContextActive("DialogueMenuContext");
 		m_OnTextEditContextChange.Invoke(ctxActive);
 
 		// Invoke OnUpdate
 		m_OnUpdate.Invoke(tDelta);
-		GetGame().GetInputManager().ActivateContext("DialogueMenu");
+		GetGame().GetInputManager().ActivateContext("DialogueMenuContext");
 	}
 	void RemoveListeners()
 	{
@@ -77,18 +77,12 @@ class DialogueUIClass: ChimeraMenuBase
 		m_ListBoxComponent = SCR_ListBoxComponent.Cast(m_ListBoxOverlay.FindHandler(SCR_ListBoxComponent));
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		m_IDComp = SCR_CharacterIdentityComponent.Cast(User.FindComponent(SCR_CharacterIdentityComponent));
+		m_CharIDComp = SCR_CharacterIdentityComponent.Cast(myCallerEntity.FindComponent(SCR_CharacterIdentityComponent));
 	}
 	//------------------------------------------------------------------------------------------------//
 	void UpdateEntries(IEntity Character, IEntity Player)
 	{
-		myCallerEntity = Character;
-		myUserEntity = Player;
-		m_IDComp = SCR_CharacterIdentityComponent.Cast(myUserEntity.FindComponent(SCR_CharacterIdentityComponent));
-		m_CharIDComp = SCR_CharacterIdentityComponent.Cast(myCallerEntity.FindComponent(SCR_CharacterIdentityComponent));
-		m_wRoot = GetRootWidget();
-		m_ListBoxOverlay = OverlayWidget.Cast(m_wRoot.FindAnyWidget("ListBox0")); 
-		m_ListBoxComponent = SCR_ListBoxComponent.Cast(m_ListBoxOverlay.FindHandler(SCR_ListBoxComponent));
-		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		Init(Character, Player);
 		string DiagText;
 		int entryamount;
 		if(myCallerEntity)
@@ -129,32 +123,35 @@ class DialogueUIClass: ChimeraMenuBase
 		
 		AssignIcons(faction, Plfaction);
 		
-		if(m_IDComp.GetRep() > 50)
+		int MyRep = m_IDComp.GetRep();
+		int CharRep = m_CharIDComp.GetRep();
+		
+		if(MyRep > 50)
 		{
 			m_PlayerRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
 			m_PlayerRep.SetColor(Color.DarkGreen);
 		}
-		else if(m_IDComp.GetRep() <= 50 && m_IDComp.GetRep() > 20)
+		else if(MyRep <= 50 && MyRep > 20)
 		{
 			m_PlayerRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
 			m_PlayerRep.SetColor(Color.DarkYellow);
 		}
-		else if(m_IDComp.GetRep() <= 20)
+		else if(MyRep <= 20)
 		{
 			m_PlayerRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
 			m_PlayerRep.SetColor(Color.DarkRed);
 		}
-		if(m_CharIDComp.GetRep() > 50)
+		if(CharRep > 50)
 		{
 			m_CharacterRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("CharReputationColor"));
 			m_CharacterRep.SetColor(Color.DarkGreen);
 		}
-		else if(m_CharIDComp.GetRep() <= 50 && m_CharIDComp.GetRep() > 20)
+		else if(CharRep <= 50 && CharRep > 20)
 		{
 			m_CharacterRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("CharReputationColor"));
 			m_CharacterRep.SetColor(Color.DarkYellow);
 		}
-		else if(m_CharIDComp.GetRep() <= 20)
+		else if(CharRep <= 20)
 		{
 			m_CharacterRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("CharReputationColor"));
 			m_CharacterRep.SetColor(Color.DarkRed);
@@ -180,7 +177,8 @@ class DialogueUIClass: ChimeraMenuBase
 				m_ListBoxComponent.AddItem(DiagText);
 				CurrentBranchID = i;
 				SP_ListBoxElementComponent elComp = SP_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
-				switch(i)
+				elComp.GetOnClick().Insert(ExecuteDialogue);
+				/*switch(i)
 				{
 					case 0:
 					elComp.m_OnClicked.Insert(ExecuteDialogue0);
@@ -203,7 +201,7 @@ class DialogueUIClass: ChimeraMenuBase
 					case 6:
 					elComp.m_OnClicked.Insert(ExecuteDialogue6);
 					break;
-				}
+				}*/
 				string entrynumber = (entryamount + 1).ToString();
 				if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 				{
@@ -288,6 +286,11 @@ class DialogueUIClass: ChimeraMenuBase
 		RemoveListeners();
 	}
 	//------------------------------------------------------------------------------------------------//
+	void ExecuteDialogue(Widget w, int x, int y, int button)
+	{
+		RemoveListeners();
+		DiagComp.DoDialogue(myCallerEntity, myUserEntity, button);
+	}
 	//DoDialogue function wich branch ID 0
 	void ExecuteDialogue0()
 	{

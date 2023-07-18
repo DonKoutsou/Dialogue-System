@@ -1,27 +1,8 @@
 ButtonWidgetClass {
  Name "ListBoxElement"
  components {
-  SP_ListBoxElementComponent "{5D10C019C741C840}" : "{217E1BF1715F9C33}Configs/UI/ListBoxElement_DialogueModularButtonComponent.conf" {
-   m_aEffects {
-    SCR_ButtonEffectColor "{5D10C019DD0338BA}" {
-     m_eEvents 24580
-     m_cHovered 0 0 0 0
-     m_cActivatedHovered 1 1 1 0
-     m_cClicked 1 1 1 0
-     m_cFocusGained 1 1 1 0
-     m_cToggledOn 0 0 0 1
-    }
-    SCR_ButtonEffectOpacity "{5D10C019DD0338BF}" {
-     m_eEvents EVENT_CLICKED
-    }
-    SCR_ButtonEffectOpacity "{5D10C01FE4F2F751}" {
-     m_bEnabled 0
-     m_eEvents EVENT_CLICKED
-     m_sWidgetName "Image"
-     m_fClicked 1
-     m_fFocusGained 1
-    }
-   }
+  SP_ListBoxElementComponent "{5DE4EC0E87274774}" : "{217E1BF1715F9C33}Configs/UI/ListBoxElement_DialogueModularButtonComponent.conf" {
+   m_bFocusOnMouseEnter 1
   }
  }
  style blank
