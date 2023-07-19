@@ -1,10 +1,3 @@
-modded enum EModularButtonEventHandler
-{
-	BUTTON_1		= 1<<6,
-	BUTTON_2		= 1<<7,
-	BUTTON_3		= 1<<8,
-	BUTTON_4		= 1<<9
-};
 class DialogueUIClass: ChimeraMenuBase
 { 
 	//----------------------------------------------------------------//
@@ -21,7 +14,7 @@ class DialogueUIClass: ChimeraMenuBase
 	PanelWidget									m_PlayerRep;
 	ImageWidget 								m_FactionRep;
 	SCR_ListBoxElementComponent 				m_ListBoxElement;
-    SCR_ListBoxComponent 						m_ListBoxComponent;
+    SP_ListBoxComponent 						m_ListBoxComponent;
 	
     //----------------------------------------------------------------//
 	//PlayerCharacter
@@ -45,7 +38,6 @@ class DialogueUIClass: ChimeraMenuBase
 	SCR_CharacterIdentityComponent				m_CharIDComp;
 	protected BaseGameMode 					GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
 	int 										CurrentBranchID;
-	ref ScriptInvoker 							m_OnKeyDown = new ScriptInvoker();
     //------------------------------------------------------------------------------------------------//
 	override void OnMenuUpdate(float tDelta)
 	{
@@ -58,13 +50,10 @@ class DialogueUIClass: ChimeraMenuBase
 	}
 	void RemoveListeners()
 	{
-		GetGame().GetInputManager().RemoveActionListener("Dialogue0", EActionTrigger.DOWN, ExecuteDialogue0);
-		GetGame().GetInputManager().RemoveActionListener("Dialogue1", EActionTrigger.DOWN, ExecuteDialogue1);
-		GetGame().GetInputManager().RemoveActionListener("Dialogue2", EActionTrigger.DOWN, ExecuteDialogue2);
-		GetGame().GetInputManager().RemoveActionListener("Dialogue3", EActionTrigger.DOWN, ExecuteDialogue3);
-		GetGame().GetInputManager().RemoveActionListener("Dialogue4", EActionTrigger.DOWN, ExecuteDialogue4);
-		GetGame().GetInputManager().RemoveActionListener("Dialogue5", EActionTrigger.DOWN, ExecuteDialogue5);
-		GetGame().GetInputManager().RemoveActionListener("Dialogue6", EActionTrigger.DOWN, ExecuteDialogue6);
+		for (int i = 0; i < m_ListBoxComponent.GetItemCount(); i++)
+		{
+			GetGame().GetInputManager().RemoveActionListener(string.Format("Dialogue%1", i), EActionTrigger.DOWN, SP_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(i)).OnKeyPressed);
+		}
 		GetGame().GetInputManager().RemoveActionListener("DialogueBack", EActionTrigger.DOWN, DoDialogueBack);
 		GetGame().GetInputManager().RemoveActionListener("DialogueBack", EActionTrigger.DOWN, LeaveFunction);
 	}
@@ -74,7 +63,7 @@ class DialogueUIClass: ChimeraMenuBase
 		myUserEntity = User;
 		m_wRoot = GetRootWidget();
 		m_ListBoxOverlay = OverlayWidget.Cast(m_wRoot.FindAnyWidget("ListBox0")); 
-		m_ListBoxComponent = SCR_ListBoxComponent.Cast(m_ListBoxOverlay.FindHandler(SCR_ListBoxComponent));
+		m_ListBoxComponent = SP_ListBoxComponent.Cast(m_ListBoxOverlay.FindHandler(SP_ListBoxComponent));
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		m_IDComp = SCR_CharacterIdentityComponent.Cast(User.FindComponent(SCR_CharacterIdentityComponent));
 		m_CharIDComp = SCR_CharacterIdentityComponent.Cast(myCallerEntity.FindComponent(SCR_CharacterIdentityComponent));
@@ -177,31 +166,7 @@ class DialogueUIClass: ChimeraMenuBase
 				m_ListBoxComponent.AddItem(DiagText);
 				CurrentBranchID = i;
 				SP_ListBoxElementComponent elComp = SP_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
-				elComp.GetOnClick().Insert(ExecuteDialogue);
-				/*switch(i)
-				{
-					case 0:
-					elComp.m_OnClicked.Insert(ExecuteDialogue0);
-					break;
-					case 1:
-					elComp.m_OnClicked.Insert(ExecuteDialogue1);
-					break;
-					case 2:
-					elComp.m_OnClicked.Insert(ExecuteDialogue2);
-					break;
-					case 3:
-					elComp.m_OnClicked.Insert(ExecuteDialogue3);
-					break;
-					case 4:
-					elComp.m_OnClicked.Insert(ExecuteDialogue4);
-					break;
-					case 5:
-					elComp.m_OnClicked.Insert(ExecuteDialogue5);
-					break;
-					case 6:
-					elComp.m_OnClicked.Insert(ExecuteDialogue6);
-					break;
-				}*/
+				elComp.m_OnClicked.Insert(ExecuteDialogue);
 				string entrynumber = (entryamount + 1).ToString();
 				if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 				{
@@ -211,33 +176,8 @@ class DialogueUIClass: ChimeraMenuBase
 				{
 					elComp.SetTextNumber(entrynumber);
 				}
-				
 				DiagText = STRING_EMPTY;
-				string actionname = string.Format("Dialogue%1", entryamount.ToString());
-				switch(i)
-				{
-					case 0:
-					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue0);
-					break;
-					case 1:
-					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue1);
-					break;
-					case 2:
-					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue2);
-					break;
-					case 3:
-					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue3);
-					break;
-					case 4:
-					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue4);
-					break;
-					case 5:
-					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue5);
-					break;
-					case 6:
-					GetGame().GetInputManager().AddActionListener(actionname, EActionTrigger.DOWN, ExecuteDialogue6);
-					break;
-				}
+				GetGame().GetInputManager().AddActionListener(string.Format("Dialogue%1", entryamount.ToString()), EActionTrigger.DOWN, elComp.OnKeyPressed);
 				entryamount = entryamount + 1;
 			}
 		}
@@ -286,48 +226,10 @@ class DialogueUIClass: ChimeraMenuBase
 		RemoveListeners();
 	}
 	//------------------------------------------------------------------------------------------------//
-	void ExecuteDialogue(Widget w, int x, int y, int button)
+	void ExecuteDialogue(int num)
 	{
 		RemoveListeners();
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, button);
-	}
-	//DoDialogue function wich branch ID 0
-	void ExecuteDialogue0()
-	{
-		RemoveListeners();
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 0);
-	}
-	//------------------------------------------------------------------------------------------------//
-	void ExecuteDialogue1()
-	{
-		RemoveListeners();
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 1);
-	}
-	//------------------------------------------------------------------------------------------------//
-	void ExecuteDialogue2()
-	{
-		RemoveListeners();
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 2);
-	}
-	void ExecuteDialogue3()
-	{
-		RemoveListeners();
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 3);
-	}
-	void ExecuteDialogue4()
-	{
-		RemoveListeners();
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 4);
-	}
-	void ExecuteDialogue5()
-	{
-		RemoveListeners();
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 5);
-	}
-	void ExecuteDialogue6()
-	{
-		RemoveListeners();
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, 6);
+		DiagComp.DoDialogue(myCallerEntity, myUserEntity, num);
 	}
 	//------------------------------------------------------------------------------------------------//
 	void DoDialogueBack()
@@ -336,20 +238,6 @@ class DialogueUIClass: ChimeraMenuBase
 		DiagComp.DoBackDialogue(myCallerEntity, myUserEntity);
 	}
 	//------------------------------------------------------------------------------------------------//
-	override event bool OnKeyDown(Widget w, int x, int y, int key)
-	{
-		if (key == 1)
-		{
-			OnClick(w, x, y, 0);
-			m_OnKeyDown.Invoke(this);
-			return true;
-		}
-		return false;
-	}
-	string GetDialogueActionName(int index)
-	{
-	    return "Dialogue" + index.ToString();
-	}
 	string GetGamepadButtonText(int index)
 	{
 	    switch (index)

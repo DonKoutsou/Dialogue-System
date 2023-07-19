@@ -5,10 +5,14 @@ Listbox component which supports multi selection, custom element layouts.
 */
 class SP_ListBoxComponent : SCR_ListBoxComponent
 {
-	override event bool OnKeyDown(Widget w, int x, int y, int key)
+	int GetElementIndex(SP_ListBoxElementComponent element)
 	{
-		int myint = 1;
-		return true;
+		for (int i = 0; i < m_aElementComponents.GetSizeOf(); i++)
+		{
+			if (m_aElementComponents[i] == element)
+				return i;
+		}
+		return -1;
 	}
 	
 };
