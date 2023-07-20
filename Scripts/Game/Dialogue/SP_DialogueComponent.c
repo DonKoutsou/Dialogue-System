@@ -28,6 +28,8 @@ class SP_DialogueComponent: ScriptComponent
 	//----------------------------------------------------------------------------------------------------------------//
 	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;	
 	//----------------------------------------------------------------------------------------------------------------//
+	[Attribute()]
+	protected ref SCR_MapLocationQuadHint m_WorldDirections;
 	//Channels
 	[Attribute()]
 	ref BaseChatChannel m_ChatChannelFIA;
@@ -47,7 +49,7 @@ class SP_DialogueComponent: ScriptComponent
 	[Attribute()]
 	ref BaseChatChannel m_ChatChannelANOUNCER;
 	//----------------------------------------------------------------------------------------------------------------//
-	BaseGameMode GameMode;
+	SP_GameMode GameMode;
 	
 	void Escape(IEntity Char, IEntity Player)
 	{
@@ -418,7 +420,7 @@ class SP_DialogueComponent: ScriptComponent
 	//initialise configuration to crate map of configuration's contents
 	override void EOnInit(IEntity owner)
 	{
-		GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
+		GameMode = SP_GameMode.Cast(GetGame().GetGameMode());
 		foreach (SP_DialogueArchetype config: m_CharacterArchetypeList)
 		{
 			config.Init(owner);
@@ -432,6 +434,149 @@ class SP_DialogueComponent: ScriptComponent
 		super.OnPostInit(owner);
 		SetEventMask(owner, EntityEvent.INIT);
 		owner.SetFlags(EntityFlags.ACTIVE, true);
+	}
+	string GetCharacterLocation(IEntity Character)
+	{
+		int m_iGridSizeX;
+		int m_iGridSizeY;
+		float angleA = 0.775;
+		const float angleB = 0.325;
+		vector mins,maxs;
+		GetGame().GetWorldEntity().GetWorldBounds(mins, maxs);
+			
+		m_iGridSizeX = maxs[0]/3;
+		m_iGridSizeY = maxs[2]/3;
+	 
+		SCR_EditableEntityCore core = SCR_EditableEntityCore.Cast(SCR_EditableEntityCore.GetInstance(SCR_EditableEntityCore));
+		vector posPlayer = Character.GetOrigin();
+			
+		SCR_EditableEntityComponent nearest = core.FindNearestEntity(posPlayer, EEditableEntityType.COMMENT);
+		GenericEntity nearestLocation = nearest.GetOwner();
+		SCR_MapDescriptorComponent mapDescr = SCR_MapDescriptorComponent.Cast(nearestLocation.FindComponent(SCR_MapDescriptorComponent));
+		string closestLocationName;
+		closestLocationName = nearest.GetDisplayName();
+
+		vector lastLocationPos = nearestLocation.GetOrigin();
+		float lastDistance = vector.DistanceSqXZ(lastLocationPos, posPlayer);
+	
+		string closeLocationAzimuth;
+		vector result = posPlayer - lastLocationPos;
+		result.Normalize();
+		
+		float angle1 = vector.DotXZ(result,vector.Forward);
+		float angle2 = vector.DotXZ(result,vector.Right);
+				
+		if (angle2 > 0)
+		{
+			if (angle1 >= angleA)
+				closeLocationAzimuth = "#AR-MapLocationHint_DirectionNorth";
+			if (angle1 < angleA && angle1 >= angleB )
+				closeLocationAzimuth = "#AR-MapLocationHint_DirectionNorthEast";
+			if (angle1 < angleB && angle1 >=-angleB)
+				closeLocationAzimuth = "#AR-MapLocationHint_DirectionEast";
+			if (angle1 < -angleB && angle1 >=-angleA)
+				closeLocationAzimuth = "#AR-MapLocationHint_DirectionSouthEast";
+			if (angle1 < -angleA)
+				closeLocationAzimuth = "#AR-MapLocationHint_DirectionSouth";
+		}
+		else
+		{
+			if (angle1 >= angleA)
+				closeLocationAzimuth = "#AR-MapLocationHint_DirectionNorth";
+			if (angle1 < angleA && angle1 >= angleB )
+				closeLocationAzimuth = "#AR-MapLocationHint_DirectionNorthWest";
+			if (angle1 < angleB && angle1 >=-angleB)
+				closeLocationAzimuth = "#AR-MapLocationHint_DirectionWest";
+			if (angle1 < -angleB && angle1 >=-angleA)
+				closeLocationAzimuth = "#AR-MapLocationHint_DirectionSouthWest";
+			if (angle1 < -angleA)
+				closeLocationAzimuth = "#AR-MapLocationHint_DirectionSouth";
+		}
+		int playerGridPositionX = posPlayer[0]/m_iGridSizeX;
+		int playerGridPositionY = posPlayer[2]/m_iGridSizeY;
+			
+		int playerGridID = GetGridIndex(playerGridPositionX,playerGridPositionY);
+	 	string m_sLocationName = m_WorldDirections.GetQuadHint(playerGridID) + ", " + closestLocationName;
+		return m_sLocationName;
+	}
+	protected int GetGridIndex(int x, int y)
+	{
+		return 3*y + x;
+	}
+	string GenerateRummor(IEntity Instigator)
+	{
+		if (!GameMode)
+			return "Missing GameMode cunt";
+		string rummor;
+		SP_RequestManagerComponent RequestManager = GameMode.GetRequestManagerComponent();
+		CharacterHolder Characters = RequestManager.GetCharacterHolder();
+		SP_FactionManager FactionMan = SP_FactionManager.Cast(GameMode.GetFactionManager());
+		FactionAffiliationComponent Affiliation = FactionAffiliationComponent.Cast(Instigator.FindComponent(FactionAffiliationComponent));
+		int index = Math.RandomInt(0, 5);
+		switch (index)
+		{
+			case 0:
+				{
+					//look for bounty of friendly unit
+				array <ref SP_Task> tasks = new array <ref SP_Task> ();
+				RequestManager.GetTasksOfSameType(tasks, SP_BountyTask);
+				if (tasks.IsEmpty())
+					break;
+				foreach (SP_Task task : tasks)
+					{
+						IEntity target = task.GetTarget();
+						FactionAffiliationComponent targetaffiliation = FactionAffiliationComponent.Cast(target.FindComponent(FactionAffiliationComponent));
+						if (targetaffiliation.GetAffiliatedFaction() != Affiliation.GetAffiliatedFaction())
+							break;
+						rummor = string.Format("I heard that someone has put a bounty on %1's head", GetCharacterName(target));
+					}
+				}
+			break;
+			case 1:
+				{
+					//look for task of friendly unit
+					ChimeraCharacter Friendly;
+					Characters.GetUnitOfFaction(Affiliation.GetAffiliatedFaction(), Friendly);
+					array <ref SP_Task> tasks = new array <ref SP_Task> ();
+					RequestManager.GetCharTasks(Friendly, tasks);
+					rummor = tasks.GetRandomElement().GetTaskDescription();
+				}
+			break;
+			case 2:
+				{
+					//look for enemy units and report location
+					ChimeraCharacter Friendly;
+					array <Faction> enemFactions = new array <Faction>();
+					FactionMan.GetEnemyFactions(Affiliation.GetAffiliatedFaction(), enemFactions);
+					Faction enemFaction = enemFactions.GetRandomElement();
+					Characters.GetUnitOfFaction(enemFaction, Friendly);
+					rummor = string.Format("We have reports of %1 units in %2.", enemFaction, GetCharacterLocation(Friendly));
+				}
+			break;
+			case 3:
+				{
+					//look for lost groups
+					array <ref SP_Task> tasks = new array <ref SP_Task> ();
+					RequestManager.GetTasksOfSameType(tasks, SP_RescueTask);
+					if (tasks.IsEmpty())
+						break;
+					foreach (SP_Task task : tasks)
+						{
+							IEntity target = task.GetTarget();
+							FactionAffiliationComponent targetaffiliation = FactionAffiliationComponent.Cast(target.FindComponent(FactionAffiliationComponent));
+							if (targetaffiliation.GetAffiliatedFaction() != Affiliation.GetAffiliatedFaction())
+								break;
+							rummor = string.Format("I heard about %1's squad lossing contact with HQ around %2. If you are around the area keep an eye out", GetCharacterName(target), GetCharacterLocation(target));
+						}
+				}
+			break;
+			case 4:
+				{
+					//look for stash locations
+				}
+			break;
+		}
+		return rummor;
 	}
 }
 //----------------------------------------------------------------------------------------------------------------//
