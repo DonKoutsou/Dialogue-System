@@ -503,7 +503,7 @@ class SP_DialogueComponent: ScriptComponent
 	{
 		return 3*y + x;
 	}
-	string GenerateRummor(IEntity Instigator)
+	string GenerateRummor(IEntity Instigator, IEntity Player)
 	{
 		if (!GameMode)
 			return "Missing GameMode cunt";
@@ -512,7 +512,7 @@ class SP_DialogueComponent: ScriptComponent
 		CharacterHolder Characters = RequestManager.GetCharacterHolder();
 		SP_FactionManager FactionMan = SP_FactionManager.Cast(GameMode.GetFactionManager());
 		FactionAffiliationComponent Affiliation = FactionAffiliationComponent.Cast(Instigator.FindComponent(FactionAffiliationComponent));
-		int index = Math.RandomInt(0, 5);
+		int index = Math.RandomInt(0, 4);
 		switch (index)
 		{
 			case 0:
@@ -549,25 +549,35 @@ class SP_DialogueComponent: ScriptComponent
 					array <Faction> enemFactions = new array <Faction>();
 					FactionMan.GetEnemyFactions(Affiliation.GetAffiliatedFaction(), enemFactions);
 					Faction enemFaction = enemFactions.GetRandomElement();
-					Characters.GetUnitOfFaction(enemFaction, Friendly);
-					rummor = string.Format("We have reports of %1 units in %2.", enemFaction, GetCharacterLocation(Friendly));
+					if (!Characters.GetUnitOfFaction(enemFaction, Friendly))
+						break;
+					rummor = string.Format("We have reports of %1 units in %2.", enemFaction.GetFactionKey(), GetCharacterLocation(Friendly));
 				}
 			break;
 			case 3:
 				{
 					//look for lost groups
-					array <ref SP_Task> tasks = new array <ref SP_Task> ();
-					RequestManager.GetTasksOfSameType(tasks, SP_RescueTask);
-					if (tasks.IsEmpty())
+					array<ref SP_Task> rescuetasks = new array<ref SP_Task>();
+					SP_RequestManagerComponent req = SP_RequestManagerComponent.Cast(GetGame().GetGameMode().FindComponent(SP_RequestManagerComponent));
+					req.GetRescueTasks(rescuetasks);
+					if (rescuetasks.IsEmpty())
 						break;
-					foreach (SP_Task task : tasks)
-						{
-							IEntity target = task.GetTarget();
-							FactionAffiliationComponent targetaffiliation = FactionAffiliationComponent.Cast(target.FindComponent(FactionAffiliationComponent));
-							if (targetaffiliation.GetAffiliatedFaction() != Affiliation.GetAffiliatedFaction())
-								break;
-							rummor = string.Format("I heard about %1's squad lossing contact with HQ around %2. If you are around the area keep an eye out", GetCharacterName(target), GetCharacterLocation(target));
-						}
+					foreach (SP_Task Task : rescuetasks)
+					{
+						SP_RescueTask resctask = SP_RescueTask.Cast(Task);
+						IEntity target = Task.GetTarget();
+						FactionAffiliationComponent afcomp = FactionAffiliationComponent.Cast(target.FindComponent(FactionAffiliationComponent));
+						if (afcomp.GetAffiliatedFaction() == Affiliation.GetAffiliatedFaction())
+							{
+								string Oname;
+								string Dname;
+								string OLoc;
+								string DLoc;
+								resctask.GetInfo(Oname, Dname, OLoc, DLoc);
+								rummor = string.Format("I heard about %1's squad lossing contact with HQ around %2. If you are around the area keep an eye out", Dname, DLoc);
+								resctask.AssignCharacter(Player);
+							}
+					}
 				}
 			break;
 			case 4:
