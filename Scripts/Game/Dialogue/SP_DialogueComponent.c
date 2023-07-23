@@ -279,7 +279,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return null;
 	}
-	string GetCharacterRankName(IEntity Character)
+		string GetCharacterRankName(IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		string CharacterRank;
@@ -503,7 +503,7 @@ class SP_DialogueComponent: ScriptComponent
 	{
 		return 3*y + x;
 	}
-	string GenerateRummor(IEntity Instigator)
+	string GenerateRummor(IEntity Instigator, IEntity Player)
 	{
 		if (!GameMode)
 			return "Missing GameMode cunt";
@@ -512,7 +512,7 @@ class SP_DialogueComponent: ScriptComponent
 		CharacterHolder Characters = RequestManager.GetCharacterHolder();
 		SP_FactionManager FactionMan = SP_FactionManager.Cast(GameMode.GetFactionManager());
 		FactionAffiliationComponent Affiliation = FactionAffiliationComponent.Cast(Instigator.FindComponent(FactionAffiliationComponent));
-		int index = Math.RandomInt(0, 5);
+		int index = Math.RandomInt(0, 4);
 		switch (index)
 		{
 			case 0:
@@ -525,10 +525,13 @@ class SP_DialogueComponent: ScriptComponent
 				foreach (SP_Task task : tasks)
 					{
 						IEntity target = task.GetTarget();
+						if (target == Instigator)
+							break;
 						FactionAffiliationComponent targetaffiliation = FactionAffiliationComponent.Cast(target.FindComponent(FactionAffiliationComponent));
 						if (targetaffiliation.GetAffiliatedFaction() != Affiliation.GetAffiliatedFaction())
 							break;
 						rummor = string.Format("I heard that someone has put a bounty on %1's head", GetCharacterName(target));
+						break;
 					}
 				}
 			break;
@@ -537,20 +540,27 @@ class SP_DialogueComponent: ScriptComponent
 					//look for task of friendly unit
 					ChimeraCharacter Friendly;
 					Characters.GetUnitOfFaction(Affiliation.GetAffiliatedFaction(), Friendly);
+					if (Friendly == Instigator && Friendly == Player)
+						break;
 					array <ref SP_Task> tasks = new array <ref SP_Task> ();
 					RequestManager.GetCharTasks(Friendly, tasks);
+					if (tasks.IsEmpty())
+						break;
 					rummor = tasks.GetRandomElement().GetTaskDescription();
 				}
 			break;
 			case 2:
 				{
 					//look for enemy units and report location
-					ChimeraCharacter Friendly;
+					ChimeraCharacter Enemy;
 					array <Faction> enemFactions = new array <Faction>();
 					FactionMan.GetEnemyFactions(Affiliation.GetAffiliatedFaction(), enemFactions);
+					if (enemFactions.IsEmpty())
+						break;
 					Faction enemFaction = enemFactions.GetRandomElement();
-					Characters.GetUnitOfFaction(enemFaction, Friendly);
-					rummor = string.Format("We have reports of %1 units in %2.", enemFaction, GetCharacterLocation(Friendly));
+					if (!Characters.GetUnitOfFaction(enemFaction, Enemy))
+						break;
+					rummor = string.Format("We have reports of %1 units in %2.", enemFaction.GetFactionKey(), GetCharacterLocation(Enemy));
 				}
 			break;
 			case 3:
@@ -560,14 +570,23 @@ class SP_DialogueComponent: ScriptComponent
 					RequestManager.GetTasksOfSameType(tasks, SP_RescueTask);
 					if (tasks.IsEmpty())
 						break;
-					foreach (SP_Task task : tasks)
-						{
-							IEntity target = task.GetTarget();
-							FactionAffiliationComponent targetaffiliation = FactionAffiliationComponent.Cast(target.FindComponent(FactionAffiliationComponent));
-							if (targetaffiliation.GetAffiliatedFaction() != Affiliation.GetAffiliatedFaction())
+					foreach (SP_Task Task : tasks)
+					{
+						SP_RescueTask resctask = SP_RescueTask.Cast(Task);
+						IEntity target = Task.GetTarget();
+						FactionAffiliationComponent afcomp = FactionAffiliationComponent.Cast(target.FindComponent(FactionAffiliationComponent));
+						if (afcomp.GetAffiliatedFaction() == Affiliation.GetAffiliatedFaction())
+							{
+								string Oname;
+								string Dname;
+								string OLoc;
+								string DLoc;
+								resctask.GetInfo(Oname, Dname, OLoc, DLoc);
+								rummor = string.Format("I heard about %1's squad lossing contact with HQ around %2. If you are around the area keep an eye out", Dname, DLoc);
+								resctask.AssignCharacter(Player);
 								break;
-							rummor = string.Format("I heard about %1's squad lossing contact with HQ around %2. If you are around the area keep an eye out", GetCharacterName(target), GetCharacterLocation(target));
-						}
+							}
+					}
 				}
 			break;
 			case 4:
