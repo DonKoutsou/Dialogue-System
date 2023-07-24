@@ -7,6 +7,8 @@ class SP_ListBoxElementComponent : SCR_ListBoxElementComponent
 	[Attribute("TextNumber")]
 	protected string m_sWidgetTextNumber;
 	
+	int branch;
+	
 	override void HandlerAttached(Widget w)
 	{
 		super.HandlerAttached(w);
@@ -19,6 +21,38 @@ class SP_ListBoxElementComponent : SCR_ListBoxElementComponent
 		
 		if (w)
 			w.SetText(Number);
+	}
+	override bool OnClick(Widget w, int x, int y, int button)
+	{
+		#ifdef DEBUG_MODULAR_BUTTON
+		_print("OnClick");
+		#endif
+		
+		// Auto focus is focusable
+		if (m_wRoot.IsFocusable())
+		{
+			auto workspace = GetGame().GetWorkspace();
+			Widget currentFocus = workspace.GetFocusedWidget();
+			if (currentFocus != m_wRoot)
+				workspace.SetFocusedWidget(m_wRoot);
+		}
+		
+		bool eventReturnValue = m_eEventReturnValue & EModularButtonEventHandler.CLICK;
+		
+		if (m_bIgnoreStandardInputs)
+			return eventReturnValue;
+		
+		if (m_bCanBeToggled && !m_bToggledOnlyThroughApi)
+			Internal_SetToggled(!m_bToggled);
+		
+		InvokeEffectsEvent(EModularButtonEventFlag.EVENT_CLICKED);
+		
+		EModularButtonState state = GetCurrentState();
+		InvokeEffectsEvent(state);
+		TextWidget tw = TextWidget.Cast(m_wRoot.FindAnyWidget(m_sWidgetTextNumber));
+		m_OnClicked.Invoke(branch);
+			
+		return eventReturnValue;
 	}
 	override bool OnMouseEnter(Widget w, int x, int y)
 	{

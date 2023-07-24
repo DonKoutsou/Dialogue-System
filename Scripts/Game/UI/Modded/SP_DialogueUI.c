@@ -166,6 +166,7 @@ class DialogueUIClass: ChimeraMenuBase
 				m_ListBoxComponent.AddItem(DiagText);
 				CurrentBranchID = i;
 				SP_ListBoxElementComponent elComp = SP_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
+				elComp.branch = i;
 				elComp.m_OnClicked.Insert(ExecuteDialogue);
 				string entrynumber = (entryamount + 1).ToString();
 				if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
