@@ -50,7 +50,6 @@ class SP_DialogueComponent: ScriptComponent
 	ref BaseChatChannel m_ChatChannelANOUNCER;
 	//----------------------------------------------------------------------------------------------------------------//
 	SP_GameMode GameMode;
-	
 	void Escape(IEntity Char, IEntity Player)
 	{
 		DoBackDialogue(Char, Player);
@@ -205,8 +204,19 @@ class SP_DialogueComponent: ScriptComponent
 		if (!utility)
 			return;
 		SCR_AIConverseBehavior act = SCR_AIConverseBehavior.Cast(utility.FindActionOfType(SCR_AIConverseBehavior));
-		act.SetActionState(EAIActionState.FAILED);
-		//utility.SetStateAllActionsOfType(SCR_AIConverseBehavior, EAIActionState.FAILED, false);
+		//act.SetActionState(EAIActionState.FAILED);
+		act.SetActiveConversation(false);
+		SCR_AIGroup group = SCR_AIGroup.Cast(agent.GetParentGroup());
+		if (!group)
+			return;
+		SCR_DefendWaypoint wp;
+		wp = SCR_DefendWaypoint.Cast(group.GetCurrentWaypoint());
+		if (wp)
+		{
+			group.RemoveWaypoint(wp);
+			group.AddWaypoint(wp);
+		}
+		
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	void DoAnouncerDialogue(string Text)
@@ -279,7 +289,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return null;
 	}
-	string GetCharacterRankName(IEntity Character)
+		string GetCharacterRankName(IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		string CharacterRank;
@@ -525,10 +535,13 @@ class SP_DialogueComponent: ScriptComponent
 				foreach (SP_Task task : tasks)
 					{
 						IEntity target = task.GetTarget();
+						if (target == Instigator)
+							break;
 						FactionAffiliationComponent targetaffiliation = FactionAffiliationComponent.Cast(target.FindComponent(FactionAffiliationComponent));
 						if (targetaffiliation.GetAffiliatedFaction() != Affiliation.GetAffiliatedFaction())
 							break;
 						rummor = string.Format("I heard that someone has put a bounty on %1's head", GetCharacterName(target));
+						break;
 					}
 				}
 			break;
@@ -537,32 +550,37 @@ class SP_DialogueComponent: ScriptComponent
 					//look for task of friendly unit
 					ChimeraCharacter Friendly;
 					Characters.GetUnitOfFaction(Affiliation.GetAffiliatedFaction(), Friendly);
+					if (Friendly == Instigator && Friendly == Player)
+						break;
 					array <ref SP_Task> tasks = new array <ref SP_Task> ();
 					RequestManager.GetCharTasks(Friendly, tasks);
+					if (tasks.IsEmpty())
+						break;
 					rummor = tasks.GetRandomElement().GetTaskDescription();
 				}
 			break;
 			case 2:
 				{
 					//look for enemy units and report location
-					ChimeraCharacter Friendly;
+					ChimeraCharacter Enemy;
 					array <Faction> enemFactions = new array <Faction>();
 					FactionMan.GetEnemyFactions(Affiliation.GetAffiliatedFaction(), enemFactions);
-					Faction enemFaction = enemFactions.GetRandomElement();
-					if (!Characters.GetUnitOfFaction(enemFaction, Friendly))
+					if (enemFactions.IsEmpty())
 						break;
-					rummor = string.Format("We have reports of %1 units in %2.", enemFaction.GetFactionKey(), GetCharacterLocation(Friendly));
+					Faction enemFaction = enemFactions.GetRandomElement();
+					if (!Characters.GetUnitOfFaction(enemFaction, Enemy))
+						break;
+					rummor = string.Format("We have reports of %1 units in %2.", enemFaction.GetFactionKey(), GetCharacterLocation(Enemy));
 				}
 			break;
 			case 3:
 				{
 					//look for lost groups
-					array<ref SP_Task> rescuetasks = new array<ref SP_Task>();
-					SP_RequestManagerComponent req = SP_RequestManagerComponent.Cast(GetGame().GetGameMode().FindComponent(SP_RequestManagerComponent));
-					req.GetRescueTasks(rescuetasks);
-					if (rescuetasks.IsEmpty())
+					array <ref SP_Task> tasks = new array <ref SP_Task> ();
+					RequestManager.GetTasksOfSameType(tasks, SP_RescueTask);
+					if (tasks.IsEmpty())
 						break;
-					foreach (SP_Task Task : rescuetasks)
+					foreach (SP_Task Task : tasks)
 					{
 						SP_RescueTask resctask = SP_RescueTask.Cast(Task);
 						IEntity target = Task.GetTarget();
@@ -576,6 +594,7 @@ class SP_DialogueComponent: ScriptComponent
 								resctask.GetInfo(Oname, Dname, OLoc, DLoc);
 								rummor = string.Format("I heard about %1's squad lossing contact with HQ around %2. If you are around the area keep an eye out", Dname, DLoc);
 								resctask.AssignCharacter(Player);
+								break;
 							}
 					}
 				}

@@ -171,7 +171,7 @@ FrameWidgetClass {
       OffsetBottom -55
      }
      Color 0 0.502 0.125 1
-     style debugUI
+     style full
     }
     TextWidgetClass "{5D10CA1D63DBBA26}" {
      Name "CharacterName"
@@ -399,7 +399,7 @@ FrameWidgetClass {
       OffsetBottom -55
      }
      Color 0 0.502 0.125 1
-     style debugUI
+     style full
     }
    }
   }

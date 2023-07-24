@@ -11,7 +11,7 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
      Nodes {
       SCR_AIGetConverseParameters "SCR_AI Get Converse Parameters" {
        Name "SCR_AI Get Converse Parameters"
-       EditorPos -594 135
+       EditorPos -666.091 127.091
        OutPorts {
         SingleOutputPortContainer SingleOutputPortContainer {
          Port 0
@@ -29,7 +29,7 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
       }
       SCR_AILookAtPosition "SCR_AI Look At Position" {
        Name "SCR_AI Look At Position"
-       EditorPos -75 137
+       EditorPos -147.091 129.091
        InPorts {
         SingleInputPortContainer SingleInputPortContainer {
          Port 0
@@ -75,7 +75,7 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
  VariablesRefs {
   VariableReference posToLook {
    VariableType 0
-   EditorPos -280 170
+   EditorPos -352.091 162.091
   }
  }
 }
