@@ -302,13 +302,14 @@ class SP_DialogueComponent: ScriptComponent
 	//CHARACTER FACTION
 	Faction GetCharacterFaction(IEntity Character)
 	{
+		if (!Character)
+			return null;
 		FactionAffiliationComponent FactionComponent = FactionAffiliationComponent.Cast(Character.FindComponent(FactionAffiliationComponent));
 		if(FactionComponent)
 		{
 			return FactionComponent.GetAffiliatedFaction();
 		}
-		else
-			return null;	
+		return null;	
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	SP_DialogueArchetype GetArchetypeTemplate(IEntity pOwnerEntity, IEntity pUserEntity)
