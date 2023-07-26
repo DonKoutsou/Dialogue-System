@@ -11,7 +11,7 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
      Nodes {
       SCR_AIGetConverseParameters "SCR_AI Get Converse Parameters" {
        Name "SCR_AI Get Converse Parameters"
-       EditorPos -666.091 127.091
+       EditorPos -950.377 149.948
        OutPorts {
         SingleOutputPortContainer SingleOutputPortContainer {
          Port 0
@@ -29,7 +29,7 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
       }
       SCR_AILookAtPosition "SCR_AI Look At Position" {
        Name "SCR_AI Look At Position"
-       EditorPos -147.091 129.091
+       EditorPos -431.377 151.948
        InPorts {
         SingleInputPortContainer SingleInputPortContainer {
          Port 0
@@ -47,6 +47,16 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
         }
        }
        m_fPriority 80
+      }
+      SCR_AISetWeaponRaised "SCR_AI Set Weapon Raised" {
+       Name "SCR_AI Set Weapon Raised"
+       EditorPos -158.571 171.429
+       InPorts {
+        SingleInputPortContainer SingleInputPortContainerClass {
+         PortName "Raised"
+        }
+       }
+       m_bRaised 0
       }
       AITaskMove Move {
        Name "Move"
@@ -75,7 +85,7 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
  VariablesRefs {
   VariableReference posToLook {
    VariableType 0
-   EditorPos -352.091 162.091
+   EditorPos -636.377 184.948
   }
  }
 }

@@ -50,7 +50,7 @@ class SP_ListBoxElementComponent : SCR_ListBoxElementComponent
 		EModularButtonState state = GetCurrentState();
 		InvokeEffectsEvent(state);
 		TextWidget tw = TextWidget.Cast(m_wRoot.FindAnyWidget(m_sWidgetTextNumber));
-		m_OnClicked.Invoke(branch);
+		m_OnClicked.Invoke(this);
 			
 		return eventReturnValue;
 	}
@@ -77,9 +77,7 @@ class SP_ListBoxElementComponent : SCR_ListBoxElementComponent
 	}
 	void OnKeyPressed(float value = 0.0, EActionTrigger reason = 0)
 	{
-		DialogueUIClass MyUI = DialogueUIClass.Cast(ChimeraMenuBase.CurrentChimeraMenu());
-		SP_ListBoxComponent list = MyUI.m_ListBoxComponent;
-		MyUI.ExecuteDialogue(list.GetElementIndex(this));
+		m_OnClicked.Invoke(this);
 	}
 	
 };

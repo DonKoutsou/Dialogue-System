@@ -205,7 +205,8 @@ class SP_DialogueComponent: ScriptComponent
 			return;
 		SCR_AIConverseBehavior act = SCR_AIConverseBehavior.Cast(utility.FindActionOfType(SCR_AIConverseBehavior));
 		//act.SetActionState(EAIActionState.FAILED);
-		act.SetActiveConversation(false);
+		if (act)
+			act.SetActiveConversation(false);
 		SCR_AIGroup group = SCR_AIGroup.Cast(agent.GetParentGroup());
 		if (!group)
 			return;

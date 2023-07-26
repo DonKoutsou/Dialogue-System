@@ -34,7 +34,8 @@ class SP_DialogueAction : ScriptedUserAction
 			DiagComp.SendText(NoTalkText, Channel, 0, name, DiagComp.GetCharacterRankName(pOwnerEntity));
 			return;
 		}
-		utility.AddAction(action);
+		if (!utility.FindActionOfType(SCR_AIFollowBehavior))
+			utility.AddAction(action);
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		GetGame().GetInputManager().ActivateContext("DialogueMenuContext");
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
