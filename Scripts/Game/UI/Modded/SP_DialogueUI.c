@@ -47,6 +47,7 @@ class DialogueUIClass: ChimeraMenuBase
 		// Invoke OnUpdate
 		m_OnUpdate.Invoke(tDelta);
 		GetGame().GetInputManager().ActivateContext("DialogueMenuContext");
+		super.OnMenuUpdate(tDelta);
 	}
 	void RemoveListeners()
 	{
@@ -195,7 +196,7 @@ class DialogueUIClass: ChimeraMenuBase
 			}
 			else
 			{
-				elComp7.SetTextNumber("[BACKSPACE]");
+				elComp7.SetTextNumber("[ESC]");
 			}
 			GetGame().GetInputManager().AddActionListener("DialogueBack", EActionTrigger.DOWN, DoDialogueBack);
 			return;
@@ -209,7 +210,7 @@ class DialogueUIClass: ChimeraMenuBase
 			}
 			else
 			{
-				elComp7.SetTextNumber("[BACKSPACE]");
+				elComp7.SetTextNumber("[ESC]");
 			}
 		GetGame().GetInputManager().AddActionListener("DialogueBack", EActionTrigger.DOWN, LeaveFunction);
 	}
@@ -227,10 +228,11 @@ class DialogueUIClass: ChimeraMenuBase
 		RemoveListeners();
 	}
 	//------------------------------------------------------------------------------------------------//
-	void ExecuteDialogue(int num)
+	void ExecuteDialogue(SCR_ListBoxElementComponent ListboxElement)
 	{
+		SP_ListBoxElementComponent listbox = SP_ListBoxElementComponent.Cast(ListboxElement);
 		RemoveListeners();
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, num);
+		DiagComp.DoDialogue(myCallerEntity, myUserEntity, listbox.branch);
 	}
 	//------------------------------------------------------------------------------------------------//
 	void DoDialogueBack()
