@@ -6,9 +6,6 @@ class SP_DialogueAction : ScriptedUserAction
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
-		SCR_PlayerController scrPlayerController = SCR_PlayerController.Cast(GetGame().GetPlayerController());
-		if (!scrPlayerController || pUserEntity != scrPlayerController.GetMainEntity()) 
-			return;
 		AIControlComponent comp = AIControlComponent.Cast(pOwnerEntity.FindComponent(AIControlComponent));
 		if (!comp)
 			return;
@@ -67,4 +64,14 @@ class SP_DialogueAction : ScriptedUserAction
 		
 		return super.CanBePerformedScript(user);
 	}
+	override bool HasLocalEffectOnlyScript()
+	{
+		return true;
+	}
+	
+	//----------------------------------------------------------------------------------
+	override bool CanBroadcastScript() 
+	{ 
+		return false; 
+	};
 }
