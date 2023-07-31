@@ -1,4 +1,4 @@
-BehaviorTree "{8D025428FBEF3B73}AI/BehaviorTrees/Chimera/Soldier/CaptiveSoldier.bt" {
+BehaviorTree "{F89BF93EA3363C34}AI/BehaviorTrees/AI_Navigate_Follow.bt" {
  Name "AI/BehaviorTrees/AI_Navigate_Follow.bt"
  Nodes {
   RootNode Root {
@@ -80,8 +80,13 @@ BehaviorTree "{8D025428FBEF3B73}AI/BehaviorTrees/Chimera/Soldier/CaptiveSoldier.
          Nodes {
           RunBT RunBT {
            Name "RunBT"
-           EditorPos 263.234 546.116
-           BehaviorTree "{990D4960E5206005}AI/BehaviorTrees/Chimera/Soldier/Soldier.bt"
+           EditorPos 263.234 547.545
+           OutPorts {
+            SingleOutputPortContainer SingleOutputPortContainerClass {
+             PortName "SmartToMoveTo"
+            }
+           }
+           BehaviorTree "{BC53D77D23308CD6}AI/BehaviorTrees/SmartActions/SA_ObservationPost.bt"
           }
          }
          InEntity 3
