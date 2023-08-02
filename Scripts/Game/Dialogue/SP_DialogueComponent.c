@@ -41,12 +41,6 @@ class SP_DialogueComponent: ScriptComponent
 	ref BaseChatChannel m_ChatChannelUS;
 	
 	[Attribute()]
-	ref BaseChatChannel m_ChatChannelBANDITS;
-	
-	[Attribute()]
-	ref BaseChatChannel m_ChatChannelSPEIRA;
-	
-	[Attribute()]
 	ref BaseChatChannel m_ChatChannelANOUNCER;
 	//----------------------------------------------------------------------------------------------------------------//
 	SCR_BaseGameMode GameMode;
@@ -99,12 +93,6 @@ class SP_DialogueComponent: ScriptComponent
 				break;
 				case "USSR":
 					Channel = m_ChatChannelUSSR;
-				break;
-				case "BANDITS":
-					Channel = m_ChatChannelBANDITS;
-				break;
-				case "SPEIRA":
-					Channel = m_ChatChannelSPEIRA;
 				break;
 				case "US":
 					Channel = m_ChatChannelUS;
@@ -280,6 +268,36 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return CharacterFullName;
 	}
+	string GetCharacterFirstName(IEntity Character)
+	{
+		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
+		
+		string CharacterFullName;
+		if(IdentityComponent)
+		{
+			Identity ID = IdentityComponent.GetIdentity();
+			if(ID)
+			{
+				CharacterFullName = ID.GetName();
+			}
+		}
+		return CharacterFullName;
+	}
+	string GetCharacterSurname(IEntity Character)
+	{
+		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
+		
+		string CharacterFullName;
+		if(IdentityComponent)
+		{
+			Identity ID = IdentityComponent.GetIdentity();
+			if(ID)
+			{
+				CharacterFullName = ID.GetSurname();
+			}
+		}
+		return CharacterFullName;
+	}
 	//CHARACTER RANK
 	SCR_ECharacterRank GetCharacterRank(IEntity Character)
 	{
@@ -315,7 +333,7 @@ class SP_DialogueComponent: ScriptComponent
 	//----------------------------------------------------------------------------------------------------------------//
 	SP_DialogueArchetype GetArchetypeTemplate(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
-		string senderName = GetCharacterName(pOwnerEntity);
+		string senderName = pOwnerEntity.GetName();
 		SCR_ECharacterRank senderRank = GetCharacterRank(pOwnerEntity);
 		FactionKey senderFaction = GetCharacterFaction(pOwnerEntity).GetFactionKey();
 		
@@ -355,7 +373,6 @@ class SP_DialogueComponent: ScriptComponent
 					if (ArchRank == senderRank)
 					{
 						DiagArch = m_CharacterArchetypeList[i];
-						return DiagArch;
 					}
 					break;
 				//-----------------------------------------------------------------------------------------------------------//
@@ -364,7 +381,6 @@ class SP_DialogueComponent: ScriptComponent
 					if (ArchFaction == senderFaction)
 					{
 						DiagArch = m_CharacterArchetypeList[i];
-						return DiagArch;
 					}
 					break;
 				//-----------------------------------------------------------------------------------------------------------//
@@ -373,7 +389,6 @@ class SP_DialogueComponent: ScriptComponent
 					if (ArchFaction == senderFaction && ArchRank == senderRank)
 					{
 						DiagArch = m_CharacterArchetypeList[i];
-						return DiagArch;
 					}
 					break;
 				}
