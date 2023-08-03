@@ -80,21 +80,21 @@ BehaviorTree "{F89BF93EA3363C34}AI/BehaviorTrees/AI_Navigate_Follow.bt" {
          Nodes {
           Selector Selector {
            Name "Selector"
-           EditorPos 367.357 558.786
+           EditorPos 319.667 544.333
            Nodes {
             RunBT RunBT {
              Name "RunBT"
-             EditorPos -439.112 727.641
+             EditorPos -464.445 827.641
              BehaviorTree "{5588B72AE6CDAFC8}AI/BehaviorTrees/SmartActions/WaypointLessObservationPoint.bt"
              AlwaysReinit 1
             }
             Sequence Sequence {
              Name "Sequence"
-             EditorPos 575.667 721.167
+             EditorPos 519 689.5
              Nodes {
               SCR_AISendOrder_MovementType "SCR_AI Send Order_ Movement Type" {
                Name "SCR_AI Send Order_ Movement Type"
-               EditorPos 104.535 871.894
+               EditorPos 63.868 832.227
                InPorts {
                 SingleInputPortContainer SingleInputPortContainer {
                  Port -1
@@ -109,13 +109,13 @@ BehaviorTree "{F89BF93EA3363C34}AI/BehaviorTrees/AI_Navigate_Follow.bt" {
               }
               AITaskMoveToEntity "Move To Entity" {
                Name "Move To Entity"
-               EditorPos 484.56 872.536
+               EditorPos 443.893 832.869
                PrecisionXZ 3
                InEntity 17
               }
               AITaskIdle Idle {
                Name "Idle"
-               EditorPos 804.917 872.179
+               EditorPos 766.583 866.845
               }
              }
             }
@@ -125,7 +125,7 @@ BehaviorTree "{F89BF93EA3363C34}AI/BehaviorTrees/AI_Navigate_Follow.bt" {
          AbortType AbortChildrenBranch
          InEntity 3
          InPosition 2
-         DistanceThreshold 10
+         DistanceThreshold 5
         }
         Sequence Sequence {
          Name "Sequence"
@@ -296,7 +296,7 @@ BehaviorTree "{F89BF93EA3363C34}AI/BehaviorTrees/AI_Navigate_Follow.bt" {
            AbortType AbortChildrenBranch
            InEntity 4
            InPosition 5
-           DistanceThreshold 10
+           DistanceThreshold 5
            OutDistance 8
           }
           RunBT RunBT {
@@ -422,7 +422,7 @@ BehaviorTree "{F89BF93EA3363C34}AI/BehaviorTrees/AI_Navigate_Follow.bt" {
   }
   VariableReference ChaRToFollow {
    VariableType 0
-   EditorPos 205.87 1059.262
+   EditorPos 165.203 1019.595
   }
  }
 }
