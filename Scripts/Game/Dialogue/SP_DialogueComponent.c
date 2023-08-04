@@ -29,7 +29,7 @@ class SP_DialogueComponent: ScriptComponent
 	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;	
 	//----------------------------------------------------------------------------------------------------------------//
 	[Attribute()]
-	protected ref SCR_MapLocationQuadHint m_WorldDirections;
+	protected ref SCR_MapLocationQuadHint m_aWorldDirections;
 	//Channels
 	[Attribute()]
 	ref BaseChatChannel m_ChatChannelFIA;
@@ -42,6 +42,8 @@ class SP_DialogueComponent: ScriptComponent
 	
 	[Attribute()]
 	ref BaseChatChannel m_ChatChannelANOUNCER;
+	
+	static protected ref SCR_MapLocationQuadHint m_WorldDirections;
 	//----------------------------------------------------------------------------------------------------------------//
 	SCR_BaseGameMode GameMode;
 	void Escape(IEntity Char, IEntity Player)
@@ -251,9 +253,15 @@ class SP_DialogueComponent: ScriptComponent
 		DiagArch.IncrementStage(BranchID, incrementamount, owner);
 		return false;
 	}
+	static string GetEditableEntName(IEntity ent)
+	{
+		SCR_EditableEntityComponent editComp = SCR_EditableEntityComponent.Cast(ent.FindComponent(SCR_EditableEntityComponent));
+		SCR_UIInfo uiinfo = editComp.GetInfo(ent);
+		return uiinfo.GetName();
+	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//CHARACTER NAME
-	string GetCharacterName(IEntity Character)
+	static string GetCharacterName(IEntity Character)
 	{
 		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
 		
@@ -268,7 +276,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return CharacterFullName;
 	}
-	string GetCharacterFirstName(IEntity Character)
+	static string GetCharacterFirstName(IEntity Character)
 	{
 		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
 		
@@ -283,7 +291,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return CharacterFullName;
 	}
-	string GetCharacterSurname(IEntity Character)
+	static string GetCharacterSurname(IEntity Character)
 	{
 		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
 		
@@ -299,7 +307,7 @@ class SP_DialogueComponent: ScriptComponent
 		return CharacterFullName;
 	}
 	//CHARACTER RANK
-	SCR_ECharacterRank GetCharacterRank(IEntity Character)
+	static SCR_ECharacterRank GetCharacterRank(IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		if(RankComponent)
@@ -308,7 +316,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return null;
 	}
-		string GetCharacterRankName(IEntity Character)
+	static string GetCharacterRankName(IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		string CharacterRank;
@@ -319,7 +327,7 @@ class SP_DialogueComponent: ScriptComponent
 		return CharacterRank;
 	}
 	//CHARACTER FACTION
-	Faction GetCharacterFaction(IEntity Character)
+	static Faction GetCharacterFaction(IEntity Character)
 	{
 		if (!Character)
 			return null;
@@ -453,6 +461,7 @@ class SP_DialogueComponent: ScriptComponent
 			config.Init(owner);
 		}
 		DialogueArchetypeMap = new map<string, ref SP_DialogueArchetype>;
+		m_WorldDirections = m_aWorldDirections;
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	// set masks;
@@ -462,7 +471,7 @@ class SP_DialogueComponent: ScriptComponent
 		SetEventMask(owner, EntityEvent.INIT);
 		owner.SetFlags(EntityFlags.ACTIVE, true);
 	}
-	string GetCharacterLocation(IEntity Character)
+	static string GetCharacterLocation(IEntity Character)
 	{
 		int m_iGridSizeX;
 		int m_iGridSizeY;
@@ -526,7 +535,7 @@ class SP_DialogueComponent: ScriptComponent
 	 	string m_sLocationName = m_WorldDirections.GetQuadHint(playerGridID) + ", " + closestLocationName;
 		return m_sLocationName;
 	}
-	protected int GetGridIndex(int x, int y)
+	static protected int GetGridIndex(int x, int y)
 	{
 		return 3*y + x;
 	}
