@@ -44,8 +44,19 @@ class SP_DialogueComponent: ScriptComponent
 	ref BaseChatChannel m_ChatChannelANOUNCER;
 	
 	static protected ref SCR_MapLocationQuadHint m_WorldDirections;
+	
+	ref array <string>					a_texthistory;
 	//----------------------------------------------------------------------------------------------------------------//
 	SCR_BaseGameMode GameMode;
+	void GetTextHistory(out array <string> hist)
+	{
+		if (!a_texthistory.IsEmpty())
+			hist.Copy(a_texthistory);
+	}
+	void ClearTextHistory()
+	{
+		a_texthistory.Clear();
+	}
 	void Escape(IEntity Char, IEntity Player)
 	{
 		DoBackDialogue(Char, Player);
@@ -60,11 +71,12 @@ class SP_DialogueComponent: ScriptComponent
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//Main function. Its called in SP_DialogueUI when an input is pressed. Branch ID will be different based on the input pressed
-	void DoDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount = 1)
+	string DoDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount = 1)
 	{
 		//------------------------------------------------------------------//
 		//SenderID needed to send text to chat
 		int senderID;
+		string actiontext;
 		//String to store the text we want to send on chat
 		string 					m_DialogTexttoshow;
 		//Name of character we are talking to 
@@ -86,7 +98,7 @@ class SP_DialogueComponent: ScriptComponent
 		if (Branch.CanBePerformed(Character, Player) == false)
 		{
 			DiagUI.UpdateEntries(Character, Player);
-			return;
+			return "Cant do dat.";
 		}
 		switch (senderFaction)
 			{
@@ -110,30 +122,37 @@ class SP_DialogueComponent: ScriptComponent
 			{
 				DiagArch.BranchArchetype(BranchID);
 			}
+			Branch.OnPerform(Character, Player);
 			//--------------------------------------//
 			//Look for the config that matches our character. Config hold info about progression of dialogue for the Specific AI we are talking to.			
 			DialogueBranchInfo Conf = Branch.LocateConfig(Character);
 			Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
-			SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
+			//Branch.GetActionText(Character, Player, actiontext);
+			//a_texthistory.Insert(string.Format("%1 : %2", GetCharacterRankName(Player) + " " + GetCharacterName(Player) , actiontext));
+			a_texthistory.Insert(string.Format("%1 : %2", GetCharacterRankName(Character) + " " + GetCharacterName(Character) , m_DialogTexttoshow));
+			//SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
 			// Cause a branch of the config
 			Branch.CauseBranch(BranchID, Character);
 			//Call OnPerform function of the branch stage
-			Branch.OnPerform(Character, Player);
+			
 			//--------------------------------------//
 			DiagUI.UpdateEntries(Character, Player);
 			//--------------------------------------//
-			return;
+			return m_DialogTexttoshow;
 			//--------------------------------------//
 		}
 		//--------------------------------------//
 		Branch.OnPerform(Character, Player);
 		DialogueBranchInfo Conf = Branch.LocateConfig(Character);
+		//Branch.GetActionText(Character, Player, actiontext);
 		Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
 		//--------------------------------------//
-		SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
-		
+		//SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
+		//a_texthistory.Insert(string.Format("%1 : %2", GetCharacterRankName(Player) + " " + GetCharacterName(Player) , actiontext));
+		a_texthistory.Insert(string.Format("%1 : %2", GetCharacterRankName(Character) + " " + GetCharacterName(Character) , m_DialogTexttoshow));
 		//--------------------------------------//
 		int Bstage;
+		
 		Conf.GetDialogueBranchStage(Bstage);
 		//If a stage exists it means that dialogue can increment
 		if (Branch.CheckNextStage(Bstage + 1) == true)
@@ -142,6 +161,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		//--------------------------------------//
 		DiagUI.UpdateEntries(Character, Player);
+		return m_DialogTexttoshow;
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//Function used for "GoBack" and "Leave" dialogue options
@@ -207,7 +227,7 @@ class SP_DialogueComponent: ScriptComponent
 			group.RemoveWaypoint(wp);
 			group.AddWaypoint(wp);
 		}
-		
+		ClearTextHistory();
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	void DoAnouncerDialogue(string Text)
@@ -462,6 +482,8 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		DialogueArchetypeMap = new map<string, ref SP_DialogueArchetype>;
 		m_WorldDirections = m_aWorldDirections;
+		if	(!a_texthistory)
+			a_texthistory = new array <string>();
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	// set masks;

@@ -1,0 +1,70 @@
+ButtonWidgetClass {
+ Name "ListBoxElement"
+ components {
+  SCR_ListBoxElementComponent "{5E0AC0144CC40C38}" {
+   m_eEventReturnValue 2147483584
+  }
+ }
+ style blank
+ {
+  SizeLayoutWidgetClass "{5E0AB5C22C38DFFC}" {
+   Name "SizeLayout"
+   Slot ButtonWidgetSlot "{5548E6E7E6AEDDC1}" {
+    HorizontalAlign 3
+   }
+   AllowHeightOverride 1
+   HeightOverride 35
+   {
+    OverlayWidgetClass "{5E0AB5C22C38DFC1}" {
+     Name "Overlay"
+     Slot ButtonWidgetSlot "{5548E6E7F213FB11}" {
+      HorizontalAlign 3
+      VerticalAlign 3
+     }
+     Clipping True
+     Color 0 0 0 1
+     {
+      FrameWidgetClass "{5E0AB5C22C38DFCB}" {
+       Name "Frame0"
+       Slot OverlayWidgetSlot "{5DC50309DE78CFF0}" {
+        HorizontalAlign 3
+        VerticalAlign 3
+        Padding 23.9 0 0 0
+       }
+       Clipping True
+       {
+        TextWidgetClass "{5E0AB5C22C38DFC9}" : "{E64DA8292CD7DBDD}UI/layouts/WidgetLibrary/TextWidgets/Text_InteractiveSmall.layout" {
+         Name "Text"
+         Slot FrameWidgetSlot "{5DC506F8BAE11727}" {
+          Anchor 0 0 1 0
+          PositionX 0
+          OffsetLeft 0
+          PositionY 0
+          OffsetTop 0
+          SizeX 0
+          OffsetRight 0
+          SizeY 35
+          OffsetBottom -35
+         }
+         Clipping True
+         Text "Textawuhwaguawghuawhguawhgouqw3hogahoipgahigeagiahjgiawehgiahgiaeignpaenginpigae"
+         "Font Size" 16
+         "Min Font Size" 16
+         "Horizontal Alignment" Center
+         "Vertical Alignment" Center
+         Wrap 1
+         FontProperties FontProperties "{546AF489DFD25402}" {
+          Font "{CD2634D279AB011A}UI/Fonts/Roboto/Roboto_Bold.fnt"
+          OutlineSize 4
+          ShadowSize 32
+         }
+         "Line Spacing" 0
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

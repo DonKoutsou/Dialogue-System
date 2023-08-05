@@ -2,8 +2,9 @@ class DialogueUIClass: ChimeraMenuBase
 { 
 	//----------------------------------------------------------------//
 	//UI Widgets
-	protected Widget 							m_wRoot; 
-	OverlayWidget 								m_ListBoxOverlay;
+	protected Widget 						m_wRoot; 
+	OverlayWidget 							m_ListBoxOverlay;
+	OverlayWidget 							m_ListBoxOverlayHistory;
 	TextWidget 									m_CharacterName;
 	TextWidget 									m_PlayerName;
 	TextWidget 									m_CharacterRank;
@@ -13,31 +14,33 @@ class DialogueUIClass: ChimeraMenuBase
 	PanelWidget									m_CharacterRep;
 	PanelWidget									m_PlayerRep;
 	ImageWidget 								m_FactionRep;
-	SCR_ListBoxElementComponent 				m_ListBoxElement;
-    SP_ListBoxComponent 						m_ListBoxComponent;
+	SCR_ListBoxElementComponent m_ListBoxElement;
+  SP_ListBoxComponent 				m_ListBoxComponent;
+	SCR_ListBoxComponent 				m_ListBoxComponentHistory;
 	
     //----------------------------------------------------------------//
 	//PlayerCharacter
-	IEntity 									myUserEntity;           
+	IEntity 										myUserEntity;           
 	//----------------------------------------------------------------//
 	//Charactaer we are talking to
-	IEntity 									myCallerEntity;
-	string 										CharName;
-	string 										PlName;
-	string 										CharRank;
-	string 										m_sPlRank;
-	string 										rank;
-	string		 								PLrank;
+	IEntity 										myCallerEntity;
+	string 											CharName;
+	string 											PlName;
+	string 											CharRank;
+	string 											m_sPlRank;
+	string 											rank;
+	string		 									PLrank;
 	FactionKey 									faction;
 	FactionKey 									Plfaction;
 	//----------------------------------------------------------------//
 	//DialogueStystem
 	SP_DialogueComponent 						DiagComp;
 	SP_DialogueArchetype 						DiagArch;
-	SCR_CharacterIdentityComponent				m_IDComp;
-	SCR_CharacterIdentityComponent				m_CharIDComp;
+	SCR_CharacterIdentityComponent	m_IDComp;
+	SCR_CharacterIdentityComponent	m_CharIDComp;
 	protected BaseGameMode 					GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
-	int 										CurrentBranchID;
+	int 														CurrentBranchID;
+	
     //------------------------------------------------------------------------------------------------//
 	override void OnMenuUpdate(float tDelta)
 	{
@@ -64,7 +67,9 @@ class DialogueUIClass: ChimeraMenuBase
 		myUserEntity = User;
 		m_wRoot = GetRootWidget();
 		m_ListBoxOverlay = OverlayWidget.Cast(m_wRoot.FindAnyWidget("ListBox0")); 
+		m_ListBoxOverlayHistory = OverlayWidget.Cast(m_wRoot.FindAnyWidget("ListBox1")); 
 		m_ListBoxComponent = SP_ListBoxComponent.Cast(m_ListBoxOverlay.FindHandler(SP_ListBoxComponent));
+		m_ListBoxComponentHistory = SCR_ListBoxComponent.Cast(m_ListBoxOverlayHistory.FindHandler(SCR_ListBoxComponent));
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		m_IDComp = SCR_CharacterIdentityComponent.Cast(User.FindComponent(SCR_CharacterIdentityComponent));
 		m_CharIDComp = SCR_CharacterIdentityComponent.Cast(myCallerEntity.FindComponent(SCR_CharacterIdentityComponent));
@@ -163,7 +168,11 @@ class DialogueUIClass: ChimeraMenuBase
 
 		m_PlayerRank = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerRank0"));
 		m_PlayerRank.SetText(m_sPlRank);
-		
+			
+		array <string> a_texthistory = new array <string>();
+		DiagComp.GetTextHistory(a_texthistory);
+		foreach (string text : a_texthistory)
+			m_ListBoxComponentHistory.AddItem(text);
 		for (int i = 0; i < 7; i++)
 		{
 			DiagComp.GetActionName(i, myCallerEntity, Player, DiagText);
@@ -221,13 +230,13 @@ class DialogueUIClass: ChimeraMenuBase
 	}
 	//------------------------------------------------------------------------------------------------//
 	//Function called to close menu
-    void LeaveFunction()
-    {
+   void LeaveFunction()
+   {
 		RemoveListeners();
 		DiagComp.DoBackDialogue(myCallerEntity, myUserEntity);
 		DiagComp.ReleaseAI(myCallerEntity, myUserEntity);
 		GetGame().GetMenuManager().CloseAllMenus();
-    }
+   }
 	override void OnMenuClose()
 	{
 		RemoveListeners();
@@ -237,7 +246,10 @@ class DialogueUIClass: ChimeraMenuBase
 	{
 		SP_ListBoxElementComponent listbox = SP_ListBoxElementComponent.Cast(ListboxElement);
 		RemoveListeners();
-		DiagComp.DoDialogue(myCallerEntity, myUserEntity, listbox.branch);
+		string diagname = DiagComp.DoDialogue(myCallerEntity, myUserEntity, listbox.branch);
+		string actname;
+		DiagComp.GetActionName(listbox.branch, myCallerEntity, myUserEntity, actname);
+		
 	}
 	//------------------------------------------------------------------------------------------------//
 	void DoDialogueBack()

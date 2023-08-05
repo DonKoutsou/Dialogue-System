@@ -1,0 +1,43 @@
+ButtonWidgetClass {
+ Name "ListBoxElement"
+ Slot AlignableSlot "{554ADB1D2D5974C0}" {
+  HorizontalAlign 3
+ }
+ components {
+  SCR_ListBoxElementComponent "{5E0AC00D6CB687D9}" {
+  }
+ }
+ style blank
+ {
+  SizeLayoutWidgetClass "{5E0AC00D447F979B}" {
+   Name "SizeLayout"
+   Slot ButtonWidgetSlot "{5548E6E7E6AEDDC1}" {
+    HorizontalAlign 3
+   }
+   HeightOverride 60
+   AllowMaxDesiredHeight 1
+   MaxDesiredHeight 180
+   {
+    OverlayWidgetClass "{5E0AC00D447F9799}" {
+     Name "Overlay"
+     Slot ButtonWidgetSlot "{5548E6E7F213FB11}" {
+      HorizontalAlign 0
+     }
+     Clipping False
+     {
+      TextWidgetClass "{5E0AC00D447F979D}" : "{E64DA8292CD7DBDD}UI/layouts/WidgetLibrary/TextWidgets/Text_InteractiveSmall.layout" {
+       Name "Text"
+       Slot OverlayWidgetSlot "{569519C7FDE79DBD}" {
+        Padding 8 8 8 8
+       }
+       "Z Order" 8
+       Text "Interactiveaufhuwafgawufgwaufwaufhawfwifawofaowfwa"
+       "Min Font Size" 20
+       Wrap 1
+      }
+     }
+    }
+   }
+  }
+ }
+}

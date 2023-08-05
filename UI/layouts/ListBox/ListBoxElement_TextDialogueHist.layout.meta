@@ -1,0 +1,15 @@
+MetaFileClass {
+ Name "{0DFA44F0A0C059C3}UI/layouts/ListBox/ListBoxElement_TextDialogueHist.layout"
+ Configurations {
+  LayoutResourceClass PC {
+  }
+  LayoutResourceClass XBOX_ONE : PC {
+  }
+  LayoutResourceClass XBOX_SERIES : PC {
+  }
+  LayoutResourceClass PS4 : PC {
+  }
+  LayoutResourceClass HEADLESS : PC {
+  }
+ }
+}

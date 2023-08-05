@@ -11,9 +11,10 @@ ButtonWidgetClass {
    Name "SizeLayout"
    Slot ButtonWidgetSlot "{5548E6E7E6AEDDC1}" {
     HorizontalAlign 3
+    Padding 0 0 0 0
    }
    AllowHeightOverride 1
-   HeightOverride 35
+   HeightOverride 50
    {
     OverlayWidgetClass "{5D10C018F39AE948}" {
      Name "Overlay"
@@ -31,22 +32,60 @@ ButtonWidgetClass {
         VerticalAlign 3
        }
        {
+        ImageWidgetClass "{5E0AC000308EA24F}" {
+         Name "Image2"
+         Slot FrameWidgetSlot "{5E0AC007E6AD3982}" {
+          Anchor 0 0 1 1
+          PositionX 0
+          OffsetLeft 2
+          PositionY 0
+          OffsetTop 2
+          SizeX 0
+          OffsetRight 2
+          SizeY 0
+          OffsetBottom 2
+          SizeToContent 1
+         }
+         Opacity 0.8
+         Color 0 0 0 1
+         "Blend Mode" Opaque
+         "Flip Vertically" 1
+         Saturation 0
+         "Transition width" 0
+         Progress 0.229
+         "Mask Mode" "Include Below"
+        }
+        PanelWidgetClass "{5E0AC00005CB8742}" {
+         Name "Panel0"
+         Slot FrameWidgetSlot "{5E0AC00005CB8020}" {
+          Anchor 0 0 1 1
+          PositionX 0
+          OffsetLeft 2
+          PositionY 0
+          OffsetTop 2
+          SizeX -1820
+          OffsetRight 2
+          SizeY -20
+          OffsetBottom 2
+         }
+         Color 0.761 0.584 0.366 1
+        }
         PanelWidgetClass "{5D10C018F39AE94E}" {
          Name "Border"
          Slot FrameWidgetSlot "{5DE2D88894C8742F}" {
-          Anchor 0 0 1 0
-          PositionX 5.263
-          OffsetLeft 5.263
-          PositionY 2.6
-          OffsetTop 2.6
-          SizeX -5.474
-          OffsetRight 0.211
-          SizeY 30
-          OffsetBottom -32.6
+          Anchor 0 0 1 1
+          PositionX 0
+          OffsetLeft 2
+          PositionY 0
+          OffsetTop 2
+          SizeX -1820
+          OffsetRight 2
+          SizeY -20
+          OffsetBottom 2
          }
          "Is Visible" 0
          Color 0.761 0.386 0.08 1
-         style outline_2px
+         style outline_4px
         }
         BlurWidgetClass "{5DE2D88918EDFF58}" {
          Name "Blur1"
@@ -60,6 +99,7 @@ ButtonWidgetClass {
           OffsetRight -105.218
           SizeY 30
           OffsetBottom -32.609
+          SizeToContent 1
          }
          Intensity 0.2
         }
@@ -77,15 +117,15 @@ ButtonWidgetClass {
         TextWidgetClass "{5D10C018F39AE94C}" : "{E64DA8292CD7DBDD}UI/layouts/WidgetLibrary/TextWidgets/Text_InteractiveSmall.layout" {
          Name "Text"
          Slot FrameWidgetSlot "{5DC506F8BAE11727}" {
-          Anchor 0 0 1 0
+          Anchor 0 0 1 1
           PositionX 0
           OffsetLeft 0
           PositionY 0
           OffsetTop 0
           SizeX 0
           OffsetRight 0
-          SizeY 35
-          OffsetBottom -35
+          SizeY -50
+          OffsetBottom 0
          }
          Clipping True
          Text "Textawuhwaguawghuawhguawhgouqw3hogahoipgahigeagiahjgiawehgiahgiaeignpaenginpigae"
