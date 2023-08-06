@@ -217,16 +217,16 @@ class SP_DialogueComponent: ScriptComponent
 		//act.SetActionState(EAIActionState.FAILED);
 		if (act)
 			act.SetActiveConversation(false);
-		SCR_AIGroup group = SCR_AIGroup.Cast(agent.GetParentGroup());
-		if (!group)
-			return;
-		SCR_DefendWaypoint wp;
-		wp = SCR_DefendWaypoint.Cast(group.GetCurrentWaypoint());
-		if (wp)
-		{
-			group.RemoveWaypoint(wp);
-			group.AddWaypoint(wp);
-		}
+		//SCR_AIGroup group = SCR_AIGroup.Cast(agent.GetParentGroup());
+		//if (!group)
+		//	return;
+		//SCR_DefendWaypoint wp;
+		//wp = SCR_DefendWaypoint.Cast(group.GetCurrentWaypoint());
+		//if (wp)
+		//{
+		//	group.RemoveWaypoint(wp);
+		//	group.AddWaypoint(wp);
+		//}
 		ClearTextHistory();
 	}
 	//----------------------------------------------------------------------------------------------------------------//
@@ -335,6 +335,18 @@ class SP_DialogueComponent: ScriptComponent
 			return RankComponent.GetCharacterRank(Character);
 		}
 		return null;
+	}
+	static string GetCharacterRankInsignia(IEntity Character)
+	{
+		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
+		SCR_FactionManager factman = SCR_FactionManager.Cast(GetGame().GetFactionManager());
+		SCR_Faction fact = SCR_Faction.Cast(GetCharacterFaction(Character));
+		if(RankComponent)
+		{
+			SCR_ECharacterRank curRank = RankComponent.GetCharacterRank(Character);
+			return fact.GetRankInsignia(curRank);
+		}
+		return STRING_EMPTY;
 	}
 	static string GetCharacterRankName(IEntity Character)
 	{

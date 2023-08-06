@@ -7,8 +7,8 @@ class DialogueUIClass: ChimeraMenuBase
 	OverlayWidget 							m_ListBoxOverlayHistory;
 	TextWidget 									m_CharacterName;
 	TextWidget 									m_PlayerName;
-	TextWidget 									m_CharacterRank;
-	TextWidget 									m_PlayerRank;
+	ImageWidget 								m_CharacterRank;
+	ImageWidget 								m_PlayerRank;
 	ImageWidget 								m_CharacterFactionIcon;
 	ImageWidget 								m_PlayerFactionIcon;
 	PanelWidget									m_CharacterRep;
@@ -40,7 +40,7 @@ class DialogueUIClass: ChimeraMenuBase
 	SCR_CharacterIdentityComponent	m_CharIDComp;
 	protected BaseGameMode 					GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
 	int 														CurrentBranchID;
-	
+	ResourceName RANK_ICON_IMAGESET = "{5D7F0C1AB551F610}UI/Textures/MilitaryIcons/MilitaryIcons.imageset";
     //------------------------------------------------------------------------------------------------//
 	override void OnMenuUpdate(float tDelta)
 	{
@@ -83,7 +83,7 @@ class DialogueUIClass: ChimeraMenuBase
 		if(myCallerEntity)
 		{
 			CharName = DiagComp.GetCharacterName(myCallerEntity);
-			rank = DiagComp.GetCharacterRankName(myCallerEntity);
+			rank = DiagComp.GetCharacterRankInsignia(myCallerEntity);
 			faction = DiagComp.GetCharacterFaction(myCallerEntity).GetFactionKey();
 		}
 		if(myUserEntity)
@@ -96,33 +96,12 @@ class DialogueUIClass: ChimeraMenuBase
 			Plfaction = DiagComp.GetCharacterFaction(myUserEntity).GetFactionKey();
 			*/ 
 			PlName = DiagComp.GetCharacterName(myUserEntity);
-			PLrank = DiagComp.GetCharacterRankName(myUserEntity);
+			PLrank = DiagComp.GetCharacterRankInsignia(myUserEntity);
 			Plfaction = DiagComp.GetCharacterFaction(myUserEntity).GetFactionKey();
 		}
 		
-		SCR_Faction SCRFact = SCR_Faction.Cast(DiagComp.GetCharacterFaction(myCallerEntity));
-		/*int FactionRep = SCRFact.GetFactionRep(DiagComp.GetCharacterFaction(myUserEntity));
-		if(FactionRep > 50)
-		{
-			m_FactionRep = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionRep()"));
-			m_FactionRep.SetColor(Color.DarkGreen);
-		}
-		else if(FactionRep <= 50 &&FactionRep > 20)
-		{
-			m_FactionRep = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionRep()"));
-			m_FactionRep.SetColor(Color.DarkYellow);
-		}
-		else if(FactionRep <= 20)
-		{
-			m_FactionRep = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionRep()"));
-			m_FactionRep.SetColor(Color.DarkRed);
-		}
-		*/
-		CharRank = rank;
-		PLrank = m_sPlRank;
-		
-		AssignIcons(faction, Plfaction);
-		
+		AssignFactionIcons(faction, Plfaction);
+		AssignRankIcons(rank, PLrank);
 		int MyRep = m_IDComp.GetRep();
 		int CharRep = m_CharIDComp.GetRep();
 		
@@ -160,19 +139,15 @@ class DialogueUIClass: ChimeraMenuBase
 		m_CharacterName = TextWidget.Cast(m_wRoot.FindAnyWidget("CharacterName"));
 		m_CharacterName.SetText(CharName);
 		
-		m_CharacterRank = TextWidget.Cast(m_wRoot.FindAnyWidget("CharacterRank"));
-		m_CharacterRank.SetText(CharRank);
 		
 		m_PlayerName = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerName0"));
 		m_PlayerName.SetText(PlName);
-
-		m_PlayerRank = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerRank0"));
-		m_PlayerRank.SetText(m_sPlRank);
-			
+		
 		array <string> a_texthistory = new array <string>();
 		DiagComp.GetTextHistory(a_texthistory);
 		foreach (string text : a_texthistory)
 			m_ListBoxComponentHistory.AddItem(text);
+		
 		for (int i = 0; i < 7; i++)
 		{
 			DiagComp.GetActionName(i, myCallerEntity, Player, DiagText);
@@ -210,7 +185,7 @@ class DialogueUIClass: ChimeraMenuBase
 			}
 			else
 			{
-				elComp7.SetTextNumber("[ESC]");
+				elComp7.SetTextNumber("[TAB]");
 			}
 			GetGame().GetInputManager().AddActionListener("DialogueBack", EActionTrigger.DOWN, DoDialogueBack);
 			return;
@@ -224,7 +199,7 @@ class DialogueUIClass: ChimeraMenuBase
 			}
 			else
 			{
-				elComp7.SetTextNumber("[ESC]");
+				elComp7.SetTextNumber("[TAB]");
 			}
 		GetGame().GetInputManager().AddActionListener("DialogueBack", EActionTrigger.DOWN, LeaveFunction);
 	}
@@ -289,7 +264,7 @@ class DialogueUIClass: ChimeraMenuBase
 	    }
 		return STRING_EMPTY;
 	}
-	void AssignIcons(FactionKey factioncharacter, FactionKey factionplayer)
+	void AssignFactionIcons(FactionKey factioncharacter, FactionKey factionplayer)
 	{
 		m_CharacterFactionIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionIcon"));
 		m_PlayerFactionIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("PlayerFactionIcon0"));
@@ -334,6 +309,19 @@ class DialogueUIClass: ChimeraMenuBase
 					m_PlayerFactionIcon.LoadImageTexture(0, "{CEAC8771342689C5}Assets/Data/Faction_SPEIRA.edds");
 				break;	
 			}
+		}
+	}
+	void AssignRankIcons(string rankinsigniacharacter, string rankinsigniaplayer)
+	{
+		m_CharacterRank = ImageWidget.Cast(m_wRoot.FindAnyWidget("RankIcon"));
+		m_PlayerRank = ImageWidget.Cast(m_wRoot.FindAnyWidget("PlayeRankIcon0"));
+		if (m_CharacterRank)
+		{
+			m_CharacterRank.LoadImageFromSet(0, RANK_ICON_IMAGESET, rankinsigniacharacter);
+		}
+		if (m_PlayerRank)
+		{
+			m_PlayerRank.LoadImageFromSet(0, RANK_ICON_IMAGESET, rankinsigniaplayer);
 		}
 	}
 }

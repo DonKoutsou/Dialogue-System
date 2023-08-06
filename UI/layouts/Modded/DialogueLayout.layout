@@ -77,7 +77,7 @@ FrameWidgetClass {
      Slot OverlayWidgetSlot "{5E0AC007E5E2E897}" {
       HorizontalAlign 3
       VerticalAlign 3
-      Padding 10 10 10 330
+      Padding 10 170 10 250
      }
      {
       ImageWidgetClass "{5E0AB5C6ADA8B376}" {
@@ -124,8 +124,8 @@ FrameWidgetClass {
         OffsetTop 8
         SizeX 592
         OffsetRight -600
-        SizeY 640
-        OffsetBottom -648
+        SizeY 552
+        OffsetBottom -560
        }
        components {
         SP_ListBoxComponent "{566C9415BAA54E1B}" {
@@ -135,6 +135,7 @@ FrameWidgetClass {
        {
         ScrollLayoutWidgetClass "{56691148E692435A}" {
          Prefab "{56691148E692435A}"
+         Color 0.761 0.583 0.367 1
          {
           VerticalLayoutWidgetClass "{56691148E013D981}" {
            Prefab "{56691148E013D981}"
@@ -222,7 +223,7 @@ FrameWidgetClass {
      Slot OverlayWidgetSlot "{5E0B18C768F6B01F}" {
       HorizontalAlign 3
       VerticalAlign 3
-      Padding 10 665 10 245
+      Padding 10 10 10 830
      }
      Opacity 0.895
      {
@@ -281,92 +282,159 @@ FrameWidgetClass {
        Intensity 0.256
        "Smooth Border" 6 6 6 6
       }
-      ImageWidgetClass "{5D8D25501211BCAA}" {
-       Name "FactionRep()"
-       Slot FrameWidgetSlot "{5D126ECA850604C0}" {
-        PositionX 272
-        OffsetLeft 272
-        PositionY 8
-        OffsetTop 8
-        SizeX 64
-        OffsetRight -336
-        SizeY 64.139
-        OffsetBottom -72.139
-       }
-       Color 0 0.502 0.125 1
-       Texture "{EF2619456049109B}UI/Textures/StanceIndicator/arrows_ui.edds"
-       "Flip Horizontally" 1
-      }
       FrameWidgetClass "{5E0B249373F621A7}" {
        Name "Frame1"
        Slot FrameWidgetSlot "{5E0B249373F62192}" {
         Anchor 0 0.5 0 0.5
-        PositionX 330
-        OffsetLeft 330
-        PositionY -31.35
-        OffsetTop -31.4
-        SizeX 272
+        PositionX 304
+        OffsetLeft 304
+        PositionY -66.35
+        OffsetTop -66.35
+        SizeX 298
         OffsetRight -602
-        SizeY 64
-        OffsetBottom -32.7
+        SizeY 136
+        OffsetBottom -69.65
        }
        {
-        FrameWidgetClass "{5E0B2494F2F05E21}" {
-         Name "Frame0"
-         Slot FrameWidgetSlot "{5E0B2494F2F05E02}" {
-          Anchor 0.5 0.5 0.5 0.5
-          PositionX 20
-          OffsetLeft 20
-          PositionY 0
-          OffsetTop 0
-          SizeX 106.1
-          OffsetRight -126.1
-          SizeY 30
-          OffsetBottom -30
+        FrameWidgetClass "{5E0CC94E9781A34B}" {
+         Name "Frame1"
+         Slot FrameWidgetSlot "{5E0CC94E9781BCA4}" {
+          PositionX 232
+          OffsetLeft 232
+          PositionY 6
+          OffsetTop 6
+          SizeX 60
+          OffsetRight -292
+          SizeY 60
+          OffsetBottom -66
          }
          {
-          TextWidgetClass "{5D96A234052529B8}" {
-           Name "Rank0"
-           Slot FrameWidgetSlot "{5D96A2347BB39BA8}" {
-            Anchor 0 0.5 0 0.5
+          ImageWidgetClass "{5E0C85B8FB92E1E2}" {
+           Name "RankIcon"
+           Slot FrameWidgetSlot "{5D126ECA850604C0}" {
             PositionX 0
             OffsetLeft 0
-            PositionY -7
-            OffsetTop -7
+            PositionY 0
+            OffsetTop 0
+            SizeX 60
+            OffsetRight -60
+            SizeY 60
+            OffsetBottom -60
+           }
+           Color 1 0.782 0.305 1
+           Texture "{5D7F0C1AB551F610}UI/Textures/MilitaryIcons/MilitaryIcons.imageset"
+           Image "AR_Rank_OR-6"
+           Size 32 32
+          }
+          PanelWidgetClass "{5E0CC94EA1A9B9E7}" {
+           Name "Panel1"
+           Slot FrameWidgetSlot "{5E0B24932856418A}" {
+            Anchor 0 0 1 1
+            PositionX 0
+            OffsetLeft 0
+            PositionY 0
+            OffsetTop 0
+            SizeX 0
+            OffsetRight 0
+            SizeY 0
+            OffsetBottom 0
+           }
+           Color 0.761 0.583 0.367 1
+          }
+         }
+        }
+        FrameWidgetClass "{5E0CC94FCD30198F}" {
+         Name "Frame0"
+         Slot FrameWidgetSlot "{5E0CC94FCD3019EA}" {
+          PositionX 8
+          OffsetLeft 8
+          PositionY 96
+          OffsetTop 96
+          SizeX 120
+          OffsetRight -128
+          SizeY 30
+          OffsetBottom -126
+         }
+         {
+          PanelWidgetClass "{5E0CC94F803987B7}" {
+           Name "Panel1"
+           Slot FrameWidgetSlot "{5E0B24932856418A}" {
+            Anchor 0 0 1 1
+            PositionX 0
+            OffsetLeft 0
+            PositionY 0
+            OffsetTop 0
+            SizeX 0
+            OffsetRight 0
+            SizeY 0
+            OffsetBottom 0
+           }
+           Color 0.761 0.583 0.367 1
+          }
+          FrameWidgetClass "{5E0CC94FBB61AB13}" {
+           Name "RepFrame0"
+           Slot FrameWidgetSlot "{5E0CC94FBB61AB6F}" {
+            Anchor 1 0 1 1
+            PositionX -23
+            OffsetLeft -23
+            PositionY 8
+            OffsetTop 8
+            SizeX 15
+            OffsetRight 8
+            SizeY -15
+            OffsetBottom 7
+           }
+           {
+            PanelWidgetClass "{5D96A2342146A25B}" {
+             Name "CharReputationColor"
+             Slot FrameWidgetSlot "{5D8D15D993F3A44F}" {
+              Anchor 0 0 1 1
+              PositionX 7.5
+              PositionY 7.5
+              SizeX -5
+              OffsetRight 0
+              SizeY 0
+              OffsetBottom 0
+             }
+             Color 0 0.502 0.125 1
+             style magazine_small_progress
+            }
+            PanelWidgetClass "{5E0CC94F441475BC}" {
+             Name "Panel0"
+             Slot FrameWidgetSlot "{5E0B24932856418A}" {
+              Anchor 0 0 1 1
+              PositionX 0
+              OffsetLeft 0
+              PositionY 0
+              OffsetTop 0
+              SizeX 0
+              OffsetRight 0
+              SizeY 0
+              OffsetBottom 0
+             }
+            }
+           }
+          }
+          TextWidgetClass "{5D96A23431C3FCD7}" {
+           Name "Reputation0"
+           Slot FrameWidgetSlot "{5D8D15DA50442F05}" {
+            Anchor 0 0 0 1
+            PositionX 5
+            OffsetLeft 5
+            PositionY 5
+            OffsetTop 6
             SizeX 100
-            OffsetRight -100
-            SizeY 30
-            OffsetBottom -23
+            OffsetRight -105
+            SizeY -3.7
+            OffsetBottom -1.3
             SizeToContent 1
            }
-           Text "Rank:"
+           Text "Reputation:"
            "Font Size" 15
            "Min Font Size" 15
-           Wrap 1
-          }
-          TextWidgetClass "{5D126ECAF57D6258}" {
-           Name "CharacterRank"
-           Slot FrameWidgetSlot "{5D10CA1D63DBBA3C}" {
-            Anchor 0 0.5 0 0.5
-            PositionX 35
-            OffsetLeft 35
-            PositionY -7
-            OffsetTop -7
-            SizeX 100
-            OffsetRight -135
-            SizeY 30
-            OffsetBottom -23
-            SizeToContent 1
-           }
-           Text "Cha"
-           "Font Size" 14
-           "Min Font Size" 14
-           Wrap 1
-           FontProperties FontProperties "{5D132977CD7B0B9E}" {
-            Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+           FontProperties FontProperties "{5E0CC94C6F8D0155}" {
+            Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
             Bold 1
-            OutlineSize 2
-            ShadowSize 32
            }
           }
          }
@@ -379,67 +447,54 @@ FrameWidgetClass {
           OffsetLeft 0
           PositionY 0
           OffsetTop 0
-          SizeX -172
+          SizeX 0
           OffsetRight 0
-          SizeY -34
+          SizeY 0
           OffsetBottom 0
          }
+         Color 0.761 0.583 0.367 1
         }
-        ImageWidgetClass "{5D126ECA850604EF}" {
-         Name "FactionIcon"
-         Slot FrameWidgetSlot "{5D126ECA850604C0}" {
-          PositionX 8
-          OffsetLeft 8
-          PositionY 8
-          OffsetTop 8
-          SizeX 50
-          OffsetRight -58
-          SizeY 50
-          OffsetBottom -58
+        FrameWidgetClass "{5E0CC94F394D0817}" {
+         Name "Faction"
+         Slot FrameWidgetSlot "{5E0CC94F394D0871}" {
+          Anchor 0 0 0 0
+          PositionX 232
+          OffsetLeft 232
+          PositionY 70
+          OffsetTop 70
+          SizeX 60
+          OffsetRight -292
+          SizeY 60
+          OffsetBottom -130
          }
-         Texture "{FB266CDD4502D60B}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_Fia.edds"
-        }
-        PanelWidgetClass "{5D96A2342146A25B}" {
-         Name "CharReputationColor"
-         Slot FrameWidgetSlot "{5D8D15D993F3A44F}" {
-          PositionX 130
-          OffsetLeft 130
-          PositionY 40
-          OffsetTop 40
-          SizeX 15
-          OffsetRight -145
-          SizeY 15
-          OffsetBottom -55
+         {
+          ImageWidgetClass "{5D126ECA850604EF}" {
+           Name "FactionIcon"
+           Slot FrameWidgetSlot "{5D126ECA850604C0}" {
+            Anchor 0 0 1 1
+            PositionX 0.5
+            OffsetLeft 1
+            PositionY 0.5
+            OffsetTop 1
+            SizeX -2
+            OffsetRight 1
+            SizeY -2
+            OffsetBottom 1
+           }
+           Texture "{EB7F65DBC9392557}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds"
+           Size 128 128
+          }
          }
-         Color 0 0.502 0.125 1
-         style full
-        }
-        TextWidgetClass "{5D96A23431C3FCD7}" {
-         Name "Reputation0"
-         Slot FrameWidgetSlot "{5D8D15DA50442F05}" {
-          PositionX 60
-          OffsetLeft 60
-          PositionY 40
-          OffsetTop 40
-          SizeX 120.925
-          OffsetRight -180.9
-          SizeY 26.324
-          OffsetBottom -66.3
-          SizeToContent 1
-         }
-         Text "Reputation:"
-         "Font Size" 15
-         "Min Font Size" 15
         }
         TextWidgetClass "{5D10CA1D63DBBA26}" {
          Name "CharacterName"
          Slot FrameWidgetSlot "{5D10CA1D63DBBA3C}" {
-          PositionX 60
-          OffsetLeft 60
+          PositionX 8
+          OffsetLeft 8
           PositionY 8
           OffsetTop 8
-          SizeX -660.6
-          OffsetRight 600.6
+          SizeX -649.801
+          OffsetRight 641.801
           SizeY -33.8
           OffsetBottom 25.8
           SizeToContent 1
@@ -447,12 +502,26 @@ FrameWidgetClass {
          Text "Ch"
          Wrap 1
          FontProperties FontProperties "{5D132977C36A3649}" {
-          Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
-          OutlineSize 3
-          ShadowSize 32
+          Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+          Bold 1
          }
         }
        }
+      }
+      PanelWidgetClass "{5E0CC94F2FB05C21}" {
+       Name "Panel0"
+       Slot FrameWidgetSlot "{5E0B24932856418A}" {
+        Anchor 0 0 1 1
+        PositionX 0
+        OffsetLeft 0
+        PositionY 0
+        OffsetTop 0
+        SizeX 0
+        OffsetRight 0
+        SizeY 0
+        OffsetBottom 0
+       }
+       Color 0.761 0.583 0.367 1
       }
       FrameWidgetClass "{5E0B2492AB326D39}" {
        Name "Frame0"
@@ -460,69 +529,203 @@ FrameWidgetClass {
         Anchor 0.5 0.5 0.5 0.5
         PositionX -300
         OffsetLeft -300
-        PositionY -31.35
-        OffsetTop -31.4
-        SizeX 268
-        OffsetRight 32
-        SizeY 64
-        OffsetBottom -32.7
+        PositionY -66.35
+        OffsetTop -66.35
+        SizeX 291.55
+        OffsetRight 8.45
+        SizeY 136
+        OffsetBottom -69.65
        }
        {
-        FrameWidgetClass "{5E0B2494B3349996}" {
-         Name "Frame0"
-         Slot FrameWidgetSlot "{5E0B2494B33499EC}" {
-          Anchor 0.5 0.5 0.5 0.5
-          PositionX -33
-          OffsetLeft -33
-          OffsetTop 0
-          SizeX 100
-          OffsetRight -67
-          SizeY 30
-          OffsetBottom -30
+        FrameWidgetClass "{5E0CC94D8D3C301E}" {
+         Name "Frame1"
+         Slot FrameWidgetSlot "{5E0CC94D8D3C3074}" {
+          PositionX 225
+          OffsetLeft 225
+          PositionY 6
+          OffsetTop 6
+          SizeX 60
+          OffsetRight -285
+          SizeY 60
+          OffsetBottom -66
          }
          {
-          TextWidgetClass "{5D96A2347BB39A57}" {
-           Name "Rank"
-           Slot FrameWidgetSlot "{5D96A2347BB39BA8}" {
-            Anchor 0 0.5 0 0.5
+          ImageWidgetClass "{5E0C85B9307BB4FE}" {
+           Name "PlayeRankIcon0"
+           Slot FrameWidgetSlot "{5D126ECA850604C0}" {
+            Anchor 0 0 1 1
+            PositionX 200
             OffsetLeft 0
-            PositionY -7
-            OffsetTop -7
-            SizeX 100
-            OffsetRight -100
-            SizeY 31
-            OffsetBottom -24
+            PositionY 6
+            OffsetTop 0
+            SizeX 0
+            OffsetRight 0
+            SizeY 0
+            OffsetBottom 0
+           }
+           Color 1 0.782 0.305 1
+           Texture "{5D7F0C1AB551F610}UI/Textures/MilitaryIcons/MilitaryIcons.imageset"
+           Image "AR_Rank_OR-2"
+           Size 32 32
+          }
+          PanelWidgetClass "{5E0CC94DBE108229}" {
+           Name "Panel1"
+           Slot FrameWidgetSlot "{5E0B24932856418A}" {
+            Anchor 0 0 1 1
+            PositionX 0
+            OffsetLeft 0
+            PositionY 0
+            OffsetTop 0
+            SizeX 0
+            OffsetRight 0
+            SizeY 0
+            OffsetBottom 0
+           }
+           Color 0.761 0.583 0.367 1
+          }
+         }
+        }
+        FrameWidgetClass "{5E0CC94DF15FD448}" {
+         Name "PlayerFaction_Frame"
+         Slot FrameWidgetSlot "{5E0CC94DF15FD5AB}" {
+          PositionX 225
+          OffsetLeft 225
+          PositionY 70
+          OffsetTop 70
+          SizeX 60
+          OffsetRight -285
+          SizeY 60
+          OffsetBottom -130
+         }
+         {
+          ImageWidgetClass "{5D8D15DFA6C7DD57}" {
+           Name "PlayerFactionIcon0"
+           Slot FrameWidgetSlot "{5D126ECA850604C0}" {
+            Anchor 0 0 1 1
+            PositionX 200
+            OffsetLeft 1
+            PositionY 70
+            OffsetTop 1
+            SizeX 0
+            OffsetRight 1
+            SizeY 0
+            OffsetBottom 1
+           }
+           Texture "{FB266CDD4502D60B}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_Fia.edds"
+           Size 128 128
+          }
+          PanelWidgetClass "{5E0CC94DE6D150F4}" {
+           Name "Panel1"
+           Slot FrameWidgetSlot "{5E0B24932856418A}" {
+            Anchor 0 0 1 1
+            PositionX 0
+            OffsetLeft 0
+            PositionY 0
+            OffsetTop 0
+            SizeX 0
+            OffsetRight 0
+            SizeY 0
+            OffsetBottom 0
+           }
+           Color 0.761 0.583 0.367 1
+          }
+         }
+        }
+        FrameWidgetClass "{5E0CC94E7080BBA8}" {
+         Name "Frame0"
+         Slot FrameWidgetSlot "{5E0CC94E7080BB8D}" {
+          PositionX 8
+          OffsetLeft 8
+          PositionY 96
+          OffsetTop 96
+          SizeX 120
+          OffsetRight -128
+          SizeY 30
+          OffsetBottom -126
+         }
+         {
+          FrameWidgetClass "{5E0CC94E0F82D4AF}" {
+           Name "Frame0"
+           Slot FrameWidgetSlot "{5E0CC94E0F82D488}" {
+            Anchor 1 0 1 1
+            PositionX -23
+            OffsetLeft -23
+            PositionY 0
+            OffsetTop 8
+            SizeX 15
+            OffsetRight 8
+            SizeY 0
+            OffsetBottom 7
+           }
+           {
+            PanelWidgetClass "{5D8D15D993F3A45B}" {
+             Name "ReputationColor"
+             Slot FrameWidgetSlot "{5D8D15D993F3A44F}" {
+              Anchor 0 0 1 1
+              PositionX 80
+              PositionY 6
+              SizeX -85
+              OffsetRight 0
+              SizeY -15
+              OffsetBottom 0
+             }
+             Color 0 0.502 0.125 1
+             style magazine_small_progress
+            }
+            PanelWidgetClass "{5E0CC94DDE0ED606}" {
+             Name "Panel1"
+             Slot FrameWidgetSlot "{5E0B24932856418A}" {
+              Anchor 0 0 1 1
+              PositionX 0
+              OffsetLeft 0
+              PositionY 0
+              OffsetTop 0
+              SizeX 0
+              OffsetRight 0
+              SizeY 0
+              OffsetBottom 0
+             }
+             Color 0.761 0.583 0.367 1
+            }
+           }
+          }
+          TextWidgetClass "{5D8D15DA50442F13}" {
+           Name "Reputation"
+           Slot FrameWidgetSlot "{5D8D15DA50442F05}" {
+            Anchor 0 0 0 1
+            PositionX 5
+            OffsetLeft 5
+            PositionY 6
+            OffsetTop 6
+            SizeX 120.9
+            OffsetRight -125.9
+            SizeY -3.7
+            OffsetBottom 0
             SizeToContent 1
            }
-           Text "Rank:"
+           Text "Reputation:"
            "Font Size" 15
            "Min Font Size" 15
-           Wrap 1
-          }
-          TextWidgetClass "{5D8D15DFF3489D0F}" {
-           Name "PlayerRank0"
-           Slot FrameWidgetSlot "{5D10CA1D63DBBA3C}" {
-            Anchor 0 0.5 0 0.5
-            PositionX 35
-            OffsetLeft 35
-            PositionY -7
-            OffsetTop -7
-            SizeX 100
-            OffsetRight -135
-            SizeY 30
-            OffsetBottom -23
-            SizeToContent 1
-           }
-           Text "PlayerRank"
-           "Font Size" 14
-           "Min Font Size" 14
-           Wrap 1
-           FontProperties FontProperties "{5D132977CD7B0B9E}" {
-            Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
+           FontProperties FontProperties "{5E0CC94C455CF9F9}" {
+            Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
             Bold 1
-            OutlineSize 2
-            ShadowSize 32
+            DisabledColor 1 1 1 1
            }
+          }
+          PanelWidgetClass "{5E0CC94E145BCCAA}" {
+           Name "Panel1"
+           Slot FrameWidgetSlot "{5E0B24932856418A}" {
+            Anchor 0 0 1 1
+            PositionX 0
+            OffsetLeft 0
+            PositionY 0
+            OffsetTop 0
+            SizeX 0
+            OffsetRight 0
+            SizeY 0
+            OffsetBottom 0
+           }
+           Color 0.761 0.583 0.367 1
           }
          }
         }
@@ -539,55 +742,7 @@ FrameWidgetClass {
           OffsetBottom 0
          }
          Opacity 0.659
-        }
-        ImageWidgetClass "{5D8D15DFA6C7DD57}" {
-         Name "PlayerFactionIcon0"
-         Slot FrameWidgetSlot "{5D126ECA850604C0}" {
-          PositionX 211.7
-          OffsetLeft 211.7
-          PositionY 8
-          OffsetTop 8
-          SizeX 50
-          OffsetRight -261.7
-          SizeY 50
-          OffsetBottom -58
-         }
-         Texture "{EA856582D475C1A8}Assets/Editor/CompositionSlot/Data/whiteTexture_01.edds"
-         Size 8 8
-        }
-        TextWidgetClass "{5D8D15DA50442F13}" {
-         Name "Reputation"
-         Slot FrameWidgetSlot "{5D8D15DA50442F05}" {
-          Anchor 0 1 0 1
-          PositionX 8
-          OffsetLeft 8
-          PositionY -24
-          OffsetTop -24
-          SizeX 120.9
-          OffsetRight -128.9
-          SizeY 26.3
-          OffsetBottom -2.3
-          SizeToContent 1
-         }
-         Text "Reputation:"
-         "Font Size" 15
-         "Min Font Size" 15
-        }
-        PanelWidgetClass "{5D8D15D993F3A45B}" {
-         Name "ReputationColor"
-         Slot FrameWidgetSlot "{5D8D15D993F3A44F}" {
-          Anchor 0 1 0 1
-          PositionX 80
-          OffsetLeft 80
-          PositionY -24
-          OffsetTop -24
-          SizeX 15
-          OffsetRight -95
-          SizeY 15
-          OffsetBottom 9
-         }
-         Color 0 0.502 0.125 1
-         style full
+         Color 0.761 0.583 0.367 1
         }
         TextWidgetClass "{5D8D15DFF3489CA6}" {
          Name "PlayerName0"
@@ -602,13 +757,11 @@ FrameWidgetClass {
           OffsetBottom -8
           SizeToContent 1
          }
-         Text "Playerw"
-         "Horizontal Alignment" Center
+         Text "Matouš"
          Wrap 1
          FontProperties FontProperties "{5D132977C36A3649}" {
-          Font "{3E7733BAC8C831F6}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.fnt"
-          OutlineSize 3
-          ShadowSize 32
+          Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+          Bold 1
          }
         }
        }

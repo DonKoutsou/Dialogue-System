@@ -34,6 +34,9 @@ ButtonWidgetClass {
        Text "Interactiveaufhuwafgawufgwaufwaufhawfwifawofaowfwa"
        "Min Font Size" 20
        Wrap 1
+       FontProperties FontProperties "{546AF489DFD25402}" {
+        Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+       }
       }
      }
     }

@@ -52,7 +52,8 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
        Name "SCR_AI Set Weapon Raised"
        EditorPos -158.571 171.429
        InPorts {
-        SingleInputPortContainer SingleInputPortContainerClass {
+        SingleInputPortContainer SingleInputPortContainer {
+         Port -1
          PortName "Raised"
         }
        }
@@ -62,7 +63,7 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
        Name "Move"
        EditorPos 185 132
        InTargetLocation 0
-       PrecisionXZ 2
+       PrecisionXZ 3
       }
       AITaskIdle Idle {
        Name "Idle"

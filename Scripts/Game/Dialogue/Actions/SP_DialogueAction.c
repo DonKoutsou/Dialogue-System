@@ -20,15 +20,10 @@ class SP_DialogueAction : ScriptedUserAction
 		
 		GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
-		AIGroup group = AIGroup.Cast(agent.GetParentGroup());
 		string NoTalkText = "Cant talk to you now";
 		FactionKey SenderFaction = DiagComp.GetCharacterFaction(pOwnerEntity).GetFactionKey();
 		BaseChatChannel Channel;
 		string name = DiagComp.GetCharacterName(pOwnerEntity);
-        if (group)
-		{
-			agent = group.GetLeaderAgent();
-		}
 		if (!DiagComp.LocateDialogueArchetype(pOwnerEntity, pUserEntity))
 		{
 			DiagComp.SendText(NoTalkText, Channel, 0, name, DiagComp.GetCharacterRankName(pOwnerEntity));
