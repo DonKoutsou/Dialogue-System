@@ -273,9 +273,77 @@ BehaviorTree "{F89BF93EA3363C34}AI/BehaviorTrees/AI_Navigate_Follow.bt" {
                    DistanceThreshold 15
                    OutDistance -1
                   }
+                  DecoTestDistanceToEntity "Test Distance To Entity" {
+                   Name "Test Distance To Entity"
+                   EditorPos 2050.667 1559.834
+                   Nodes {
+                    ForEachChild "For Each Child" {
+                     Name "For Each Child"
+                     EditorPos 2107.143 1824.286
+                     Nodes {
+                      Sequence Sequence {
+                       Name "Sequence"
+                       EditorPos 2131.643 1983.571
+                       Nodes {
+                        SCR_AIGetRandomPoint "SCR_AI Get Random Point" {
+                         Name "SCR_AI Get Random Point"
+                         EditorPos 1848.047 2170.523
+                         InPorts {
+                          SingleInputPortContainer SingleInputPortContainer {
+                           Port -1
+                           PortName "Waypoint"
+                          }
+                          SingleInputPortContainer SingleInputPortContainer {
+                           Port 20
+                           PortName "Origin"
+                          }
+                          SingleInputPortContainer SingleInputPortContainer {
+                           Port -1
+                           PortName "Radius"
+                          }
+                         }
+                         OutPorts {
+                          SingleOutputPortContainer SingleOutputPortContainer {
+                           Port 21
+                           PortName "ResultVector"
+                          }
+                         }
+                         m_Radius 10
+                         m_ExclusionRadius 2
+                        }
+                        SCR_AISetPosition "SCR_AI Set Position" {
+                         Name "SCR_AI Set Position"
+                         EditorPos 2337.747 2180.603
+                         InPorts {
+                          SingleInputPortContainer SingleInputPortContainer {
+                           Port -1
+                           PortName "EntitytIn"
+                          }
+                          SingleInputPortContainer SingleInputPortContainer {
+                           Port 23
+                           PortName "AgentIn"
+                          }
+                          SingleInputPortContainer SingleInputPortContainer {
+                           Port 21
+                           PortName "DestinationIn"
+                          }
+                         }
+                        }
+                       }
+                      }
+                     }
+                     OutEntity 22
+                    }
+                   }
+                   NegativeCondition 1
+                   InEntity 19
+                   InPosition 18
+                   DistanceThreshold 50
+                   OutDistance -1
+                  }
                   AITaskMoveToEntity "Move To Entity" {
                    Name "Move To Entity"
-                   EditorPos 2003.651 1573.141
+                   EditorPos 2385.318 1584.808
                    InTargetOrientation -1
                    InPrecisionXZ -1
                    PrecisionXZ 3
@@ -347,6 +415,18 @@ BehaviorTree "{F89BF93EA3363C34}AI/BehaviorTrees/AI_Navigate_Follow.bt" {
   Variable Distance {
    VariableName "Distance"
    VariableTypeName "float"
+   VariableExposedInput 0
+   VariableExposedOutput 0
+  }
+  Variable randomp {
+   VariableName "randomp"
+   VariableTypeName "vector"
+   VariableExposedInput 0
+   VariableExposedOutput 0
+  }
+  Variable Agent {
+   VariableName "Agent"
+   VariableTypeName "AIAgent"
    VariableExposedInput 0
    VariableExposedOutput 0
   }
@@ -423,6 +503,30 @@ BehaviorTree "{F89BF93EA3363C34}AI/BehaviorTrees/AI_Navigate_Follow.bt" {
   VariableReference ChaRToFollow {
    VariableType 0
    EditorPos 165.203 1019.595
+  }
+  VariableReference MyPos {
+   VariableType 2
+   EditorPos 1844.518 1842.199
+  }
+  VariableReference ChaRToFollow {
+   VariableType 0
+   EditorPos 1770.482 1764.967
+  }
+  VariableReference CharToFollowPos {
+   VariableType 1
+   EditorPos 1654.357 2371.989
+  }
+  VariableReference randomp {
+   VariableType 4
+   EditorPos 2122.38 2379.683
+  }
+  VariableReference Agent {
+   VariableType 5
+   EditorPos 2295.556 1882.222
+  }
+  VariableReference Agent {
+   VariableType 5
+   EditorPos 2138.889 2256.667
   }
  }
 }
