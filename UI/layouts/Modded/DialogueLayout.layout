@@ -350,8 +350,8 @@ FrameWidgetClass {
           OffsetLeft 8
           PositionY 96
           OffsetTop 96
-          SizeX 120
-          OffsetRight -128
+          SizeX 150
+          OffsetRight -158
           SizeY 30
           OffsetBottom -126
          }
@@ -371,49 +371,25 @@ FrameWidgetClass {
            }
            Color 0.761 0.583 0.367 1
           }
-          FrameWidgetClass "{5E0CC94FBB61AB13}" {
-           Name "RepFrame0"
-           Slot FrameWidgetSlot "{5E0CC94FBB61AB6F}" {
-            Anchor 1 0 1 1
-            PositionX -23
-            OffsetLeft -23
-            PositionY 8
-            OffsetTop 8
-            SizeX 15
-            OffsetRight 8
-            SizeY -15
-            OffsetBottom 7
+          TextWidgetClass "{5D96A2342146A25B}" {
+           Name "CharReputationText"
+           Slot FrameWidgetSlot "{5D8D15D993F3A44F}" {
+            Anchor 0 0 0 1
+            PositionX 90
+            OffsetLeft 90
+            PositionY 0
+            OffsetTop 0
+            SizeX 120
+            OffsetRight -210
+            SizeY 0
+            OffsetBottom 0
            }
-           {
-            PanelWidgetClass "{5D96A2342146A25B}" {
-             Name "CharReputationColor"
-             Slot FrameWidgetSlot "{5D8D15D993F3A44F}" {
-              Anchor 0 0 1 1
-              PositionX 7.5
-              PositionY 7.5
-              SizeX -5
-              OffsetRight 0
-              SizeY 0
-              OffsetBottom 0
-             }
-             Color 0 0.502 0.125 1
-             style magazine_small_progress
-            }
-            PanelWidgetClass "{5E0CC94F441475BC}" {
-             Name "Panel0"
-             Slot FrameWidgetSlot "{5E0B24932856418A}" {
-              Anchor 0 0 1 1
-              PositionX 0
-              OffsetLeft 0
-              PositionY 0
-              OffsetTop 0
-              SizeX 0
-              OffsetRight 0
-              SizeY 0
-              OffsetBottom 0
-             }
-            }
-           }
+           Color 0.502 0.011 0 1
+           style default
+           Text "Terrible"
+           "Font Size" 15
+           "Min Font Size" 15
+           "Vertical Alignment" Center
           }
           TextWidgetClass "{5D96A23431C3FCD7}" {
            Name "Reputation0"
@@ -638,56 +614,33 @@ FrameWidgetClass {
           OffsetLeft 8
           PositionY 96
           OffsetTop 96
-          SizeX 120
-          OffsetRight -128
+          SizeX 150
+          OffsetRight -158
           SizeY 30
           OffsetBottom -126
+          Alignment 0 0
          }
          {
-          FrameWidgetClass "{5E0CC94E0F82D4AF}" {
-           Name "Frame0"
-           Slot FrameWidgetSlot "{5E0CC94E0F82D488}" {
-            Anchor 1 0 1 1
-            PositionX -23
-            OffsetLeft -23
-            PositionY 0
-            OffsetTop 8
-            SizeX 15
-            OffsetRight 8
-            SizeY 0
-            OffsetBottom 7
+          TextWidgetClass "{5D8D15D993F3A45B}" {
+           Name "ReputationText"
+           Slot FrameWidgetSlot "{5D8D15D993F3A44F}" {
+            Anchor 0 0 0 1
+            PositionX 90
+            OffsetLeft 90
+            PositionY 21
+            OffsetTop 0
+            SizeX 120
+            OffsetRight -210
+            SizeY -10
+            OffsetBottom 0
+            SizeToContent 1
            }
-           {
-            PanelWidgetClass "{5D8D15D993F3A45B}" {
-             Name "ReputationColor"
-             Slot FrameWidgetSlot "{5D8D15D993F3A44F}" {
-              Anchor 0 0 1 1
-              PositionX 80
-              PositionY 6
-              SizeX -85
-              OffsetRight 0
-              SizeY -15
-              OffsetBottom 0
-             }
-             Color 0 0.502 0.125 1
-             style magazine_small_progress
-            }
-            PanelWidgetClass "{5E0CC94DDE0ED606}" {
-             Name "Panel1"
-             Slot FrameWidgetSlot "{5E0B24932856418A}" {
-              Anchor 0 0 1 1
-              PositionX 0
-              OffsetLeft 0
-              PositionY 0
-              OffsetTop 0
-              SizeX 0
-              OffsetRight 0
-              SizeY 0
-              OffsetBottom 0
-             }
-             Color 0.761 0.583 0.367 1
-            }
-           }
+           Color 0 0.502 0.125 1
+           style default
+           Text "Good"
+           "Font Size" 15
+           "Min Font Size" 15
+           "Vertical Alignment" Center
           }
           TextWidgetClass "{5D8D15DA50442F13}" {
            Name "Reputation"
@@ -696,16 +649,16 @@ FrameWidgetClass {
             PositionX 5
             OffsetLeft 5
             PositionY 6
-            OffsetTop 6
+            OffsetTop 0
             SizeX 120.9
             OffsetRight -125.9
             SizeY -3.7
             OffsetBottom 0
-            SizeToContent 1
            }
            Text "Reputation:"
            "Font Size" 15
            "Min Font Size" 15
+           "Vertical Alignment" Center
            FontProperties FontProperties "{5E0CC94C455CF9F9}" {
             Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
             Bold 1

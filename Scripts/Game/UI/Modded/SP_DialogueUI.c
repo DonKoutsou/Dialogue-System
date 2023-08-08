@@ -11,8 +11,8 @@ class DialogueUIClass: ChimeraMenuBase
 	ImageWidget 								m_PlayerRank;
 	ImageWidget 								m_CharacterFactionIcon;
 	ImageWidget 								m_PlayerFactionIcon;
-	PanelWidget									m_CharacterRep;
-	PanelWidget									m_PlayerRep;
+	TextWidget									m_CharacterRep;
+	TextWidget									m_PlayerRep;
 	ImageWidget 								m_FactionRep;
 	SCR_ListBoxElementComponent m_ListBoxElement;
   SP_ListBoxComponent 				m_ListBoxComponent;
@@ -105,35 +105,65 @@ class DialogueUIClass: ChimeraMenuBase
 		int MyRep = m_IDComp.GetRep();
 		int CharRep = m_CharIDComp.GetRep();
 		
-		if(MyRep > 50)
+		if(MyRep > 80)
 		{
-			m_PlayerRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
+			m_PlayerRep = TextWidget.Cast(m_wRoot.FindAnyWidget("ReputationText"));
 			m_PlayerRep.SetColor(Color.DarkGreen);
+			m_PlayerRep.SetText("Briliant");
 		}
-		else if(MyRep <= 50 && MyRep > 20)
+		else if(MyRep > 60)
 		{
-			m_PlayerRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
+			m_PlayerRep = TextWidget.Cast(m_wRoot.FindAnyWidget("ReputationText"));
+			m_PlayerRep.SetColor(Color.DarkGreen);
+			m_PlayerRep.SetText("Good");
+		}
+		else if(MyRep > 40)
+		{
+			m_PlayerRep = TextWidget.Cast(m_wRoot.FindAnyWidget("ReputationText"));
 			m_PlayerRep.SetColor(Color.DarkYellow);
+			m_PlayerRep.SetText("Neuteral");
 		}
-		else if(MyRep <= 20)
+		else if(MyRep > 20)
 		{
-			m_PlayerRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("ReputationColor"));
+			m_PlayerRep = TextWidget.Cast(m_wRoot.FindAnyWidget("ReputationText"));
 			m_PlayerRep.SetColor(Color.DarkRed);
+			m_PlayerRep.SetText("Bad");
 		}
-		if(CharRep > 50)
+		else if(MyRep > 1)
 		{
-			m_CharacterRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("CharReputationColor"));
+			m_PlayerRep = TextWidget.Cast(m_wRoot.FindAnyWidget("ReputationText"));
+			m_PlayerRep.SetColor(Color.DarkRed);
+			m_PlayerRep.SetText("Horrible");
+		}
+		if(CharRep > 80)
+		{
+			m_CharacterRep = TextWidget.Cast(m_wRoot.FindAnyWidget("CharReputationText"));
 			m_CharacterRep.SetColor(Color.DarkGreen);
+			m_CharacterRep.SetText("Briliant");
 		}
-		else if(CharRep <= 50 && CharRep > 20)
+		else if(CharRep > 60)
 		{
-			m_CharacterRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("CharReputationColor"));
+			m_CharacterRep = TextWidget.Cast(m_wRoot.FindAnyWidget("CharReputationText"));
+			m_CharacterRep.SetColor(Color.DarkGreen);
+			m_CharacterRep.SetText("Good");
+		}
+		else if(CharRep > 40)
+		{
+			m_CharacterRep = TextWidget.Cast(m_wRoot.FindAnyWidget("CharReputationText"));
 			m_CharacterRep.SetColor(Color.DarkYellow);
+			m_CharacterRep.SetText("Neuteral");
 		}
-		else if(CharRep <= 20)
+		else if(CharRep > 20)
 		{
-			m_CharacterRep = PanelWidget.Cast(m_wRoot.FindAnyWidget("CharReputationColor"));
+			m_CharacterRep = TextWidget.Cast(m_wRoot.FindAnyWidget("CharReputationText"));
 			m_CharacterRep.SetColor(Color.DarkRed);
+			m_CharacterRep.SetText("Bad");
+		}
+		else if(CharRep > 1)
+		{
+			m_CharacterRep = TextWidget.Cast(m_wRoot.FindAnyWidget("CharReputationText"));
+			m_CharacterRep.SetColor(Color.DarkRed);
+			m_CharacterRep.SetText("Horrible");
 		}
 		
 		m_CharacterName = TextWidget.Cast(m_wRoot.FindAnyWidget("CharacterName"));
