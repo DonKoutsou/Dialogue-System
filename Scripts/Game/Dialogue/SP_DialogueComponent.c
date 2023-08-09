@@ -45,13 +45,22 @@ class SP_DialogueComponent: ScriptComponent
 	
 	static protected ref SCR_MapLocationQuadHint m_WorldDirections;
 	
-	ref array <string>					a_texthistory;
+	ref array <string>				a_texthistory;
+	ref array <string>				a_PLtexthistory;
 	//----------------------------------------------------------------------------------------------------------------//
 	SCR_BaseGameMode GameMode;
-	void GetTextHistory(out array <string> hist)
+	void GetTextHistory(out array <string> hist, out array <string> PLhist)
 	{
-		if (!a_texthistory.IsEmpty())
-			hist.Copy(a_texthistory);
+		//if (!a_texthistory.IsEmpty())
+			//hist.Copy(a_texthistory);
+		for (int i = 0; i < a_texthistory.Count(); i++)
+		{
+			hist.Insert(a_texthistory[i]);
+		}
+		for (int i = 0; i < a_PLtexthistory.Count(); i++)
+		{
+			PLhist.Insert(a_PLtexthistory[i]);
+		}
 	}
 	void ClearTextHistory()
 	{
@@ -122,14 +131,18 @@ class SP_DialogueComponent: ScriptComponent
 			{
 				DiagArch.BranchArchetype(BranchID);
 			}
+			
 			Branch.OnPerform(Character, Player);
 			//--------------------------------------//
 			//Look for the config that matches our character. Config hold info about progression of dialogue for the Specific AI we are talking to.			
 			DialogueBranchInfo Conf = Branch.LocateConfig(Character);
+			Branch.GetActionText(Character, Player, actiontext);
 			Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
-			//Branch.GetActionText(Character, Player, actiontext);
-			//a_texthistory.Insert(string.Format("%1 : %2", GetCharacterRankName(Player) + " " + GetCharacterName(Player) , actiontext));
-			a_texthistory.Insert(string.Format("%1 : %2", GetCharacterRankName(Character) + " " + GetCharacterName(Character) , m_DialogTexttoshow));
+			if (actiontext)
+				a_PLtexthistory.Insert(actiontext);
+			else
+				a_PLtexthistory.Insert("null");
+			a_texthistory.Insert(m_DialogTexttoshow);
 			//SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
 			// Cause a branch of the config
 			Branch.CauseBranch(BranchID, Character);
@@ -142,14 +155,18 @@ class SP_DialogueComponent: ScriptComponent
 			//--------------------------------------//
 		}
 		//--------------------------------------//
+		
 		Branch.OnPerform(Character, Player);
 		DialogueBranchInfo Conf = Branch.LocateConfig(Character);
-		//Branch.GetActionText(Character, Player, actiontext);
+		Branch.GetActionText(Character, Player, actiontext);
 		Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
 		//--------------------------------------//
 		//SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
-		//a_texthistory.Insert(string.Format("%1 : %2", GetCharacterRankName(Player) + " " + GetCharacterName(Player) , actiontext));
-		a_texthistory.Insert(string.Format("%1 : %2", GetCharacterRankName(Character) + " " + GetCharacterName(Character) , m_DialogTexttoshow));
+		if (actiontext)
+			a_PLtexthistory.Insert(actiontext);
+		else
+			a_PLtexthistory.Insert("null");
+		a_texthistory.Insert(m_DialogTexttoshow);
 		//--------------------------------------//
 		int Bstage;
 		
@@ -161,6 +178,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		//--------------------------------------//
 		DiagUI.UpdateEntries(Character, Player);
+		PlayDialogueSound();
 		return m_DialogTexttoshow;
 	}
 	//----------------------------------------------------------------------------------------------------------------//
@@ -358,6 +376,16 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return CharacterRank;
 	}
+	static string GetCharacterRankNameFull(IEntity Character)
+	{
+		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
+		string CharacterRank;
+		if(RankComponent)
+		{
+			CharacterRank = RankComponent.GetCharacterRankName(Character);
+		}
+		return CharacterRank;
+	}
 	//CHARACTER FACTION
 	static Faction GetCharacterFaction(IEntity Character)
 	{
@@ -496,6 +524,8 @@ class SP_DialogueComponent: ScriptComponent
 		m_WorldDirections = m_aWorldDirections;
 		if	(!a_texthistory)
 			a_texthistory = new array <string>();
+		if	(!a_PLtexthistory)
+			a_PLtexthistory = new array <string>();
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	// set masks;

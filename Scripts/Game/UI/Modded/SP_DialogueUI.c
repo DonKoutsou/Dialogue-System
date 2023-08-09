@@ -5,18 +5,20 @@ class DialogueUIClass: ChimeraMenuBase
 	protected Widget 						m_wRoot; 
 	OverlayWidget 							m_ListBoxOverlay;
 	OverlayWidget 							m_ListBoxOverlayHistory;
-	TextWidget 									m_CharacterName;
-	TextWidget 									m_PlayerName;
-	ImageWidget 								m_CharacterRank;
-	ImageWidget 								m_PlayerRank;
-	ImageWidget 								m_CharacterFactionIcon;
-	ImageWidget 								m_PlayerFactionIcon;
-	TextWidget									m_CharacterRep;
-	TextWidget									m_PlayerRep;
-	ImageWidget 								m_FactionRep;
-	SCR_ListBoxElementComponent m_ListBoxElement;
-  SP_ListBoxComponent 				m_ListBoxComponent;
-	SCR_ListBoxComponent 				m_ListBoxComponentHistory;
+	TextWidget 								m_CharacterName;
+	TextWidget 								m_PlayerName;
+	ImageWidget 							m_CharacterRank;
+	ImageWidget 							m_PlayerRank;
+	TextWidget 								m_TextCharacterRank;
+	TextWidget 								m_TextPlayerRank;
+	ImageWidget 							m_CharacterFactionIcon;
+	ImageWidget 							m_PlayerFactionIcon;
+	TextWidget								m_CharacterRep;
+	TextWidget								m_PlayerRep;
+	ImageWidget 							m_FactionRep;
+	SCR_ListBoxElementComponent 			m_ListBoxElement;
+ 	 SP_ListBoxComponent 					m_ListBoxComponent;
+	SCR_ListBoxComponent 					m_ListBoxComponentHistory;
 	
     //----------------------------------------------------------------//
 	//PlayerCharacter
@@ -30,8 +32,10 @@ class DialogueUIClass: ChimeraMenuBase
 	string 											m_sPlRank;
 	string 											rank;
 	string		 									PLrank;
-	FactionKey 									faction;
-	FactionKey 									Plfaction;
+	string 											rankText;
+	string		 									PLrankText;
+	FactionKey 										faction;
+	FactionKey 										Plfaction;
 	//----------------------------------------------------------------//
 	//DialogueStystem
 	SP_DialogueComponent 						DiagComp;
@@ -85,6 +89,7 @@ class DialogueUIClass: ChimeraMenuBase
 			CharName = DiagComp.GetCharacterName(myCallerEntity);
 			rank = DiagComp.GetCharacterRankInsignia(myCallerEntity);
 			faction = DiagComp.GetCharacterFaction(myCallerEntity).GetFactionKey();
+			rankText = DiagComp.GetCharacterRankNameFull(myCallerEntity);
 		}
 		if(myUserEntity)
 		{
@@ -98,10 +103,26 @@ class DialogueUIClass: ChimeraMenuBase
 			PlName = DiagComp.GetCharacterName(myUserEntity);
 			PLrank = DiagComp.GetCharacterRankInsignia(myUserEntity);
 			Plfaction = DiagComp.GetCharacterFaction(myUserEntity).GetFactionKey();
+			PLrankText = DiagComp.GetCharacterRankNameFull(myUserEntity);
 		}
 		
 		AssignFactionIcons(faction, Plfaction);
 		AssignRankIcons(rank, PLrank);
+		
+		/*ItemPreviewManagerEntity m_PreviewManager = GetGame().GetItemPreviewManager();
+		ItemPreviewWidget test = ItemPreviewWidget.Cast(m_wRoot.FindAnyWidget("ItemPreview0"));
+		SCR_CharacterInventoryStorageComponent sto = SCR_CharacterInventoryStorageComponent.Cast(Character.FindComponent(SCR_CharacterInventoryStorageComponent));
+		
+		PreviewRenderAttributes preview = PreviewRenderAttributes.Cast(sto.FindAttribute(PreviewRenderAttributes));
+		//preview.ZoomCamera(-100);
+		preview.RotateItemCamera(vector.Zero, vector.Zero, "0 45 0");
+		m_PreviewManager.SetPreviewItem(test, Character, preview);*/
+		
+		
+		m_TextCharacterRank = TextWidget.Cast(m_wRoot.FindAnyWidget("CharRankText"));
+		m_TextCharacterRank.SetText(rankText);
+		m_TextPlayerRank = TextWidget.Cast(m_wRoot.FindAnyWidget("RankText"));
+		m_TextPlayerRank.SetText(PLrankText);
 		int MyRep = m_IDComp.GetRep();
 		int CharRep = m_CharIDComp.GetRep();
 		
@@ -174,9 +195,15 @@ class DialogueUIClass: ChimeraMenuBase
 		m_PlayerName.SetText(PlName);
 		
 		array <string> a_texthistory = new array <string>();
-		DiagComp.GetTextHistory(a_texthistory);
-		foreach (string text : a_texthistory)
-			m_ListBoxComponentHistory.AddItem(text);
+		array <string> a_PLtexthistory = new array <string>();
+		DiagComp.GetTextHistory(a_texthistory, a_PLtexthistory);
+		for (int i = 0; i < a_texthistory.Count(); i++)
+		{
+			if (a_PLtexthistory[i] != "null")
+				m_ListBoxComponentHistory.AddDiagItem(a_PLtexthistory[i], PlName, Color.DarkGreen);
+			m_ListBoxComponentHistory.AddDiagItem(a_texthistory[i], CharName, Color.DarkYellow);
+		}
+			
 		
 		for (int i = 0; i < 7; i++)
 		{
@@ -252,9 +279,6 @@ class DialogueUIClass: ChimeraMenuBase
 		SP_ListBoxElementComponent listbox = SP_ListBoxElementComponent.Cast(ListboxElement);
 		RemoveListeners();
 		string diagname = DiagComp.DoDialogue(myCallerEntity, myUserEntity, listbox.branch);
-		string actname;
-		DiagComp.GetActionName(listbox.branch, myCallerEntity, myUserEntity, actname);
-		
 	}
 	//------------------------------------------------------------------------------------------------//
 	void DoDialogueBack()

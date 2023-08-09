@@ -1,7 +1,8 @@
 ButtonWidgetClass {
  Name "ListBoxElement"
- Slot AlignableSlot "{554ADB1D2D5974C0}" {
-  HorizontalAlign 3
+ Slot AlignableSlot "{5E1310B79664ED60}" {
+  HorizontalAlign 0
+  VerticalAlign 0
  }
  components {
   SCR_ListBoxElementComponent "{5E0AC00D6CB687D9}" {
@@ -12,9 +13,13 @@ ButtonWidgetClass {
   SizeLayoutWidgetClass "{5E0AC00D447F979B}" {
    Name "SizeLayout"
    Slot ButtonWidgetSlot "{5548E6E7E6AEDDC1}" {
-    HorizontalAlign 3
+    HorizontalAlign 0
+    VerticalAlign 0
+    Padding 0 0 0 0
    }
-   HeightOverride 60
+   HeightOverride 40
+   AllowMinDesiredHeight 1
+   MinDesiredHeight 40
    AllowMaxDesiredHeight 1
    MaxDesiredHeight 180
    {
@@ -22,20 +27,41 @@ ButtonWidgetClass {
      Name "Overlay"
      Slot ButtonWidgetSlot "{5548E6E7F213FB11}" {
       HorizontalAlign 0
+      VerticalAlign 0
+      Padding 0 0 0 0
      }
-     Clipping False
+     Clipping True
      {
       TextWidgetClass "{5E0AC00D447F979D}" : "{E64DA8292CD7DBDD}UI/layouts/WidgetLibrary/TextWidgets/Text_InteractiveSmall.layout" {
        Name "Text"
        Slot OverlayWidgetSlot "{569519C7FDE79DBD}" {
-        Padding 8 8 8 8
+        HorizontalAlign 0
+        VerticalAlign 0
+        Padding 20 20 0 0
        }
        "Z Order" 8
-       Text "Interactiveaufhuwafgawufgwaufwaufhawfwifawofaowfwa"
-       "Min Font Size" 20
+       Text "InteractiveaufhuwafgawufgwaufwaufhawfwifawofaowfwaInteractiveaufhuwafgawufgwaufwaufhawfwifawofaowfwaInteractiveaufhuwafgawufgwaufwaufhawfwifawofaowfwaInteractiveaufhuwafgawufgwaufwaufhawfwifawofaowfwaInteractiveaufhuwafgawufgwaufwaufhawfwifawofaowfwa"
+       "Font Size" 15
+       "Min Font Size" 15
        Wrap 1
        FontProperties FontProperties "{546AF489DFD25402}" {
         Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+       }
+       "Line Spacing" 2
+      }
+      TextWidgetClass "{5E129C584A15D029}" {
+       Name "CharName"
+       Slot OverlayWidgetSlot "{5E129C584A15D0DE}" {
+        HorizontalAlign 0
+        Padding 0 0 0 50
+       }
+       Color 0.82 0.674 0.238 1
+       "Font Size" 15
+       "Min Font Size" 15
+       FontProperties FontProperties "{5E129C5A45D7BE56}" {
+        Font "{CD2634D279AB011A}UI/Fonts/Roboto/Roboto_Bold.fnt"
+        Bold 1
+        OutlineSize 2
        }
       }
      }
