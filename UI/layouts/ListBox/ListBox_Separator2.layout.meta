@@ -1,0 +1,15 @@
+MetaFileClass {
+ Name "{8DB27B8B301423D5}UI/layouts/ListBox/ListBox_Separator2.layout"
+ Configurations {
+  LayoutResourceClass PC {
+  }
+  LayoutResourceClass XBOX_ONE : PC {
+  }
+  LayoutResourceClass XBOX_SERIES : PC {
+  }
+  LayoutResourceClass PS4 : PC {
+  }
+  LayoutResourceClass HEADLESS : PC {
+  }
+ }
+}
