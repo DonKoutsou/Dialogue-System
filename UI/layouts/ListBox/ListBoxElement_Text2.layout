@@ -1,6 +1,6 @@
 ButtonWidgetClass {
  Name "ListBoxElement"
- Slot AlignableSlot "{5E1310B79664ED60}" {
+ Slot LayoutSlot "{5E16933DDB435DFF}" {
   HorizontalAlign 0
   VerticalAlign 0
  }
@@ -17,11 +17,7 @@ ButtonWidgetClass {
     VerticalAlign 0
     Padding 0 0 0 0
    }
-   HeightOverride 40
-   AllowMinDesiredHeight 1
-   MinDesiredHeight 40
-   AllowMaxDesiredHeight 1
-   MaxDesiredHeight 180
+   HeightOverride 100
    {
     OverlayWidgetClass "{5E0AC00D447F9799}" {
      Name "Overlay"
@@ -30,16 +26,14 @@ ButtonWidgetClass {
       VerticalAlign 0
       Padding 0 0 0 0
      }
-     Clipping True
      {
       TextWidgetClass "{5E0AC00D447F979D}" : "{E64DA8292CD7DBDD}UI/layouts/WidgetLibrary/TextWidgets/Text_InteractiveSmall.layout" {
        Name "Text"
        Slot OverlayWidgetSlot "{569519C7FDE79DBD}" {
-        HorizontalAlign 0
-        VerticalAlign 0
-        Padding 20 20 0 0
+        HorizontalAlign 3
+        VerticalAlign 3
+        Padding 0 0 0 0
        }
-       "Z Order" 8
        Text "InteractiveaufhuwafgawufgwaufwaufhawfwifawofaowfwaInteractiveaufhuwafgawufgwaufwaufhawfwifawofaowfwaInteractiveaufhuwafgawufgwaufwaufhawfwifawofaowfwaInteractiveaufhuwafgawufgwaufwaufhawfwifawofaowfwaInteractiveaufhuwafgawufgwaufwaufhawfwifawofaowfwa"
        "Font Size" 15
        "Min Font Size" 15
@@ -47,6 +41,7 @@ ButtonWidgetClass {
        FontProperties FontProperties "{546AF489DFD25402}" {
         Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
        }
+       Offset 10 20
        "Line Spacing" 2
       }
       TextWidgetClass "{5E129C584A15D029}" {

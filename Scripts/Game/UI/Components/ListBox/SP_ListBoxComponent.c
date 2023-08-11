@@ -14,5 +14,8 @@ class SP_ListBoxComponent : SCR_ListBoxComponent
 		}
 		return -1;
 	}
+	override void AddSeparator(string text)
+	{
+	}
 	
 };

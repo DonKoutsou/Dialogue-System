@@ -62,6 +62,7 @@ FrameWidgetClass {
       VerticalAlign 3
      }
      Color 0.761 0.533 0.277 1
+     style pixel_frame
     }
     BlurWidgetClass "{5D128E0CC9EBE7A5}" {
      Name "Blur0"
@@ -114,18 +115,20 @@ FrameWidgetClass {
         Alignment 0 0
        }
        Color 0.761 0.583 0.367 1
+       style pixel_frame
       }
       OverlayWidgetClass "{5E0AB5C600A9D31A}" : "{94CAAE4A601195D3}UI/layouts/ListBox/ListBox.layout" {
        Name "ListBox1"
        Slot FrameWidgetSlot "{5E0AC0077ADFCE71}" {
+        Anchor 0 0 0 1
         PositionX 8
         OffsetLeft 8
         PositionY 8
         OffsetTop 8
         SizeX 592
         OffsetRight -600
-        SizeY 552
-        OffsetBottom -560
+        SizeY -16.7
+        OffsetBottom 8.7
        }
        components {
         SP_ListBoxComponent "{566C9415BAA54E1B}" {
@@ -137,9 +140,15 @@ FrameWidgetClass {
         ScrollLayoutWidgetClass "{56691148E692435A}" {
          Prefab "{56691148E692435A}"
          Color 0.761 0.583 0.367 1
+         style Small
+         "Scrollbar Always Visible" 1
          {
           VerticalLayoutWidgetClass "{56691148E013D981}" {
            Prefab "{56691148E013D981}"
+           components {
+            SCR_ListViewComponent "{5E16933F7E58876D}" {
+            }
+           }
            "Fill Origin" Bottom
           }
          }
@@ -193,18 +202,21 @@ FrameWidgetClass {
         OffsetBottom 0
        }
        Color 0.761 0.583 0.367 1
+       style pixel_frame
       }
       OverlayWidgetClass "{5D10CA10CABF9D5A}" : "{94CAAE4A601195D3}UI/layouts/ListBox/ListBox.layout" {
        Name "ListBox0"
        Slot FrameWidgetSlot "{5E0AC00106D76943}" {
-        PositionX 8
-        OffsetLeft 8
+        Anchor 0.5 0 0.5 1
+        PositionX 0
+        OffsetLeft 0
         PositionY 8
-        OffsetTop 8
-        SizeX 592
-        OffsetRight -600
-        SizeY 216
-        OffsetBottom -224
+        OffsetTop 6
+        SizeX 595
+        OffsetRight -595
+        SizeY -12.7
+        OffsetBottom 6
+        Alignment 0.5 0
        }
        components {
         SP_ListBoxComponent "{566C9415BAA54E1B}" {
@@ -268,6 +280,7 @@ FrameWidgetClass {
         Alignment 0 0
        }
        Color 0.761 0.583 0.367 1
+       style pixel_frame
       }
       BlurWidgetClass "{5D126EC5A621ED82}" {
        Name "Blur0"
@@ -288,15 +301,15 @@ FrameWidgetClass {
       FrameWidgetClass "{5E0B249373F621A7}" {
        Name "Frame1"
        Slot FrameWidgetSlot "{5E0B249373F62192}" {
-        Anchor 0 0.5 0 0.5
-        PositionX 304
-        OffsetLeft 304
-        PositionY -66.35
-        OffsetTop -66.35
+        Anchor 1 0 1 1
+        PositionX -304.9
+        OffsetLeft -304.9
+        PositionY 8
+        OffsetTop 5
         SizeX 298
-        OffsetRight -602
-        SizeY 136
-        OffsetBottom -69.65
+        OffsetRight 6.9
+        SizeY -12.7
+        OffsetBottom 5
        }
        {
         FrameWidgetClass "{5E0CC94E9781A34B}" {
@@ -403,6 +416,7 @@ FrameWidgetClass {
           OffsetBottom 0
          }
          Color 0.761 0.583 0.367 1
+         style pixel_frame
         }
         FrameWidgetClass "{5E0CC94F394D0817}" {
          Name "Faction"
@@ -528,20 +542,21 @@ FrameWidgetClass {
         SizeY 0
         OffsetBottom 0
        }
+       "Is Visible" 0
        Color 0.761 0.583 0.367 1
       }
       FrameWidgetClass "{5E0B2492AB326D39}" {
        Name "Frame0"
        Slot FrameWidgetSlot "{5E0B2492AB326D1C}" {
-        Anchor 0.5 0.5 0.5 0.5
-        PositionX -300
-        OffsetLeft -300
-        PositionY -66.35
-        OffsetTop -66.35
+        Anchor 0 0 0 1
+        PositionX 5
+        OffsetLeft 5
+        PositionY 8
+        OffsetTop 5
         SizeX 291.55
-        OffsetRight 8.45
-        SizeY 136
-        OffsetBottom -69.65
+        OffsetRight -296.5
+        SizeY -12.7
+        OffsetBottom 5
        }
        {
         FrameWidgetClass "{5E0CC94D8D3C301E}" {
@@ -611,14 +626,15 @@ FrameWidgetClass {
         FrameWidgetClass "{5E0CC94E7080BBA8}" {
          Name "Frame0"
          Slot FrameWidgetSlot "{5E0CC94E7080BB8D}" {
+          Anchor 0 0 0 1
           PositionX 8
           OffsetLeft 8
           PositionY 96
           OffsetTop 96
           SizeX 150
           OffsetRight -158
-          SizeY 30
-          OffsetBottom -126
+          SizeY -106
+          OffsetBottom 10
           Alignment 0 0
          }
          {
@@ -682,6 +698,7 @@ FrameWidgetClass {
          }
          Opacity 0.659
          Color 0.761 0.583 0.367 1
+         style pixel_frame
         }
         TextWidgetClass "{5D8D15DFF3489CA6}" {
          Name "PlayerName0"

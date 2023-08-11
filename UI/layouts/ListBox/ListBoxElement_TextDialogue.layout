@@ -69,6 +69,7 @@ ButtonWidgetClass {
           OffsetBottom 2
          }
          Color 0.761 0.583 0.367 1
+         style pixel_frame
         }
         PanelWidgetClass "{5D10C018F39AE94E}" {
          Name "Border"
