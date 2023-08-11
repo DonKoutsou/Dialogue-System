@@ -46,6 +46,8 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
          PortName "PositionOut"
         }
        }
+       m_fVerticalOffset 1.7
+       m_fIgnoreLookDistSq 0
        m_fPriority 80
       }
       SCR_AISetWeaponRaised "SCR_AI Set Weapon Raised" {

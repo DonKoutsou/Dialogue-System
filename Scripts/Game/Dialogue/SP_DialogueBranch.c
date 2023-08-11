@@ -64,6 +64,8 @@ class SP_DialogueBranch
 		Conf.GetDialogueBranchStage(Bstage);
 		if(m_BranchStages.Count() >= Bstage)
 		{
+			//if (m_BranchStages[Bstage].CheckIfStageBranches(Character, Player);
+			
 			DiagText = m_BranchStages[Bstage].GetStageDialogueText(Character, Player);
 		}
 	}
@@ -93,7 +95,7 @@ class SP_DialogueBranch
 			Diagstage = m_BranchStages[Bstage];
 		}
 		
-		if(Diagstage && Diagstage.CheckIfStageCanBranch(Character, Player) == true)
+		if(Diagstage && Diagstage.CheckIfStageCanBranch(Character, Player))
 		{
 			return true;
 		}

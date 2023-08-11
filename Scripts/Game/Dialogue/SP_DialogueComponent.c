@@ -65,6 +65,7 @@ class SP_DialogueComponent: ScriptComponent
 	void ClearTextHistory()
 	{
 		a_texthistory.Clear();
+		a_PLtexthistory.Clear();
 	}
 	void Escape(IEntity Char, IEntity Player)
 	{
@@ -132,17 +133,19 @@ class SP_DialogueComponent: ScriptComponent
 				DiagArch.BranchArchetype(BranchID);
 			}
 			
-			Branch.OnPerform(Character, Player);
+			
 			//--------------------------------------//
 			//Look for the config that matches our character. Config hold info about progression of dialogue for the Specific AI we are talking to.			
 			DialogueBranchInfo Conf = Branch.LocateConfig(Character);
+			Branch.OnPerform(Character, Player);
 			Branch.GetActionText(Character, Player, actiontext);
 			Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
+			a_texthistory.Insert(m_DialogTexttoshow);
 			if (actiontext)
 				a_PLtexthistory.Insert(actiontext);
 			else
 				a_PLtexthistory.Insert("null");
-			a_texthistory.Insert(m_DialogTexttoshow);
+			
 			//SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
 			// Cause a branch of the config
 			Branch.CauseBranch(BranchID, Character);
@@ -156,17 +159,19 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		//--------------------------------------//
 		
-		Branch.OnPerform(Character, Player);
 		DialogueBranchInfo Conf = Branch.LocateConfig(Character);
 		Branch.GetActionText(Character, Player, actiontext);
+		Branch.OnPerform(Character, Player);
 		Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
 		//--------------------------------------//
 		//SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
+		a_texthistory.Insert(m_DialogTexttoshow);
 		if (actiontext)
 			a_PLtexthistory.Insert(actiontext);
 		else
 			a_PLtexthistory.Insert("null");
-		a_texthistory.Insert(m_DialogTexttoshow);
+		
+		
 		//--------------------------------------//
 		int Bstage;
 		
