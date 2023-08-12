@@ -43,6 +43,8 @@ class SP_DialogueAction : ScriptedUserAction
 	//------------------------------------------------------------------//
 	override bool CanBeShownScript(IEntity user)
 	{
+		if (user == GetOwner())
+			return false;
 		ChimeraCharacter char = ChimeraCharacter.Cast(GetOwner());
 		if (!char)
 			return false;

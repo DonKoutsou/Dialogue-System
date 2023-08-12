@@ -406,14 +406,17 @@ class SP_DialogueComponent: ScriptComponent
 	//----------------------------------------------------------------------------------------------------------------//
 	SP_DialogueArchetype GetArchetypeTemplate(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
+		SCR_CharacterIdentityComponent id = SCR_CharacterIdentityComponent.Cast(pUserEntity.FindComponent(SCR_CharacterIdentityComponent));
+		if (id.HasArchetype())
+			return id.GetArchetype();
+		
 		string senderName = pOwnerEntity.GetName();
+		
 		SCR_ECharacterRank senderRank = GetCharacterRank(pOwnerEntity);
 		FactionKey senderFaction = GetCharacterFaction(pOwnerEntity).GetFactionKey();
-		
 		FactionKey playerFaction = GetCharacterFaction(pUserEntity).GetFactionKey();
 		
 		SP_DialogueArchetype DiagArch;
-		
 		for (int i, count = m_CharacterArchetypeList.Count(); i < count; i++)
 		{
 			array <string> factions;
