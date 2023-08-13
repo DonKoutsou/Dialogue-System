@@ -34,6 +34,7 @@ class SP_DialogueAction : ScriptedUserAction
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		GetGame().GetInputManager().ActivateContext("DialogueMenuContext");
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
+		//DiagComp.IntroducitonSting(pOwnerEntity, pUserEntity);
 		DiagUI.Init(pOwnerEntity, pUserEntity);
 		DiagUI.UpdateEntries(pOwnerEntity, pUserEntity);
 	}

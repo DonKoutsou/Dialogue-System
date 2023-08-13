@@ -611,6 +611,7 @@ class SP_DialogueComponent: ScriptComponent
 	{
 		return 3*y + x;
 	}
+	
 }
 //----------------------------------------------------------------------------------------------------------------//
 modded enum ChimeraMenuPreset

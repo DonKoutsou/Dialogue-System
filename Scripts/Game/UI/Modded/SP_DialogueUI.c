@@ -197,12 +197,18 @@ class DialogueUIClass: ChimeraMenuBase
 		array <string> a_texthistory = new array <string>();
 		array <string> a_PLtexthistory = new array <string>();
 		DiagComp.GetTextHistory(a_texthistory, a_PLtexthistory);
-		for (int i = 0; i < a_texthistory.Count(); i++)
+		if (!a_texthistory.IsEmpty())
 		{
-			if (a_PLtexthistory[i] != "null")
-				m_ListBoxComponentHistory.AddDiagItem(a_PLtexthistory[i], PlName, Color.DarkGreen);
-			m_ListBoxComponentHistory.AddDiagItem(a_texthistory[i], CharName, Color.DarkYellow);
+			for (int i = 0; i < a_texthistory.Count(); i++)
+			{
+				m_ListBoxComponentHistory.AddDiagItem(a_texthistory[i], CharName, Color.DarkYellow);
+				if (a_PLtexthistory.Count() >= i + 1)
+				{
+					m_ListBoxComponentHistory.AddDiagItem(a_PLtexthistory[i], PlName, Color.DarkGreen);
+				}
+			}
 		}
+		
 			
 		
 		for (int i = 0; i < 7; i++)
@@ -286,6 +292,7 @@ class DialogueUIClass: ChimeraMenuBase
 		RemoveListeners();
 		DiagComp.DoBackDialogue(myCallerEntity, myUserEntity);
 	}
+	
 	//------------------------------------------------------------------------------------------------//
 	string GetGamepadButtonText(int index)
 	{

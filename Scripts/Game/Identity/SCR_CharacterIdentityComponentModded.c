@@ -64,7 +64,7 @@ modded class SCR_CharacterIdentityComponent
 			}
 		}
 	}
-	void GetFormattedFullName(out string format, out string name, out string alias, out string surname)
+	override void GetFormattedFullName(out string format, out string name, out string alias, out string surname)
 	{
 		name = GetIdentity().GetName();
 		alias = GetIdentity().GetAlias();
