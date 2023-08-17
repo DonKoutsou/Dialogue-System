@@ -157,3 +157,143 @@ class DecoratorScripted_IsBiggerThan : DecoratorScripted
 		return s_aVarsIn;
 	}
 };
+class SCR_AIExecuteTaskBehavior : SCR_AIBehaviorBase
+{
+	protected ref SCR_BTParam<IEntity> m_vChar = new SCR_BTParam<IEntity>("Character");
+	protected ref SCR_BTParam<float> m_fDuration = new SCR_BTParam<float>("Duration");	// Initialize in derived class
+	protected ref SCR_BTParam<float> m_fRadius = new SCR_BTParam<float>("Radius");		// Initialize in derived class
+	
+	protected float m_fDeleteActionTime_ms;	// Initialize in derived class by InitTimeout()
+	
+	bool m_bActiveFollowing = false;
+	
+	//------------------------------------------------------------------------------------------------------------------------
+	void InitParameters(IEntity CharToFollow, AIAgent Agent)
+	{
+		m_vChar.Init(this, CharToFollow);
+		m_fDuration.Init(this, 5000);
+		m_fRadius.Init(this, 0);
+	}
+	
+	// posWorld - position to observe
+	void SCR_AIExecuteTaskBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, IEntity CharToFollow)
+	{
+		if(CharToFollow)
+		{
+			AIControlComponent comp = AIControlComponent.Cast(CharToFollow.FindComponent(AIControlComponent));
+			AIAgent agent = comp.GetAIAgent();
+			InitParameters(CharToFollow, agent);
+		}
+		else
+		{
+			InitParameters(CharToFollow, null);
+		}
+
+		
+		if (!utility)
+			return;
+				
+		m_sBehaviorTree = "{077A234FBE16E63A}AI/BehaviorTrees/SP_AITaskAction.bt";
+		m_bAllowLook = true; // Disable standard looking
+		m_bResetLook = true;
+		m_bActiveFollowing = true;
+	}
+	
+	void SetActiveFollowing(bool state)
+	{
+		m_bActiveFollowing = state;
+	}
+	
+	override float EvaluatePriorityLevel()
+	{
+		// Fail action if timeout has been reached
+		//float currentTime_ms = GetGame().GetWorld().GetWorldTime();
+		//if (currentTime_ms > m_fDeleteActionTime_ms)
+		//{
+		//	Fail();
+		//	return 0;
+		//}
+		//return m_fPriority;
+		if (m_bActiveFollowing)
+			return 100;
+		
+		Fail();
+		return 0;
+	}
+	
+	void InitTimeout(float timeout_s)
+	{
+		float currentTime_ms = GetGame().GetWorld().GetWorldTime(); // Milliseconds!
+		m_fDeleteActionTime_ms = currentTime_ms + 10 * timeout_s;
+	}
+};
+class SCR_AIPickupTaskBehavior : SCR_AIBehaviorBase
+{
+	protected ref SCR_BTParam<IEntity> m_vChar = new SCR_BTParam<IEntity>("Character");
+	protected ref SCR_BTParam<float> m_fDuration = new SCR_BTParam<float>("Duration");	// Initialize in derived class
+	protected ref SCR_BTParam<float> m_fRadius = new SCR_BTParam<float>("Radius");		// Initialize in derived class
+	
+	protected float m_fDeleteActionTime_ms;	// Initialize in derived class by InitTimeout()
+	
+	bool m_bActiveFollowing = false;
+	
+	//------------------------------------------------------------------------------------------------------------------------
+	void InitParameters(IEntity CharToFollow, AIAgent Agent)
+	{
+		m_vChar.Init(this, CharToFollow);
+		m_fDuration.Init(this, 5000);
+		m_fRadius.Init(this, 0);
+	}
+	
+	// posWorld - position to observe
+	void SCR_AIPickupTaskBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, IEntity CharToFollow)
+	{
+		if(CharToFollow)
+		{
+			AIControlComponent comp = AIControlComponent.Cast(CharToFollow.FindComponent(AIControlComponent));
+			AIAgent agent = comp.GetAIAgent();
+			InitParameters(CharToFollow, agent);
+		}
+		else
+		{
+			InitParameters(CharToFollow, null);
+		}
+
+		
+		if (!utility)
+			return;
+				
+		m_sBehaviorTree = "{077A234FBE16E63A}AI/BehaviorTrees/SP_AITaskAction.bt";
+		m_bAllowLook = true; // Disable standard looking
+		m_bResetLook = true;
+		m_bActiveFollowing = true;
+	}
+	
+	void SetActiveFollowing(bool state)
+	{
+		m_bActiveFollowing = state;
+	}
+	
+	override float EvaluatePriorityLevel()
+	{
+		// Fail action if timeout has been reached
+		//float currentTime_ms = GetGame().GetWorld().GetWorldTime();
+		//if (currentTime_ms > m_fDeleteActionTime_ms)
+		//{
+		//	Fail();
+		//	return 0;
+		//}
+		//return m_fPriority;
+		if (m_bActiveFollowing)
+			return 100;
+		
+		Fail();
+		return 0;
+	}
+	
+	void InitTimeout(float timeout_s)
+	{
+		float currentTime_ms = GetGame().GetWorld().GetWorldTime(); // Milliseconds!
+		m_fDeleteActionTime_ms = currentTime_ms + 10 * timeout_s;
+	}
+};
