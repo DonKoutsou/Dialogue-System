@@ -157,41 +157,26 @@ class DecoratorScripted_IsBiggerThan : DecoratorScripted
 		return s_aVarsIn;
 	}
 };
-class SCR_AIExecuteTaskBehavior : SCR_AIBehaviorBase
+class SCR_AIExecuteDeliveryTaskBehavior : SCR_AIBehaviorBase
 {
-	protected ref SCR_BTParam<IEntity> m_vChar = new SCR_BTParam<IEntity>("Character");
-	protected ref SCR_BTParam<float> m_fDuration = new SCR_BTParam<float>("Duration");	// Initialize in derived class
-	protected ref SCR_BTParam<float> m_fRadius = new SCR_BTParam<float>("Radius");		// Initialize in derived class
+	protected ref SCR_BTParam<IEntity> m_vCharOwner = new SCR_BTParam<IEntity>("TaskOwner");
+	protected ref SCR_BTParam<IEntity> m_vCharTarg = new SCR_BTParam<IEntity>("TaskTarget");
 	
 	protected float m_fDeleteActionTime_ms;	// Initialize in derived class by InitTimeout()
 	
 	bool m_bActiveFollowing = false;
 	
 	//------------------------------------------------------------------------------------------------------------------------
-	void InitParameters(IEntity CharToFollow, AIAgent Agent)
+	void InitParameters(IEntity TaskOwner, IEntity TaskTarget)
 	{
-		m_vChar.Init(this, CharToFollow);
-		m_fDuration.Init(this, 5000);
-		m_fRadius.Init(this, 0);
+		m_vCharOwner.Init(this, TaskOwner);
+		m_vCharTarg.Init(this, TaskTarget);
 	}
 	
 	// posWorld - position to observe
-	void SCR_AIExecuteTaskBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, IEntity CharToFollow)
+	void SCR_AIExecuteDeliveryTaskBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, IEntity TaskTarget, IEntity TaskOwner)
 	{
-		if(CharToFollow)
-		{
-			AIControlComponent comp = AIControlComponent.Cast(CharToFollow.FindComponent(AIControlComponent));
-			AIAgent agent = comp.GetAIAgent();
-			InitParameters(CharToFollow, agent);
-		}
-		else
-		{
-			InitParameters(CharToFollow, null);
-		}
-
-		
-		if (!utility)
-			return;
+		InitParameters(TaskOwner ,TaskTarget);
 				
 		m_sBehaviorTree = "{077A234FBE16E63A}AI/BehaviorTrees/SP_AITaskAction.bt";
 		m_bAllowLook = true; // Disable standard looking
@@ -227,43 +212,36 @@ class SCR_AIExecuteTaskBehavior : SCR_AIBehaviorBase
 		m_fDeleteActionTime_ms = currentTime_ms + 10 * timeout_s;
 	}
 };
-class SCR_AIPickupTaskBehavior : SCR_AIBehaviorBase
+class SCR_AIDeliveryTaskParameters : SCR_AIGetActionParameters
 {
-	protected ref SCR_BTParam<IEntity> m_vChar = new SCR_BTParam<IEntity>("Character");
-	protected ref SCR_BTParam<float> m_fDuration = new SCR_BTParam<float>("Duration");	// Initialize in derived class
-	protected ref SCR_BTParam<float> m_fRadius = new SCR_BTParam<float>("Radius");		// Initialize in derived class
+	static ref TStringArray s_aVarsOut = (new SCR_AIExecuteDeliveryTaskBehavior(null, null, null, null)).GetPortNames();
+	override TStringArray GetVariablesOut()
+	{
+		return s_aVarsOut;
+	}
+	
+	protected override bool VisibleInPalette() { return true; }
+};
+class SCR_AITaskPickupBehavior : SCR_AIBehaviorBase
+{
+	protected ref SCR_BTParam<IEntity> m_vCharOwner = new SCR_BTParam<IEntity>("TaskOwner");
 	
 	protected float m_fDeleteActionTime_ms;	// Initialize in derived class by InitTimeout()
 	
 	bool m_bActiveFollowing = false;
 	
 	//------------------------------------------------------------------------------------------------------------------------
-	void InitParameters(IEntity CharToFollow, AIAgent Agent)
+	void InitParameters(IEntity TaskOwner)
 	{
-		m_vChar.Init(this, CharToFollow);
-		m_fDuration.Init(this, 5000);
-		m_fRadius.Init(this, 0);
+		m_vCharOwner.Init(this, TaskOwner);
 	}
 	
 	// posWorld - position to observe
-	void SCR_AIPickupTaskBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, IEntity CharToFollow)
+	void SCR_AITaskPickupBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, IEntity TaskOwner)
 	{
-		if(CharToFollow)
-		{
-			AIControlComponent comp = AIControlComponent.Cast(CharToFollow.FindComponent(AIControlComponent));
-			AIAgent agent = comp.GetAIAgent();
-			InitParameters(CharToFollow, agent);
-		}
-		else
-		{
-			InitParameters(CharToFollow, null);
-		}
-
-		
-		if (!utility)
-			return;
+		InitParameters(TaskOwner);
 				
-		m_sBehaviorTree = "{077A234FBE16E63A}AI/BehaviorTrees/SP_AITaskAction.bt";
+		m_sBehaviorTree = "{1075A790BA6B9CCE}AI/BehaviorTrees/SP_AITaskPickupAction.bt";
 		m_bAllowLook = true; // Disable standard looking
 		m_bResetLook = true;
 		m_bActiveFollowing = true;
@@ -296,4 +274,79 @@ class SCR_AIPickupTaskBehavior : SCR_AIBehaviorBase
 		float currentTime_ms = GetGame().GetWorld().GetWorldTime(); // Milliseconds!
 		m_fDeleteActionTime_ms = currentTime_ms + 10 * timeout_s;
 	}
+};
+class SCR_AITaskPickupParameters : SCR_AIGetActionParameters
+{
+	static ref TStringArray s_aVarsOut = (new SCR_AITaskPickupBehavior(null, null, null)).GetPortNames();
+	override TStringArray GetVariablesOut()
+	{
+		return s_aVarsOut;
+	}
+	
+	protected override bool VisibleInPalette() { return true; }
+};
+class SCR_AIExecuteNavigateTaskBehavior : SCR_AIBehaviorBase
+{
+	protected ref SCR_BTParam<IEntity> m_vCharOwner = new SCR_BTParam<IEntity>("TaskOwner");
+	protected ref SCR_BTParam<IEntity> m_vCharTarg = new SCR_BTParam<IEntity>("TaskTarget");
+	
+	protected float m_fDeleteActionTime_ms;	// Initialize in derived class by InitTimeout()
+	
+	bool m_bActiveFollowing = false;
+	
+	//------------------------------------------------------------------------------------------------------------------------
+	void InitParameters(IEntity TaskOwner, IEntity TaskTarget)
+	{
+		m_vCharOwner.Init(this, TaskOwner);
+		m_vCharTarg.Init(this, TaskTarget);
+	}
+	
+	// posWorld - position to observe
+	void SCR_AIExecuteNavigateTaskBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, IEntity TaskTarget, IEntity TaskOwner)
+	{
+		InitParameters(TaskOwner ,TaskTarget);
+				
+		m_sBehaviorTree = "{BA22426A96305944}AI/BehaviorTrees/SP_AINavigateTaskAction.bt";
+		m_bAllowLook = true; // Disable standard looking
+		m_bResetLook = true;
+		m_bActiveFollowing = true;
+	}
+	
+	void SetActiveFollowing(bool state)
+	{
+		m_bActiveFollowing = state;
+	}
+	
+	override float EvaluatePriorityLevel()
+	{
+		// Fail action if timeout has been reached
+		//float currentTime_ms = GetGame().GetWorld().GetWorldTime();
+		//if (currentTime_ms > m_fDeleteActionTime_ms)
+		//{
+		//	Fail();
+		//	return 0;
+		//}
+		//return m_fPriority;
+		if (m_bActiveFollowing)
+			return 100;
+		
+		Fail();
+		return 0;
+	}
+	
+	void InitTimeout(float timeout_s)
+	{
+		float currentTime_ms = GetGame().GetWorld().GetWorldTime(); // Milliseconds!
+		m_fDeleteActionTime_ms = currentTime_ms + 10 * timeout_s;
+	}
+};
+class SCR_AINavigateTaskParameters : SCR_AIGetActionParameters
+{
+	static ref TStringArray s_aVarsOut = (new SCR_AIExecuteNavigateTaskBehavior(null, null, null, null)).GetPortNames();
+	override TStringArray GetVariablesOut()
+	{
+		return s_aVarsOut;
+	}
+	
+	protected override bool VisibleInPalette() { return true; }
 };
