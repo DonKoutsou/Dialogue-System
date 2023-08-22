@@ -559,6 +559,8 @@ class SP_DialogueComponent: ScriptComponent
 		vector posPlayer = Character.GetOrigin();
 			
 		SCR_EditableEntityComponent nearest = core.FindNearestEntity(posPlayer, EEditableEntityType.COMMENT);
+		if (!nearest)
+			return STRING_EMPTY;
 		GenericEntity nearestLocation = nearest.GetOwner();
 		SCR_MapDescriptorComponent mapDescr = SCR_MapDescriptorComponent.Cast(nearestLocation.FindComponent(SCR_MapDescriptorComponent));
 		string closestLocationName;
