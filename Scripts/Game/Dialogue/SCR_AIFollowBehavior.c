@@ -225,21 +225,23 @@ class SCR_AIDeliveryTaskParameters : SCR_AIGetActionParameters
 class SCR_AITaskPickupBehavior : SCR_AIBehaviorBase
 {
 	protected ref SCR_BTParam<IEntity> m_vCharOwner = new SCR_BTParam<IEntity>("TaskOwner");
+	protected ref SCR_BTParam<ref SP_Task> m_vTask = new SCR_BTParam<ref SP_Task>("Task");
 	
 	protected float m_fDeleteActionTime_ms;	// Initialize in derived class by InitTimeout()
 	
 	bool m_bActiveFollowing = false;
 	
 	//------------------------------------------------------------------------------------------------------------------------
-	void InitParameters(IEntity TaskOwner)
+	void InitParameters(IEntity TaskOwner, SP_Task task)
 	{
 		m_vCharOwner.Init(this, TaskOwner);
+		m_vTask.Init(this, task);
 	}
 	
 	// posWorld - position to observe
-	void SCR_AITaskPickupBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, IEntity TaskOwner)
+	void SCR_AITaskPickupBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, IEntity TaskOwner, SP_Task Task)
 	{
-		InitParameters(TaskOwner);
+		InitParameters(TaskOwner, Task);
 				
 		m_sBehaviorTree = "{1075A790BA6B9CCE}AI/BehaviorTrees/SP_AITaskPickupAction.bt";
 		m_bAllowLook = true; // Disable standard looking
@@ -277,7 +279,7 @@ class SCR_AITaskPickupBehavior : SCR_AIBehaviorBase
 };
 class SCR_AITaskPickupParameters : SCR_AIGetActionParameters
 {
-	static ref TStringArray s_aVarsOut = (new SCR_AITaskPickupBehavior(null, null, null)).GetPortNames();
+	static ref TStringArray s_aVarsOut = (new SCR_AITaskPickupBehavior(null, null, null, null)).GetPortNames();
 	override TStringArray GetVariablesOut()
 	{
 		return s_aVarsOut;
