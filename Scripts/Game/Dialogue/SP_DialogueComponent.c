@@ -306,6 +306,8 @@ class SP_DialogueComponent: ScriptComponent
 	//CHARACTER NAME
 	static string GetCharacterName(IEntity Character)
 	{
+		if (!Character)
+			return STRING_EMPTY;
 		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
 		
 		string CharacterFullName;

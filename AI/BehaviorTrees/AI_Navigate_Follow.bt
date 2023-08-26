@@ -85,7 +85,7 @@ BehaviorTree "{F89BF93EA3363C34}AI/BehaviorTrees/AI_Navigate_Follow.bt" {
             RunBT RunBT {
              Name "RunBT"
              EditorPos -464.445 827.641
-             BehaviorTree "{5588B72AE6CDAFC8}AI/BehaviorTrees/SmartActions/WaypointLessObservationPoint.bt"
+             BehaviorTree "{5588B72AE6CDAFC8}AI/BehaviorTrees/WaypointLessObservationPoint.bt"
              AlwaysReinit 1
             }
             Sequence Sequence {
@@ -125,7 +125,7 @@ BehaviorTree "{F89BF93EA3363C34}AI/BehaviorTrees/AI_Navigate_Follow.bt" {
          AbortType AbortChildrenBranch
          InEntity 3
          InPosition 2
-         DistanceThreshold 5
+         DistanceThreshold 2
         }
         Sequence Sequence {
          Name "Sequence"
