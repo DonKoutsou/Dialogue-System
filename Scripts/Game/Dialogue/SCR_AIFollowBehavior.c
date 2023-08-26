@@ -4,6 +4,8 @@ class SCR_AIFollowBehavior : SCR_AIBehaviorBase
 	protected ref SCR_BTParam<float> m_fDuration = new SCR_BTParam<float>("Duration");	// Initialize in derived class
 	protected ref SCR_BTParam<float> m_fRadius = new SCR_BTParam<float>("Radius");		// Initialize in derived class
 	
+	IEntity Char;
+	
 	protected float m_fDeleteActionTime_ms;	// Initialize in derived class by InitTimeout()
 	
 	bool m_bActiveFollowing = false;
@@ -24,6 +26,7 @@ class SCR_AIFollowBehavior : SCR_AIBehaviorBase
 			AIControlComponent comp = AIControlComponent.Cast(CharToFollow.FindComponent(AIControlComponent));
 			AIAgent agent = comp.GetAIAgent();
 			InitParameters(CharToFollow, agent);
+			Char = CharToFollow;
 		}
 		else
 		{
@@ -224,25 +227,25 @@ class SCR_AIDeliveryTaskParameters : SCR_AIGetActionParameters
 };
 class SCR_AITaskPickupBehavior : SCR_AIBehaviorBase
 {
-	protected ref SCR_BTParam<IEntity> m_vCharOwner = new SCR_BTParam<IEntity>("TaskOwner");
 	protected ref SCR_BTParam<ref SP_Task> m_vTask = new SCR_BTParam<ref SP_Task>("Task");
+	
+	SP_Task PickedTask;
 	
 	protected float m_fDeleteActionTime_ms;	// Initialize in derived class by InitTimeout()
 	
 	bool m_bActiveFollowing = false;
 	
 	//------------------------------------------------------------------------------------------------------------------------
-	void InitParameters(IEntity TaskOwner, SP_Task task)
+	void InitParameters(SP_Task task)
 	{
-		m_vCharOwner.Init(this, TaskOwner);
 		m_vTask.Init(this, task);
 	}
 	
 	// posWorld - position to observe
-	void SCR_AITaskPickupBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, IEntity TaskOwner, SP_Task Task)
+	void SCR_AITaskPickupBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, SP_Task Task)
 	{
-		InitParameters(TaskOwner, Task);
-				
+		InitParameters(Task);
+		PickedTask = Task;	
 		m_sBehaviorTree = "{1075A790BA6B9CCE}AI/BehaviorTrees/SP_AITaskPickupAction.bt";
 		m_bAllowLook = true; // Disable standard looking
 		m_bResetLook = true;
@@ -279,7 +282,7 @@ class SCR_AITaskPickupBehavior : SCR_AIBehaviorBase
 };
 class SCR_AITaskPickupParameters : SCR_AIGetActionParameters
 {
-	static ref TStringArray s_aVarsOut = (new SCR_AITaskPickupBehavior(null, null, null, null)).GetPortNames();
+	static ref TStringArray s_aVarsOut = (new SCR_AITaskPickupBehavior(null, null, null)).GetPortNames();
 	override TStringArray GetVariablesOut()
 	{
 		return s_aVarsOut;
@@ -289,26 +292,24 @@ class SCR_AITaskPickupParameters : SCR_AIGetActionParameters
 };
 class SCR_AIExecuteNavigateTaskBehavior : SCR_AIBehaviorBase
 {
-	protected ref SCR_BTParam<IEntity> m_vCharOwner = new SCR_BTParam<IEntity>("TaskOwner");
-	protected ref SCR_BTParam<IEntity> m_vCharTarg = new SCR_BTParam<IEntity>("TaskTarget");
+	protected ref SCR_BTParam<SP_Task> m_vTask = new SCR_BTParam<SP_Task>("Task");
 	
 	protected float m_fDeleteActionTime_ms;	// Initialize in derived class by InitTimeout()
 	
 	bool m_bActiveFollowing = false;
 	
 	//------------------------------------------------------------------------------------------------------------------------
-	void InitParameters(IEntity TaskOwner, IEntity TaskTarget)
+	void InitParameters(SP_Task Task)
 	{
-		m_vCharOwner.Init(this, TaskOwner);
-		m_vCharTarg.Init(this, TaskTarget);
+		m_vTask.Init(this, Task);
 	}
 	
 	// posWorld - position to observe
-	void SCR_AIExecuteNavigateTaskBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, IEntity TaskTarget, IEntity TaskOwner)
+	void SCR_AIExecuteNavigateTaskBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, SP_Task Task)
 	{
-		InitParameters(TaskOwner ,TaskTarget);
+		InitParameters(Task);
 				
-		m_sBehaviorTree = "{BA22426A96305944}AI/BehaviorTrees/SP_AINavigateTaskAction.bt";
+		m_sBehaviorTree = "{A670B53B3B00B2D2}AI/BehaviorTrees/SP_AITaskAction-Navigate.bt";
 		m_bAllowLook = true; // Disable standard looking
 		m_bResetLook = true;
 		m_bActiveFollowing = true;
@@ -344,7 +345,7 @@ class SCR_AIExecuteNavigateTaskBehavior : SCR_AIBehaviorBase
 };
 class SCR_AINavigateTaskParameters : SCR_AIGetActionParameters
 {
-	static ref TStringArray s_aVarsOut = (new SCR_AIExecuteNavigateTaskBehavior(null, null, null, null)).GetPortNames();
+	static ref TStringArray s_aVarsOut = (new SCR_AIExecuteNavigateTaskBehavior(null, null, null)).GetPortNames();
 	override TStringArray GetVariablesOut()
 	{
 		return s_aVarsOut;
