@@ -127,15 +127,13 @@ class SCR_FollowAction : ScriptedUserAction
 		action.SetActiveFollowing(false);
 	}
 };
-/*class DecoratorScripted_IsBiggerThan : DecoratorScripted
+class DecoratorScripted_IsBiggerThan : DecoratorScripted
 {
-	[Attribute("0")]
-	private int m_DistanceTocompareto;
-	
 	protected override bool TestFunction(AIAgent owner)
 	{
 		int var = GetVariableType(true, "value1");
-		if (var >= m_DistanceTocompareto)
+		int var2 = GetVariableType(true, "valu2");
+		if (var >= var2)
 		{
 			return true;
 		}
@@ -153,13 +151,49 @@ class SCR_FollowAction : ScriptedUserAction
 	}
 	
 	protected static ref TStringArray s_aVarsIn = {
-		"value1"
+		"value1", "value2"
 	};
 	protected override TStringArray GetVariablesIn()
 	{
 		return s_aVarsIn;
 	}
-};*/
+};
+class DecoratorScripted_IsSmallerThan : DecoratorScripted
+{
+	[Attribute(defvalue: "10")]
+	int m_ivalue2offset;
+	
+	protected override bool TestFunction(AIAgent owner)
+	{
+		float var;
+		GetVariableIn("value1", var);
+		int var2;
+		GetVariableIn("value2", var2);
+		if (var <= var2 + m_ivalue2offset)
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	protected override bool VisibleInPalette()
+	{
+		return true;
+	}	
+	
+	protected override string GetOnHoverDescription()
+	{
+		return "DecoratorScripted_IsEqual: Compares whether 1st variable is bigger than 2nd. Supports int-int, float-float";
+	}
+	
+	protected static ref TStringArray s_aVarsIn = {
+		"value1", "value2"
+	};
+	protected override TStringArray GetVariablesIn()
+	{
+		return s_aVarsIn;
+	}
+};
 class SCR_AISetFollowFalse : SCR_AIActionTask
 {
 

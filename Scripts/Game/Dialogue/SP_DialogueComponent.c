@@ -323,6 +323,8 @@ class SP_DialogueComponent: ScriptComponent
 	}
 	static string GetCharacterFirstName(IEntity Character)
 	{
+		if (!Character)
+			return STRING_EMPTY;
 		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
 		
 		string CharacterFullName;
@@ -332,6 +334,7 @@ class SP_DialogueComponent: ScriptComponent
 			if(ID)
 			{
 				CharacterFullName = ID.GetName();
+				CharacterFullName = CharacterFullName.Substring(17, CharacterFullName.Length() - 17)
 			}
 		}
 		return CharacterFullName;
@@ -347,6 +350,7 @@ class SP_DialogueComponent: ScriptComponent
 			if(ID)
 			{
 				CharacterFullName = ID.GetSurname();
+				CharacterFullName = CharacterFullName.Substring(15, CharacterFullName.Length() - 15)
 			}
 		}
 		return CharacterFullName;
@@ -360,6 +364,14 @@ class SP_DialogueComponent: ScriptComponent
 			return RankComponent.GetCharacterRank(Character);
 		}
 		return null;
+	}
+	static int GetCharacterRep(IEntity Character)
+	{
+		if (!Character)
+			return -1;
+		SCR_CharacterIdentityComponent Idcomp = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
+		int MyRep = Idcomp.GetRep();
+		return MyRep;
 	}
 	static string GetCharacterRankInsignia(IEntity Character)
 	{
