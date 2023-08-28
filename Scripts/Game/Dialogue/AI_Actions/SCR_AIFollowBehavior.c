@@ -160,16 +160,13 @@ class DecoratorScripted_IsBiggerThan : DecoratorScripted
 };
 class DecoratorScripted_IsSmallerThan : DecoratorScripted
 {
-	[Attribute(defvalue: "10")]
-	int m_ivalue2offset;
-	
 	protected override bool TestFunction(AIAgent owner)
 	{
 		float var;
 		GetVariableIn("value1", var);
 		int var2;
 		GetVariableIn("value2", var2);
-		if (var <= var2 + m_ivalue2offset)
+		if (var <= var2)
 		{
 			return true;
 		}
