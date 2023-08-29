@@ -49,6 +49,7 @@ class SP_DialogueComponent: ScriptComponent
 	ref array <string>				a_PLtexthistory;
 	//----------------------------------------------------------------------------------------------------------------//
 	SCR_BaseGameMode GameMode;
+	static SP_DialogueComponent GetInstance(){return SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));};
 	void GetTextHistory(out array <string> hist, out array <string> PLhist)
 	{
 		//if (!a_texthistory.IsEmpty())

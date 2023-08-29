@@ -7,6 +7,8 @@ class SCR_AIConverseBehavior : SCR_AIBehaviorBase
 	
 	protected float m_fDeleteActionTime_ms;	// Initialize in derived class by InitTimeout()
 	
+	IEntity Owner;
+	
 	bool m_bActiveConversation = false;
 	
 	//------------------------------------------------------------------------------------------------------------------------
