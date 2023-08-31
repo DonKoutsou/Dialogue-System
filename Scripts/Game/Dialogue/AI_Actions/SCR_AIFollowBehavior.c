@@ -191,33 +191,6 @@ class DecoratorScripted_IsSmallerThan : DecoratorScripted
 		return s_aVarsIn;
 	}
 };
-class DecoratorScripted_TestSmartAction : DecoratorScripted
-{
-	
-	protected override bool TestFunction(AIAgent owner)
-	{
-		SCR_AISmartActionComponent SmartAct;
-		GetVariableIn("SmartAction", SCR_AISmartActionComponent);
-		if (SmartAct.NeedsTest())
-		{
-			return SmartAct.RunTest(owner.GetControlledEntity());
-		}
-		return true;
-	}
-	
-	protected override bool VisibleInPalette()
-	{
-		return true;
-	}	
-	
-	protected static ref TStringArray s_aVarsIn = {
-		"SmartAction"
-	};
-	protected override TStringArray GetVariablesIn()
-	{
-		return s_aVarsIn;
-	}
-};
 class SCR_AISetFollowFalse : SCR_AIActionTask
 {
 
