@@ -158,6 +158,69 @@ class DecoratorScripted_IsBiggerThan : DecoratorScripted
 		return s_aVarsIn;
 	}
 };
+class DecoratorScripted_ShouldBeFollowing : DecoratorScripted
+{
+	protected static const string CHARTOFOLLOW_PORT = "CharacterToFollow";
+	
+	protected vector lastloc;
+	protected float lastdisplacament;
+	
+	protected int waitingfor;
+	
+	protected override bool TestFunction(AIAgent owner)
+	{
+		IEntity Char;
+		GetVariableIn(CHARTOFOLLOW_PORT, Char);
+		if (!Char)
+			return ENodeResult.FAIL;
+		int maxdist = 15;
+		if (!lastloc)
+		{
+			lastloc = Char.GetOrigin();
+		}
+		lastdisplacament = vector.Distance(lastloc, Char.GetOrigin());
+		if (lastdisplacament > 0)
+		{
+			lastloc = Char.GetOrigin();
+			waitingfor = 0;
+			return true;
+		}
+		else
+		{
+			waitingfor += 1;
+			if (waitingfor < 100)
+			{
+				return true;
+			}
+		}
+		lastloc = Char.GetOrigin();
+		//IEntity Me = owner.GetControlledEntity();
+		//if (vector.Distance(Me.GetOrigin(), Char.GetOrigin()) > maxdist)
+		//{
+		//	lastloc = Char.GetOrigin();
+		//	return true;
+		//}
+		return false;
+	}
+	
+	protected override bool VisibleInPalette()
+	{
+		return true;
+	}	
+	
+	protected override string GetOnHoverDescription()
+	{
+		return "DecoratorScripted_IsEqual: Compares whether 1st variable is bigger than 2nd. Supports int-int, float-float";
+	}
+	
+	protected static ref TStringArray s_aVarsIn = {
+		CHARTOFOLLOW_PORT
+	};
+	protected override TStringArray GetVariablesIn()
+	{
+		return s_aVarsIn;
+	}
+};
 class DecoratorScripted_IsSmallerThan : DecoratorScripted
 {
 	protected override bool TestFunction(AIAgent owner)
