@@ -45,13 +45,37 @@ class SP_DialogueComponent: ScriptComponent
 	
 	static protected ref SCR_MapLocationQuadHint m_WorldDirections;
 	
+	ref map <string, ref array <string>> texthistorymap;
+	ref map <string, ref array <string>> PLtexthistorymap;
 	ref array <string>				a_texthistory;
 	ref array <string>				a_PLtexthistory;
 	//----------------------------------------------------------------------------------------------------------------//
 	SCR_BaseGameMode GameMode;
 	static SP_DialogueComponent GetInstance(){return SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));};
+	void RegisterCharInHistory(IEntity Owner)
+	{
+		array <string>	texthistory = {};
+		if (!texthistorymap.Get(Owner.GetID().ToString()))
+		{
+			texthistorymap.Insert(Owner.GetID().ToString(), texthistory);
+		}
+		array <string>	PLtexthistory = {};
+		if (!PLtexthistorymap.Get(Owner.GetID().ToString()))
+		{
+			PLtexthistorymap.Insert(Owner.GetID().ToString(), PLtexthistory);
+		}
+		if (a_texthistory != texthistorymap.Get(Owner.GetID().ToString()))
+		{
+			a_texthistory = texthistorymap.Get(Owner.GetID().ToString());
+		}
+		if (a_PLtexthistory != PLtexthistorymap.Get(Owner.GetID().ToString()))
+		{
+			a_PLtexthistory = PLtexthistorymap.Get(Owner.GetID().ToString());
+		}
+	}
 	void GetTextHistory(out array <string> hist, out array <string> PLhist)
 	{
+		
 		//if (!a_texthistory.IsEmpty())
 			//hist.Copy(a_texthistory);
 		for (int i = 0; i < a_texthistory.Count(); i++)
@@ -63,10 +87,12 @@ class SP_DialogueComponent: ScriptComponent
 			PLhist.Insert(a_PLtexthistory[i]);
 		}
 	}
-	void ClearTextHistory()
+	void ArchiveTextHistory(IEntity Owner)
 	{
-		a_texthistory.Clear();
-		a_PLtexthistory.Clear();
+		texthistorymap.Insert(Owner.GetID().ToString(), a_texthistory);
+		PLtexthistorymap.Insert(Owner.GetID().ToString(), a_PLtexthistory);
+		//a_texthistory.Clear();
+		//a_PLtexthistory.Clear();
 	}
 	void Escape(IEntity Char, IEntity Player)
 	{
@@ -138,7 +164,7 @@ class SP_DialogueComponent: ScriptComponent
 			//--------------------------------------//
 			//Look for the config that matches our character. Config hold info about progression of dialogue for the Specific AI we are talking to.			
 			DialogueBranchInfo Conf = Branch.LocateConfig(Character);
-			Branch.OnPerform(Character, Player);
+			
 			Branch.GetActionText(Character, Player, actiontext);
 			Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
 			a_texthistory.Insert(m_DialogTexttoshow);
@@ -146,7 +172,7 @@ class SP_DialogueComponent: ScriptComponent
 				a_PLtexthistory.Insert(actiontext);
 			else
 				a_PLtexthistory.Insert("null");
-			
+			Branch.OnPerform(Character, Player);
 			//SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
 			// Cause a branch of the config
 			Branch.CauseBranch(BranchID, Character);
@@ -251,7 +277,7 @@ class SP_DialogueComponent: ScriptComponent
 		//	group.RemoveWaypoint(wp);
 		//	group.AddWaypoint(wp);
 		//}
-		ClearTextHistory();
+		ArchiveTextHistory(Character);
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	void DoAnouncerDialogue(string Text)
@@ -549,6 +575,11 @@ class SP_DialogueComponent: ScriptComponent
 			a_texthistory = new array <string>();
 		if	(!a_PLtexthistory)
 			a_PLtexthistory = new array <string>();
+		if	(!texthistorymap)
+			texthistorymap = new map <string,ref array <string>>();
+		if	(!PLtexthistorymap)
+			PLtexthistorymap = new map <string,ref array <string>>();
+
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	// set masks;

@@ -201,11 +201,9 @@ class DialogueUIClass: ChimeraMenuBase
 		{
 			for (int i = 0; i < a_texthistory.Count(); i++)
 			{
+				if (a_PLtexthistory[i] != "null")
+						m_ListBoxComponentHistory.AddDiagItem(a_PLtexthistory[i], PlName, Color.DarkGreen);
 				m_ListBoxComponentHistory.AddDiagItem(a_texthistory[i], CharName, Color.DarkYellow);
-				if (a_PLtexthistory.Count() >= i + 1)
-				{
-					m_ListBoxComponentHistory.AddDiagItem(a_PLtexthistory[i], PlName, Color.DarkGreen);
-				}
 			}
 		}
 		
