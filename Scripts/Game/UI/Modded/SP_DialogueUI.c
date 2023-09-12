@@ -2,23 +2,14 @@ class DialogueUIClass: ChimeraMenuBase
 { 
 	//----------------------------------------------------------------//
 	//UI Widgets
-	protected Widget 						m_wRoot; 
-	OverlayWidget 							m_ListBoxOverlay;
-	OverlayWidget 							m_ListBoxOverlayHistory;
-	TextWidget 								m_CharacterName;
-	TextWidget 								m_PlayerName;
-	ImageWidget 							m_CharacterRank;
-	ImageWidget 							m_PlayerRank;
-	TextWidget 								m_TextCharacterRank;
-	TextWidget 								m_TextPlayerRank;
-	ImageWidget 							m_CharacterFactionIcon;
-	ImageWidget 							m_PlayerFactionIcon;
-	TextWidget								m_CharacterRep;
-	TextWidget								m_PlayerRep;
-	ImageWidget 							m_FactionRep;
-	SCR_ListBoxElementComponent 			m_ListBoxElement;
- 	 SP_ListBoxComponent 					m_ListBoxComponent;
-	SCR_ListBoxComponent 					m_ListBoxComponentHistory;
+	protected Widget m_wRoot; 
+	OverlayWidget m_ListBoxOverlay;
+	OverlayWidget m_ListBoxOverlayHistory;
+	TextWidget m_CharacterName;
+	TextWidget m_PlayerName;
+	SCR_ListBoxElementComponent m_ListBoxElement;
+ 	SP_ListBoxComponent m_ListBoxComponent;
+	SCR_ListBoxComponent m_ListBoxComponentHistory;
 	
     //----------------------------------------------------------------//
 	//PlayerCharacter
@@ -27,15 +18,6 @@ class DialogueUIClass: ChimeraMenuBase
 	//Charactaer we are talking to
 	IEntity 										myCallerEntity;
 	string 											CharName;
-	string 											PlName;
-	string 											CharRank;
-	string 											m_sPlRank;
-	string 											rank;
-	string		 									PLrank;
-	string 											rankText;
-	string		 									PLrankText;
-	FactionKey 										faction;
-	FactionKey 										Plfaction;
 	//----------------------------------------------------------------//
 	//DialogueStystem
 	SP_DialogueComponent 						DiagComp;
@@ -71,9 +53,9 @@ class DialogueUIClass: ChimeraMenuBase
 		myUserEntity = User;
 		m_wRoot = GetRootWidget();
 		m_ListBoxOverlay = OverlayWidget.Cast(m_wRoot.FindAnyWidget("ListBox0")); 
-		m_ListBoxOverlayHistory = OverlayWidget.Cast(m_wRoot.FindAnyWidget("ListBox1")); 
+		//m_ListBoxOverlayHistory = OverlayWidget.Cast(m_wRoot.FindAnyWidget("ListBox1")); 
 		m_ListBoxComponent = SP_ListBoxComponent.Cast(m_ListBoxOverlay.FindHandler(SP_ListBoxComponent));
-		m_ListBoxComponentHistory = SCR_ListBoxComponent.Cast(m_ListBoxOverlayHistory.FindHandler(SCR_ListBoxComponent));
+		//m_ListBoxComponentHistory = SCR_ListBoxComponent.Cast(m_ListBoxOverlayHistory.FindHandler(SCR_ListBoxComponent));
 		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		m_IDComp = SCR_CharacterIdentityComponent.Cast(User.FindComponent(SCR_CharacterIdentityComponent));
 		m_CharIDComp = SCR_CharacterIdentityComponent.Cast(myCallerEntity.FindComponent(SCR_CharacterIdentityComponent));
@@ -87,127 +69,12 @@ class DialogueUIClass: ChimeraMenuBase
 		if(myCallerEntity)
 		{
 			CharName = DiagComp.GetCharacterName(myCallerEntity);
-			rank = DiagComp.GetCharacterRankInsignia(myCallerEntity);
-			faction = DiagComp.GetCharacterFaction(myCallerEntity).GetFactionKey();
-			rankText = DiagComp.GetCharacterRankNameFull(myCallerEntity);
 		}
-		if(myUserEntity)
-		{
-			/*
-			PlayerManager mngr = GetGame().GetPlayerManager();
-			int pid = mngr.GetPlayerIdFromControlledEntity(myUserEntity);
-			PlName = mngr.GetPlayerName(pid);
-			PLrank = DiagComp.GetCharacterRankName(myUserEntity);
-			Plfaction = DiagComp.GetCharacterFaction(myUserEntity).GetFactionKey();
-			*/ 
-			PlName = DiagComp.GetCharacterName(myUserEntity);
-			PLrank = DiagComp.GetCharacterRankInsignia(myUserEntity);
-			Plfaction = DiagComp.GetCharacterFaction(myUserEntity).GetFactionKey();
-			PLrankText = DiagComp.GetCharacterRankNameFull(myUserEntity);
-		}
-		
-		AssignFactionIcons(faction, Plfaction);
-		AssignRankIcons(rank, PLrank);
-		
-		/*ItemPreviewManagerEntity m_PreviewManager = GetGame().GetItemPreviewManager();
-		ItemPreviewWidget test = ItemPreviewWidget.Cast(m_wRoot.FindAnyWidget("ItemPreview0"));
-		SCR_CharacterInventoryStorageComponent sto = SCR_CharacterInventoryStorageComponent.Cast(Character.FindComponent(SCR_CharacterInventoryStorageComponent));
-		
-		PreviewRenderAttributes preview = PreviewRenderAttributes.Cast(sto.FindAttribute(PreviewRenderAttributes));
-		//preview.ZoomCamera(-100);
-		preview.RotateItemCamera(vector.Zero, vector.Zero, "0 45 0");
-		m_PreviewManager.SetPreviewItem(test, Character, preview);*/
-		
-		
-		m_TextCharacterRank = TextWidget.Cast(m_wRoot.FindAnyWidget("CharRankText"));
-		m_TextCharacterRank.SetText(rankText);
-		m_TextPlayerRank = TextWidget.Cast(m_wRoot.FindAnyWidget("RankText"));
-		m_TextPlayerRank.SetText(PLrankText);
-		int MyRep = m_IDComp.GetRep();
-		int CharRep = m_CharIDComp.GetRep();
-		
-		if(MyRep > 80)
-		{
-			m_PlayerRep = TextWidget.Cast(m_wRoot.FindAnyWidget("ReputationText"));
-			m_PlayerRep.SetColor(Color.DarkGreen);
-			m_PlayerRep.SetText("Briliant");
-		}
-		else if(MyRep > 60)
-		{
-			m_PlayerRep = TextWidget.Cast(m_wRoot.FindAnyWidget("ReputationText"));
-			m_PlayerRep.SetColor(Color.DarkGreen);
-			m_PlayerRep.SetText("Good");
-		}
-		else if(MyRep > 40)
-		{
-			m_PlayerRep = TextWidget.Cast(m_wRoot.FindAnyWidget("ReputationText"));
-			m_PlayerRep.SetColor(Color.DarkYellow);
-			m_PlayerRep.SetText("Neuteral");
-		}
-		else if(MyRep > 20)
-		{
-			m_PlayerRep = TextWidget.Cast(m_wRoot.FindAnyWidget("ReputationText"));
-			m_PlayerRep.SetColor(Color.DarkRed);
-			m_PlayerRep.SetText("Bad");
-		}
-		else if(MyRep > 1)
-		{
-			m_PlayerRep = TextWidget.Cast(m_wRoot.FindAnyWidget("ReputationText"));
-			m_PlayerRep.SetColor(Color.DarkRed);
-			m_PlayerRep.SetText("Horrible");
-		}
-		if(CharRep > 80)
-		{
-			m_CharacterRep = TextWidget.Cast(m_wRoot.FindAnyWidget("CharReputationText"));
-			m_CharacterRep.SetColor(Color.DarkGreen);
-			m_CharacterRep.SetText("Briliant");
-		}
-		else if(CharRep > 60)
-		{
-			m_CharacterRep = TextWidget.Cast(m_wRoot.FindAnyWidget("CharReputationText"));
-			m_CharacterRep.SetColor(Color.DarkGreen);
-			m_CharacterRep.SetText("Good");
-		}
-		else if(CharRep > 40)
-		{
-			m_CharacterRep = TextWidget.Cast(m_wRoot.FindAnyWidget("CharReputationText"));
-			m_CharacterRep.SetColor(Color.DarkYellow);
-			m_CharacterRep.SetText("Neuteral");
-		}
-		else if(CharRep > 20)
-		{
-			m_CharacterRep = TextWidget.Cast(m_wRoot.FindAnyWidget("CharReputationText"));
-			m_CharacterRep.SetColor(Color.DarkRed);
-			m_CharacterRep.SetText("Bad");
-		}
-		else if(CharRep > 1)
-		{
-			m_CharacterRep = TextWidget.Cast(m_wRoot.FindAnyWidget("CharReputationText"));
-			m_CharacterRep.SetColor(Color.DarkRed);
-			m_CharacterRep.SetText("Horrible");
-		}
-		
-		m_CharacterName = TextWidget.Cast(m_wRoot.FindAnyWidget("CharacterName"));
-		m_CharacterName.SetText(CharName);
-		
-		
-		m_PlayerName = TextWidget.Cast(m_wRoot.FindAnyWidget("PlayerName0"));
-		m_PlayerName.SetText(PlName);
-		
+
 		array <string> a_texthistory = new array <string>();
 		array <string> a_PLtexthistory = new array <string>();
 		DiagComp.GetTextHistory(a_texthistory, a_PLtexthistory);
-		if (!a_texthistory.IsEmpty())
-		{
-			for (int i = 0; i < a_texthistory.Count(); i++)
-			{
-				if (a_PLtexthistory[i] != "null")
-						m_ListBoxComponentHistory.AddDiagItem(a_PLtexthistory[i], PlName, Color.DarkGreen);
-				m_ListBoxComponentHistory.AddDiagItem(a_texthistory[i], CharName, Color.DarkYellow);
-			}
-		}
-		
-			
+	
 		
 		for (int i = 0; i < 7; i++)
 		{
@@ -322,65 +189,5 @@ class DialogueUIClass: ChimeraMenuBase
 			break;
 	    }
 		return STRING_EMPTY;
-	}
-	void AssignFactionIcons(FactionKey factioncharacter, FactionKey factionplayer)
-	{
-		m_CharacterFactionIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("FactionIcon"));
-		m_PlayerFactionIcon = ImageWidget.Cast(m_wRoot.FindAnyWidget("PlayerFactionIcon0"));
-		if (m_CharacterFactionIcon)
-		{
-			switch(factioncharacter)
-			{
-				case "US":
-					m_CharacterFactionIcon.LoadImageTexture(0, "{EB7F65DBC9392557}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
-				break;
-				case "USSR":
-					m_CharacterFactionIcon.LoadImageTexture(0, "{40B12B0DF911B856}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
-				break;
-				case "FIA":
-					m_CharacterFactionIcon.LoadImageTexture(0, "{FB266CDD4502D60B}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_Fia.edds");
-				break;
-				case "BANDITS":
-					m_CharacterFactionIcon.LoadImageTexture(0, "{855625FE8D6A87A8}UI/Textures/DamageState/damageState-dead.edds");
-				break;
-				case "SPEIRA":
-					m_CharacterFactionIcon.LoadImageTexture(0, "{CEAC8771342689C5}Assets/Data/Faction_SPEIRA.edds");
-				break;	
-			}
-		}
-		if (m_PlayerFactionIcon)
-		{
-			switch(factionplayer)
-			{
-				case "US":
-					m_PlayerFactionIcon.LoadImageTexture(0, "{EB7F65DBC9392557}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
-				break;
-				case "USSR":
-					m_PlayerFactionIcon.LoadImageTexture(0, "{40B12B0DF911B856}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds");
-				break;
-				case "FIA":
-					m_PlayerFactionIcon.LoadImageTexture(0, "{FB266CDD4502D60B}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_Fia.edds");
-				break;
-				case "BANDITS":
-					m_PlayerFactionIcon.LoadImageTexture(0, "{855625FE8D6A87A8}UI/Textures/DamageState/damageState-dead.edds");
-				break;
-				case "SPEIRA":
-					m_PlayerFactionIcon.LoadImageTexture(0, "{CEAC8771342689C5}Assets/Data/Faction_SPEIRA.edds");
-				break;	
-			}
-		}
-	}
-	void AssignRankIcons(string rankinsigniacharacter, string rankinsigniaplayer)
-	{
-		m_CharacterRank = ImageWidget.Cast(m_wRoot.FindAnyWidget("RankIcon"));
-		m_PlayerRank = ImageWidget.Cast(m_wRoot.FindAnyWidget("PlayeRankIcon0"));
-		if (m_CharacterRank)
-		{
-			m_CharacterRank.LoadImageFromSet(0, RANK_ICON_IMAGESET, rankinsigniacharacter);
-		}
-		if (m_PlayerRank)
-		{
-			m_PlayerRank.LoadImageFromSet(0, RANK_ICON_IMAGESET, rankinsigniaplayer);
-		}
 	}
 }

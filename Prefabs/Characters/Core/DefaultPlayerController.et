@@ -1,0 +1,12 @@
+SCR_PlayerController {
+ ID "1A9BA6BEFA06E3B1"
+ components {
+  SCR_HUDManagerComponent "{2FDC275D9EBCDB8B}" {
+   InfoDisplays {
+    SCR_DialogueWidget "{5E593BAF81632BF1}" {
+     m_LayoutPath "{8998563B2B97D6A8}UI/layouts/Damage/DialogueMenuBubble.layout"
+    }
+   }
+  }
+ }
+}

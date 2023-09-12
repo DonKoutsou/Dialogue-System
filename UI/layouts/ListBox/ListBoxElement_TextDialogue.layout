@@ -46,6 +46,7 @@ ButtonWidgetClass {
           OffsetBottom 2
           SizeToContent 1
          }
+         "Is Visible" 0
          Opacity 0.8
          Color 0 0 0 1
          "Blend Mode" Opaque

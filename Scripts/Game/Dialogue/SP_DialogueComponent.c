@@ -180,6 +180,18 @@ class SP_DialogueComponent: ScriptComponent
 			
 			//--------------------------------------//
 			DiagUI.UpdateEntries(Character, Player);
+			array<BaseInfoDisplay> infoDisplays = {};
+			GetGame().GetPlayerController().GetHUDManagerComponent().GetInfoDisplays(infoDisplays);
+			foreach (BaseInfoDisplay baseInfoDisplays : infoDisplays)
+			{
+				SCR_DialogueWidget DialogueDisplay = SCR_DialogueWidget.Cast(baseInfoDisplays);
+				if (!DialogueDisplay)
+					continue;
+	
+				DialogueDisplay.SetTarget(Character);
+				DialogueDisplay.SetText(m_DialogTexttoshow);
+				DialogueDisplay.ShowInspectCasualtyWidget(Character);
+			}
 			//--------------------------------------//
 			return m_DialogTexttoshow;
 			//--------------------------------------//
@@ -211,6 +223,18 @@ class SP_DialogueComponent: ScriptComponent
 		//--------------------------------------//
 		DiagUI.UpdateEntries(Character, Player);
 		PlayDialogueSound();
+		array<BaseInfoDisplay> infoDisplays = {};
+		GetGame().GetPlayerController().GetHUDManagerComponent().GetInfoDisplays(infoDisplays);
+		foreach (BaseInfoDisplay baseInfoDisplays : infoDisplays)
+		{
+			SCR_DialogueWidget DialogueDisplay = SCR_DialogueWidget.Cast(baseInfoDisplays);
+			if (!DialogueDisplay)
+				continue;
+
+			DialogueDisplay.SetTarget(Character);
+			DialogueDisplay.SetText(m_DialogTexttoshow);
+			DialogueDisplay.ShowInspectCasualtyWidget(Character);
+		}
 		return m_DialogTexttoshow;
 	}
 	//----------------------------------------------------------------------------------------------------------------//

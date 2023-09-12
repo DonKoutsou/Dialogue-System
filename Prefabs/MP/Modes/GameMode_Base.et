@@ -4,6 +4,15 @@ SCR_BaseGameMode {
   SP_DialogueComponent "{5D1547897BFE725A}" {
    m_CharacterArchetypeList {
     SP_DialogueArchetype "{5DE2CA50B7920D63}" : "{65CFF309C633A29E}Configs/CharacterTesUS.conf" {
+     DialogueBranch {
+      SP_DialogueBranch "{5D24F6680D99C27C}" {
+       m_BranchStages {
+        DialogueStage "{5D24F6680D99C27E}" {
+         DialogueText "T estw afawfw aafwaf awf wafwa ufwa gfuaeigfu eago uewuge hguahgae uhgegeha"
+        }
+       }
+      }
+     }
     }
    }
    m_ChatChannelFIA FIAChatChannel "{5D76C2C8CDC0AB5E}" {
@@ -19,16 +28,6 @@ SCR_BaseGameMode {
    m_ChatChannelUS USChatChannel "{5D76C2C8F46C1450}" {
     "Channel name" "US"
     Style BaseChatChannelStyle "{5D76C2C8F7B0D2A5}" {
-    }
-   }
-   m_ChatChannelBANDITS BANDITSChatChannel "{5D76C2C8F9ADA1BF}" {
-    "Channel name" "BANDITS"
-    Style BaseChatChannelStyle "{5D76C2C8FBB5AE6E}" {
-    }
-   }
-   m_ChatChannelSPEIRA SPEIRAChatChannel "{5D76C2C8FCA0BA98}" {
-    "Channel name" "SPEIRA"
-    Style BaseChatChannelStyle "{5D76C2C8FEE0A33D}" {
     }
    }
    m_ChatChannelANOUNCER LocalChatChannel "{5D76C2C8E07ECAFD}" {

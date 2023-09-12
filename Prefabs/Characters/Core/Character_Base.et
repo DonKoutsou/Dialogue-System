@@ -11,6 +11,15 @@ SCR_ChimeraCharacter {
       Name "Talk"
      }
     }
+    SP_IDUserAction "{5E590184D4A33D8C}" {
+     ParentContextList {
+      "default"
+     }
+     UIInfo UIInfo "{5E590184C0AD1B85}" {
+      Name "Check ID"
+     }
+     "Sort Priority" 10
+    }
    }
   }
  }

@@ -1,0 +1,189 @@
+FrameWidgetClass {
+ Name "ItemInfoRoot"
+ Slot FrameWidgetSlot "{5ABE7EB1D69808C2}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 100
+  OffsetRight -100
+  SizeY 100
+  OffsetBottom -100
+  SizeToContent 1
+ }
+ components {
+  SCR_DialogueBubble "{5E59019BF3DD11E5}" {
+  }
+ }
+ {
+  FrameWidgetClass "{5E59019FD4F3D118}" {
+   Name "ItemInfo"
+   Slot FrameWidgetSlot "{567A868B1A36D6CA}" {
+    OffsetLeft 0
+    OffsetTop 0
+    SizeX 0
+    OffsetRight 0
+    SizeY 0
+    OffsetBottom 0
+    SizeToContent 1
+   }
+   components {
+    SCR_SlotUIComponent "{567A868A4CB58266}" {
+     SizeX 500
+     SizeY 100
+    }
+   }
+   {
+    SizeLayoutWidgetClass "{5E59019FD4F3D11C}" {
+     Name "size"
+     Slot FrameWidgetSlot "{567A868A7C2126F9}" {
+      OffsetLeft 0
+      OffsetTop 0
+      SizeX 300
+      OffsetRight -300
+      SizeY 200
+      OffsetBottom -200
+     }
+     HeightOverride 0
+     AllowMinDesiredWidth 1
+     MinDesiredWidth 0
+     AllowMinDesiredHeight 1
+     MinDesiredHeight 150
+     AllowMaxDesiredWidth 1
+     MaxDesiredWidth 350
+     AllowMaxDesiredHeight 1
+     MaxDesiredHeight 350
+     {
+      FrameWidgetClass "{5E59019FD4F3D161}" {
+       Name "SizeLayout0"
+       Slot AlignableSlot "{567A868D73CC5795}" {
+        HorizontalAlign 3
+        VerticalAlign 3
+       }
+       {
+        OverlayWidgetClass "{5E59019FD4F3D167}" {
+         Name "Overlay1"
+         Slot FrameWidgetSlot "{567A868D73CC57B6}" {
+          PositionX 0
+          OffsetLeft 0
+          PositionY 0
+          OffsetTop 0
+          SizeX 0
+          OffsetRight 0
+          SizeY 0
+          OffsetBottom 0
+          SizeToContent 1
+         }
+         Clipping True
+         {
+          ImageWidgetClass "{5E5927D9DC3155C1}" {
+           Name "Image2"
+           Slot OverlayWidgetSlot {
+            HorizontalAlign 3
+            VerticalAlign 3
+           }
+           "Is Visible" 0
+           Opacity 0.8
+           Color 0 0 0 1
+           "Blend Mode" Opaque
+           "Flip Vertically" 1
+           Saturation 0
+           "Transition width" 0
+           Progress 0.229
+           "Mask Mode" "Include Below"
+          }
+          ImageWidgetClass "{5E59019FD4F3D169}" {
+           Name "Background"
+           Slot OverlayWidgetSlot "{567A7CC054B0F870}" {
+            HorizontalAlign 3
+            VerticalAlign 3
+           }
+           Color 0.028 0.028 0.028 0.71
+           Tiling None
+          }
+          PanelWidgetClass "{5E5927D9DC315446}" {
+           Name "Border"
+           Slot OverlayWidgetSlot {
+            HorizontalAlign 3
+            VerticalAlign 3
+           }
+           "Is Visible" 0
+           Color 0.761 0.386 0.08 1
+           style outline_4px
+          }
+          BlurWidgetClass "{5E59019FD4F3D164}" {
+           Name "Blur0"
+           Slot OverlayWidgetSlot "{567A7CC034D3C2EF}" {
+            HorizontalAlign 3
+            VerticalAlign 3
+           }
+           Intensity 0.2
+          }
+          PanelWidgetClass "{5E5927D9DC3155AD}" {
+           Name "Panel0"
+           Slot OverlayWidgetSlot {
+            HorizontalAlign 3
+            VerticalAlign 3
+           }
+           Color 0.761 0.583 0.367 1
+           style pixel_frame
+          }
+          FrameWidgetClass "{5E59019FD4F3D16D}" {
+           Name "Frame1"
+           Slot OverlayWidgetSlot "{5E590186A559CF1B}" {
+            Padding 10 10 10 10
+           }
+           Clipping True
+           {
+            SizeLayoutWidgetClass "{5E5927D8E0029592}" {
+             Name "SizeLayout0"
+             Slot FrameWidgetSlot "{5E5927D8E00295EE}" {
+              Anchor 0.5 0.5 0.5 0.5
+              PositionX 0
+              OffsetLeft 0
+              PositionY 0
+              OffsetTop 0
+              SizeX 0
+              OffsetRight 0
+              SizeY 0
+              OffsetBottom 0
+              Alignment 0.5 0.5
+              SizeToContent 1
+             }
+             AllowMinDesiredWidth 1
+             MinDesiredWidth 0
+             AllowMinDesiredHeight 1
+             MinDesiredHeight 0
+             AllowMaxDesiredWidth 1
+             MaxDesiredWidth 600
+             AllowMaxDesiredHeight 1
+             MaxDesiredHeight 300
+             {
+              TextWidgetClass "{5E59019FD4F3D141}" {
+               Name "DialogueText"
+               Slot AlignableSlot "{5E5927D8E58FA3E4}" {
+                Padding 0 0 0 0
+               }
+               Text "Testwafawfwaafwa fawfwafwaufwagf uaeigfueagou ewugehguahgaeu hgegehaafawfaw"
+               "Font Size" 16
+               "Min Font Size" 16
+               "Horizontal Alignment" Center
+               "Vertical Alignment" Center
+               Wrap 1
+               FontProperties FontProperties "{5D132977C36A3649}" {
+                Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+                Bold 1
+               }
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

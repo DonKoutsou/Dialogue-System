@@ -1,0 +1,334 @@
+FrameWidgetClass {
+ Name "ItemInfoRoot"
+ Slot FrameWidgetSlot "{5ABE7EB1D69808C2}" {
+  OffsetLeft 0
+  OffsetTop 0
+  SizeX 100
+  OffsetRight -100
+  SizeY 100
+  OffsetBottom -100
+  SizeToContent 1
+ }
+ components {
+  SCR_IDInfoUI "{5E5901864E1A477C}" {
+  }
+ }
+ {
+  FrameWidgetClass "{5E59018C4ACBB9D9}" {
+   Name "ItemInfo"
+   Slot FrameWidgetSlot "{567A868B1A36D6CA}" {
+    OffsetLeft 0
+    OffsetTop 0
+    SizeX 0
+    OffsetRight 0
+    SizeY 0
+    OffsetBottom 0
+   }
+   components {
+    SCR_SlotUIComponent "{567A868A4CB58266}" {
+     SizeX 0
+     SizeY 0
+     SizeToContent 1
+    }
+   }
+   {
+    SizeLayoutWidgetClass "{5E59018C4ACBB9DE}" {
+     Name "size"
+     Slot FrameWidgetSlot "{567A868A7C2126F9}" {
+      OffsetLeft 0
+      OffsetTop 0
+      SizeX 0
+      OffsetRight 0
+      SizeY 0
+      OffsetBottom 0
+      SizeToContent 1
+     }
+     AllowMinDesiredWidth 1
+     MinDesiredWidth 300
+     AllowMinDesiredHeight 1
+     MinDesiredHeight 150
+     AllowMaxDesiredWidth 1
+     MaxDesiredWidth 500
+     AllowMaxDesiredHeight 1
+     MaxDesiredHeight 300
+     {
+      FrameWidgetClass "{5E59018C4ACBB9DD}" {
+       Name "SizeLayout0"
+       Slot AlignableSlot "{567A868D73CC5795}" {
+        HorizontalAlign 3
+        VerticalAlign 3
+       }
+       {
+        OverlayWidgetClass "{5E59018C4ACBB923}" {
+         Name "Overlay1"
+         Slot FrameWidgetSlot "{567A868D73CC57B6}" {
+          Anchor 0 0 0 0
+          PositionX 0
+          OffsetLeft 0
+          PositionY 0
+          OffsetTop 0
+          SizeX 0
+          OffsetRight 0
+          SizeY 0
+          OffsetBottom 0
+          SizeToContent 1
+         }
+         {
+          BlurWidgetClass "{5E59018C4ACBB922}" {
+           Name "Blur0"
+           Slot OverlayWidgetSlot "{567A7CC034D3C2EF}" {
+            HorizontalAlign 3
+            VerticalAlign 3
+           }
+           Intensity 0.421
+          }
+          ImageWidgetClass "{5E59018C4ACBB920}" {
+           Name "Background"
+           Slot OverlayWidgetSlot "{567A7CC054B0F870}" {
+            HorizontalAlign 3
+            VerticalAlign 3
+           }
+           Color 0.028 0.028 0.028 0.71
+           Tiling None
+          }
+          ImageWidgetClass "{5E59018C4ACBB927}" {
+           Name "Line"
+           Slot OverlayWidgetSlot "{567A941404657E5F}" {
+            HorizontalAlign 3
+            VerticalAlign 0
+           }
+           Color 0.761 0.392 0.078 1
+           Size 32 4
+          }
+          FrameWidgetClass "{5E59018C671E2E51}" {
+           Name "Frame1"
+           Slot OverlayWidgetSlot "{5E590186A559CF1B}" {
+           }
+           {
+            FrameWidgetClass "{5E59018C671E2E56}" {
+             Name "Frame1"
+             Slot FrameWidgetSlot "{5E0CC94E9781BCA4}" {
+              PositionX 232
+              OffsetLeft 232
+              PositionY 6
+              OffsetTop 6
+              SizeX 60
+              OffsetRight -292
+              SizeY 60
+              OffsetBottom -66
+             }
+             {
+              ImageWidgetClass "{5E59018C671E2E5B}" {
+               Name "RankIcon"
+               Slot FrameWidgetSlot "{5D126ECA850604C0}" {
+                PositionX 0
+                OffsetLeft 0
+                PositionY 0
+                OffsetTop 0
+                SizeX 60
+                OffsetRight -60
+                SizeY 60
+                OffsetBottom -60
+               }
+               Color 1 0.782 0.305 1
+               Texture "{5D7F0C1AB551F610}UI/Textures/MilitaryIcons/MilitaryIcons.imageset"
+               Image "AR_Rank_OR-6"
+               Size 32 32
+              }
+             }
+            }
+            FrameWidgetClass "{5E59018C671E2E58}" {
+             Name "Frame0"
+             Slot FrameWidgetSlot "{5E0CC94FCD3019EA}" {
+              PositionX 8
+              OffsetLeft 8
+              PositionY 96
+              OffsetTop 96
+              SizeX 150
+              OffsetRight -158
+              SizeY 30
+              OffsetBottom -126
+             }
+             {
+              TextWidgetClass "{5E59018C671E2E5E}" {
+               Name "CharReputationText"
+               Slot FrameWidgetSlot "{5D8D15D993F3A44F}" {
+                Anchor 0 0 0 1
+                PositionX 85
+                OffsetLeft 85
+                PositionY 0
+                OffsetTop 0
+                SizeX 120
+                OffsetRight -205
+                SizeY 0
+                OffsetBottom 0
+                SizeToContent 1
+               }
+               Color 0.502 0.011 0 1
+               style default
+               Text "Terrible"
+               "Font Size" 15
+               "Min Font Size" 15
+               "Vertical Alignment" Center
+              }
+              TextWidgetClass "{5E59018C671E2FA3}" {
+               Name "Reputation0"
+               Slot FrameWidgetSlot "{5D8D15DA50442F05}" {
+                Anchor 0 0 0 1
+                PositionX 5
+                OffsetLeft 5
+                PositionY 5
+                OffsetTop 0
+                SizeX 120
+                OffsetRight -125
+                SizeY -3.7
+                OffsetBottom 0
+               }
+               Text "Reputation:"
+               "Font Size" 15
+               "Min Font Size" 15
+               "Vertical Alignment" Center
+               FontProperties FontProperties "{5E0CC94C6F8D0155}" {
+                Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+                Bold 1
+               }
+              }
+             }
+            }
+            PanelWidgetClass "{5E59018C671E2FA1}" {
+             Name "Panel0"
+             Slot FrameWidgetSlot "{5E0B24932856418A}" {
+              Anchor 0 0 1 1
+              PositionX 0
+              OffsetLeft 0
+              PositionY 0
+              OffsetTop 0
+              SizeX 0
+              OffsetRight 0
+              SizeY 0
+              OffsetBottom 0
+             }
+             Color 0.761 0.583 0.367 1
+             style pixel_frame
+            }
+            FrameWidgetClass "{5E59018C671E2FA7}" {
+             Name "Faction"
+             Slot FrameWidgetSlot "{5E0CC94F394D0871}" {
+              Anchor 0 0 0 0
+              PositionX 232
+              OffsetLeft 232
+              PositionY 70
+              OffsetTop 70
+              SizeX 60
+              OffsetRight -292
+              SizeY 60
+              OffsetBottom -130
+             }
+             {
+              ImageWidgetClass "{5E59018C671E2FA4}" {
+               Name "FactionIcon"
+               Slot FrameWidgetSlot "{5D126ECA850604C0}" {
+                Anchor 0 0 1 1
+                PositionX 0.5
+                OffsetLeft 1
+                PositionY 0.5
+                OffsetTop 1
+                SizeX -2
+                OffsetRight 1
+                SizeY -2
+                OffsetBottom 1
+               }
+               Texture "{EB7F65DBC9392557}UI/Textures/Editor/EditableEntities/Factions/EditableEntity_Faction_USA.edds"
+               Size 128 128
+              }
+             }
+            }
+            TextWidgetClass "{5E59018C671E2FAA}" {
+             Name "CharacterName"
+             Slot FrameWidgetSlot "{5D10CA1D63DBBA3C}" {
+              PositionX 8
+              OffsetLeft 8
+              PositionY 8
+              OffsetTop 8
+              SizeX -649.801
+              OffsetRight 641.801
+              SizeY -33.8
+              OffsetBottom 25.8
+              SizeToContent 1
+             }
+             Text "Ch"
+             Wrap 1
+             FontProperties FontProperties "{5D132977C36A3649}" {
+              Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+              Bold 1
+             }
+            }
+            FrameWidgetClass "{5E59018C671E2FAF}" {
+             Name "Frame2"
+             Slot FrameWidgetSlot "{5E0CC94FCD3019EA}" {
+              PositionX 8
+              OffsetLeft 8
+              PositionY 50
+              OffsetTop 50
+              SizeX 150
+              OffsetRight -158
+              SizeY 30
+              OffsetBottom -80
+             }
+             {
+              TextWidgetClass "{5E59018C671E2FAD}" {
+               Name "CharRankText"
+               Slot FrameWidgetSlot "{5D8D15D993F3A44F}" {
+                Anchor 0 0 0 1
+                PositionX 45
+                OffsetLeft 45
+                PositionY 0
+                OffsetTop 0
+                SizeX 120
+                OffsetRight -165
+                SizeY 0
+                OffsetBottom 0
+                SizeToContent 1
+               }
+               style default
+               Text "Private"
+               "Font Size" 15
+               "Min Font Size" 15
+               "Vertical Alignment" Center
+              }
+              TextWidgetClass "{5E59018C671E2FB3}" {
+               Name "Rank0"
+               Slot FrameWidgetSlot "{5D8D15DA50442F05}" {
+                Anchor 0 0 0 1
+                PositionX 5
+                OffsetLeft 5
+                PositionY 5
+                OffsetTop 0
+                SizeX 120
+                OffsetRight -125
+                SizeY -3.7
+                OffsetBottom 0
+               }
+               Text "Rank:"
+               "Font Size" 15
+               "Min Font Size" 15
+               "Vertical Alignment" Center
+               FontProperties FontProperties "{5E0CC94C6F8D0155}" {
+                Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+                Bold 1
+               }
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}
