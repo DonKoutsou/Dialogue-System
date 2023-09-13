@@ -1,0 +1,15 @@
+MetaFileClass {
+ Name "{B5A3B106F88FF20E}UI/Fonts/Greek.fnt"
+ Configurations {
+  FNTResourceClass PC {
+  }
+  FNTResourceClass XBOX_ONE : PC {
+  }
+  FNTResourceClass XBOX_SERIES : PC {
+  }
+  FNTResourceClass PS4 : PC {
+  }
+  FNTResourceClass HEADLESS : PC {
+  }
+ }
+}

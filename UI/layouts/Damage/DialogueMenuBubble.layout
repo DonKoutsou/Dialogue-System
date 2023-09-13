@@ -76,7 +76,7 @@ FrameWidgetClass {
          {
           ImageWidgetClass "{5E5927D9DC3155C1}" {
            Name "Image2"
-           Slot OverlayWidgetSlot {
+           Slot OverlayWidgetSlot "{5E5B00E4D634C913}" {
             HorizontalAlign 3
             VerticalAlign 3
            }
@@ -101,7 +101,7 @@ FrameWidgetClass {
           }
           PanelWidgetClass "{5E5927D9DC315446}" {
            Name "Border"
-           Slot OverlayWidgetSlot {
+           Slot OverlayWidgetSlot "{5E5B00E4D634CAA8}" {
             HorizontalAlign 3
             VerticalAlign 3
            }
@@ -119,7 +119,7 @@ FrameWidgetClass {
           }
           PanelWidgetClass "{5E5927D9DC3155AD}" {
            Name "Panel0"
-           Slot OverlayWidgetSlot {
+           Slot OverlayWidgetSlot "{5E5B00E4D634CAE7}" {
             HorizontalAlign 3
             VerticalAlign 3
            }
@@ -162,15 +162,14 @@ FrameWidgetClass {
                Slot AlignableSlot "{5E5927D8E58FA3E4}" {
                 Padding 0 0 0 0
                }
-               Text "Testwafawfwaafwa fawfwafwaufwagf uaeigfueagou ewugehguahgaeu hgegehaafawfaw"
+               Text "test"
                "Font Size" 16
                "Min Font Size" 16
                "Horizontal Alignment" Center
                "Vertical Alignment" Center
                Wrap 1
-               FontProperties FontProperties "{5D132977C36A3649}" {
-                Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
-                Bold 1
+               FontProperties FontProperties "{5E5B11A99E9659A4}" {
+                Font "{7BDD040ECCF66BA7}UI/Fonts/GreekFull.fnt"
                }
               }
              }

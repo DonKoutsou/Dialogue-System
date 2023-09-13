@@ -46,8 +46,7 @@ ButtonWidgetClass {
           OffsetBottom 2
           SizeToContent 1
          }
-         "Is Visible" 0
-         Opacity 0.8
+         Opacity 0.482
          Color 0 0 0 1
          "Blend Mode" Opaque
          "Flip Vertically" 1
@@ -137,7 +136,7 @@ ButtonWidgetClass {
          "Vertical Alignment" Center
          Wrap 1
          FontProperties FontProperties "{546AF489DFD25402}" {
-          Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+          Font "{7BDD040ECCF66BA7}UI/Fonts/GreekFull.fnt"
           Bold 1
          }
          "Line Spacing" 0

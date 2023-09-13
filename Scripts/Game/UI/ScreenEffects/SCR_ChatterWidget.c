@@ -1,13 +1,16 @@
-class SCR_IDWidget : SCR_InfoDisplayExtended
+class SCR_ChatterWidget : SCR_InfoDisplayExtended
 {
-	const ResourceName INSPECT_CASUALTY_LAYOUT = "{7E4E75B13F626B88}UI/layouts/Damage/IDMenu.layout";
+	const ResourceName INSPECT_CASUALTY_LAYOUT = "{8998563B2B97D6A8}UI/layouts/Damage/DialogueMenuBubble.layout";
 	
 	protected SCR_CharacterDamageManagerComponent m_CharDamageManager;
+	protected array <IEntity> m_aTargets;
+	protected map <IEntity, ref Widget> m_mChatterWidgetMap;
+	protected map <IEntity, float> m_mChatterWidgetTimerMap;
+	
 	protected Widget m_wIDInspectWidget;
 
 	IEntity m_Target;
-	
-
+	string m_sText;
 	protected const float UPDATE_FREQ = 0.5;
 	protected const string TARGET_BONE = "Spine4";
 	protected float m_fTimeTillUpdate;
@@ -23,6 +26,18 @@ class SCR_IDWidget : SCR_InfoDisplayExtended
 	//------------------------------------------------------------------------------------------------
 	override event void DisplayUpdate(IEntity owner, float timeSlice)
 	{
+		for (int i = 0; i < m_mChatterWidgetTimerMap.Count(); i++)
+		{
+			float timer = m_mChatterWidgetTimerMap.GetElement(i);
+			timer -= timeSlice;
+			if (timer < 0)
+			{
+				m_mChatterWidgetTimerMap.RemoveElement(i);
+				Widget element = m_mChatterWidgetMap.GetElement(i);
+				element.SetVisible(false);
+				
+			}
+		}
 		if (m_fTimeTillUpdate > 0)
 		{
 			m_fTimeTillUpdate -= timeSlice;
@@ -84,17 +99,11 @@ class SCR_IDWidget : SCR_InfoDisplayExtended
 	{
 		if (!m_Target || !m_wIDInspectWidget)
 			return;
-		
-		FactionKey faction = SP_DialogueComponent.GetCharacterFaction(m_Target).GetFactionKey();
-		string rank = SP_DialogueComponent.GetCharacterRankInsignia(m_Target);
-		
-		SCR_IDInfoUI IDInfoUI = SCR_IDInfoUI.Cast(m_wIDInspectWidget.FindHandler(SCR_IDInfoUI));
+
+		SCR_DialogueBubble IDInfoUI = SCR_DialogueBubble.Cast(m_wIDInspectWidget.FindHandler(SCR_DialogueBubble));
 		if (IDInfoUI)
 		{
-			IDInfoUI.AssignFactionIcons(faction);
-			IDInfoUI.AssignRankIcons(rank);
-			IDInfoUI.SetCharacterName(m_Target);
-			
+			IDInfoUI.SetText(m_sText);
 		}
 	}
 	
@@ -109,7 +118,6 @@ class SCR_IDWidget : SCR_InfoDisplayExtended
 		m_Target.GetBoneMatrix(m_Target.GetBoneIndex(TARGET_BONE), boneVector);
 		
 		vector WPPos = boneVector[3] + m_Target.GetOrigin();
-		//WPPos[1] = WPPos[1] + 1.3;
 		vector pos = GetGame().GetWorkspace().ProjWorldToScreen(WPPos, GetGame().GetWorld());
 		// Handle off-screen coords
 		WorkspaceWidget workspace = GetGame().GetWorkspace();
@@ -152,11 +160,17 @@ class SCR_IDWidget : SCR_InfoDisplayExtended
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void SetTarget(IEntity target)
+	void AddTarget(IEntity target)
 	{
+		Widget wid;
+		m_mChatterWidgetMap.Insert(target, wid);
+		m_mChatterWidgetTimerMap.Insert(target, 10);
 		m_Target = target;
 	}
-	
+	void SetText(string text)
+	{
+		m_sText = text;
+	}
 	//------------------------------------------------------------------------------------------------			
 	bool IsActive()
 	{

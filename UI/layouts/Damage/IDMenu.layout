@@ -65,12 +65,12 @@ FrameWidgetClass {
           Anchor 0 0 0 0
           PositionX 0
           OffsetLeft 0
-          PositionY 0
-          OffsetTop 0
+          PositionY -130
+          OffsetTop -130
           SizeX 0
           OffsetRight 0
           SizeY 0
-          OffsetBottom 0
+          OffsetBottom 130
           SizeToContent 1
          }
          {

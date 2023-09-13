@@ -10,14 +10,14 @@ FrameWidgetClass {
    Name "Panel0"
    Slot FrameWidgetSlot "{5D10B3055CA98F76}" {
     Anchor 0.5 1 0.5 1
-    PositionX 622.4
-    OffsetLeft 622.4
-    PositionY -143.344
-    OffsetTop -143.3
+    PositionX 644.75
+    OffsetLeft 644.8
+    PositionY -120.05
+    OffsetTop -120.1
     SizeX 628.9
-    OffsetRight -1251.3
-    SizeY 239.913
-    OffsetBottom -96.6
+    OffsetRight -1273.7
+    SizeY 239.9
+    OffsetBottom -119.8
     Alignment 0.5 0.5
    }
    {
@@ -61,6 +61,7 @@ FrameWidgetClass {
       HorizontalAlign 3
       VerticalAlign 3
      }
+     "Is Visible" 0
      Color 0.761 0.533 0.277 1
      style pixel_frame
     }
@@ -69,6 +70,7 @@ FrameWidgetClass {
      Slot OverlayWidgetSlot "{5D132976EEB2C72B}" {
       HorizontalAlign 3
       VerticalAlign 3
+      Padding 15 15 15 15
      }
      Intensity 0.17
      "Smooth Border" 6 6 6 6
@@ -94,6 +96,7 @@ FrameWidgetClass {
         SizeY 30
         OffsetBottom -30
        }
+       "Is Visible" 0
        Opacity 0.8
        Color 0 0 0 1
        Pivot 0.5 0.5
@@ -117,6 +120,7 @@ FrameWidgetClass {
         SizeY -205.9
         OffsetBottom 0
        }
+       "Is Visible" 0
        Color 0.761 0.583 0.367 1
        style pixel_frame
       }
