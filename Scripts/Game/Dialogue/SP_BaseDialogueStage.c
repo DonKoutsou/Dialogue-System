@@ -1,6 +1,7 @@
 [BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
 class DialogueStage
 {
+	SP_DialogueBranch m_Owner;
 	//------------------------------------------------------------------//
 	[Attribute(defvalue: "Action Text", desc: "Action Title", category: "Dialogue")]
 	string ActionText;
@@ -90,7 +91,19 @@ class DialogueStage
 		}
 		return false;
 	}
-	
+	void Init(SP_DialogueBranch Owner = null, int Index = 0)
+	{
+		if (Owner)
+			m_Owner = Owner;
+		if (!m_Branch.IsEmpty())
+		{
+			for (int i = 0; i < m_Branch.Count(); i++)
+			{
+				SP_DialogueBranch branch = SP_DialogueBranch.Cast(m_Branch[i]);
+				branch.Init(this, i);
+			}
+		}
+	}
 }
 //---------------------------------------------------------------------------------------------------//
 class DialogueStageTitleAttribute : BaseContainerCustomTitle

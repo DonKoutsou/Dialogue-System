@@ -3,15 +3,15 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
  Nodes {
   RootNode Root {
    Name "Root"
-   EditorPos -61 -249
+   EditorPos -99.75 -527.75
    Nodes {
     Sequence Sequence {
      Name "Sequence"
-     EditorPos -72 -66
+     EditorPos -108.25 -343.5
      Nodes {
       SCR_AIGetConverseParameters "SCR_AI Get Converse Parameters" {
        Name "SCR_AI Get Converse Parameters"
-       EditorPos -950.377 149.948
+       EditorPos -1235.877 -117.302
        OutPorts {
         SingleOutputPortContainer SingleOutputPortContainer {
          Port 0
@@ -25,34 +25,15 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
          Port -1
          PortName "Radius"
         }
-       }
-      }
-      SCR_AILookAtPosition "SCR_AI Look At Position" {
-       Name "SCR_AI Look At Position"
-       EditorPos -431.377 151.948
-       InPorts {
-        SingleInputPortContainer SingleInputPortContainer {
-         Port 0
-         PortName "PositionIn"
-        }
-        SingleInputPortContainer SingleInputPortContainer {
-         Port -1
-         PortName "PriorityIn"
-        }
-       }
-       OutPorts {
         SingleOutputPortContainer SingleOutputPortContainer {
-         Port -1
-         PortName "PositionOut"
+         Port 1
+         PortName "UseRadio"
         }
        }
-       m_fVerticalOffset 1.7
-       m_fIgnoreLookDistSq 0
-       m_fPriority 80
       }
       SCR_AISetWeaponRaised "SCR_AI Set Weapon Raised" {
        Name "SCR_AI Set Weapon Raised"
-       EditorPos -158.571 171.429
+       EditorPos -393.071 -119.821
        InPorts {
         SingleInputPortContainer SingleInputPortContainer {
          Port -1
@@ -61,16 +42,98 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
        }
        m_bRaised 0
       }
-      AITaskMove Move {
-       Name "Move"
-       EditorPos 185 132
-       InTargetLocation 0
-       PrecisionXZ 3
-      }
-      AITaskIdle Idle {
-       Name "Idle"
-       EditorPos 527 143
-       Period 500
+      Selector Selector {
+       Name "Selector"
+       EditorPos -23.75 -118.75
+       Nodes {
+        DecoTestVariable "Test Variable" {
+         Name "Test Variable"
+         EditorPos -188.75 85
+         Nodes {
+          Parallel Parallel {
+           Name "Parallel"
+           EditorPos -94 312
+           Nodes {
+            Sequence Sequence {
+             Name "Sequence"
+             EditorPos -363 498
+             Nodes {
+              SCR_AIEquipRightHandItem "SCR_AI Equip Right Hand Item" {
+               Name "SCR_AI Equip Right Hand Item"
+               EditorPos -505 664.5
+               InPorts {
+                SingleInputPortContainer SingleInputPortContainer {
+                 Port -1
+                 PortName "ItemType"
+                }
+                SingleInputPortContainer SingleInputPortContainer {
+                 Port -1
+                 PortName "GadgetType"
+                }
+               }
+               m_eGadgetType RADIO
+              }
+              AITaskIdle Idle {
+               Name "Idle"
+               EditorPos -150 662
+               Period 500
+              }
+             }
+            }
+            SCR_AIToggleUnEquipRadioOnAbort "SCR_AI Toggle Un Equip Radio On Abort" {
+             Name "SCR_AI Toggle Un Equip Radio On Abort"
+             EditorPos 128 559
+            }
+           }
+          }
+         }
+         NegativeCondition 1
+         AbortType AbortChildrenBranch
+         InVariable 1
+         TestType EqualsValue
+         TestValue "1"
+        }
+        Sequence Sequence {
+         Name "Sequence"
+         EditorPos 280.25 115
+         Nodes {
+          SCR_AILookAtPosition "SCR_AI Look At Position" {
+           Name "SCR_AI Look At Position"
+           EditorPos 121.123 290.198
+           InPorts {
+            SingleInputPortContainer SingleInputPortContainer {
+             Port 0
+             PortName "PositionIn"
+            }
+            SingleInputPortContainer SingleInputPortContainer {
+             Port -1
+             PortName "PriorityIn"
+            }
+           }
+           OutPorts {
+            SingleOutputPortContainer SingleOutputPortContainer {
+             Port -1
+             PortName "PositionOut"
+            }
+           }
+           m_fVerticalOffset 1.7
+           m_fIgnoreLookDistSq 0
+           m_fPriority 80
+          }
+          AITaskMoveToEntity "Move To Entity" {
+           Name "Move To Entity"
+           EditorPos 448.75 303.75
+           PrecisionXZ 3
+           InEntity 0
+          }
+          AITaskIdle Idle {
+           Name "Idle"
+           EditorPos 948.25 288
+           Period 500
+          }
+         }
+        }
+       }
       }
      }
     }
@@ -84,11 +147,21 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
    VariableExposedInput 0
    VariableExposedOutput 0
   }
+  Variable UseRadio {
+   VariableName "UseRadio"
+   VariableTypeName "bool"
+   VariableExposedInput 0
+   VariableExposedOutput 0
+  }
  }
  VariablesRefs {
   VariableReference posToLook {
    VariableType 0
-   EditorPos -636.377 184.948
+   EditorPos 9.623 177.698
+  }
+  VariableReference UseRadio {
+   VariableType 1
+   EditorPos -722 440
   }
  }
 }

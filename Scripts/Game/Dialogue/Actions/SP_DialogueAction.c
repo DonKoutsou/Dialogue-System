@@ -1,11 +1,21 @@
 class SP_DialogueAction : ScriptedUserAction
 {
+	[Attribute()]
+	bool isradio;
 	//------------------------------------------------------------------//
 	protected SP_DialogueComponent DiagComp;
 	protected BaseGameMode GameMode;
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
+		GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
+		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		if (SCR_EntityHelper.IsPlayer(pUserEntity))
+		{
+			if (!DiagComp.a_PLcontactList.Contains(pOwnerEntity))
+				DiagComp.a_PLcontactList.Insert(pOwnerEntity)
+		}
+		
 		AIControlComponent comp = AIControlComponent.Cast(pOwnerEntity.FindComponent(AIControlComponent));
 		if (!comp)
 			return;
@@ -16,10 +26,9 @@ class SP_DialogueAction : ScriptedUserAction
 		if (!utility)
 			return;
 		
-		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, pUserEntity.GetOrigin());
+		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, pUserEntity.GetOrigin(), false);
 		
-		GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
-		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		
 		string NoTalkText = "Cant talk to you now";
 		FactionKey SenderFaction = DiagComp.GetCharacterFaction(pOwnerEntity).GetFactionKey();
 		BaseChatChannel Channel;
@@ -40,6 +49,7 @@ class SP_DialogueAction : ScriptedUserAction
 	}
 	override event void Init(IEntity pOwnerEntity, GenericComponent pManagerComponent)
 	{
+		
 	};
 	//------------------------------------------------------------------//
 	override bool CanBeShownScript(IEntity user)
@@ -47,18 +57,20 @@ class SP_DialogueAction : ScriptedUserAction
 		if (user == GetOwner())
 			return false;
 		ChimeraCharacter char = ChimeraCharacter.Cast(GetOwner());
-		if (!char)
-			return false;
-		SCR_CharacterDamageManagerComponent damageMan = SCR_CharacterDamageManagerComponent.Cast(char.GetDamageManager());
-		if (!damageMan)
-			return false;
-		
-		if (damageMan.GetState() == EDamageState.DESTROYED)
-			return false;
-		if(damageMan.GetIsUnconscious() == true)
+		if (char)
 		{
-			return false;
+			SCR_CharacterDamageManagerComponent damageMan = SCR_CharacterDamageManagerComponent.Cast(char.GetDamageManager());
+			if (!damageMan)
+				return false;
+			
+			if (damageMan.GetState() == EDamageState.DESTROYED)
+				return false;
+			if(damageMan.GetIsUnconscious() == true)
+			{
+				return false;
+			}
 		}
+		
 		
 		return super.CanBePerformedScript(user);
 	}

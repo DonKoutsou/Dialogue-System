@@ -5,6 +5,7 @@
 class SP_DialogueBranch
 {
 	//------------------------------------------------------------------//
+	DialogueStage m_Owner;
 	[Attribute(desc: "Dialogue Stage, Depending on the stage of the branch the apropriate stage will be selected. Stage = 0 means first entry etc...")]
 	ref array<ref DialogueStage> 						m_BranchStages;
 	ref DialogueBranchInfo 								BranchInfoConfig;
@@ -217,6 +218,19 @@ class SP_DialogueBranch
 		DialogueBranchInfo Conf = LocateConfig(Char);
 		Conf.SetParent(ParentConfig);
 		Conf.SetOriginalArch(Archetype);
+	}
+	void Init(DialogueStage Owner = null, int index = 0)
+	{
+		if (Owner)
+			m_Owner = Owner;
+		if (!m_BranchStages.IsEmpty())
+		{
+			for (int i = 0; i < m_BranchStages.Count(); i++)
+			{
+				DialogueStage stage = DialogueStage.Cast(m_BranchStages[i]);
+				stage.Init(this, index);
+			}
+		}
 	}
 };
 [BaseContainerProps(configRoot:true), SCR_BaseContainerCustomTitleField("ActionText", "DialogueText")]

@@ -164,11 +164,14 @@ class SP_DialogueArchetype: ScriptAndConfig
 		OriginalArchetype = this;
 		DialogueBranchMap = new map<int, ref SP_DialogueBranch>();
 		for (int i = 0, count = DialogueBranch.Count(); i < count; i++)
-        {
+    {
+			SP_DialogueBranch branch = DialogueBranch[i];
+			branch.Init(null, i);
 			//using 2 values to create key, branch and stage IDs
 			int key = (i);
         	DialogueBranchMap.Insert(key, DialogueBranch[i]);
-        }
+    }
 		TalkingCharacter = Character;
+		
 	}
 };

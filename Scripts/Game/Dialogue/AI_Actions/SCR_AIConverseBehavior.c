@@ -3,10 +3,12 @@ class SCR_AIConverseBehavior : SCR_AIBehaviorBase
 	protected ref SCR_BTParam<vector> m_vPosition = new SCR_BTParam<vector>("Position");
 	protected ref SCR_BTParam<float> m_fDuration = new SCR_BTParam<float>("Duration");	// Initialize in derived class
 	protected ref SCR_BTParam<float> m_fRadius = new SCR_BTParam<float>("Radius");		// Initialize in derived class
+	protected ref SCR_BTParam<bool> m_bUseRadio = new SCR_BTParam<bool>("UseRadio");		// Initialize in derived class
+	
 	//protected ref SCR_BTParam<bool> m_bUseBinoculars = new SCR_BTParam<bool>("UseBinoculars"); // Initialize in derived class
 	
 	protected float m_fDeleteActionTime_ms;	// Initialize in derived class by InitTimeout()
-	
+	bool m_buseradio;
 	IEntity Owner;
 	
 	bool m_bActiveConversation = false;
@@ -17,20 +19,23 @@ class SCR_AIConverseBehavior : SCR_AIBehaviorBase
 		m_vPosition.Init(this, position);
 		m_fDuration.Init(this, 5000);
 		m_fRadius.Init(this, 0);
+		m_bUseRadio.Init(this, m_buseradio);
 		//m_bUniqueInActionQueue = false;
 		//m_bUseBinoculars.Init(this, false);
 	}
 	
 	// posWorld - position to observe
-	void SCR_AIConverseBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, vector posWorld)
+	void SCR_AIConverseBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, vector posWorld, bool useradio)
 	{
-		InitParameters(posWorld);
-		if (!utility)
-			return;
-				
+		
+		
+		m_buseradio = useradio;
 		m_sBehaviorTree = "{082A95ACDC49DBAB}AI/BehaviorTrees/klamaczTest.bt";
 		m_bAllowLook = true; // Disable standard looking
 		m_bResetLook = true;
+		InitParameters(posWorld);
+		if (!utility)
+			return;
 		//m_bUniqueInActionQueue = true;
 		
 		m_bActiveConversation = true;
@@ -67,7 +72,7 @@ class SCR_AIConverseBehavior : SCR_AIBehaviorBase
 
 class SCR_AIGetConverseParameters : SCR_AIGetActionParameters
 {
-	static ref TStringArray s_aVarsOut = (new SCR_AIConverseBehavior(null, null, Vector(0,0,0))).GetPortNames();
+	static ref TStringArray s_aVarsOut = (new SCR_AIConverseBehavior(null, null, Vector(0,0,0), 0)).GetPortNames();
 	override TStringArray GetVariablesOut()
 	{
 		return s_aVarsOut;
@@ -91,7 +96,7 @@ class SCR_ConverseAction : ScriptedUserAction
 		if (!utility)
 			return;
 		
-		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, pUserEntity.GetOrigin());
+		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, pUserEntity.GetOrigin(), false);
 		utility.AddAction(action);
 
 	}
@@ -118,5 +123,28 @@ class SCR_ConverseAction : ScriptedUserAction
 		// or
 		SCR_AIConverseBehavior action = SCR_AIConverseBehavior.Cast(utility.FindActionOfType(SCR_AIConverseBehavior));
 		action.SetActiveConversation(false);
+	}
+};
+class SCR_AIToggleUnEquipRadioOnAbort : SCR_AIToggleFlashlights
+{
+	//------------------------------------------------------------------------------------------------------
+	override void OnAbort(AIAgent owner, Node nodeCausingAbort)
+	{
+		if (!m_GadgetManager)
+			return;
+		m_GadgetManager.RemoveHeldGadget();
+		//ToggleFlashlights(m_GadgetManager, m_bEnable);
+	}
+	
+	//------------------------------------------------------------------------------------------------------
+	override ENodeResult EOnTaskSimulate(AIAgent owner, float dt)
+	{
+		return ENodeResult.RUNNING;
+	}
+	
+	//------------------------------------------------------------------------------------------------------
+	override static protected bool VisibleInPalette()
+	{
+		return true;
 	}
 };

@@ -3,7 +3,8 @@ enum EArchetypeIdentifier
 	Name,
 	Rank,
 	"FactionKey",
-	"Faction and Rank"
+	"Faction and Rank",
+	"Radio"
 };
 enum EChoiseBehavior
 {
@@ -49,6 +50,7 @@ class SP_DialogueComponent: ScriptComponent
 	ref map <string, ref array <string>> PLtexthistorymap;
 	ref array <string>				a_texthistory;
 	ref array <string>				a_PLtexthistory;
+	static ref array <IEntity> a_PLcontactList;
 	//----------------------------------------------------------------------------------------------------------------//
 	SCR_BaseGameMode GameMode;
 	static SP_DialogueComponent GetInstance(){return SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));};
@@ -118,8 +120,6 @@ class SP_DialogueComponent: ScriptComponent
 		string 					m_DialogTexttoshow;
 		//Name of character we are talking to 
 		string 					senderName = GetCharacterName(Character);
-		//Faction
-		FactionKey				senderFaction = GetCharacterFaction(Character).GetFactionKey();
 		//Dialogue Archetype matching the charcter we are talking to 
 		SP_DialogueArchetype 	DiagArch = LocateDialogueArchetype(Character, Player);
 		//Get branch located in found archetype using ID
@@ -137,18 +137,6 @@ class SP_DialogueComponent: ScriptComponent
 			DiagUI.UpdateEntries(Character, Player);
 			return "Cant do dat.";
 		}
-		switch (senderFaction)
-			{
-				case "FIA":
-					Channel = m_ChatChannelFIA;
-				break;
-				case "USSR":
-					Channel = m_ChatChannelUSSR;
-				break;
-				case "US":
-					Channel = m_ChatChannelUS;
-				break;
-			}
 		//------------------------------------------------------------------//
 		//Check if branch has another branch in its current stage. If yes we will have to cause a branch after getting our text
 		if (Branch.CheckIfStageBranches(Character, Player) == true)
@@ -471,7 +459,7 @@ class SP_DialogueComponent: ScriptComponent
 	//----------------------------------------------------------------------------------------------------------------//
 	SP_DialogueArchetype GetArchetypeTemplate(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
-		SCR_CharacterIdentityComponent id = SCR_CharacterIdentityComponent.Cast(pUserEntity.FindComponent(SCR_CharacterIdentityComponent));
+		SCR_CharacterIdentityComponent id = SCR_CharacterIdentityComponent.Cast(pOwnerEntity.FindComponent(SCR_CharacterIdentityComponent));
 		if (id.HasArchetype())
 			return id.GetArchetype();
 		
@@ -543,12 +531,13 @@ class SP_DialogueComponent: ScriptComponent
 	SP_DialogueArchetype LocateDialogueArchetype(IEntity Owner, IEntity User)
 	{
 		SP_DialogueArchetype CharDialogueArch;
-		//using character full name atm to match Owner with Archetype
-		string LocCharacterName = GetCharacterName(Owner);
+		
 		if (!GetArchetypeTemplate(Owner, User))
 		{
 			return CharDialogueArch;
 		}
+		//using character full name atm to match Owner with Archetype
+		string LocCharacterName = GetCharacterName(Owner);
 		//Check if an Archetype with out character's name exists
 		if (DialogueArchetypeMap.Contains(LocCharacterName))
 			{
@@ -603,6 +592,8 @@ class SP_DialogueComponent: ScriptComponent
 			texthistorymap = new map <string,ref array <string>>();
 		if	(!PLtexthistorymap)
 			PLtexthistorymap = new map <string,ref array <string>>();
+		if	(!a_PLcontactList)
+			a_PLcontactList = new array <IEntity>();
 
 	}
 	//----------------------------------------------------------------------------------------------------------------//

@@ -1,0 +1,25 @@
+GenericEntity : "{5879D8E9C56E358D}Prefabs/Items/Core/Radio_base.et" {
+ ID "508AB2013EEE1E00"
+ components {
+  SCR_CharacterIdentityComponent "{5E5D05BE157A4A4F}" {
+   Identity Identity "{5E5D05BE14EEE485}" {
+   }
+   m_DialogueArchetype SP_DialogueArchetype "{5E5D119872B271FD}" : "{FCAE8781D1F3F187}Configs/RadioTest.conf" {
+   }
+  }
+  ActionsManagerComponent "{508AB5952B584B2E}" {
+   additionalActions {
+    SP_DialogueAction "{5E5D05BDD0376D7C}" {
+     ParentContextList {
+      "default"
+     }
+     UIInfo UIInfo "{5E5D05BDD4FBF2CA}" {
+      Name "test"
+     }
+     Duration 0.5
+     isradio 1
+    }
+   }
+  }
+ }
+}
