@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{883FFABBC42CCA9B}UI/Fonts/GreekFull.edds"
+ Name "{F3CECB04B7B263F9}UI/Fonts/RobotoCondensed/RobotoCondensed_Regular.edds"
  Configurations {
   TGAResourceClass PC : "{F18523FA5BAAEA63}Configs/System/ResourceTypes/PC/TextureFonts.conf" {
   }

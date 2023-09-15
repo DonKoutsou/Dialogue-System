@@ -136,7 +136,7 @@ ButtonWidgetClass {
          "Vertical Alignment" Center
          Wrap 1
          FontProperties FontProperties "{546AF489DFD25402}" {
-          Font "{7BDD040ECCF66BA7}UI/Fonts/GreekFull.fnt"
+          Font "{DBE887B44077C90E}UI/Fonts/Greek_Final.fnt"
           Bold 1
          }
          "Line Spacing" 0
@@ -178,7 +178,7 @@ ButtonWidgetClass {
        "Font Size" 18
        "Min Font Size" 18
        FontProperties FontProperties "{5D1329762D9C23A5}" {
-        Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+        Font "{DBE887B44077C90E}UI/Fonts/Greek_Final.fnt"
         Bold 1
         ShadowSize 32
        }

@@ -170,6 +170,9 @@ FrameWidgetClass {
                "Font Size" 15
                "Min Font Size" 15
                "Vertical Alignment" Center
+               FontProperties FontProperties "{5E5F0544C2C3B829}" {
+                Font "{DBE887B44077C90E}UI/Fonts/Greek_Final.fnt"
+               }
               }
               TextWidgetClass "{5E59018C671E2FA3}" {
                Name "Reputation0"
@@ -189,7 +192,7 @@ FrameWidgetClass {
                "Min Font Size" 15
                "Vertical Alignment" Center
                FontProperties FontProperties "{5E0CC94C6F8D0155}" {
-                Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+                Font "{DBE887B44077C90E}UI/Fonts/Greek_Final.fnt"
                 Bold 1
                }
               }
@@ -259,7 +262,7 @@ FrameWidgetClass {
              Text "Ch"
              Wrap 1
              FontProperties FontProperties "{5D132977C36A3649}" {
-              Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+              Font "{DBE887B44077C90E}UI/Fonts/Greek_Final.fnt"
               Bold 1
              }
             }
@@ -295,6 +298,9 @@ FrameWidgetClass {
                "Font Size" 15
                "Min Font Size" 15
                "Vertical Alignment" Center
+               FontProperties FontProperties "{5E5F0544F454B1EF}" {
+                Font "{DBE887B44077C90E}UI/Fonts/Greek_Final.fnt"
+               }
               }
               TextWidgetClass "{5E59018C671E2FB3}" {
                Name "Rank0"
@@ -314,7 +320,7 @@ FrameWidgetClass {
                "Min Font Size" 15
                "Vertical Alignment" Center
                FontProperties FontProperties "{5E0CC94C6F8D0155}" {
-                Font "{E2CBA6F76AAA42AF}UI/Fonts/Roboto/Roboto_Regular.fnt"
+                Font "{DBE887B44077C90E}UI/Fonts/Greek_Final.fnt"
                 Bold 1
                }
               }

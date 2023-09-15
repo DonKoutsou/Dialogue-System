@@ -1,6 +1,6 @@
 class SCR_AIConverseBehavior : SCR_AIBehaviorBase
 {
-	protected ref SCR_BTParam<vector> m_vPosition = new SCR_BTParam<vector>("Position");
+	protected ref SCR_BTParam<IEntity> m_vEntity = new SCR_BTParam<IEntity>("Entity");
 	protected ref SCR_BTParam<float> m_fDuration = new SCR_BTParam<float>("Duration");	// Initialize in derived class
 	protected ref SCR_BTParam<float> m_fRadius = new SCR_BTParam<float>("Radius");		// Initialize in derived class
 	protected ref SCR_BTParam<bool> m_bUseRadio = new SCR_BTParam<bool>("UseRadio");		// Initialize in derived class
@@ -14,9 +14,9 @@ class SCR_AIConverseBehavior : SCR_AIBehaviorBase
 	bool m_bActiveConversation = false;
 	
 	//------------------------------------------------------------------------------------------------------------------------
-	void InitParameters(vector position)
+	void InitParameters(IEntity Char)
 	{
-		m_vPosition.Init(this, position);
+		m_vEntity.Init(this, Char);
 		m_fDuration.Init(this, 5000);
 		m_fRadius.Init(this, 0);
 		m_bUseRadio.Init(this, m_buseradio);
@@ -25,15 +25,15 @@ class SCR_AIConverseBehavior : SCR_AIBehaviorBase
 	}
 	
 	// posWorld - position to observe
-	void SCR_AIConverseBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, vector posWorld, bool useradio)
+	void SCR_AIConverseBehavior(SCR_AIUtilityComponent utility, SCR_AIActivityBase groupActivity, IEntity Char, bool useradio)
 	{
 		
 		
 		m_buseradio = useradio;
-		m_sBehaviorTree = "{082A95ACDC49DBAB}AI/BehaviorTrees/klamaczTest.bt";
+		m_sBehaviorTree = "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt";
 		m_bAllowLook = true; // Disable standard looking
 		m_bResetLook = true;
-		InitParameters(posWorld);
+		InitParameters(Char);
 		if (!utility)
 			return;
 		//m_bUniqueInActionQueue = true;
@@ -72,7 +72,7 @@ class SCR_AIConverseBehavior : SCR_AIBehaviorBase
 
 class SCR_AIGetConverseParameters : SCR_AIGetActionParameters
 {
-	static ref TStringArray s_aVarsOut = (new SCR_AIConverseBehavior(null, null, Vector(0,0,0), 0)).GetPortNames();
+	static ref TStringArray s_aVarsOut = (new SCR_AIConverseBehavior(null, null, null, 0)).GetPortNames();
 	override TStringArray GetVariablesOut()
 	{
 		return s_aVarsOut;
@@ -96,7 +96,7 @@ class SCR_ConverseAction : ScriptedUserAction
 		if (!utility)
 			return;
 		
-		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, pUserEntity.GetOrigin(), false);
+		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, pUserEntity, false);
 		utility.AddAction(action);
 
 	}

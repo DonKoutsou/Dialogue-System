@@ -1,21 +1,21 @@
-BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt" {
- Name "AI/BehaviorTrees/klamaczTest.bt"
+BehaviorTree {
+ Name "AI/BehaviorTrees/ConverseAction.bt"
  Nodes {
   RootNode Root {
    Name "Root"
-   EditorPos -99.75 -527.75
+   EditorPos -50 -45
    Nodes {
     Sequence Sequence {
      Name "Sequence"
-     EditorPos -108.25 -343.5
+     EditorPos -51.865 132.643
      Nodes {
       SCR_AIGetConverseParameters "SCR_AI Get Converse Parameters" {
        Name "SCR_AI Get Converse Parameters"
-       EditorPos -1235.877 -117.302
+       EditorPos -1229.492 343.127
        OutPorts {
         SingleOutputPortContainer SingleOutputPortContainer {
-         Port 0
-         PortName "Position"
+         Port 2
+         PortName "Entity"
         }
         SingleOutputPortContainer SingleOutputPortContainer {
          Port -1
@@ -26,14 +26,14 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
          PortName "Radius"
         }
         SingleOutputPortContainer SingleOutputPortContainer {
-         Port 1
+         Port 0
          PortName "UseRadio"
         }
        }
       }
       SCR_AISetWeaponRaised "SCR_AI Set Weapon Raised" {
        Name "SCR_AI Set Weapon Raised"
-       EditorPos -393.071 -119.821
+       EditorPos -336.686 356.322
        InPorts {
         SingleInputPortContainer SingleInputPortContainer {
          Port -1
@@ -44,23 +44,23 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
       }
       Selector Selector {
        Name "Selector"
-       EditorPos -23.75 -118.75
+       EditorPos 32.635 357.393
        Nodes {
         DecoTestVariable "Test Variable" {
          Name "Test Variable"
-         EditorPos -188.75 85
+         EditorPos -132.365 561.143
          Nodes {
           Parallel Parallel {
            Name "Parallel"
-           EditorPos -94 312
+           EditorPos -37.615 788.143
            Nodes {
             Sequence Sequence {
              Name "Sequence"
-             EditorPos -363 498
+             EditorPos -306.615 974.143
              Nodes {
               SCR_AIEquipRightHandItem "SCR_AI Equip Right Hand Item" {
                Name "SCR_AI Equip Right Hand Item"
-               EditorPos -505 664.5
+               EditorPos -448.615 1140.643
                InPorts {
                 SingleInputPortContainer SingleInputPortContainer {
                  Port -1
@@ -75,34 +75,50 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
               }
               AITaskIdle Idle {
                Name "Idle"
-               EditorPos -150 662
+               EditorPos -93.615 1138.143
                Period 500
               }
              }
             }
             SCR_AIToggleUnEquipRadioOnAbort "SCR_AI Toggle Un Equip Radio On Abort" {
              Name "SCR_AI Toggle Un Equip Radio On Abort"
-             EditorPos 128 559
+             EditorPos 184.385 1035.143
             }
            }
           }
          }
          NegativeCondition 1
          AbortType AbortChildrenBranch
-         InVariable 1
+         InVariable 0
          TestType EqualsValue
          TestValue "1"
         }
         Sequence Sequence {
          Name "Sequence"
-         EditorPos 280.25 115
+         EditorPos 336.635 591.143
          Nodes {
-          SCR_AILookAtPosition "SCR_AI Look At Position" {
-           Name "SCR_AI Look At Position"
-           EditorPos 121.123 290.198
+          SCR_AIGetEntityPosition "SCR_AI Get Entity Position" {
+           Name "SCR_AI Get Entity Position"
+           EditorPos 131.429 774.286
            InPorts {
             SingleInputPortContainer SingleInputPortContainer {
-             Port 0
+             Port 3
+             PortName "Entity"
+            }
+           }
+           OutPorts {
+            SingleOutputPortContainer SingleOutputPortContainer {
+             Port 1
+             PortName "Position"
+            }
+           }
+          }
+          SCR_AILookAtPosition "SCR_AI Look At Position" {
+           Name "SCR_AI Look At Position"
+           EditorPos 444.294 779.377
+           InPorts {
+            SingleInputPortContainer SingleInputPortContainer {
+             Port 1
              PortName "PositionIn"
             }
             SingleInputPortContainer SingleInputPortContainer {
@@ -122,13 +138,13 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
           }
           AITaskMoveToEntity "Move To Entity" {
            Name "Move To Entity"
-           EditorPos 448.75 303.75
+           EditorPos 719.421 774.179
            PrecisionXZ 3
-           InEntity 0
+           InEntity 3
           }
           AITaskIdle Idle {
            Name "Idle"
-           EditorPos 948.25 288
+           EditorPos 1218.921 758.429
            Period 500
           }
          }
@@ -141,27 +157,41 @@ BehaviorTree "{431061879A1F5324}AI/BehaviorTrees/Chimera/Soldier/klamaczTest.bt"
   }
  }
  Variables {
-  Variable posToLook {
-   VariableName "posToLook"
-   VariableTypeName "vector"
-   VariableExposedInput 0
-   VariableExposedOutput 0
-  }
   Variable UseRadio {
    VariableName "UseRadio"
    VariableTypeName "bool"
    VariableExposedInput 0
    VariableExposedOutput 0
   }
+  Variable posToLook {
+   VariableName "posToLook"
+   VariableTypeName "vector"
+   VariableExposedInput 0
+   VariableExposedOutput 0
+  }
+  Variable CharToTalk {
+   VariableName "CharToTalk"
+   VariableTypeName "IEntity"
+   VariableExposedInput 0
+   VariableExposedOutput 0
+  }
  }
  VariablesRefs {
-  VariableReference posToLook {
-   VariableType 0
-   EditorPos 9.623 177.698
-  }
   VariableReference UseRadio {
+   VariableType 0
+   EditorPos -665.615 916.143
+  }
+  VariableReference posToLook {
    VariableType 1
-   EditorPos -722 440
+   EditorPos 295.65 904.377
+  }
+  VariableReference CharToTalk {
+   VariableType 2
+   EditorPos -722.857 688.571
+  }
+  VariableReference CharToTalk {
+   VariableType 2
+   EditorPos -95.714 918.571
   }
  }
 }

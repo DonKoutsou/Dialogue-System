@@ -29,7 +29,7 @@ class DialogueStageInitiateDialogue : DialogueStage
 		if (!utility)
 			return;
 		
-		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, Player.GetOrigin(), true);
+		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, Player, true);
 		
 		
 		string NoTalkText = "Cant talk to you now";

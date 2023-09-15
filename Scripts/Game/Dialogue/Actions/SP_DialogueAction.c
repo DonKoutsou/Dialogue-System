@@ -26,7 +26,7 @@ class SP_DialogueAction : ScriptedUserAction
 		if (!utility)
 			return;
 		
-		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, pUserEntity.GetOrigin(), false);
+		SCR_AIConverseBehavior action = new SCR_AIConverseBehavior(utility, null, pUserEntity, false);
 		
 		
 		string NoTalkText = "Cant talk to you now";

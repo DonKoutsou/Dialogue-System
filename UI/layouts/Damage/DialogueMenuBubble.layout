@@ -162,14 +162,14 @@ FrameWidgetClass {
                Slot AlignableSlot "{5E5927D8E58FA3E4}" {
                 Padding 0 0 0 0
                }
-               Text "test"
+               Text "τεστ"
                "Font Size" 16
                "Min Font Size" 16
                "Horizontal Alignment" Center
                "Vertical Alignment" Center
                Wrap 1
                FontProperties FontProperties "{5E5B11A99E9659A4}" {
-                Font "{7BDD040ECCF66BA7}UI/Fonts/GreekFull.fnt"
+                Font "{DBE887B44077C90E}UI/Fonts/Greek_Final.fnt"
                }
               }
              }
