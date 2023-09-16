@@ -343,10 +343,8 @@ class SP_DialogueComponent: ScriptComponent
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//CHARACTER NAME
-	static string GetCharacterName(IEntity Character)
+	static string GetCharacterName(notnull IEntity Character)
 	{
-		if (!Character)
-			return STRING_EMPTY;
 		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
 		
 		string CharacterFullName;
@@ -360,10 +358,8 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return CharacterFullName;
 	}
-	static string GetCharacterFirstName(IEntity Character)
+	static string GetCharacterFirstName(notnull IEntity Character)
 	{
-		if (!Character)
-			return STRING_EMPTY;
 		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
 		
 		string CharacterFullName;
@@ -378,7 +374,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return CharacterFullName;
 	}
-	static string GetCharacterSurname(IEntity Character)
+	static string GetCharacterSurname(notnull IEntity Character)
 	{
 		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
 		
@@ -395,7 +391,7 @@ class SP_DialogueComponent: ScriptComponent
 		return CharacterFullName;
 	}
 	//CHARACTER RANK
-	static SCR_ECharacterRank GetCharacterRank(IEntity Character)
+	static SCR_ECharacterRank GetCharacterRank(notnull IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		if(RankComponent)
@@ -404,15 +400,13 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return null;
 	}
-	static int GetCharacterRep(IEntity Character)
+	static int GetCharacterRep(notnull IEntity Character)
 	{
-		if (!Character)
-			return -1;
 		SCR_CharacterIdentityComponent Idcomp = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
 		int MyRep = Idcomp.GetRep();
 		return MyRep;
 	}
-	static string GetCharacterRankInsignia(IEntity Character)
+	static string GetCharacterRankInsignia(notnull IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		SCR_FactionManager factman = SCR_FactionManager.Cast(GetGame().GetFactionManager());
@@ -424,7 +418,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return STRING_EMPTY;
 	}
-	static string GetCharacterRankName(IEntity Character)
+	static string GetCharacterRankName(notnull IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		string CharacterRank;
@@ -434,7 +428,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return CharacterRank;
 	}
-	static string GetCharacterRankNameFull(IEntity Character)
+	static string GetCharacterRankNameFull(notnull IEntity Character)
 	{
 		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
 		string CharacterRank;
@@ -445,10 +439,8 @@ class SP_DialogueComponent: ScriptComponent
 		return CharacterRank;
 	}
 	//CHARACTER FACTION
-	static Faction GetCharacterFaction(IEntity Character)
+	static Faction GetCharacterFaction(notnull IEntity Character)
 	{
-		if (!Character)
-			return null;
 		FactionAffiliationComponent FactionComponent = FactionAffiliationComponent.Cast(Character.FindComponent(FactionAffiliationComponent));
 		if(FactionComponent)
 		{

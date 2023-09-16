@@ -126,7 +126,9 @@ class DialogueStageTitleAttribute : BaseContainerCustomTitle
 		{
 			branchesStr = "Stage Increments"
 		}
-		title = string.Format("Stage: %1 - %2", actionName, branchesStr);
+
+		string classname = source.GetClassName();
+		title = string.Format("%1: %2 - %3", classname, actionName, branchesStr);
 		return true;
 	}
 }
