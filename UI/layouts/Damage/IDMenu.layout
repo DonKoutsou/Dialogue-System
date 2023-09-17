@@ -154,12 +154,12 @@ FrameWidgetClass {
                Name "CharReputationText"
                Slot FrameWidgetSlot "{5D8D15D993F3A44F}" {
                 Anchor 0 0 0 1
-                PositionX 85
-                OffsetLeft 85
+                PositionX 98
+                OffsetLeft 98
                 PositionY 0
                 OffsetTop 0
                 SizeX 120
-                OffsetRight -205
+                OffsetRight -218
                 SizeY 0
                 OffsetBottom 0
                 SizeToContent 1
@@ -283,12 +283,12 @@ FrameWidgetClass {
                Name "CharRankText"
                Slot FrameWidgetSlot "{5D8D15D993F3A44F}" {
                 Anchor 0 0 0 1
-                PositionX 45
-                OffsetLeft 45
+                PositionX 60
+                OffsetLeft 60
                 PositionY 0
                 OffsetTop 0
                 SizeX 120
-                OffsetRight -165
+                OffsetRight -180
                 SizeY 0
                 OffsetBottom 0
                 SizeToContent 1
