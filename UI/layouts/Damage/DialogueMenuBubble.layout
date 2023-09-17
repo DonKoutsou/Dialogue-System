@@ -165,7 +165,6 @@ FrameWidgetClass {
                Text "τεστ"
                "Font Size" 16
                "Min Font Size" 16
-               "Horizontal Alignment" Center
                "Vertical Alignment" Center
                Wrap 1
                FontProperties FontProperties "{5E5B11A99E9659A4}" {

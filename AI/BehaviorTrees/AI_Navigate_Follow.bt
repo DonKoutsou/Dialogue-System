@@ -274,62 +274,50 @@ BehaviorTree "{F89BF93EA3363C34}AI/BehaviorTrees/AI_Navigate_Follow.bt" {
                Name "Scripted_ Should Be Following"
                EditorPos 1637.833 926.667
                Nodes {
-                Selector Selector {
-                 Name "Selector"
-                 EditorPos 1776.833 1087.762
+                Sequence Sequence {
+                 Name "Sequence"
+                 EditorPos 1957.833 1233.881
                  Nodes {
-                  RunBT RunBT {
-                   Name "RunBT"
-                   EditorPos 747.722 1403.51
-                   BehaviorTree "{BC53D77D23308CD6}AI/BehaviorTrees/SmartActions/SA_ObservationPost.bt"
-                   AlwaysReinit 1
-                  }
-                  Sequence Sequence {
-                   Name "Sequence"
-                   EditorPos 1957.833 1233.881
-                   Nodes {
-                    SCR_AIGetMovementOfEntity "SCR_AI Get Movement Of Entity" {
-                     Name "SCR_AI Get Movement Of Entity"
-                     EditorPos 1272.722 1444.778
-                     InPorts {
-                      SingleInputPortContainer SingleInputPortContainer {
-                       Port 5
-                       PortName "Entity"
-                      }
-                     }
-                     OutPorts {
-                      SingleOutputPortContainer SingleOutputPortContainer {
-                       Port 11
-                       PortName "MovementType"
-                      }
-                     }
-                    }
-                    SCR_AISendOrder_MovementType "SCR_AI Send Order_ Movement Type" {
-                     Name "SCR_AI Send Order_ Movement Type"
-                     EditorPos 1660.618 1422.144
-                     InPorts {
-                      SingleInputPortContainer SingleInputPortContainer {
-                       Port 11
-                       PortName "Receiver"
-                      }
-                      SingleInputPortContainer SingleInputPortContainer {
-                       Port -1
-                       PortName "MovementType"
-                      }
-                     }
-                     m_eMovementType WALK
-                    }
-                    AITaskMoveToEntity "Move To Entity" {
-                     Name "Move To Entity"
-                     EditorPos 2039.393 1431.536
-                     PrecisionXZ 5
-                     InEntity 4
-                    }
-                    AITaskIdle Idle {
-                     Name "Idle"
-                     EditorPos 2404.583 1443.012
+                  SCR_AIGetMovementOfEntity "SCR_AI Get Movement Of Entity" {
+                   Name "SCR_AI Get Movement Of Entity"
+                   EditorPos 1272.722 1444.778
+                   InPorts {
+                    SingleInputPortContainer SingleInputPortContainer {
+                     Port 5
+                     PortName "Entity"
                     }
                    }
+                   OutPorts {
+                    SingleOutputPortContainer SingleOutputPortContainer {
+                     Port 11
+                     PortName "MovementType"
+                    }
+                   }
+                  }
+                  SCR_AISendOrder_MovementType "SCR_AI Send Order_ Movement Type" {
+                   Name "SCR_AI Send Order_ Movement Type"
+                   EditorPos 1660.618 1422.144
+                   InPorts {
+                    SingleInputPortContainer SingleInputPortContainer {
+                     Port 11
+                     PortName "Receiver"
+                    }
+                    SingleInputPortContainer SingleInputPortContainer {
+                     Port -1
+                     PortName "MovementType"
+                    }
+                   }
+                   m_eMovementType WALK
+                  }
+                  AITaskMoveToEntity "Move To Entity" {
+                   Name "Move To Entity"
+                   EditorPos 2039.393 1431.536
+                   PrecisionXZ 5
+                   InEntity 4
+                  }
+                  AITaskIdle Idle {
+                   Name "Idle"
+                   EditorPos 2404.583 1443.012
                   }
                  }
                 }
