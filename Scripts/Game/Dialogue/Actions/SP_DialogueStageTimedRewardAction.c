@@ -32,10 +32,13 @@ class DialogueStageTimedRewardAction : DialogueStage
 	};
 	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{
-		int currentday = GetGame().GetTimeAndWeatherManager().GetDay();
+		GenericEntity ent = GenericEntity.Cast(Character);
+		ChimeraWorld world = ent.GetWorld();
+		TimeAndWeatherManagerEntity weatherManager = world.GetTimeAndWeatherManager();
+		int currentday = weatherManager.GetDay();
 		if (DayToBeAvailable == currentday)
 		{
-			int currenttime = GetGame().GetTimeAndWeatherManager().GetTime().m_iHours;
+			int currenttime = weatherManager.GetTime().m_iHours;
 			if (TimeToBeAvailable <= currenttime)
 			{
 				return true;
@@ -50,11 +53,14 @@ class DialogueStageTimedRewardAction : DialogueStage
 	}
 	override bool GetActionText(IEntity Character, IEntity Player, out string acttext)
 	{
+		GenericEntity ent = GenericEntity.Cast(Character);
+		ChimeraWorld world = ent.GetWorld();
+		TimeAndWeatherManagerEntity weatherManager = world.GetTimeAndWeatherManager();
 		acttext = ActionText;
 		if(TimeChecked == false)
 		{
-			TimeToBeAvailable = GetGame().GetTimeAndWeatherManager().GetTime().m_iHours + TimeOffset;
-			DayToBeAvailable = GetGame().GetTimeAndWeatherManager().GetDay();
+			TimeToBeAvailable = weatherManager.GetTime().m_iHours + TimeOffset;
+			DayToBeAvailable = weatherManager.GetDay();
 			if(TimeToBeAvailable > 24)
 			{
 				TimeToBeAvailable = TimeToBeAvailable - 24;

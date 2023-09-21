@@ -2,9 +2,9 @@ enum EArchetypeIdentifier
 {
 	Name,
 	Rank,
-	"FactionKey",
-	"Faction and Rank",
-	"Radio"
+	Faction_Key,
+	Faction_and_Rank,
+	Radio
 };
 enum EChoiseBehavior
 {
@@ -52,8 +52,13 @@ class SP_DialogueComponent: ScriptComponent
 	ref array <string>				a_PLtexthistory;
 	static ref array <IEntity> a_PLcontactList;
 	//----------------------------------------------------------------------------------------------------------------//
-	SCR_BaseGameMode GameMode;
-	static SP_DialogueComponent GetInstance(){return SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));};
+	static SCR_BaseGameMode GameMode;
+	static SP_DialogueComponent GetInstance()
+	{
+		if (!GameMode)
+			return null;
+		return SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+	};
 	void RegisterCharInHistory(IEntity Owner)
 	{
 		array <string>	texthistory = {};
@@ -603,7 +608,10 @@ class SP_DialogueComponent: ScriptComponent
 		float angleA = 0.775;
 		const float angleB = 0.325;
 		vector mins,maxs;
-		GetGame().GetWorldEntity().GetWorldBounds(mins, maxs);
+		GenericWorldEntity world = GetGame().GetWorldEntity();
+		if (!world)
+			return STRING_EMPTY;
+		world.GetWorldBounds(mins, maxs);
 			
 		m_iGridSizeX = maxs[0]/3;
 		m_iGridSizeY = maxs[2]/3;

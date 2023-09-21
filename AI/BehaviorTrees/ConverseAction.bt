@@ -1,4 +1,4 @@
-BehaviorTree {
+BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
  Name "AI/BehaviorTrees/ConverseAction.bt"
  Nodes {
   RootNode Root {
@@ -58,21 +58,6 @@ BehaviorTree {
              Name "Sequence"
              EditorPos -306.615 974.143
              Nodes {
-              SCR_AIEquipRightHandItem "SCR_AI Equip Right Hand Item" {
-               Name "SCR_AI Equip Right Hand Item"
-               EditorPos -448.615 1140.643
-               InPorts {
-                SingleInputPortContainer SingleInputPortContainer {
-                 Port -1
-                 PortName "ItemType"
-                }
-                SingleInputPortContainer SingleInputPortContainer {
-                 Port -1
-                 PortName "GadgetType"
-                }
-               }
-               m_eGadgetType RADIO
-              }
               AITaskIdle Idle {
                Name "Idle"
                EditorPos -93.615 1138.143
@@ -132,6 +117,7 @@ BehaviorTree {
              PortName "PositionOut"
             }
            }
+           m_bSuccessWhenClose 0
            m_fVerticalOffset 1.7
            m_fIgnoreLookDistSq 0
            m_fPriority 80
@@ -144,7 +130,22 @@ BehaviorTree {
           }
           AITaskIdle Idle {
            Name "Idle"
-           EditorPos 1218.921 758.429
+           EditorPos 1061.667 775
+           Period 1
+          }
+          SCR_AISaluteEachother "SCR_AI Salute Eachother" {
+           Name "SCR_AI Salute Eachother"
+           EditorPos 1205 780
+           InPorts {
+            SingleInputPortContainer SingleInputPortContainerClass {
+             Port 4
+             PortName "EntityIn"
+            }
+           }
+          }
+          AITaskIdle Idle {
+           Name "Idle"
+           EditorPos 1425.588 776.763
            Period 500
           }
          }
@@ -192,6 +193,10 @@ BehaviorTree {
   VariableReference CharToTalk {
    VariableType 2
    EditorPos -95.714 918.571
+  }
+  VariableReference CharToTalk {
+   VariableType 2
+   EditorPos 945 945
   }
  }
 }
