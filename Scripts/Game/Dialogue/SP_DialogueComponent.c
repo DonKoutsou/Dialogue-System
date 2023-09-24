@@ -31,18 +31,6 @@ class SP_DialogueComponent: ScriptComponent
 	//----------------------------------------------------------------------------------------------------------------//
 	[Attribute()]
 	protected ref SCR_MapLocationQuadHint m_aWorldDirections;
-	//Channels
-	[Attribute()]
-	ref BaseChatChannel m_ChatChannelFIA;
-	
-	[Attribute()]
-	ref BaseChatChannel m_ChatChannelUSSR;
-	
-	[Attribute()]
-	ref BaseChatChannel m_ChatChannelUS;
-	
-	[Attribute()]
-	ref BaseChatChannel m_ChatChannelANOUNCER;
 	
 	static protected ref SCR_MapLocationQuadHint m_WorldDirections;
 	
@@ -310,7 +298,7 @@ class SP_DialogueComponent: ScriptComponent
 		//--------------------------------------//
 		m_DialogTexttoshow = Text;
 		//--------------------------------------//
-		SendText(m_DialogTexttoshow, m_ChatChannelANOUNCER, senderID, senderName, senderRank);
+		SendText(m_DialogTexttoshow, null, senderID, senderName, senderRank);
 	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//Send text function for sending the provided text to chat 
@@ -574,6 +562,8 @@ class SP_DialogueComponent: ScriptComponent
 	//initialise configuration to crate map of configuration's contents
 	override void EOnInit(IEntity owner)
 	{
+		if (!GetGame().InPlayMode())
+			return;
 		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
 		foreach (SP_DialogueArchetype config: m_CharacterArchetypeList)
 		{
