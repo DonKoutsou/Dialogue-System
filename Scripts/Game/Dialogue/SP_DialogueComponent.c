@@ -27,68 +27,31 @@ class SP_DialogueComponent: ScriptComponent
 	[Attribute()]
 	protected ref array<ref SP_DialogueArchetype> m_CharacterArchetypeList;
 	//----------------------------------------------------------------------------------------------------------------//
-	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;	
+	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;
 	//----------------------------------------------------------------------------------------------------------------//
-	[Attribute()]
+	[Attribute(desc : "Used when figuring out strings for locations")]
 	protected ref SCR_MapLocationQuadHint m_aWorldDirections;
 	
 	static protected ref SCR_MapLocationQuadHint m_WorldDirections;
 	
+	//containing text history of all characters player has talked to
 	ref map <string, ref array <string>> texthistorymap;
 	ref map <string, ref array <string>> PLtexthistorymap;
+	//containing text history of character currently talking too
 	ref array <string>				a_texthistory;
 	ref array <string>				a_PLtexthistory;
+	//all characters player talked too
 	static ref array <IEntity> a_PLcontactList;
 	//----------------------------------------------------------------------------------------------------------------//
 	static SCR_BaseGameMode GameMode;
+	
 	static SP_DialogueComponent GetInstance()
 	{
 		if (!GameMode)
 			return null;
 		return SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 	};
-	void RegisterCharInHistory(IEntity Owner)
-	{
-		array <string>	texthistory = {};
-		if (!texthistorymap.Get(Owner.GetID().ToString()))
-		{
-			texthistorymap.Insert(Owner.GetID().ToString(), texthistory);
-		}
-		array <string>	PLtexthistory = {};
-		if (!PLtexthistorymap.Get(Owner.GetID().ToString()))
-		{
-			PLtexthistorymap.Insert(Owner.GetID().ToString(), PLtexthistory);
-		}
-		if (a_texthistory != texthistorymap.Get(Owner.GetID().ToString()))
-		{
-			a_texthistory = texthistorymap.Get(Owner.GetID().ToString());
-		}
-		if (a_PLtexthistory != PLtexthistorymap.Get(Owner.GetID().ToString()))
-		{
-			a_PLtexthistory = PLtexthistorymap.Get(Owner.GetID().ToString());
-		}
-	}
-	void GetTextHistory(out array <string> hist, out array <string> PLhist)
-	{
-		
-		//if (!a_texthistory.IsEmpty())
-			//hist.Copy(a_texthistory);
-		for (int i = 0; i < a_texthistory.Count(); i++)
-		{
-			hist.Insert(a_texthistory[i]);
-		}
-		for (int i = 0; i < a_PLtexthistory.Count(); i++)
-		{
-			PLhist.Insert(a_PLtexthistory[i]);
-		}
-	}
-	void ArchiveTextHistory(IEntity Owner)
-	{
-		texthistorymap.Insert(Owner.GetID().ToString(), a_texthistory);
-		PLtexthistorymap.Insert(Owner.GetID().ToString(), a_PLtexthistory);
-		//a_texthistory.Clear();
-		//a_PLtexthistory.Clear();
-	}
+	
 	void Escape(IEntity Char, IEntity Player)
 	{
 		DoBackDialogue(Char, Player);
@@ -148,11 +111,7 @@ class SP_DialogueComponent: ScriptComponent
 			
 			Branch.GetActionText(Character, Player, actiontext);
 			Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
-			a_texthistory.Insert(m_DialogTexttoshow);
-			if (actiontext)
-				a_PLtexthistory.Insert(actiontext);
-			else
-				a_PLtexthistory.Insert("null");
+			AddLinesToHistory(m_DialogTexttoshow, actiontext);
 			Branch.OnPerform(Character, Player);
 			//SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
 			// Cause a branch of the config
@@ -185,13 +144,8 @@ class SP_DialogueComponent: ScriptComponent
 		Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
 		//--------------------------------------//
 		//SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
-		a_texthistory.Insert(m_DialogTexttoshow);
-		if (actiontext)
-			a_PLtexthistory.Insert(actiontext);
-		else
-			a_PLtexthistory.Insert("null");
-		
-		
+		AddLinesToHistory(m_DialogTexttoshow, actiontext);
+
 		//--------------------------------------//
 		int Bstage;
 		
@@ -257,33 +211,30 @@ class SP_DialogueComponent: ScriptComponent
 		DiagUI.UpdateEntries(Character, Player);
 		PlayDialogueSound();
 	}
+	
+	//Function used when leaving dialogue, finds converse action and completes it
 	void ReleaseAI(IEntity Character, IEntity Player)
 	{
+		//archive history
+		ArchiveTextHistory(Character);
+		
+		//find SCR_AIUtilityComponent and SCR_AIConverseBehavior and complete them
 		AIControlComponent comp = AIControlComponent.Cast(Character.FindComponent(AIControlComponent));
 		if (!comp)
 			return;
 		AIAgent agent = comp.GetAIAgent();
 		if (!agent)
 			return;
+		
 		SCR_AIUtilityComponent utility = SCR_AIUtilityComponent.Cast(agent.FindComponent(SCR_AIUtilityComponent));
 		if (!utility)
 			return;
+		
 		SCR_AIConverseBehavior act = SCR_AIConverseBehavior.Cast(utility.FindActionOfType(SCR_AIConverseBehavior));
-		//act.SetActionState(EAIActionState.FAILED);
 		if (act)
 			act.SetActiveConversation(false);
-		//SCR_AIGroup group = SCR_AIGroup.Cast(agent.GetParentGroup());
-		//if (!group)
-		//	return;
-		//SCR_DefendWaypoint wp;
-		//wp = SCR_DefendWaypoint.Cast(group.GetCurrentWaypoint());
-		//if (wp)
-		//{
-		//	group.RemoveWaypoint(wp);
-		//	group.AddWaypoint(wp);
-		//}
-		ArchiveTextHistory(Character);
 	}
+	
 	//----------------------------------------------------------------------------------------------------------------//
 	void DoAnouncerDialogue(string Text)
 	{
@@ -300,6 +251,7 @@ class SP_DialogueComponent: ScriptComponent
 		//--------------------------------------//
 		SendText(m_DialogTexttoshow, null, senderID, senderName, senderRank);
 	}
+	
 	//----------------------------------------------------------------------------------------------------------------//
 	//Send text function for sending the provided text to chat 
 	void SendText(string Text, BaseChatChannel Chanell, int SenderID, string SenderName, string rank)
@@ -307,6 +259,7 @@ class SP_DialogueComponent: ScriptComponent
 		SCR_ChatPanelManager.GetInstance().ShowDiagMessage(Text, Chanell, SenderID, rank + " " + SenderName);
 		PlayDialogueSound();
 	}
+	
 	void PlayDialogueSound()
 	{
 		SCR_UISoundEntity.SoundEvent(SCR_SoundEvent.SOUND_RADIO_CHANGEFREQUENCY_ERROR);
@@ -319,6 +272,7 @@ class SP_DialogueComponent: ScriptComponent
 		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(Character, Player);
 		DiagArch.GetActionTitle(BranchID, Character, Player, ActName);
 	}
+	
 	//----------------------------------------------------------------------------------------------------------------//
 	//Locates Archetype using LocateDialogueArchetype function using Ientity provided.
 	//Increments stage of branch in the archetype
@@ -328,119 +282,7 @@ class SP_DialogueComponent: ScriptComponent
 		DiagArch.IncrementStage(BranchID, incrementamount, owner);
 		return false;
 	}
-	static string GetEditableEntName(IEntity ent)
-	{
-		SCR_EditableEntityComponent editComp = SCR_EditableEntityComponent.Cast(ent.FindComponent(SCR_EditableEntityComponent));
-		SCR_UIInfo uiinfo = editComp.GetInfo(ent);
-		return uiinfo.GetName();
-	}
-	//----------------------------------------------------------------------------------------------------------------//
-	//CHARACTER NAME
-	static string GetCharacterName(notnull IEntity Character)
-	{
-		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
-		
-		string CharacterFullName;
-		if(IdentityComponent)
-		{
-			Identity ID = IdentityComponent.GetIdentity();
-			if(ID)
-			{
-				CharacterFullName = ID.GetFullName();
-			}
-		}
-		return CharacterFullName;
-	}
-	static string GetCharacterFirstName(notnull IEntity Character)
-	{
-		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
-		
-		string CharacterFullName;
-		if(IdentityComponent)
-		{
-			Identity ID = IdentityComponent.GetIdentity();
-			if(ID)
-			{
-				CharacterFullName = ID.GetName();
-				CharacterFullName = CharacterFullName.Substring(17, CharacterFullName.Length() - 17)
-			}
-		}
-		return CharacterFullName;
-	}
-	static string GetCharacterSurname(notnull IEntity Character)
-	{
-		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
-		
-		string CharacterFullName;
-		if(IdentityComponent)
-		{
-			Identity ID = IdentityComponent.GetIdentity();
-			if(ID)
-			{
-				CharacterFullName = ID.GetSurname();
-				CharacterFullName = CharacterFullName.Substring(15, CharacterFullName.Length() - 15)
-			}
-		}
-		return CharacterFullName;
-	}
-	//CHARACTER RANK
-	static SCR_ECharacterRank GetCharacterRank(notnull IEntity Character)
-	{
-		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
-		if(RankComponent)
-		{
-			return RankComponent.GetCharacterRank(Character);
-		}
-		return null;
-	}
-	static int GetCharacterRep(notnull IEntity Character)
-	{
-		SCR_CharacterIdentityComponent Idcomp = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
-		int MyRep = Idcomp.GetRep();
-		return MyRep;
-	}
-	static string GetCharacterRankInsignia(notnull IEntity Character)
-	{
-		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
-		SCR_FactionManager factman = SCR_FactionManager.Cast(GetGame().GetFactionManager());
-		SCR_Faction fact = SCR_Faction.Cast(GetCharacterFaction(Character));
-		if(RankComponent)
-		{
-			SCR_ECharacterRank curRank = RankComponent.GetCharacterRank(Character);
-			return fact.GetRankInsignia(curRank);
-		}
-		return STRING_EMPTY;
-	}
-	static string GetCharacterRankName(notnull IEntity Character)
-	{
-		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
-		string CharacterRank;
-		if(RankComponent)
-		{
-			CharacterRank = RankComponent.GetCharacterRankNameShort(Character);
-		}
-		return CharacterRank;
-	}
-	static string GetCharacterRankNameFull(notnull IEntity Character)
-	{
-		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
-		string CharacterRank;
-		if(RankComponent)
-		{
-			CharacterRank = RankComponent.GetCharacterRankName(Character);
-		}
-		return CharacterRank;
-	}
-	//CHARACTER FACTION
-	static Faction GetCharacterFaction(notnull IEntity Character)
-	{
-		FactionAffiliationComponent FactionComponent = FactionAffiliationComponent.Cast(Character.FindComponent(FactionAffiliationComponent));
-		if(FactionComponent)
-		{
-			return FactionComponent.GetAffiliatedFaction();
-		}
-		return null;	
-	}
+	
 	//----------------------------------------------------------------------------------------------------------------//
 	SP_DialogueArchetype GetArchetypeTemplate(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
@@ -511,6 +353,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return DiagArch;
 	}
+	
 	//-----------------------------------------------------------------------------------------------------------//
 	// locate if there is already an Archetype instace for this specific charater and if not initiates the creation of one
 	SP_DialogueArchetype LocateDialogueArchetype(IEntity Owner, IEntity User)
@@ -551,6 +394,7 @@ class SP_DialogueComponent: ScriptComponent
 			}
 	return CharDialogueArch;
 	}
+	
 	//-----------------------------------------------------------------------------------------------------------//
 	//takes all info requred from Archetype and returns a newly made Archetype with the copied info
 	SP_DialogueArchetype CopyArchetype(SP_DialogueArchetype OriginalArchetype)
@@ -558,6 +402,7 @@ class SP_DialogueComponent: ScriptComponent
 		SP_DialogueArchetype DiagArchCopy = new SP_DialogueArchetype(OriginalArchetype, true);
 		return DiagArchCopy;
 	}
+	
 	//----------------------------------------------------------------------------------------------------------------//
 	//initialise configuration to crate map of configuration's contents
 	override void EOnInit(IEntity owner)
@@ -583,6 +428,7 @@ class SP_DialogueComponent: ScriptComponent
 			a_PLcontactList = new array <IEntity>();
 
 	}
+	
 	//----------------------------------------------------------------------------------------------------------------//
 	// set masks;
 	override void OnPostInit(IEntity owner)
@@ -591,6 +437,197 @@ class SP_DialogueComponent: ScriptComponent
 		SetEventMask(owner, EntityEvent.INIT);
 		owner.SetFlags(EntityFlags.ACTIVE, true);
 	}
+	
+	////////////////////////////////////////////Text history/////////////////////////////////////////
+	
+	// texthistorymap contains line character has told to character
+	// PLtexthistorymap contains lines the player has told to character
+	
+	//add entry of character to map texthistorymap, checks if there isnt one already
+	//also sets character as current character meaning the a_texthistory and a_PLtexthistory will be filled witht this character's lines if this function is called
+	void RegisterCharInHistory(IEntity Owner)
+	{
+		//if character doesent exist in map add him
+		if (!texthistorymap.Get(Owner.GetID().ToString()))
+		{
+			//create array that will be added to map alongside character
+			array <string>	texthistory = {};
+			texthistorymap.Insert(Owner.GetID().ToString(), texthistory);
+		}
+		//if character doesent exist in pl map add him
+		array <string>	PLtexthistory = {};
+		if (!PLtexthistorymap.Get(Owner.GetID().ToString()))
+		{
+			PLtexthistorymap.Insert(Owner.GetID().ToString(), PLtexthistory);
+		}
+		//check current active arrays is the one of this character
+		if (a_texthistory != texthistorymap.Get(Owner.GetID().ToString()))
+		{
+			a_texthistory = texthistorymap.Get(Owner.GetID().ToString());
+		}
+		if (a_PLtexthistory != PLtexthistorymap.Get(Owner.GetID().ToString()))
+		{
+			a_PLtexthistory = PLtexthistorymap.Get(Owner.GetID().ToString());
+		}
+	}
+	
+	void AddLinesToHistory(string CharLine, string PlayerLine)
+	{
+		a_texthistory.Insert(CharLine);
+		if (PlayerLine)
+			a_PLtexthistory.Insert(PlayerLine);
+		else
+			a_PLtexthistory.Insert("null");
+	}
+	
+	//Retrieves history
+	void GetTextHistory(out array <string> hist, out array <string> PLhist)
+	{
+		//if (!a_texthistory.IsEmpty())
+			//hist.Copy(a_texthistory);
+		for (int i = 0; i < a_texthistory.Count(); i++)
+		{
+			hist.Insert(a_texthistory[i]);
+		}
+		for (int i = 0; i < a_PLtexthistory.Count(); i++)
+		{
+			PLhist.Insert(a_PLtexthistory[i]);
+		}
+	}
+	
+	void ArchiveTextHistory(IEntity Owner)
+	{
+		texthistorymap.Insert(Owner.GetID().ToString(), a_texthistory);
+		PLtexthistorymap.Insert(Owner.GetID().ToString(), a_PLtexthistory);
+		//a_texthistory.Clear();
+		//a_PLtexthistory.Clear();
+	}
+	
+	
+	///////////////////////////////////////////Static helper functions//////////////////////////////////////////////////
+	//----------------------------------------------------------------------------------------------------------------//
+	static string GetEditableEntName(IEntity ent)
+	{
+		SCR_EditableEntityComponent editComp = SCR_EditableEntityComponent.Cast(ent.FindComponent(SCR_EditableEntityComponent));
+		SCR_UIInfo uiinfo = editComp.GetInfo(ent);
+		return uiinfo.GetName();
+	}
+	
+	//CHARACTER FULL NAME
+	static string GetCharacterName(notnull IEntity Character)
+	{
+		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
+		
+		string CharacterFullName;
+		if(IdentityComponent)
+		{
+			Identity ID = IdentityComponent.GetIdentity();
+			CharacterFullName = ID.GetFullName();
+		}
+		return CharacterFullName;
+	}
+	//----------------------------------------------------------------------------------------------------------------//
+	//CHARACTER FIRST NAME
+	static string GetCharacterFirstName(notnull IEntity Character)
+	{
+		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
+		
+		string CharacterFullName;
+		if(IdentityComponent)
+		{
+			Identity ID = IdentityComponent.GetIdentity();
+			CharacterFullName = ID.GetName();
+			CharacterFullName = CharacterFullName.Substring(17, CharacterFullName.Length() - 17)
+		}
+		return CharacterFullName;
+	}
+	//----------------------------------------------------------------------------------------------------------------//
+	//CHARACTER SURNAME
+	static string GetCharacterSurname(notnull IEntity Character)
+	{
+		SCR_CharacterIdentityComponent IdentityComponent = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
+		
+		string CharacterFullName;
+		if(IdentityComponent)
+		{
+			Identity ID = IdentityComponent.GetIdentity();
+			if(ID)
+			{
+				CharacterFullName = ID.GetSurname();
+				CharacterFullName = CharacterFullName.Substring(15, CharacterFullName.Length() - 15)
+			}
+		}
+		return CharacterFullName;
+	}
+	//----------------------------------------------------------------------------------------------------------------//
+	//CHARACTER REPUTATION
+	static int GetCharacterRep(notnull IEntity Character)
+	{
+		SCR_CharacterIdentityComponent Idcomp = SCR_CharacterIdentityComponent.Cast(Character.FindComponent(SCR_CharacterIdentityComponent));
+		int MyRep = Idcomp.GetRep();
+		return MyRep;
+	}
+	//----------------------------------------------------------------------------------------------------------------//
+	//CHARACTER RANKINIGNIA
+	static string GetCharacterRankInsignia(notnull IEntity Character)
+	{
+		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
+		SCR_FactionManager factman = SCR_FactionManager.Cast(GetGame().GetFactionManager());
+		SCR_Faction fact = SCR_Faction.Cast(GetCharacterFaction(Character));
+		if(RankComponent)
+		{
+			SCR_ECharacterRank curRank = RankComponent.GetCharacterRank(Character);
+			return fact.GetRankInsignia(curRank);
+		}
+		return STRING_EMPTY;
+	}
+	//----------------------------------------------------------------------------------------------------------------//
+	//CHARACTER RANK
+	static SCR_ECharacterRank GetCharacterRank(notnull IEntity Character)
+	{
+		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
+		if(RankComponent)
+		{
+			return RankComponent.GetCharacterRank(Character);
+		}
+		return null;
+	}
+	//----------------------------------------------------------------------------------------------------------------//
+	//CHARACTER RANK NAME SHORT
+	static string GetCharacterRankName(notnull IEntity Character)
+	{
+		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
+		string CharacterRank;
+		if(RankComponent)
+		{
+			CharacterRank = RankComponent.GetCharacterRankNameShort(Character);
+		}
+		return CharacterRank;
+	}
+	//----------------------------------------------------------------------------------------------------------------//
+	//CHARACTER RANK NAME FULL
+	static string GetCharacterRankNameFull(notnull IEntity Character)
+	{
+		SCR_CharacterRankComponent RankComponent = SCR_CharacterRankComponent.Cast(Character.FindComponent(SCR_CharacterRankComponent));
+		string CharacterRank;
+		if(RankComponent)
+		{
+			CharacterRank = RankComponent.GetCharacterRankName(Character);
+		}
+		return CharacterRank;
+	}
+	//----------------------------------------------------------------------------------------------------------------//
+	//CHARACTER FACTION
+	static Faction GetCharacterFaction(notnull IEntity Character)
+	{
+		FactionAffiliationComponent FactionComponent = FactionAffiliationComponent.Cast(Character.FindComponent(FactionAffiliationComponent));
+		if(FactionComponent)
+		{
+			return FactionComponent.GetAffiliatedFaction();
+		}
+		return null;	
+	}
+	//----------------------------------------------------------------------------------------------------------------//
 	static string GetCharacterLocation(IEntity Character)
 	{
 		int m_iGridSizeX;
@@ -660,11 +697,11 @@ class SP_DialogueComponent: ScriptComponent
 	 	string m_sLocationName = m_WorldDirections.GetQuadHint(playerGridID) + ", " + closestLocationName;
 		return m_sLocationName;
 	}
+	//used in GetCharacterLocation, duuno
 	static protected int GetGridIndex(int x, int y)
 	{
 		return 3*y + x;
 	}
-	
 }
 //----------------------------------------------------------------------------------------------------------------//
 modded enum ChimeraMenuPreset
