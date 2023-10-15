@@ -49,7 +49,7 @@ class SP_DialogueBranch
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
 		Conf.GetDialogueBranchStage(Bstage);
-		if(m_BranchStages.Count() >= Bstage)
+		if(m_BranchStages.Count() > Bstage)
 		{
 			m_BranchStages[Bstage].GetActionText(Character, Player, ActText);
 			return true;
@@ -63,7 +63,7 @@ class SP_DialogueBranch
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
 		Conf.GetDialogueBranchStage(Bstage);
-		if(m_BranchStages.Count() >= Bstage)
+		if(m_BranchStages.Count() > Bstage)
 		{
 			//if (m_BranchStages[Bstage].CheckIfStageBranches(Character, Player);
 			
