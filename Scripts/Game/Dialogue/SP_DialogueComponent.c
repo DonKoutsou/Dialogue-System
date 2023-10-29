@@ -43,7 +43,7 @@ class SP_DialogueComponent: ScriptComponent
 	//all characters player talked too
 	static ref array <IEntity> a_PLcontactList;
 	//----------------------------------------------------------------------------------------------------------------//
-	static SCR_BaseGameMode GameMode;
+	static SCR_GameModeCampaign GameMode;
 	
 	static SP_DialogueComponent GetInstance()
 	{
@@ -409,7 +409,7 @@ class SP_DialogueComponent: ScriptComponent
 	{
 		if (!GetGame().InPlayMode())
 			return;
-		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
+		GameMode = SCR_GameModeCampaign.Cast(GetGame().GetGameMode());
 		foreach (SP_DialogueArchetype config: m_CharacterArchetypeList)
 		{
 			config.Init(owner);
@@ -537,7 +537,7 @@ class SP_DialogueComponent: ScriptComponent
 		{
 			Identity ID = IdentityComponent.GetIdentity();
 			CharacterFullName = ID.GetName();
-			CharacterFullName = CharacterFullName.Substring(17, CharacterFullName.Length() - 17)
+			CharacterFullName = CharacterFullName.Substring(17, CharacterFullName.Length() - 17);
 		}
 		return CharacterFullName;
 	}
@@ -628,7 +628,7 @@ class SP_DialogueComponent: ScriptComponent
 		return null;	
 	}
 	//----------------------------------------------------------------------------------------------------------------//
-	static string GetCharacterLocation(IEntity Character)
+	static string GetCharacterLocation(IEntity Character, bool unlockloc = 0)
 	{
 		int m_iGridSizeX;
 		int m_iGridSizeY;
@@ -645,14 +645,22 @@ class SP_DialogueComponent: ScriptComponent
 	 
 		SCR_EditableEntityCore core = SCR_EditableEntityCore.Cast(SCR_EditableEntityCore.GetInstance(SCR_EditableEntityCore));
 		vector posPlayer = Character.GetOrigin();
-			
-		SCR_EditableEntityComponent nearest = core.FindNearestEntity(posPlayer, EEditableEntityType.COMMENT);
+		
+		SCR_CampaignMilitaryBaseManager BaseMan = GameMode.GetBaseManager();
+		SCR_CampaignMilitaryBaseComponent nearest = BaseMan.GetClosestBase(Character.GetOrigin());
 		if (!nearest)
 			return STRING_EMPTY;
+		if (unlockloc)
+		{
+			if (!BaseMan.IsBaseVisible(nearest))
+			BaseMan.SetBaseVisible(nearest);
+		}
+		
+		
 		GenericEntity nearestLocation = nearest.GetOwner();
 		SCR_MapDescriptorComponent mapDescr = SCR_MapDescriptorComponent.Cast(nearestLocation.FindComponent(SCR_MapDescriptorComponent));
 		string closestLocationName;
-		closestLocationName = nearest.GetDisplayName();
+		closestLocationName = nearest.GetBaseName();
 
 		vector lastLocationPos = nearestLocation.GetOrigin();
 		float lastDistance = vector.DistanceSqXZ(lastLocationPos, posPlayer);
