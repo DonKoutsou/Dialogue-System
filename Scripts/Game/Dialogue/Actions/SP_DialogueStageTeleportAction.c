@@ -19,7 +19,8 @@ class DialogueStageTeleportAction : DialogueStage
 			}
 			else
 				char.Teleport(mat);
-		}		
+		}	
+		super.Perform(Character, Player);	
 	};
 	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{

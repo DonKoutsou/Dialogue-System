@@ -10,6 +10,7 @@ class DialogueStageJoinFactionAction : DialogueStage
 		FactComp.SetAffiliatedFactionByKey(m_FactionKey);
 		SCR_CharacterRankComponent Rankcomp = SCR_CharacterRankComponent.Cast(Player.FindComponent(SCR_CharacterRankComponent));
 		Rankcomp.SetCharacterRank(SCR_ECharacterRank.PRIVATE);
+		super.Perform(Character, Player);
 	};
 	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{

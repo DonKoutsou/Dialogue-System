@@ -1,0 +1,15 @@
+MetaFileClass {
+ Name "{385BABFB397FA07C}UI/Fonts/Handwriten.edds"
+ Configurations {
+  TGAResourceClass PC : "{F18523FA5BAAEA63}Configs/System/ResourceTypes/PC/TextureFonts.conf" {
+  }
+  TGAResourceClass XBOX_ONE : "{02B393E0229C74CB}configs/ResourceTypes/XBOX_ONE/TextureFonts.conf" {
+  }
+  TGAResourceClass XBOX_SERIES : "{85ECC27BD918BA89}configs/ResourceTypes/XBOX_SERIES/TextureFonts.conf" {
+  }
+  TGAResourceClass PS4 : "{3C102C974458DF07}configs/ResourceTypes/PS4/TextureFonts.conf" {
+  }
+  TGAResourceClass HEADLESS : "{D20F8633D63483FA}configs/ResourceTypes/HEADLESS/TextureFonts.conf" {
+  }
+ }
+}

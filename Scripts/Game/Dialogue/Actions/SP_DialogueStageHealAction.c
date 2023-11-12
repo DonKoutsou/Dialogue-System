@@ -5,6 +5,7 @@ class DialogueStageHealAction : DialogueStage
 	{
 		SCR_CharacterDamageManagerComponent CharDamageMnagr = SCR_CharacterDamageManagerComponent.Cast(Player.FindComponent(SCR_CharacterDamageManagerComponent));
 		CharDamageMnagr.FullHeal();
+		super.Perform(Character, Player);
 	};
 	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{

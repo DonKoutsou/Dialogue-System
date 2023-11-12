@@ -14,9 +14,9 @@ class DialogueStageCheckIDAction : DialogueStage
 
 			casualtyInspectDisplay.SetTarget(Character);
 			casualtyInspectDisplay.ShowInspectCasualtyWidget(Character);
-			return;
+			break;
 		}
-		
+		super.Perform(Character, Player);
 	};
 	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{

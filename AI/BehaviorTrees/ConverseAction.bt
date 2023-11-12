@@ -100,7 +100,7 @@ BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
           }
           SCR_AILookAtPosition "SCR_AI Look At Position" {
            Name "SCR_AI Look At Position"
-           EditorPos 444.294 779.377
+           EditorPos 445.961 779.377
            InPorts {
             SingleInputPortContainer SingleInputPortContainer {
              Port 1
@@ -137,7 +137,7 @@ BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
            Name "SCR_AI Salute Eachother"
            EditorPos 1205 780
            InPorts {
-            SingleInputPortContainer SingleInputPortContainerClass {
+            SingleInputPortContainer SingleInputPortContainer {
              Port 4
              PortName "EntityIn"
             }

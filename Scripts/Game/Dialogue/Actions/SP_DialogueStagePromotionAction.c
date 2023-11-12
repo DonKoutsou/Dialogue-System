@@ -69,6 +69,7 @@ class DialogueStagePromotionAction : DialogueStage
 		DiagComp.DoAnouncerDialogue(m_text);
 		SCR_PlayerController Cont = SCR_PlayerController.Cast(GetGame().GetPlayerController());
 		f.SendHQMessage(radio, calledID: Cont.GetPlayerId(), public: false, param: m_CurrentRank);
+		super.Perform(Character, Player);
 	}
 	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{

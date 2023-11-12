@@ -6,10 +6,6 @@ class DialogueStageItemCheckAction : DialogueStage
 	[Attribute("1", UIWidgets.EditBox, params: "1 1000", desc: "")]
 	int m_WantedAmount;
 	
-	override void Perform(IEntity Character, IEntity Player)
-	{
-		
-	};
 	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{
 		InventoryStorageManagerComponent inv = InventoryStorageManagerComponent.Cast(Player.FindComponent(InventoryStorageManagerComponent));

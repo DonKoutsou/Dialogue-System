@@ -25,7 +25,7 @@ class DialogueStageRewardAction : DialogueStage
 			}
 		}
 		alreadydone = false;
-		
+		super.Perform(Character, Player);
 	};
 	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{	

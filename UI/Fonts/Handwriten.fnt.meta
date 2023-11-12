@@ -1,0 +1,15 @@
+MetaFileClass {
+ Name "{0DD1F0710B0DE0E3}UI/Fonts/Handwriten.fnt"
+ Configurations {
+  FNTResourceClass PC {
+  }
+  FNTResourceClass XBOX_ONE : PC {
+  }
+  FNTResourceClass XBOX_SERIES : PC {
+  }
+  FNTResourceClass PS4 : PC {
+  }
+  FNTResourceClass HEADLESS : PC {
+  }
+ }
+}

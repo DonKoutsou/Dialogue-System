@@ -51,7 +51,15 @@ class SP_DialogueComponent: ScriptComponent
 			return null;
 		return SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 	};
-	
+	void GetContactList(out array <IEntity> ContactList)
+	{
+		ContactList.Copy(a_PLcontactList);
+	}
+	void AddToContactList(IEntity Char)
+	{
+		if (!a_PLcontactList.Contains(Char))
+			a_PLcontactList.Insert(Char)
+	}
 	void Escape(IEntity Char, IEntity Player)
 	{
 		DoBackDialogue(Char, Player);

@@ -29,6 +29,7 @@ class DialogueStagePaperCheckAction : DialogueStageItemCheckAction
 			DiagComp.ReleaseAI(Character, Player);
 			GetGame().GetMenuManager().CloseAllMenus();
 		}
+		super.Perform(Character, Player);
 	};
 	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{	

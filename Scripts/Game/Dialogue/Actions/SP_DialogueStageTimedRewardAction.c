@@ -29,6 +29,7 @@ class DialogueStageTimedRewardAction : DialogueStage
 				GetGame().SpawnEntityPrefab(res, Character.GetWorld(), params);
 			}
 		}
+		super.Perform(Character, Player);
 	};
 	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{

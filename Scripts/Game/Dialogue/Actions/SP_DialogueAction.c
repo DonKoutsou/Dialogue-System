@@ -4,18 +4,16 @@ class SP_DialogueAction : ScriptedUserAction
 	bool isradio;
 	//------------------------------------------------------------------//
 	protected SP_DialogueComponent DiagComp;
-	protected BaseGameMode GameMode;
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
-		GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
-		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
 		if (SCR_EntityHelper.IsPlayer(pUserEntity))
 		{
-			if (!DiagComp.a_PLcontactList.Contains(pOwnerEntity))
-				DiagComp.a_PLcontactList.Insert(pOwnerEntity)
+			ChimeraCharacter Char = ChimeraCharacter.Cast(pUserEntity);
+			SCR_CharacterControllerComponent cont = SCR_CharacterControllerComponent.Cast(Char.GetCharacterController());
+			cont.OnDialogueBegan(pUserEntity, pOwnerEntity);
+			DiagComp.AddToContactList(pOwnerEntity);
 		}
-		
 		AIControlComponent comp = AIControlComponent.Cast(pOwnerEntity.FindComponent(AIControlComponent));
 		if (!comp)
 			return;
@@ -43,13 +41,12 @@ class SP_DialogueAction : ScriptedUserAction
 		MenuBase myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
 		GetGame().GetInputManager().ActivateContext("DialogueMenuContext");
 		DialogueUIClass DiagUI = DialogueUIClass.Cast(myMenu);
-		//DiagComp.IntroducitonSting(pOwnerEntity, pUserEntity);
 		DiagUI.Init(pOwnerEntity, pUserEntity);
 		DiagUI.UpdateEntries(pOwnerEntity, pUserEntity);
 	}
 	override event void Init(IEntity pOwnerEntity, GenericComponent pManagerComponent)
 	{
-		
+		DiagComp = SP_DialogueComponent.GetInstance();
 	};
 	//------------------------------------------------------------------//
 	override bool CanBeShownScript(IEntity user)

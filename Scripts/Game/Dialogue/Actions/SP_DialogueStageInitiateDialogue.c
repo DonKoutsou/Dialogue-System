@@ -50,7 +50,7 @@ class DialogueStageInitiateDialogue : DialogueStage
 		
 		DiagUI.Init(Target, Player);
 		DiagUI.UpdateEntries(Target, Player);
-		
+		super.Perform(Character, Player);
 	};
 	//------------------------------------------------------------------//
 	override bool GetActionText(IEntity Character, IEntity Player, out string acttext)
