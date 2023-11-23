@@ -7,7 +7,7 @@ modded class SCR_CharacterIdentityComponent
 	protected LocalizedString m_IdentityFormatNoAlias;
 	
 	[Attribute()]
-	protected SP_DialogueArchetype arch;
+	ref protected SP_DialogueArchetype arch;
 	
 	protected int m_iCharacterRep = Math.RandomInt(20, 100);
 	

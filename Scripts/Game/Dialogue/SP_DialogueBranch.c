@@ -6,17 +6,21 @@ class SP_DialogueBranch
 {
 	//------------------------------------------------------------------//
 	DialogueStage m_Owner;
+	
 	[Attribute(desc: "Dialogue Stage, Depending on the stage of the branch the apropriate stage will be selected. Stage = 0 means first entry etc...")]
 	ref array<ref DialogueStage> 						m_BranchStages;
+	
 	ref DialogueBranchInfo 								BranchInfoConfig;
+	
 	protected ref map<string, ref DialogueBranchInfo> 	BranchInfoConfigMap;
 	
 	//Text that is going to be used as title for the action
 	void OnPerform(IEntity Character, IEntity Player)
 	{
-		DialogueBranchInfo Conf = LocateConfig(Character);;
+		//find branch info for these char and perform it
+		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
-		Conf.GetDialogueBranchStage(Bstage);
+		Conf.GetStageOfBranch(Bstage);
 		if(m_BranchStages.Count() >= Bstage)
 		{
 			m_BranchStages[Bstage].Perform(Character, Player);
@@ -32,7 +36,7 @@ class SP_DialogueBranch
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
-		Conf.GetDialogueBranchStage(Bstage);
+		Conf.GetStageOfBranch(Bstage);
 		return m_BranchStages[Bstage].CanBePerformed(Character, Player);
 	}
 	//------------------------------------------------------------------//
@@ -40,7 +44,7 @@ class SP_DialogueBranch
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
-		Conf.GetDialogueBranchStage(Bstage);
+		Conf.GetStageOfBranch(Bstage);
 		return m_BranchStages[Bstage].CanBeShown(Character, Player);
 	}
 	//------------------------------------------------------------------//
@@ -48,7 +52,7 @@ class SP_DialogueBranch
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
-		Conf.GetDialogueBranchStage(Bstage);
+		Conf.GetStageOfBranch(Bstage);
 		if(m_BranchStages.Count() > Bstage)
 		{
 			m_BranchStages[Bstage].GetActionText(Character, Player, ActText);
@@ -62,7 +66,7 @@ class SP_DialogueBranch
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
-		Conf.GetDialogueBranchStage(Bstage);
+		Conf.GetStageOfBranch(Bstage);
 		if(m_BranchStages.Count() > Bstage)
 		{
 			//if (m_BranchStages[Bstage].CheckIfStageBranches(Character, Player);
@@ -89,7 +93,7 @@ class SP_DialogueBranch
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
-		Conf.GetDialogueBranchStage(Bstage);
+		Conf.GetStageOfBranch(Bstage);
 		DialogueStage Diagstage;
 		if (m_BranchStages.Count() >= Bstage)
 		{
@@ -111,7 +115,9 @@ class SP_DialogueBranch
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		DialogueStage DiagStage;
 		GetDialogueStage(Character, DiagStage);
-		DiagStage.InheritData(Conf.OriginalArchetype, Conf, Character);
+		//pass data lower down the hierarchy
+		DiagStage.InheritData(Conf.GetOwnerArchetype(), Conf, Character);
+		//cause the branch on the config
 		Conf.CauseBranch(BranchID);
 	}
 	void UnBranch(IEntity Character)
@@ -119,7 +125,7 @@ class SP_DialogueBranch
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		DialogueStage DiagStage;
 		GetDialogueStage(Character, DiagStage);
-		DiagStage.InheritData(Conf.OriginalArchetype, Conf, Character);
+		DiagStage.InheritData(Conf.GetOwnerArchetype(), Conf, Character);
 		Conf.Unbranch();
 	}
 	
@@ -134,7 +140,7 @@ class SP_DialogueBranch
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
-		Conf.GetDialogueBranchStage(Bstage);
+		Conf.GetStageOfBranch(Bstage);
 		if(m_BranchStages.Count() >= Bstage)
 		{
 			DiagStage = m_BranchStages[Bstage];
@@ -157,7 +163,7 @@ class SP_DialogueBranch
 		//Get the config for this dialogue branch
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
-		Conf.GetDialogueBranchStage(Bstage);
+		Conf.GetStageOfBranch(Bstage);
 		branch = this;
 		if (Conf.CheckifBranched() == true)
 		{
@@ -217,7 +223,7 @@ class SP_DialogueBranch
 	{
 		DialogueBranchInfo Conf = LocateConfig(Char);
 		Conf.SetParent(ParentConfig);
-		Conf.SetOriginalArch(Archetype);
+		Conf.SetOwnerArchetype(Archetype);
 	}
 	void Init(DialogueStage Owner = null, int index = 0)
 	{
@@ -238,46 +244,54 @@ class DialogueBranchInfo
 {
 	//------------------------------------------------------------------//
 	//Archetype wich this cofig belongs to
-	SP_DialogueArchetype OriginalArchetype;
+	SP_DialogueArchetype m_OwnerArchetype;
 	//------------------------------------------------------------------//
 	//SP_MultipleChoiceConfig that come before this one in a hierarchy. Used for DoBackDialogue in SP_DialogueComponent
 	DialogueBranchInfo ParentConfig;
 	//------------------------------------------------------------------//
-	//Branching info for this config. Once config gets branched the branch that caused it has its ID saved in BranchBranchID
-	bool IsBranchBranched;
-	int BranchBranchID;
-	int DialogueBranchStage;
+	//Branching info for this config. Once config gets branched the branch that caused it has its ID saved in m_iBranchID
+	
+	bool m_bIsBranched;
+	//branch ID is for guiding the flow. If the branch had a stage with branches and the dialogue reaches deaper when the stage is performed and
+	//the branch that was selected will be saved as m_iBranchID
+	int m_iBranchID;
+	int m_iDialogueBranchStage;
 	//------------------------------------------------------------------//
 	void DialogueBranchInfo(DialogueBranchInfo original, bool isNew = false){};
 	//------------------------------------------------------------------//
-	void IncrementStage(int amount){DialogueBranchStage = DialogueBranchStage + 1;}
+	//Progresses stage of the branch
+	void IncrementStage(int amount){m_iDialogueBranchStage += 1;}
 	//------------------------------------------------------------------//
+	//Saves the parent of this config in the hierarghy
 	void SetParent(DialogueBranchInfo BranchConf){ParentConfig = BranchConf;}
 	//------------------------------------------------------------------//
-	void SetOriginalArch(SP_DialogueArchetype DiagArch){OriginalArchetype = DiagArch;}
+	//setter and getter of parent archetype, top of the hierarchy
+	void SetOwnerArchetype(SP_DialogueArchetype Archetype){m_OwnerArchetype = Archetype;}
+	SP_DialogueArchetype GetOwnerArchetype () {return m_OwnerArchetype;}
 	//------------------------------------------------------------------//
-	void GetDialogueBranchStage(out int BStage){BStage = DialogueBranchStage;}
+	void GetStageOfBranch(out int BStage){BStage = m_iDialogueBranchStage;}
 	//------------------------------------------------------------------//
-	bool CheckifBranched(){return  IsBranchBranched;}
+	bool CheckifBranched(){return  m_bIsBranched;}
 	//------------------------------------------------------------------//
-	void GetBranchedID(out int bID){bID = BranchBranchID;}
+	void GetBranchedID(out int bID){bID = m_iBranchID;}
 	//------------------------------------------------------------------//
 	void GetParentConfig(out DialogueBranchInfo ParentC){ParentC = ParentConfig;}
 	//------------------------------------------------------------------//
+	//Cause branch and save the 
 	void CauseBranch(int BranchID)
 	{
-		if(IsBranchBranched == false)
+		if(m_bIsBranched == false)
 		{
-			IsBranchBranched = true;
-			BranchBranchID = BranchID;
+			m_bIsBranched = true;
+			m_iBranchID = BranchID;
 		}
 	}
 	//------------------------------------------------------------------//
 	void Unbranch()
 	{
-		if (IsBranchBranched == true)
+		if (m_bIsBranched == true)
 		{
-			IsBranchBranched = false;
+			m_bIsBranched = false;
 		}
 	}
 	bool CheckCondition(IEntity Character, IEntity Player)

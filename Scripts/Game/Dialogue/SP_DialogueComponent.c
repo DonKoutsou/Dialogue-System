@@ -157,7 +157,7 @@ class SP_DialogueComponent: ScriptComponent
 		//--------------------------------------//
 		int Bstage;
 		
-		Conf.GetDialogueBranchStage(Bstage);
+		Conf.GetStageOfBranch(Bstage);
 		//If a stage exists it means that dialogue can increment
 		if (Branch.CheckNextStage(Bstage + 1) == true)
 		{
@@ -635,89 +635,7 @@ class SP_DialogueComponent: ScriptComponent
 		}
 		return null;	
 	}
-	//----------------------------------------------------------------------------------------------------------------//
-	static string GetCharacterLocation(IEntity Character, bool unlockloc = 0)
-	{
-		int m_iGridSizeX;
-		int m_iGridSizeY;
-		float angleA = 0.775;
-		const float angleB = 0.325;
-		vector mins,maxs;
-		GenericWorldEntity world = GetGame().GetWorldEntity();
-		if (!world)
-			return STRING_EMPTY;
-		world.GetWorldBounds(mins, maxs);
-			
-		m_iGridSizeX = maxs[0]/3;
-		m_iGridSizeY = maxs[2]/3;
-	 
-		SCR_EditableEntityCore core = SCR_EditableEntityCore.Cast(SCR_EditableEntityCore.GetInstance(SCR_EditableEntityCore));
-		vector posPlayer = Character.GetOrigin();
-		
-		SCR_CampaignMilitaryBaseManager BaseMan = GameMode.GetBaseManager();
-		SCR_CampaignMilitaryBaseComponent nearest = BaseMan.GetClosestBase(Character.GetOrigin());
-		if (!nearest)
-			return STRING_EMPTY;
-		if (unlockloc)
-		{
-			if (!BaseMan.IsBaseVisible(nearest))
-			BaseMan.SetBaseVisible(nearest);
-		}
-		
-		
-		GenericEntity nearestLocation = nearest.GetOwner();
-		SCR_MapDescriptorComponent mapDescr = SCR_MapDescriptorComponent.Cast(nearestLocation.FindComponent(SCR_MapDescriptorComponent));
-		string closestLocationName;
-		closestLocationName = nearest.GetBaseName();
-
-		vector lastLocationPos = nearestLocation.GetOrigin();
-		float lastDistance = vector.DistanceSqXZ(lastLocationPos, posPlayer);
 	
-		string closeLocationAzimuth;
-		vector result = posPlayer - lastLocationPos;
-		result.Normalize();
-		
-		float angle1 = vector.DotXZ(result,vector.Forward);
-		float angle2 = vector.DotXZ(result,vector.Right);
-				
-		if (angle2 > 0)
-		{
-			if (angle1 >= angleA)
-				closeLocationAzimuth = "#AR-MapLocationHint_DirectionNorth";
-			if (angle1 < angleA && angle1 >= angleB )
-				closeLocationAzimuth = "#AR-MapLocationHint_DirectionNorthEast";
-			if (angle1 < angleB && angle1 >=-angleB)
-				closeLocationAzimuth = "#AR-MapLocationHint_DirectionEast";
-			if (angle1 < -angleB && angle1 >=-angleA)
-				closeLocationAzimuth = "#AR-MapLocationHint_DirectionSouthEast";
-			if (angle1 < -angleA)
-				closeLocationAzimuth = "#AR-MapLocationHint_DirectionSouth";
-		}
-		else
-		{
-			if (angle1 >= angleA)
-				closeLocationAzimuth = "#AR-MapLocationHint_DirectionNorth";
-			if (angle1 < angleA && angle1 >= angleB )
-				closeLocationAzimuth = "#AR-MapLocationHint_DirectionNorthWest";
-			if (angle1 < angleB && angle1 >=-angleB)
-				closeLocationAzimuth = "#AR-MapLocationHint_DirectionWest";
-			if (angle1 < -angleB && angle1 >=-angleA)
-				closeLocationAzimuth = "#AR-MapLocationHint_DirectionSouthWest";
-			if (angle1 < -angleA)
-				closeLocationAzimuth = "#AR-MapLocationHint_DirectionSouth";
-		}
-		int playerGridPositionX = posPlayer[0]/m_iGridSizeX;
-		int playerGridPositionY = posPlayer[2]/m_iGridSizeY;
-			
-		int playerGridID = GetGridIndex(playerGridPositionX,playerGridPositionY);
-	 	string m_sLocationName = m_WorldDirections.GetQuadHint(playerGridID) + ", " + closestLocationName;
-		return m_sLocationName;
-	}
-	//used in GetCharacterLocation, duuno
-	static protected int GetGridIndex(int x, int y)
-	{
-		return 3*y + x;
-	}
 }
 //----------------------------------------------------------------------------------------------------------------//
 modded enum ChimeraMenuPreset

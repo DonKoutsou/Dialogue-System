@@ -98,55 +98,69 @@ BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
             }
            }
           }
-          SCR_AILookAtPosition "SCR_AI Look At Position" {
-           Name "SCR_AI Look At Position"
-           EditorPos 445.961 779.377
+          SCR_AIAddOffsetToPosition "SCR_AI Add Offset To Position" {
+           Name "SCR_AI Add Offset To Position"
+           EditorPos 438.75 781.25
            InPorts {
             SingleInputPortContainer SingleInputPortContainer {
              Port 1
              PortName "PositionIn"
             }
-            SingleInputPortContainer SingleInputPortContainer {
-             Port -1
-             PortName "PriorityIn"
-            }
            }
            OutPorts {
             SingleOutputPortContainer SingleOutputPortContainer {
-             Port -1
+             Port 5
              PortName "PositionOut"
             }
            }
-           m_bSuccessWhenClose 0
-           m_fVerticalOffset 1.7
-           m_fIgnoreLookDistSq 0
-           m_fPriority 80
           }
-          AITaskMoveToEntity "Move To Entity" {
-           Name "Move To Entity"
-           EditorPos 719.421 774.179
-           PrecisionXZ 3
-           InEntity 3
-          }
-          AITaskIdle Idle {
-           Name "Idle"
-           EditorPos 1061.667 775
-           Period 1
-          }
-          SCR_AISaluteEachother "SCR_AI Salute Eachother" {
-           Name "SCR_AI Salute Eachother"
-           EditorPos 1205 780
-           InPorts {
-            SingleInputPortContainer SingleInputPortContainer {
-             Port 4
-             PortName "EntityIn"
+          Parallel Parallel {
+           Name "Parallel"
+           EditorPos 884.286 777.857
+           Nodes {
+            AITaskCharacterAim "Character Aim" {
+             Name "Character Aim"
+             EditorPos 775.535 1001.429
+             InAimAtPosition 5
+             PrecisionXZ 0
+             PrecisionY 0
+             Timeout 2
+             UseADS 0
+            }
+            Sequence Sequence {
+             Name "Sequence"
+             EditorPos 1317.357 910.714
+             Nodes {
+              AITaskIdle Idle {
+               Name "Idle"
+               EditorPos 975.714 1081.429
+               Period 2
+              }
+              AITaskMoveToEntity "Move To Entity" {
+               Name "Move To Entity"
+               EditorPos 1137.279 1083.822
+               PrecisionXZ 3
+               OrientationType ToPoint
+               InEntity 3
+              }
+              SCR_AISaluteEachother "SCR_AI Salute Eachother" {
+               Name "SCR_AI Salute Eachother"
+               EditorPos 1461.904 1077.5
+               InPorts {
+                SingleInputPortContainer SingleInputPortContainer {
+                 Port 4
+                 PortName "EntityIn"
+                }
+               }
+              }
+              AITaskIdle Idle {
+               Name "Idle"
+               EditorPos 1702.492 1069.263
+               Period 500
+              }
+             }
             }
            }
-          }
-          AITaskIdle Idle {
-           Name "Idle"
-           EditorPos 1425.588 776.763
-           Period 500
           }
          }
         }
@@ -184,7 +198,7 @@ BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
   }
   VariableReference posToLook {
    VariableType 1
-   EditorPos 295.65 904.377
+   EditorPos 271.9 898.127
   }
   VariableReference CharToTalk {
    VariableType 2
@@ -196,7 +210,11 @@ BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
   }
   VariableReference CharToTalk {
    VariableType 2
-   EditorPos 945 945
+   EditorPos 1088.571 1237.5
+  }
+  VariableReference posToLook {
+   VariableType 1
+   EditorPos 561.964 940.893
   }
  }
 }

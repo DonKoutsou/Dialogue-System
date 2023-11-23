@@ -11,39 +11,11 @@ class DialogueStage
 	//------------------------------------------------------------------//
 	[Attribute(desc: "Dialogue Branch, if present will cause branch to split instead of progressing its stage. When a branch splits, the dialogue system will only look in the entries of this branch only")]
 	ref array<ref SP_DialogueBranch> m_Branch;
-	
-	[Attribute(desc: "Event to be recorded on notebook")]
-	protected ref BaseEventContainer m_sEventString;
-	
-	protected bool m_bEventRecorded;
+
 	//------------------------------------------------------------------//
 	string m_sCantBePerformedReason = "(Cant Be Performed)";
 	//------------------------------------------------------------------//
-	bool GetEvent(out string eventString)
-	{
-		if (!m_sCantBePerformedReason)
-			return false;
-		else
-		{
-			eventString = m_sCantBePerformedReason;
-			return true;
-		}
-	}
-	//------------------------------------------------------------------//
-	void Perform(IEntity Character, IEntity Player)
-	{
-		if (m_sEventString && !m_bEventRecorded)
-		{
-			SCR_ChimeraCharacter Char = SCR_ChimeraCharacter.Cast(Player);
-			SP_CallendarComponent Callendar = Char.GetCallendar();
-			if (Callendar)
-			{
-				Callendar.RecordEvent(m_sEventString.GetString(Player, Character));
-				m_bEventRecorded = true;
-			}
-		}
-		
-	};
+	void Perform(IEntity Character, IEntity Player){};
 	//------------------------------------------------------------------//
 	bool CanBePerformed(IEntity Character, IEntity Player){return true;}
 	//------------------------------------------------------------------//
