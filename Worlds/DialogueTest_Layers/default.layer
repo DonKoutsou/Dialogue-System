@@ -1,6 +1,9 @@
 SCR_AIWorld : "{E0A05C76552E7F58}Prefabs/AI/SCR_AIWorld.et" {
  coords 132.245 1.001 131.366
 }
+SCR_BaseGameMode GameMode_Base1 : "{0F307326459A1395}Prefabs/MP/Modes/GameMode_Base.et" {
+ coords 129.617 1 129.764
+}
 $grp GenericEntity {
  {
   coords 130.389 0.826 128.402
