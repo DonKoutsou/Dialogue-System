@@ -1,5 +1,5 @@
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_DialogueStageItemCheckAction : SP_BaseDialogueStageAction
+class DS_DialogueStageItemCheckAction : DS_BaseDialogueStageAction
 {
 	[Attribute("Item needed to be delivered", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
 	ResourceName m_WantedItem;

@@ -65,10 +65,10 @@ class SCR_IDInfoUI : ScriptedWidgetComponent
 		m_CharIDComp = SCR_CharacterIdentityComponent.Cast(Char.FindComponent(SCR_CharacterIdentityComponent));
 		if(Char)
 		{
-			CharName = SP_DialogueComponent.GetCharacterName(Char);
-			rank = SP_DialogueComponent.GetCharacterRankInsignia(Char);
-			faction = SP_DialogueComponent.GetCharacterFaction(Char).GetFactionKey();
-			rankText = SP_DialogueComponent.GetCharacterRankNameFull(Char);
+			CharName = DS_DialogueComponent.GetCharacterName(Char);
+			rank = DS_DialogueComponent.GetCharacterRankInsignia(Char);
+			faction = DS_DialogueComponent.GetCharacterFaction(Char).GetFactionKey();
+			rankText = DS_DialogueComponent.GetCharacterRankNameFull(Char);
 		}
 		
 		m_TextCharacterRank.SetText(rankText);

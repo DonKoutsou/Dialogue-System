@@ -1,4 +1,4 @@
-class SP_IDUserAction : ScriptedUserAction
+class DS_IDUserAction : ScriptedUserAction
 {
 	//------------------------------------------------------------------------------------------------
 	override bool CanBeShownScript(IEntity user)

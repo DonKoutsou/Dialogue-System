@@ -85,8 +85,8 @@ class SCR_IDWidget : SCR_InfoDisplayExtended
 		if (!m_Target || !m_wIDInspectWidget)
 			return;
 		
-		FactionKey faction = SP_DialogueComponent.GetCharacterFaction(m_Target).GetFactionKey();
-		string rank = SP_DialogueComponent.GetCharacterRankInsignia(m_Target);
+		FactionKey faction = DS_DialogueComponent.GetCharacterFaction(m_Target).GetFactionKey();
+		string rank = DS_DialogueComponent.GetCharacterRankInsignia(m_Target);
 		
 		SCR_IDInfoUI IDInfoUI = SCR_IDInfoUI.Cast(m_wIDInspectWidget.FindHandler(SCR_IDInfoUI));
 		if (IDInfoUI)

@@ -1,21 +1,21 @@
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_DialogueStageInitiateDialogue : SP_BaseDialogueStageAction
+class DS_DialogueStageInitiateDialogue : DS_BaseDialogueStageAction
 {
 	//------------------------------------------------------------------//
 	IEntity Target;
 	string TargetName;
 	int m_iIndex;
-	protected SP_DialogueComponent DiagComp;
+	protected DS_DialogueComponent DiagComp;
 	protected BaseGameMode GameMode;
 	
 	override void Perform(IEntity Character, IEntity Player)
 	{
 		if (!Target)
 		{
-			Target = SP_DialogueComponent.a_PLcontactList[m_iIndex];
+			Target = DS_DialogueComponent.a_PLcontactList[m_iIndex];
 			if (Target)
 			{
-				TargetName = SP_DialogueComponent.GetCharacterName(Target);
+				TargetName = DS_DialogueComponent.GetCharacterName(Target);
 			}
 		}
 		//DiagComp.Escape(Character, Player);
@@ -54,15 +54,15 @@ class SP_DialogueStageInitiateDialogue : SP_BaseDialogueStageAction
 	};
 	/*override bool CanBeShown(IEntity Character, IEntity Player)
 	{
-		if (!SP_DialogueComponent.a_PLcontactList.IsEmpty() && SP_DialogueComponent.a_PLcontactList.Count() > m_iIndex)
+		if (!DS_DialogueComponent.a_PLcontactList.IsEmpty() && DS_DialogueComponent.a_PLcontactList.Count() > m_iIndex)
 			return true; 
 		return false;
 	}*/
 	
-	override void Init(SP_DialogueBranch Owner = null, int Index = 0)
+	override void Init(DS_DialogueBranch Owner = null, int Index = 0)
 	{
 		GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
-		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		DiagComp = DS_DialogueComponent.Cast(GameMode.FindComponent(DS_DialogueComponent));
 		super.Init(Owner, Index);
 		if (Owner)
 		{

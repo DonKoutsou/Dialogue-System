@@ -1,5 +1,5 @@
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_DialogueStageTimedRewardAction : SP_BaseDialogueStageAction
+class DS_DialogueStageTimedRewardAction : DS_BaseDialogueStageAction
 {
 	
 	[Attribute("", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
@@ -30,7 +30,7 @@ class SP_DialogueStageTimedRewardAction : SP_BaseDialogueStageAction
 	
 };
 [BaseContainerProps(configRoot:true)]
-class SP_DialogueStageTimedRewardActionCondition : SP_BaseDialogueStageActionCondition
+class DS_DialogueStageTimedRewardActionCondition : DS_BaseDialogueStageActionCondition
 {
 	[Attribute()]
   int TimeOffset;

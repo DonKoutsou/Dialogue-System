@@ -2,7 +2,7 @@
 //A character archetype can be used by alot of different characters (eg. Seting dialogue for all low ranking officers)
 //but 1 character cant/shouldn't use multiple character archetypes. (eg. Character has 1 name 1 faction 1 rank. once any of the identifiers change his dialogue will change too)
 [BaseContainerProps(configRoot: true)]
-class SP_DialogueArchetype: ScriptAndConfig
+class DS_DialogueArchetype: ScriptAndConfig
 {
 	//------------------------------------------------------------------//
 	//Dialogue Identifier
@@ -23,17 +23,17 @@ class SP_DialogueArchetype: ScriptAndConfig
 	private ref array<string> m_aArchetypeFactionMatch;
 	//------------------------------------------------------------------//
 	[Attribute("DialogueBranch")]
-	private ref array<ref SP_DialogueBranch> DialogueBranch;
+	private ref array<ref DS_DialogueBranch> DialogueBranch;
 	//------------------------------------------------------------------//
 	//Map to be filled with all the configurations on Init
-	protected ref map<int, ref SP_DialogueBranch> DialogueBranchMap;
-    protected SP_DialogueComponent DiagComp;
-	SP_DialogueArchetype OriginalArchetype;
+	protected ref map<int, ref DS_DialogueBranch> DialogueBranchMap;
+    protected DS_DialogueComponent DiagComp;
+	DS_DialogueArchetype OriginalArchetype;
 	IEntity TalkingCharacter;
 	bool IsCharacterBranched;
 	int BranchedID;
 	//------------------------------------------------------------------//
-	void GetDialogueBranchMap(out map<int, ref SP_DialogueBranch> DialogueMap){DialogueMap = DialogueBranchMap;}
+	void GetDialogueBranchMap(out map<int, ref DS_DialogueBranch> DialogueMap){DialogueMap = DialogueBranchMap;}
 	//------------------------------------------------------------------//
 	void GetBranchedID(out int BID){BID = BranchedID;}
 	//------------------------------------------------------------------//
@@ -47,7 +47,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//------------------------------------------------------------------//
 	void GetArchtypeFactionMatch(out array<string> FactMatch) {FactMatch = m_aArchetypeFactionMatch;}
 	//------------------------------------------------------------------//
-	void GetDialogueBranchArray(out array<ref SP_DialogueBranch> Branches){Branches = DialogueBranch;}
+	void GetDialogueBranchArray(out array<ref DS_DialogueBranch> Branches){Branches = DialogueBranch;}
 	//------------------------------------------------------------------//
 	//Bool returning IsCharacterBranched, used to check if character is branched. True = Branched - False = Unbranched
 	bool IsCharacterBranched(){return IsCharacterBranched;}
@@ -75,7 +75,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//------------------------------------------------------------------//
 	//Find Branch using Branch ID
 	//If character is branched we look for a branch using our BranchedID that we got once this Archetype got branched and we keep looking deeper using GetCurrentDialogueBranch
-	bool GetDialogueBranch(int BranchKey, out SP_DialogueBranch branch)
+	bool GetDialogueBranch(int BranchKey, out DS_DialogueBranch branch)
     {
 		if (IsCharacterBranched == true)
 		{
@@ -100,7 +100,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//Find correct branch and get dialogue text from it
 	bool GetDialogueText(int BranchID, IEntity Character, IEntity Player, out string DiagText)
 	{
-		SP_DialogueBranch branch;
+		DS_DialogueBranch branch;
 		GetDialogueBranch(BranchID, branch);
 		if (branch)
 		{
@@ -118,7 +118,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//Find correct branch using current stage and take action title from it 
 	bool GetActionTitle(int BranchID, IEntity Character, IEntity Player, out string ActText)
 	{
-		SP_DialogueBranch Branch;
+		DS_DialogueBranch Branch;
 		GetDialogueBranch(BranchID, Branch);
 		if (Branch)
 		{
@@ -136,7 +136,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 	//Find branch using branchID and increment its stage
 	bool IncrementStage(int BranchID, int incrementamount, IEntity Character)
 	{	
-		SP_DialogueBranch branch
+		DS_DialogueBranch branch
 		GetDialogueBranch(BranchID, branch);
 		branch.IncrementBranchStage(incrementamount, Character);
 		return true;
@@ -145,7 +145,7 @@ class SP_DialogueArchetype: ScriptAndConfig
 	
 	//------------------------------------------------------------------//
 	// constructor for when creating new Archetype
-	void SP_DialogueArchetype(SP_DialogueArchetype original, bool isNew = false)
+	void DS_DialogueArchetype(DS_DialogueArchetype original, bool isNew = false)
   {
 		if (isNew) 
 		{
@@ -162,10 +162,10 @@ class SP_DialogueArchetype: ScriptAndConfig
 	void Init(IEntity Character)
 	{
 		OriginalArchetype = this;
-		DialogueBranchMap = new map<int, ref SP_DialogueBranch>();
+		DialogueBranchMap = new map<int, ref DS_DialogueBranch>();
 		for (int i = 0, count = DialogueBranch.Count(); i < count; i++)
     {
-			SP_DialogueBranch branch = DialogueBranch[i];
+			DS_DialogueBranch branch = DialogueBranch[i];
 			branch.Init(null, i);
 			//using 2 values to create key, branch and stage IDs
 			int key = (i);

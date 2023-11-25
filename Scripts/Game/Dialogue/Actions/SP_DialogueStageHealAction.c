@@ -1,5 +1,5 @@
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_DialogueStageHealAction : SP_BaseDialogueStageAction
+class DS_DialogueStageHealAction : DS_BaseDialogueStageAction
 {
 	SCR_FadeInOutEffect FadeInOutEffect;
 	override void Perform(IEntity Character, IEntity Player)

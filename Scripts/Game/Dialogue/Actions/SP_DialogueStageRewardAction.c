@@ -1,5 +1,5 @@
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_DialogueStageRewardAction : SP_BaseDialogueStageAction
+class DS_DialogueStageRewardAction : DS_BaseDialogueStageAction
 {
 	[Attribute("", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
 	ref array <ref ResourceName> m_ItemToGive;

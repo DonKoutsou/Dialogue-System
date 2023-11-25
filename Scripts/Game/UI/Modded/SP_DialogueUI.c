@@ -8,7 +8,7 @@ class DialogueUIClass: ChimeraMenuBase
 	TextWidget m_CharacterName;
 	TextWidget m_PlayerName;
 	SCR_ListBoxElementComponent m_ListBoxElement;
- 	SP_ListBoxComponent m_ListBoxComponent;
+ 	DS_ListBoxComponent m_ListBoxComponent;
 	SCR_ListBoxComponent m_ListBoxComponentHistory;
 	
     //----------------------------------------------------------------//
@@ -20,8 +20,8 @@ class DialogueUIClass: ChimeraMenuBase
 	string 											CharName;
 	//----------------------------------------------------------------//
 	//DialogueStystem
-	SP_DialogueComponent 						DiagComp;
-	SP_DialogueArchetype 						DiagArch;
+	DS_DialogueComponent 						DiagComp;
+	DS_DialogueArchetype 						DiagArch;
 	SCR_CharacterIdentityComponent	m_IDComp;
 	SCR_CharacterIdentityComponent	m_CharIDComp;
 	protected BaseGameMode 					GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
@@ -42,7 +42,7 @@ class DialogueUIClass: ChimeraMenuBase
 	{
 		for (int i = 0; i < m_ListBoxComponent.GetItemCount(); i++)
 		{
-			GetGame().GetInputManager().RemoveActionListener(string.Format("Dialogue%1", i), EActionTrigger.DOWN, SP_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(i)).OnKeyPressed);
+			GetGame().GetInputManager().RemoveActionListener(string.Format("Dialogue%1", i), EActionTrigger.DOWN, DS_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(i)).OnKeyPressed);
 		}
 		GetGame().GetInputManager().RemoveActionListener("DialogueBack", EActionTrigger.DOWN, DoDialogueBack);
 		GetGame().GetInputManager().RemoveActionListener("DialogueBack", EActionTrigger.DOWN, LeaveFunction);
@@ -54,9 +54,9 @@ class DialogueUIClass: ChimeraMenuBase
 		m_wRoot = GetRootWidget();
 		m_ListBoxOverlay = OverlayWidget.Cast(m_wRoot.FindAnyWidget("ListBox0")); 
 		//m_ListBoxOverlayHistory = OverlayWidget.Cast(m_wRoot.FindAnyWidget("ListBox1")); 
-		m_ListBoxComponent = SP_ListBoxComponent.Cast(m_ListBoxOverlay.FindHandler(SP_ListBoxComponent));
+		m_ListBoxComponent = DS_ListBoxComponent.Cast(m_ListBoxOverlay.FindHandler(DS_ListBoxComponent));
 		//m_ListBoxComponentHistory = SCR_ListBoxComponent.Cast(m_ListBoxOverlayHistory.FindHandler(SCR_ListBoxComponent));
-		DiagComp = SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		DiagComp = DS_DialogueComponent.Cast(GameMode.FindComponent(DS_DialogueComponent));
 		m_IDComp = SCR_CharacterIdentityComponent.Cast(User.FindComponent(SCR_CharacterIdentityComponent));
 		m_CharIDComp = SCR_CharacterIdentityComponent.Cast(myCallerEntity.FindComponent(SCR_CharacterIdentityComponent));
 	}
@@ -82,7 +82,7 @@ class DialogueUIClass: ChimeraMenuBase
 			{
 				m_ListBoxComponent.AddItem(DiagText);
 				CurrentBranchID = i;
-				SP_ListBoxElementComponent elComp = SP_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
+				DS_ListBoxElementComponent elComp = DS_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
 				elComp.branch = i;
 				elComp.m_OnClicked.Insert(ExecuteDialogue);
 				string entrynumber = (entryamount + 1).ToString();
@@ -100,11 +100,11 @@ class DialogueUIClass: ChimeraMenuBase
 			}
 		}
 		//Check if Archtype is branched an choose to create a Leave button or a Go Back button
-		SP_DialogueArchetype DArch = DiagComp.LocateDialogueArchetype(myCallerEntity, Player);
+		DS_DialogueArchetype DArch = DiagComp.LocateDialogueArchetype(myCallerEntity, Player);
 		if (DArch.IsCharacterBranched == true)
 		{
 			m_ListBoxComponent.AddItem("Go Back");
-			SP_ListBoxElementComponent elComp7 = SP_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
+			DS_ListBoxElementComponent elComp7 = DS_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
 			elComp7.m_OnClicked.Insert(DoDialogueBack);
 			if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 			{
@@ -118,7 +118,7 @@ class DialogueUIClass: ChimeraMenuBase
 			return;
 		}
 		m_ListBoxComponent.AddItem("Leave");
-		SP_ListBoxElementComponent elComp7 = SP_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
+		DS_ListBoxElementComponent elComp7 = DS_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
 		elComp7.m_OnClicked.Insert(LeaveFunction);
 		if(GetGame().GetInputManager().GetLastUsedInputDevice() == EInputDeviceType.GAMEPAD)
 			{
@@ -146,7 +146,7 @@ class DialogueUIClass: ChimeraMenuBase
 	//------------------------------------------------------------------------------------------------//
 	void ExecuteDialogue(SCR_ListBoxElementComponent ListboxElement)
 	{
-		SP_ListBoxElementComponent listbox = SP_ListBoxElementComponent.Cast(ListboxElement);
+		DS_ListBoxElementComponent listbox = DS_ListBoxElementComponent.Cast(ListboxElement);
 		RemoveListeners();
 		string diagname = DiagComp.DoDialogue(myCallerEntity, myUserEntity, listbox.branch);
 	}

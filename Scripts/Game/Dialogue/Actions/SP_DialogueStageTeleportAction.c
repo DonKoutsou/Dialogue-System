@@ -1,5 +1,5 @@
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_DialogueStageTeleportAction : SP_BaseDialogueStageAction
+class DS_DialogueStageTeleportAction : DS_BaseDialogueStageAction
 {
 	[Attribute("", UIWidgets.Coords, params: "inf inf inf purpose=coords space=world", desc: "")]
 	private vector m_TeleportToWorldPosition;

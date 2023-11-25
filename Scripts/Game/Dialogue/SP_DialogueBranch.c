@@ -2,7 +2,7 @@
 //In Dialogue branch the dialogues progession can be configured, at any stage a Multiple choice config can be introduces to create another branch.
 //Each branch tracks its own stage
 [BaseContainerProps(configRoot:true),  DialogueBranchConfigTitleAttribute()]
-class SP_DialogueBranch
+class DS_DialogueBranch
 {
 	//------------------------------------------------------------------//
 	DialogueStage m_Owner;
@@ -88,7 +88,7 @@ class SP_DialogueBranch
 		Conf.IncrementStage(incrementamount);
 	}
 	//------------------------------------------------------------------//
-	//Checks if a SP_MultipleChoiceConfig exists in the current DialogueStage
+	//Checks if a DS_MultipleChoiceConfig exists in the current DialogueStage
 	bool CheckIfStageBranches(IEntity Character, IEntity Player)
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
@@ -158,7 +158,7 @@ class SP_DialogueBranch
 	}
 	//------------------------------------------------------------------//
 	//Return the current Branch. Meaning, it keeps looking deeper for a branch that doesent branch further (IsBranchBranched = false)
-	void GetCurrentDialogueBranch(IEntity Character, int BranchID, out SP_DialogueBranch branch)
+	void GetCurrentDialogueBranch(IEntity Character, int BranchID, out DS_DialogueBranch branch)
 	{
 		//Get the config for this dialogue branch
 		DialogueBranchInfo Conf = LocateConfig(Character);
@@ -199,7 +199,7 @@ class SP_DialogueBranch
 			BranchInfoConfigMap = new map<string, ref DialogueBranchInfo>();
 		}
 		SCR_BaseGameMode GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
-		SP_DialogueComponent DiagComp = SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));
+		DS_DialogueComponent DiagComp = DS_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(DS_DialogueComponent));
 		string key = DiagComp.GetCharacterName(Character);
 		if (BranchInfoConfigMap.Find(key, config))
 		{
@@ -219,7 +219,7 @@ class SP_DialogueBranch
 		return DiagConfigCopy;
 	}
 	//------------------------------------------------------------------//
-	void InheritData(SP_DialogueArchetype Archetype, DialogueBranchInfo ParentConfig, IEntity Char)
+	void InheritData(DS_DialogueArchetype Archetype, DialogueBranchInfo ParentConfig, IEntity Char)
 	{
 		DialogueBranchInfo Conf = LocateConfig(Char);
 		Conf.SetParent(ParentConfig);
@@ -244,9 +244,9 @@ class DialogueBranchInfo
 {
 	//------------------------------------------------------------------//
 	//Archetype wich this cofig belongs to
-	SP_DialogueArchetype m_OwnerArchetype;
+	DS_DialogueArchetype m_OwnerArchetype;
 	//------------------------------------------------------------------//
-	//SP_MultipleChoiceConfig that come before this one in a hierarchy. Used for DoBackDialogue in SP_DialogueComponent
+	//DS_MultipleChoiceConfig that come before this one in a hierarchy. Used for DoBackDialogue in DS_DialogueComponent
 	DialogueBranchInfo ParentConfig;
 	//------------------------------------------------------------------//
 	//Branching info for this config. Once config gets branched the branch that caused it has its ID saved in m_iBranchID
@@ -266,8 +266,8 @@ class DialogueBranchInfo
 	void SetParent(DialogueBranchInfo BranchConf){ParentConfig = BranchConf;}
 	//------------------------------------------------------------------//
 	//setter and getter of parent archetype, top of the hierarchy
-	void SetOwnerArchetype(SP_DialogueArchetype Archetype){m_OwnerArchetype = Archetype;}
-	SP_DialogueArchetype GetOwnerArchetype () {return m_OwnerArchetype;}
+	void SetOwnerArchetype(DS_DialogueArchetype Archetype){m_OwnerArchetype = Archetype;}
+	DS_DialogueArchetype GetOwnerArchetype () {return m_OwnerArchetype;}
 	//------------------------------------------------------------------//
 	void GetStageOfBranch(out int BStage){BStage = m_iDialogueBranchStage;}
 	//------------------------------------------------------------------//

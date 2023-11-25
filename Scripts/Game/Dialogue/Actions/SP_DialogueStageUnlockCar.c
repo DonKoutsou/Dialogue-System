@@ -1,5 +1,5 @@
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_DialogueStageLockUnlockCarAction : SP_BaseDialogueStageAction
+class DS_DialogueStageLockUnlockCarAction : DS_BaseDialogueStageAction
 {
 	[Attribute(defvalue: "true", desc: "If set to true, it will lock the vehicle, if set to false it will unlock the vehicle")];
 	protected bool m_bLock;
@@ -34,7 +34,7 @@ class SP_DialogueStageLockUnlockCarAction : SP_BaseDialogueStageAction
 
 };
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_DialogueStageBuyExistingVehicleAction : SP_BaseDialogueStageAction
+class DS_DialogueStageBuyExistingVehicleAction : DS_BaseDialogueStageAction
 {
 	[Attribute("Item needed to be delivered", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
 	ResourceName m_WantedItem;
@@ -51,7 +51,7 @@ class SP_DialogueStageBuyExistingVehicleAction : SP_BaseDialogueStageAction
 		if (!inv)
 			return;		
 		
-		SP_PrefabResource_Predicate pred = new SP_PrefabResource_Predicate(m_WantedItem);
+		DS_PrefabResource_Predicate pred = new DS_PrefabResource_Predicate(m_WantedItem);
 		array<IEntity> entitiesToDrop = new array<IEntity>;
 		inv.FindItems(entitiesToDrop, pred);
 		

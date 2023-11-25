@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------------//
 [BaseContainerProps(configRoot:true)]
-class SP_DialogueStageFactionCheckCondition : SP_BaseDialogueStageActionCondition
+class DS_DialogueStageFactionCheckCondition : DS_BaseDialogueStageActionCondition
 {
 	[Attribute()]
 	string m_sFactionKey;
@@ -62,7 +62,7 @@ class SP_DialogueStageFactionCheckCondition : SP_BaseDialogueStageActionConditio
 };
 //----------------------------------------------------------------------------------------------//
 [BaseContainerProps(configRoot:true)]
-class SP_DialogueStageSingleUseCondition : SP_BaseDialogueStageActionCondition
+class DS_DialogueStageSingleUseCondition : DS_BaseDialogueStageActionCondition
 {
 	override bool CanBePerformed(IEntity Character, IEntity Player, DialogueStage ParentStage)
 	{	
@@ -77,7 +77,7 @@ class SP_DialogueStageSingleUseCondition : SP_BaseDialogueStageActionCondition
 //--------------------------------------------------------------------------------------------//
 
 [BaseContainerProps(configRoot:true)]
-class SP_DialogueStageHealthCondition : SP_BaseDialogueStageActionCondition
+class DS_DialogueStageHealthCondition : DS_BaseDialogueStageActionCondition
 {
 	[Attribute()]
 	bool m_bResaultWhenMaxHP;
@@ -106,7 +106,7 @@ class SP_DialogueStageHealthCondition : SP_BaseDialogueStageActionCondition
 	}
 };
 [BaseContainerProps(configRoot:true)]
-class SP_DialogueStageItemCheckActionCondition : SP_BaseDialogueStageActionCondition
+class DS_DialogueStageItemCheckActionCondition : DS_BaseDialogueStageActionCondition
 {
 	[Attribute("Item needed to be delivered", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
 	ResourceName m_WantedItem;
@@ -125,7 +125,7 @@ class SP_DialogueStageItemCheckActionCondition : SP_BaseDialogueStageActionCondi
 		if (!inv)
 			return false;
 		
-		SP_PrefabResource_Predicate pred = new SP_PrefabResource_Predicate(m_WantedItem);
+		DS_PrefabResource_Predicate pred = new DS_PrefabResource_Predicate(m_WantedItem);
 		array<IEntity> entitiesToDrop = new array<IEntity>;
 		inv.FindItems(entitiesToDrop, pred);
 		
@@ -135,7 +135,7 @@ class SP_DialogueStageItemCheckActionCondition : SP_BaseDialogueStageActionCondi
 				m_sCantBePerformedReason = string.Format("  [Missing X%1 %2] ", m_WantedAmount - entitiesToDrop.Count() , m_WantedItem);
 			else
 			{
-				string Name = SP_DialogueComponent.GetCharacterName(Character);
+				string Name = DS_DialogueComponent.GetCharacterName(Character);
 				m_sCantBePerformedReason = string.Format("  [%1 is missing X%2 %3] ", Name ,m_WantedAmount - entitiesToDrop.Count() , m_WantedItem);
 			}
 				
@@ -145,7 +145,7 @@ class SP_DialogueStageItemCheckActionCondition : SP_BaseDialogueStageActionCondi
 	}
 }
 [BaseContainerProps(configRoot:true)]
-class SP_DialogueStageItemTypeCheckActionCondition : SP_BaseDialogueStageActionCondition
+class DS_DialogueStageItemTypeCheckActionCondition : DS_BaseDialogueStageActionCondition
 {
 	[Attribute("", UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(ECommonItemType))]
 	ECommonItemType m_WantedItem;
@@ -174,7 +174,7 @@ class SP_DialogueStageItemTypeCheckActionCondition : SP_BaseDialogueStageActionC
 				m_sCantBePerformedReason = string.Format("  [Missing X%1 %2] ", m_WantedAmount - entitiesToDrop.Count() , m_WantedItem);
 			else
 			{
-				string Name = SP_DialogueComponent.GetCharacterName(Character);
+				string Name = DS_DialogueComponent.GetCharacterName(Character);
 				m_sCantBePerformedReason = string.Format("  [%1 is missing X%2 %3] ", Name ,m_WantedAmount - entitiesToDrop.Count() , m_WantedItem);
 			}
 				

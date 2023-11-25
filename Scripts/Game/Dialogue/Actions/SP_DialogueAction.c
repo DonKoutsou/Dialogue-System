@@ -1,9 +1,9 @@
-class SP_DialogueAction : ScriptedUserAction
+class DS_DialogueAction : ScriptedUserAction
 {
 	[Attribute()]
 	bool isradio;
 	//------------------------------------------------------------------//
-	protected SP_DialogueComponent DiagComp;
+	protected DS_DialogueComponent DiagComp;
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
@@ -46,7 +46,7 @@ class SP_DialogueAction : ScriptedUserAction
 	}
 	override event void Init(IEntity pOwnerEntity, GenericComponent pManagerComponent)
 	{
-		DiagComp = SP_DialogueComponent.GetInstance();
+		DiagComp = DS_DialogueComponent.GetInstance();
 	};
 	//------------------------------------------------------------------//
 	override bool CanBeShownScript(IEntity user)

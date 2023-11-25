@@ -1,5 +1,5 @@
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_DialogueStagePromotionAction : SP_BaseDialogueStageAction
+class DS_DialogueStagePromotionAction : DS_BaseDialogueStageAction
 {
 	[Attribute()]
 	FactionKey m_FactionKey;
@@ -65,7 +65,7 @@ class SP_DialogueStagePromotionAction : SP_BaseDialogueStageAction
 			}
 			break;
 		}
-		SP_DialogueComponent DiagComp = SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));
+		DS_DialogueComponent DiagComp = DS_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(DS_DialogueComponent));
 		DiagComp.DoAnouncerDialogue(m_text);
 		SCR_PlayerController Cont = SCR_PlayerController.Cast(GetGame().GetPlayerController());
 		f.SendHQMessage(radio, calledID: Cont.GetPlayerId(), public: false, param: m_CurrentRank);

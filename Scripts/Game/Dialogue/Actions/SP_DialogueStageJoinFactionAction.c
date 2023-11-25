@@ -1,5 +1,5 @@
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_DialogueStageJoinFactionAction : SP_BaseDialogueStageAction
+class DS_DialogueStageJoinFactionAction : DS_BaseDialogueStageAction
 {
 	[Attribute()]
 	FactionKey m_FactionKey;

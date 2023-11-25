@@ -17,7 +17,7 @@ class ItemConditionedDialogueBranchInfo : DialogueBranchInfo
 		if (!inv)
 			return false;
 		
-		SP_PrefabResource_Predicate pred = new SP_PrefabResource_Predicate(m_WantedItem);
+		DS_PrefabResource_Predicate pred = new DS_PrefabResource_Predicate(m_WantedItem);
 		array<IEntity> entitiesToDrop = new array<IEntity>;
 		inv.FindItems(entitiesToDrop, pred);
 		if (entitiesToDrop.Count() < m_WantedAmount)
@@ -39,7 +39,7 @@ class ItemConditionedDialogueBranchInfo : DialogueBranchInfo
 	override void SetupCondition()
 	{
 		m_WantedAmount = Math.RandomInt(1 ,10);
-		SP_DialogueComponent Diagcomp = SP_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(SP_DialogueComponent));
+		DS_DialogueComponent Diagcomp = DS_DialogueComponent.Cast(GetGame().GetGameMode().FindComponent(DS_DialogueComponent));
 		//m_WantedItem = Diagcomp.GetRandomItem();
 	};
 };

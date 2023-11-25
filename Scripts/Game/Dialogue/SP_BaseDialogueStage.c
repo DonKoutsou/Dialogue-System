@@ -1,7 +1,7 @@
 [BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
 class DialogueStage
 {
-	SP_DialogueBranch m_Owner;
+	DS_DialogueBranch m_Owner;
 	
 	int timesused;
 	//------------------------------------------------------------------//
@@ -17,12 +17,12 @@ class DialogueStage
 	//------------------------------------------------------------------//
 	
 	[Attribute(desc : "Action that will be performed ")]
-  ref SP_BaseDialogueStageAction m_DialogueAction;
+  ref DS_BaseDialogueStageAction m_DialogueAction;
 	
 	//------------------------------------------------------------------//
 	
 	[Attribute(desc : "Action that will be performed ")]
-  ref SP_BaseDialogueStageActionCondition m_DialogueActionCondition;
+  ref DS_BaseDialogueStageActionCondition m_DialogueActionCondition;
 	
 	//------------------------------------------------------------------//
 	
@@ -31,7 +31,7 @@ class DialogueStage
 	
 	//------------------------------------------------------------------//
 	[Attribute(desc: "Dialogue Branch, if present will cause branch to split instead of progressing its stage. When a branch splits, the dialogue system will only look in the entries of this branch only")]
-	ref array<ref SP_DialogueBranch> m_Branch;
+	ref array<ref DS_DialogueBranch> m_Branch;
 	
 	
 
@@ -106,7 +106,7 @@ class DialogueStage
 	
 	//------------------------------------------------------------------//
 	
-	SP_DialogueBranch GetBranch(int BranchID)
+	DS_DialogueBranch GetBranch(int BranchID)
 	{
 		if(m_Branch.Count() >= BranchID + 1)
 		{
@@ -117,7 +117,7 @@ class DialogueStage
 	
 	//------------------------------------------------------------------//
 	
-	void InheritData(SP_DialogueArchetype Archetype, DialogueBranchInfo Config, IEntity Char)
+	void InheritData(DS_DialogueArchetype Archetype, DialogueBranchInfo Config, IEntity Char)
 	{
 		for (int i, count = m_Branch.Count(); i < count; i++)
 		{
@@ -153,7 +153,7 @@ class DialogueStage
 	
 	//------------------------------------------------------------------//
 	
-	void Init(SP_DialogueBranch Owner = null, int Index = 0)
+	void Init(DS_DialogueBranch Owner = null, int Index = 0)
 	{
 		if (Owner)
 			m_Owner = Owner;
@@ -163,21 +163,21 @@ class DialogueStage
 		{
 			for (int i = 0; i < m_Branch.Count(); i++)
 			{
-				SP_DialogueBranch branch = SP_DialogueBranch.Cast(m_Branch[i]);
+				DS_DialogueBranch branch = DS_DialogueBranch.Cast(m_Branch[i]);
 				branch.Init(this, i);
 			}
 		}
 	}
 }
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_BaseDialogueStageAction
+class DS_BaseDialogueStageAction
 {
 	
 	void Perform(IEntity Character, IEntity Player){};
-	void Init(SP_DialogueBranch Owner = null, int Index = 0){};
+	void Init(DS_DialogueBranch Owner = null, int Index = 0){};
 }
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_BaseDialogueStageActionCondition
+class DS_BaseDialogueStageActionCondition
 {
 	string m_sCantBePerformedReason = "(Cant Be Performed)";
 	bool CanBePerformed(IEntity Character, IEntity Player, DialogueStage ParentStage){return true;};
@@ -195,7 +195,7 @@ class DialogueStageTitleAttribute : BaseContainerCustomTitle
 
 		// Get selected behavior from EChoiseBehavior enum
 		string branchesStr;
-		array<ref SP_DialogueBranch> branches;
+		array<ref DS_DialogueBranch> branches;
 		source.Get("m_Branch", branches);
 		if (branches.Count() > 0)
 		{

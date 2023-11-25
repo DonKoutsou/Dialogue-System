@@ -1,5 +1,5 @@
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_DialogueStageCheckIDAction : SP_BaseDialogueStageAction
+class DS_DialogueStageCheckIDAction : DS_BaseDialogueStageAction
 {
 	
 	override void Perform(IEntity Character, IEntity Player)

@@ -7,11 +7,11 @@ modded class SCR_CharacterIdentityComponent
 	protected LocalizedString m_IdentityFormatNoAlias;
 	
 	[Attribute()]
-	ref protected SP_DialogueArchetype arch;
+	ref protected DS_DialogueArchetype arch;
 	
 	protected int m_iCharacterRep = Math.RandomInt(20, 100);
 	
-	SP_DialogueArchetype GetArchetype()
+	DS_DialogueArchetype GetArchetype()
 		return arch;
 	
 	bool HasArchetype()

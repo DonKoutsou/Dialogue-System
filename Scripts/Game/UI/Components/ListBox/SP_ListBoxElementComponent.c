@@ -1,7 +1,7 @@
 /*
 Element of a listbox.
 */
-class SP_ListBoxElementComponent : SCR_ListBoxElementComponent
+class DS_ListBoxElementComponent : SCR_ListBoxElementComponent
 {
 	
 	[Attribute("TextNumber")]

@@ -18,16 +18,16 @@ modded enum SCR_ECharacterRank
 	NAVIGATOR,
 	COMMANDER
 }
-class SP_DialogueComponentClass: ScriptComponentClass
+class DS_DialogueComponentClass: ScriptComponentClass
 {
 };
-class SP_DialogueComponent: ScriptComponent
+class DS_DialogueComponent: ScriptComponent
 {
 	//----------------------------------------------------------------------------------------------------------------//
 	[Attribute()]
-	protected ref array<ref SP_DialogueArchetype> m_CharacterArchetypeList;
+	protected ref array<ref DS_DialogueArchetype> m_CharacterArchetypeList;
 	//----------------------------------------------------------------------------------------------------------------//
-	protected ref map<string, ref SP_DialogueArchetype> DialogueArchetypeMap;
+	protected ref map<string, ref DS_DialogueArchetype> DialogueArchetypeMap;
 	//----------------------------------------------------------------------------------------------------------------//
 	[Attribute(desc : "Used when figuring out strings for locations")]
 	protected ref SCR_MapLocationQuadHint m_aWorldDirections;
@@ -45,11 +45,11 @@ class SP_DialogueComponent: ScriptComponent
 	//----------------------------------------------------------------------------------------------------------------//
 	static SCR_GameModeCampaign GameMode;
 	
-	static SP_DialogueComponent GetInstance()
+	static DS_DialogueComponent GetInstance()
 	{
 		if (!GameMode)
 			return null;
-		return SP_DialogueComponent.Cast(GameMode.FindComponent(SP_DialogueComponent));
+		return DS_DialogueComponent.Cast(GameMode.FindComponent(DS_DialogueComponent));
 	};
 	void GetContactList(out array <IEntity> ContactList)
 	{
@@ -63,7 +63,7 @@ class SP_DialogueComponent: ScriptComponent
 	void Escape(IEntity Char, IEntity Player)
 	{
 		DoBackDialogue(Char, Player);
-		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(Char, Player);
+		DS_DialogueArchetype DiagArch = LocateDialogueArchetype(Char, Player);
 		while(DiagArch.IsCharacterBranched == true)
 		{
 			DoBackDialogue(Char, Player);
@@ -73,7 +73,7 @@ class SP_DialogueComponent: ScriptComponent
 		GetGame().GetMenuManager().CloseAllMenus();
 	}
 	//----------------------------------------------------------------------------------------------------------------//
-	//Main function. Its called in SP_DialogueUI when an input is pressed. Branch ID will be different based on the input pressed
+	//Main function. Its called in DS_DialogueUI when an input is pressed. Branch ID will be different based on the input pressed
 	string DoDialogue(IEntity Character, IEntity Player, int BranchID, int IncrementAmount = 1)
 	{
 		//------------------------------------------------------------------//
@@ -85,9 +85,9 @@ class SP_DialogueComponent: ScriptComponent
 		//Name of character we are talking to 
 		string 					senderName = GetCharacterName(Character);
 		//Dialogue Archetype matching the charcter we are talking to 
-		SP_DialogueArchetype 	DiagArch = LocateDialogueArchetype(Character, Player);
+		DS_DialogueArchetype 	DiagArch = LocateDialogueArchetype(Character, Player);
 		//Get branch located in found archetype using ID
-		SP_DialogueBranch 		Branch;
+		DS_DialogueBranch 		Branch;
 		DiagArch.GetDialogueBranch(BranchID, Branch);
 		//------------------------------------------------------------------//
 		//For UI
@@ -185,11 +185,11 @@ class SP_DialogueComponent: ScriptComponent
 	void DoBackDialogue(IEntity Character, IEntity Player)
 	{
 		string senderName = GetCharacterName(Character);
-		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(Character, Player);
+		DS_DialogueArchetype DiagArch = LocateDialogueArchetype(Character, Player);
 		string m_DialogTexttoshow = "Go Back";
 		int BranchID;
 		DiagArch.GetBranchedID(BranchID);
-		SP_DialogueBranch Branch;
+		DS_DialogueBranch Branch;
 		DiagArch.GetDialogueBranch(0, Branch);
 		DialogueBranchInfo ParentBranch;
 		Branch.GetParent(Character, ParentBranch);
@@ -274,10 +274,10 @@ class SP_DialogueComponent: ScriptComponent
 	}
 	
 	//----------------------------------------------------------------------------------------------------------------//
-	//Get ActionName function used in SP_DialogueUI to check if provided branch ID gives us any text.
+	//Get ActionName function used in DS_DialogueUI to check if provided branch ID gives us any text.
 	void GetActionName(int BranchID, IEntity Character, IEntity Player, out string ActName)
 	{
-		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(Character, Player);
+		DS_DialogueArchetype DiagArch = LocateDialogueArchetype(Character, Player);
 		DiagArch.GetActionTitle(BranchID, Character, Player, ActName);
 	}
 	
@@ -286,13 +286,13 @@ class SP_DialogueComponent: ScriptComponent
 	//Increments stage of branch in the archetype
 	bool IncrementDiagStage(IEntity owner, IEntity Player, int BranchID, int incrementamount)
 	{
-		SP_DialogueArchetype DiagArch = LocateDialogueArchetype(owner, Player);
+		DS_DialogueArchetype DiagArch = LocateDialogueArchetype(owner, Player);
 		DiagArch.IncrementStage(BranchID, incrementamount, owner);
 		return false;
 	}
 	
 	//----------------------------------------------------------------------------------------------------------------//
-	SP_DialogueArchetype GetArchetypeTemplate(IEntity pOwnerEntity, IEntity pUserEntity)
+	DS_DialogueArchetype GetArchetypeTemplate(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
 		SCR_CharacterIdentityComponent id = SCR_CharacterIdentityComponent.Cast(pOwnerEntity.FindComponent(SCR_CharacterIdentityComponent));
 		if (id.HasArchetype())
@@ -304,7 +304,7 @@ class SP_DialogueComponent: ScriptComponent
 		FactionKey senderFaction = GetCharacterFaction(pOwnerEntity).GetFactionKey();
 		FactionKey playerFaction = GetCharacterFaction(pUserEntity).GetFactionKey();
 		
-		SP_DialogueArchetype DiagArch;
+		DS_DialogueArchetype DiagArch;
 		for (int i, count = m_CharacterArchetypeList.Count(); i < count; i++)
 		{
 			array <string> factions;
@@ -364,9 +364,9 @@ class SP_DialogueComponent: ScriptComponent
 	
 	//-----------------------------------------------------------------------------------------------------------//
 	// locate if there is already an Archetype instace for this specific charater and if not initiates the creation of one
-	SP_DialogueArchetype LocateDialogueArchetype(IEntity Owner, IEntity User)
+	DS_DialogueArchetype LocateDialogueArchetype(IEntity Owner, IEntity User)
 	{
-		SP_DialogueArchetype CharDialogueArch;
+		DS_DialogueArchetype CharDialogueArch;
 		
 		if (!GetArchetypeTemplate(Owner, User))
 		{
@@ -390,7 +390,7 @@ class SP_DialogueComponent: ScriptComponent
 				
 				//-------------------------------------------------------------------------//
 				//create a new archetype and copy the stuff in it
-				SP_DialogueArchetype DiagArchNew = CopyArchetype(CharDialogueArch);
+				DS_DialogueArchetype DiagArchNew = CopyArchetype(CharDialogueArch);
 				//-------------------------------------------------------------------------//
 				//initialise the newly made Archetype after its filled with all data
 				DiagArchNew.Init(Owner);
@@ -405,9 +405,9 @@ class SP_DialogueComponent: ScriptComponent
 	
 	//-----------------------------------------------------------------------------------------------------------//
 	//takes all info requred from Archetype and returns a newly made Archetype with the copied info
-	SP_DialogueArchetype CopyArchetype(SP_DialogueArchetype OriginalArchetype)
+	DS_DialogueArchetype CopyArchetype(DS_DialogueArchetype OriginalArchetype)
 	{
-		SP_DialogueArchetype DiagArchCopy = new SP_DialogueArchetype(OriginalArchetype, true);
+		DS_DialogueArchetype DiagArchCopy = new DS_DialogueArchetype(OriginalArchetype, true);
 		return DiagArchCopy;
 	}
 	
@@ -418,11 +418,11 @@ class SP_DialogueComponent: ScriptComponent
 		if (!GetGame().InPlayMode())
 			return;
 		GameMode = SCR_GameModeCampaign.Cast(GetGame().GetGameMode());
-		foreach (SP_DialogueArchetype config: m_CharacterArchetypeList)
+		foreach (DS_DialogueArchetype config: m_CharacterArchetypeList)
 		{
 			config.Init(owner);
 		}
-		DialogueArchetypeMap = new map<string, ref SP_DialogueArchetype>;
+		DialogueArchetypeMap = new map<string, ref DS_DialogueArchetype>;
 		m_WorldDirections = m_aWorldDirections;
 		if	(!a_texthistory)
 			a_texthistory = new array <string>();

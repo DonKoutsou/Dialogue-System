@@ -1,8 +1,8 @@
-class SP_ConsumablePredicate : InventorySearchPredicate
+class DS_ConsumablePredicate : InventorySearchPredicate
 {
 	SCR_EConsumableType m_ConsumableFilter;
 	
-	void SP_ConsumablePredicate(SCR_EConsumableType type)
+	void DS_ConsumablePredicate(SCR_EConsumableType type)
 	{
 		QueryComponentTypes.Insert(SCR_ConsumableItemComponent);
 		m_ConsumableFilter = type;
@@ -14,10 +14,10 @@ class SP_ConsumablePredicate : InventorySearchPredicate
 	}
 }
 
-class SP_PrefabResource_Predicate : InventorySearchPredicate
+class DS_PrefabResource_Predicate : InventorySearchPredicate
 {
 	ResourceName m_WantedPrefabName;
-	void SP_PrefabResource_Predicate(ResourceName prefabName)
+	void DS_PrefabResource_Predicate(ResourceName prefabName)
 	{
 		m_WantedPrefabName = prefabName;
 	}
@@ -28,7 +28,7 @@ class SP_PrefabResource_Predicate : InventorySearchPredicate
 	}
 }
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class SP_DialogueStageDeliverAction : SP_BaseDialogueStageAction
+class DS_DialogueStageDeliverAction : DS_BaseDialogueStageAction
 {
 	[Attribute("Item needed to be delivered", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
 	ResourceName m_WantedItem;
@@ -41,7 +41,7 @@ class SP_DialogueStageDeliverAction : SP_BaseDialogueStageAction
 		if (!inv)
 			return;		
 		
-		SP_PrefabResource_Predicate pred = new SP_PrefabResource_Predicate(m_WantedItem);
+		DS_PrefabResource_Predicate pred = new DS_PrefabResource_Predicate(m_WantedItem);
 		array<IEntity> entitiesToDrop = new array<IEntity>;
 		inv.FindItems(entitiesToDrop, pred);
 		
