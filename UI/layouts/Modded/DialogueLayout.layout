@@ -9,144 +9,101 @@ FrameWidgetClass {
   OverlayWidgetClass "{5D10B3055CA98F1A}" {
    Name "Panel0"
    Slot FrameWidgetSlot "{5D10B3055CA98F76}" {
-    Anchor 0.5 1 0.5 1
-    PositionX 644.75
-    OffsetLeft 644.8
-    PositionY -120.05
-    OffsetTop -120.1
-    SizeX 628.9
-    OffsetRight -1273.7
-    SizeY 239.9
-    OffsetBottom -119.8
-    Alignment 0.5 0.5
+    Anchor 1 1 1 1
+    OffsetLeft 0
+    OffsetTop 0
+    OffsetRight -100
+    OffsetBottom -30
+    Alignment 1 1
+    SizeToContent 1
    }
    {
-    ImageWidgetClass "{5D10B30460BE65E5}" {
-     Name "Image0"
-     Slot OverlayWidgetSlot "{5D10BE2BD518FA45}" {
-      HorizontalAlign 3
-      VerticalAlign 3
-      Padding 0 0 0 0
-     }
-     Opacity 0.087
-     Pivot 0.5 0.5
-     Texture "{B98FB2CD75200E57}UI/Textures/MainMenu/MenuBackgroundBlank_UI.edds"
-     "Transition width" 0
-     Progress 0.018
-     "Mask Mode" "Include Below"
-     Range 0.069
-    }
-    ImageWidgetClass "{5D13297694E05DFE}" {
-     Name "Image1"
-     Slot OverlayWidgetSlot "{5D132977D0950831}" {
-      HorizontalAlign 3
-      VerticalAlign 3
-      Padding 10 760 10 10
-     }
-     "Is Enabled" 0
-     "Is Visible" 0
-     Opacity 0.8
-     Color 0 0 0 1
-     Pivot 0.5 0.5
-     "Blend Mode" Opaque
-     "Flip Vertically" 1
-     Saturation 0
-     "Transition width" 0
-     Progress 0.229
-     "Mask Mode" "Include Below"
-    }
-    PanelWidgetClass "{5D128E0CC9EBE7F7}" {
-     Name "Panel0"
-     Slot OverlayWidgetSlot "{5D132976EEB2C7C5}" {
-      HorizontalAlign 3
-      VerticalAlign 3
-     }
-     "Is Visible" 0
-     Color 0.761 0.533 0.277 1
-     style pixel_frame
-    }
-    BlurWidgetClass "{5D128E0CC9EBE7A5}" {
-     Name "Blur0"
-     Slot OverlayWidgetSlot "{5D132976EEB2C72B}" {
-      HorizontalAlign 3
-      VerticalAlign 3
-      Padding 15 15 15 15
-     }
-     Intensity 0.17
-     "Smooth Border" 6 6 6 6
-    }
     FrameWidgetClass "{5E0AC001041FB226}" {
      Name "Frame1"
      Slot OverlayWidgetSlot "{5E0AC001041FB205}" {
       HorizontalAlign 3
       VerticalAlign 3
-      Padding 10 10 10 10
      }
      {
-      ImageWidgetClass "{5E0AC00129908CF4}" {
-       Name "Image2"
-       Slot FrameWidgetSlot "{5E0AC002C0A38752}" {
-        Anchor 0 0 1 1
-        PositionX 0
+      OverlayWidgetClass "{5EF3511D4903EE1A}" {
+       Name "Overlay0"
+       Slot FrameWidgetSlot "{5EF3511D4903EE7B}" {
+        Anchor 1 1 1 1
         OffsetLeft 0
-        PositionY 0
         OffsetTop 0
         SizeX 100
         OffsetRight -100
         SizeY 30
         OffsetBottom -30
-       }
-       "Is Visible" 0
-       Opacity 0.8
-       Color 0 0 0 1
-       Pivot 0.5 0.5
-       "Blend Mode" Opaque
-       "Flip Vertically" 1
-       Saturation 0
-       "Transition width" 0
-       Progress 0.229
-       "Mask Mode" "Include Below"
-      }
-      PanelWidgetClass "{5E0AC00129907351}" {
-       Name "Panel1"
-       Slot FrameWidgetSlot "{5E0AC002C1FF552D}" {
-        Anchor 0 0 1 1
-        PositionX 0
-        OffsetLeft 0
-        PositionY 0
-        OffsetTop 0
-        SizeX -668.814
-        OffsetRight 0
-        SizeY -205.9
-        OffsetBottom 0
-       }
-       "Is Visible" 0
-       Color 0.761 0.583 0.367 1
-       style pixel_frame
-      }
-      OverlayWidgetClass "{5D10CA10CABF9D5A}" : "{94CAAE4A601195D3}UI/layouts/ListBox/ListBox.layout" {
-       Name "ListBox0"
-       Slot FrameWidgetSlot "{5E0AC00106D76943}" {
-        Anchor 0.5 0 0.5 1
-        PositionX 0
-        OffsetLeft 0
-        PositionY 8
-        OffsetTop 6
-        SizeX 595
-        OffsetRight -595
-        SizeY -12.7
-        OffsetBottom 6
-        Alignment 0.5 0
-       }
-       components {
-        DS_ListBoxComponent "{5EF2BA4ECB842DBB}" {
-         m_sElementLayout "{E3491D3D0D0DE552}UI/layouts/ListBox/ListBoxElement_TextDialogue.layout"
-        }
+        Alignment 1 1
+        SizeToContent 1
        }
        {
-        ScrollLayoutWidgetClass "{56691148E692435A}" {
-         Prefab "{56691148E692435A}"
-         Slot OverlayWidgetSlot "{56691148E692437F}" {
+        ImageWidgetClass "{5EF3511D2906DF78}" {
+         Name "Image2"
+         Slot OverlayWidgetSlot "{5EF3511D2906D8A2}" {
+         }
+        }
+        BlurWidgetClass "{5D128E0CC9EBE7A5}" {
+         Name "Blur0"
+         Slot OverlayWidgetSlot "{5D132976EEB2C72B}" {
+          HorizontalAlign 3
+          VerticalAlign 3
+          Padding 15 15 15 15
+         }
+         Intensity 0.17
+         "Smooth Border" 6 6 6 6
+        }
+        PanelWidgetClass "{5D128E0CC9EBE7F7}" {
+         Name "Panel0"
+         Slot OverlayWidgetSlot "{5D132976EEB2C7C5}" {
+          HorizontalAlign 3
+          VerticalAlign 3
+         }
+         "Is Visible" 0
+         Color 0.761 0.533 0.277 1
+         style pixel_frame
+        }
+        ImageWidgetClass "{5D13297694E05DFE}" {
+         Name "Image1"
+         Slot OverlayWidgetSlot "{5D132977D0950831}" {
+          HorizontalAlign 3
+          VerticalAlign 3
+         }
+         Color 0 0 0 1
+         Pivot 0.5 0.5
+         "Blend Mode" Opaque
+         Mask "{099C73E0F66A5F28}UI/Textures/Common/gradientTexture_Dither_down_512.edds"
+         "Transition width" 1
+         Progress 0.511
+        }
+        OverlayWidgetClass "{5D10CA10CABF9D5A}" : "{94CAAE4A601195D3}UI/layouts/ListBox/ListBox.layout" {
+         Name "ListBox0"
+         Slot OverlayWidgetSlot {
+          HorizontalAlign 3
+          VerticalAlign 3
+          Padding 10 10 10 10
+         }
+         Clipping False
+         components {
+          DS_ListBoxComponent "{5EF2BA4ECB842DBB}" {
+           m_sElementLayout "{E3491D3D0D0DE552}UI/layouts/ListBox/ListBoxElement_TextDialogue.layout"
+          }
+         }
+         {
+          ScrollLayoutWidgetClass "{56691148E692435A}" {
+           Prefab "{56691148E692435A}"
+           Slot OverlayWidgetSlot "{56691148E692437F}" {
+            Padding 6 6 6 6
+           }
+           Clipping False
+           Color 0.074 0.074 0.074 0
+          }
+          ImageWidgetClass "{5DB6D18100D38307}" {
+           Prefab "{5DB6D18100D38307}"
+           "Is Enabled" 0
+           "Is Visible" 0
+          }
          }
         }
        }
