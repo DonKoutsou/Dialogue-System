@@ -75,7 +75,6 @@ class DialogueUIClass: ChimeraMenuBase
 		array <string> a_PLtexthistory = new array <string>();
 		DiagComp.GetTextHistory(a_texthistory, a_PLtexthistory);
 	
-		
 		for (int i = 0; i < 7; i++)
 		{
 			DiagComp.GetActionName(i, myCallerEntity, Player, DiagText);

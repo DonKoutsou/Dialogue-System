@@ -1,5 +1,5 @@
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageConverseAction : DialogueStage
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStageConverseAction : SP_BaseDialogueStageAction
 {
 	[Attribute("Item needed to be delivered", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
 	ResourceName m_WantedItem;
@@ -62,26 +62,10 @@ class DialogueStageConverseAction : DialogueStage
 		}
 		super.Perform(Character, Player);
 	};
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{
-		InventoryStorageManagerComponent inv = InventoryStorageManagerComponent.Cast(Player.FindComponent(InventoryStorageManagerComponent));
-		if (!inv)
-			return false;
-		
-		SP_PrefabResource_Predicate pred = new SP_PrefabResource_Predicate(m_WantedItem);
-		array<IEntity> entitiesToDrop = new array<IEntity>;
-		inv.FindItems(entitiesToDrop, pred);
-		if (entitiesToDrop.Count() < m_WantedAmount)
-		{
-			m_sCantBePerformedReason = "not enough";
-			return false;
-		}		
-		return true;
-	}
 
 };
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageBuyVehicleAction : DialogueStage
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStageBuyVehicleAction : SP_BaseDialogueStageAction
 {
 	[Attribute("Item needed to be delivered", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
 	ResourceName m_WantedItem;
@@ -144,21 +128,5 @@ class DialogueStageBuyVehicleAction : DialogueStage
 		}
 		super.Perform(Character, Player);
 	};
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{
-		InventoryStorageManagerComponent inv = InventoryStorageManagerComponent.Cast(Player.FindComponent(InventoryStorageManagerComponent));
-		if (!inv)
-			return false;
-		
-		SP_PrefabResource_Predicate pred = new SP_PrefabResource_Predicate(m_WantedItem);
-		array<IEntity> entitiesToDrop = new array<IEntity>;
-		inv.FindItems(entitiesToDrop, pred);
-		if (entitiesToDrop.Count() < m_WantedAmount)
-		{
-			m_sCantBePerformedReason = "not enough";
-			return false;
-		}		
-		return true;
-	}
 
 };

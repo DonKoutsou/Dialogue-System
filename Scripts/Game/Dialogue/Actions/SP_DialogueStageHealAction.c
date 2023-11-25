@@ -1,5 +1,5 @@
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageHealAction : DialogueStage
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStageHealAction : SP_BaseDialogueStageAction
 {
 	SCR_FadeInOutEffect FadeInOutEffect;
 	override void Perform(IEntity Character, IEntity Player)
@@ -20,18 +20,10 @@ class DialogueStageHealAction : DialogueStage
 		
 		super.Perform(Character, Player);
 	};
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{
-		SCR_CharacterDamageManagerComponent dmgmngr = SCR_CharacterDamageManagerComponent.Cast(Player.FindComponent(SCR_CharacterDamageManagerComponent));
-		if (dmgmngr.CanBeHealed() == false)
-		{
-			SetCannotPerformReason("(Full Health)");
-			return false;
-		}
-		return true;
-	}
+	
 	void Fadeout()
 	{
 		FadeInOutEffect.FadeOutEffect(false, 10);
 	}
 };
+

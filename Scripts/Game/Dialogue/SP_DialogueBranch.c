@@ -321,7 +321,7 @@ class DialogueBranchConfigTitleAttribute : BaseContainerCustomTitle
 			StageAmount = StageAmount + 1;
 			if (!Diagtext)
 			{
-				Diagtext = Stages[i].ActionText;
+				Diagtext = Stages[i].m_sActionText;
 			}
 		}
 		title = string.Format("Branch: %1 stages | %2 %3", StageAmount ,Diagtext, texttoshow);

@@ -1,5 +1,5 @@
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageInitiateDialogue : DialogueStage
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStageInitiateDialogue : SP_BaseDialogueStageAction
 {
 	//------------------------------------------------------------------//
 	IEntity Target;
@@ -52,50 +52,13 @@ class DialogueStageInitiateDialogue : DialogueStage
 		DiagUI.UpdateEntries(Target, Player);
 		super.Perform(Character, Player);
 	};
-	//------------------------------------------------------------------//
-	override bool GetActionText(IEntity Character, IEntity Player, out string acttext)
-	{
-		if (!CanBeShown(Character, Player))
-			return false;
-		if (!Target)
-		{
-			Target = SP_DialogueComponent.a_PLcontactList[m_iIndex];
-			if (Target)
-			{
-				TargetName = SP_DialogueComponent.GetCharacterName(Target);
-			}
-		}
-		if (!TargetName)
-				return false;
-		acttext = TargetName;
-		if (CanBePerformed(Character, Player) == false)
-		{
-			acttext = acttext + " " + m_sCantBePerformedReason;
-			return true;
-		}
-		return true;
-	}
-	override bool CanBeShown(IEntity Character, IEntity Player)
+	/*override bool CanBeShown(IEntity Character, IEntity Player)
 	{
 		if (!SP_DialogueComponent.a_PLcontactList.IsEmpty() && SP_DialogueComponent.a_PLcontactList.Count() > m_iIndex)
 			return true; 
 		return false;
-	}
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{
-		SCR_GadgetManagerComponent gadgetManager = SCR_GadgetManagerComponent.GetGadgetManager(Target);
-		if (!gadgetManager)
-			return false;
-
-		IEntity item = gadgetManager.GetGadgetByType(EGadgetType.RADIO);
-		if (!item)
-		{
-			SetCannotPerformReason("|Cant reach. Character missing radio.|");
-			return false;
-		}
-			
-		return true;
-	}
+	}*/
+	
 	override void Init(SP_DialogueBranch Owner = null, int Index = 0)
 	{
 		GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
@@ -106,7 +69,6 @@ class DialogueStageInitiateDialogue : DialogueStage
 			m_iIndex = Index;
 			
 		}
-		
 	}
 
 };

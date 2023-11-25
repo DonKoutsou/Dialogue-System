@@ -1,5 +1,5 @@
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStagePromotionAction : DialogueStage
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStagePromotionAction : SP_BaseDialogueStageAction
 {
 	[Attribute()]
 	FactionKey m_FactionKey;
@@ -70,10 +70,6 @@ class DialogueStagePromotionAction : DialogueStage
 		SCR_PlayerController Cont = SCR_PlayerController.Cast(GetGame().GetPlayerController());
 		f.SendHQMessage(radio, calledID: Cont.GetPlayerId(), public: false, param: m_CurrentRank);
 		super.Perform(Character, Player);
-	}
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{
-		return true;
 	}
 
 };

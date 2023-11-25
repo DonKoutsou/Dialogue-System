@@ -1,5 +1,5 @@
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageCheckIDAction : DialogueStage
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStageCheckIDAction : SP_BaseDialogueStageAction
 {
 	
 	override void Perform(IEntity Character, IEntity Player)
@@ -18,9 +18,4 @@ class DialogueStageCheckIDAction : DialogueStage
 		}
 		super.Perform(Character, Player);
 	};
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{
-		return true;
-	}
-
 };

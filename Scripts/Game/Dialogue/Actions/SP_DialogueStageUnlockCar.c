@@ -1,5 +1,5 @@
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageLockUnlockCarAction : DialogueStage
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStageLockUnlockCarAction : SP_BaseDialogueStageAction
 {
 	[Attribute(defvalue: "true", desc: "If set to true, it will lock the vehicle, if set to false it will unlock the vehicle")];
 	protected bool m_bLock;
@@ -31,14 +31,10 @@ class DialogueStageLockUnlockCarAction : DialogueStage
 		}
 		super.Perform(Character, Player);
 	};
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{
-		return true;
-	}
 
 };
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageBuyExistingVehicleAction : DialogueStage
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStageBuyExistingVehicleAction : SP_BaseDialogueStageAction
 {
 	[Attribute("Item needed to be delivered", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
 	ResourceName m_WantedItem;
@@ -101,20 +97,4 @@ class DialogueStageBuyExistingVehicleAction : DialogueStage
 		spawnProtectionComponent.ReleaseProtection();
 		super.Perform(Character, Player);
 	};
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{
-		InventoryStorageManagerComponent inv = InventoryStorageManagerComponent.Cast(Player.FindComponent(InventoryStorageManagerComponent));
-		if (!inv)
-			return false;
-		
-		SP_PrefabResource_Predicate pred = new SP_PrefabResource_Predicate(m_WantedItem);
-		array<IEntity> entitiesToDrop = new array<IEntity>;
-		inv.FindItems(entitiesToDrop, pred);
-		if (entitiesToDrop.Count() < m_WantedAmount)
-		{
-			m_sCantBePerformedReason = "[Missing Item]";
-			return false;
-		}		
-		return true;
-	}
 };

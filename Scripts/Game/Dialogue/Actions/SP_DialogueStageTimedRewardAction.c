@@ -1,5 +1,5 @@
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageTimedRewardAction : DialogueStage
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStageTimedRewardAction : SP_BaseDialogueStageAction
 {
 	
 	[Attribute("", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
@@ -8,11 +8,7 @@ class DialogueStageTimedRewardAction : DialogueStage
 	[Attribute("", UIWidgets.Coords, params: "", desc: "")]
 	vector m_SpawnOffset;
 	
-	[Attribute()]
-    int TimeOffset;
-	bool TimeChecked = false;
-	int TimeToBeAvailable;
-	int DayToBeAvailable;
+	
 	override void Perform(IEntity Character, IEntity Player)
 	{
 		vector mat[4];
@@ -31,11 +27,33 @@ class DialogueStageTimedRewardAction : DialogueStage
 		}
 		super.Perform(Character, Player);
 	};
-	override bool CanBePerformed(IEntity Character, IEntity Player)
+	
+};
+[BaseContainerProps(configRoot:true)]
+class SP_DialogueStageTimedRewardActionCondition : SP_BaseDialogueStageActionCondition
+{
+	[Attribute()]
+  int TimeOffset;
+	bool TimeChecked;
+	int TimeToBeAvailable;
+	int DayToBeAvailable;
+	
+	override bool CanBePerformed(IEntity Character, IEntity Player, DialogueStage ParentStage)
 	{
 		GenericEntity ent = GenericEntity.Cast(Character);
 		ChimeraWorld world = ent.GetWorld();
 		TimeAndWeatherManagerEntity weatherManager = world.GetTimeAndWeatherManager();
+		if(TimeChecked == false)
+		{
+			TimeToBeAvailable = weatherManager.GetTime().m_iHours + TimeOffset;
+			DayToBeAvailable = weatherManager.GetDay();
+			if(TimeToBeAvailable > 24)
+			{
+				TimeToBeAvailable = TimeToBeAvailable - 24;
+				DayToBeAvailable = DayToBeAvailable + 1;
+			}
+		}
+		TimeChecked = true;
 		int currentday = weatherManager.GetDay();
 		if (DayToBeAvailable == currentday)
 		{
@@ -52,34 +70,4 @@ class DialogueStageTimedRewardAction : DialogueStage
 		m_sCantBePerformedReason = "[" + "Not ready, come back at" + " " + TimeToBeAvailable + " " + "o'clock" + "]";
 		return false;
 	}
-	override bool GetActionText(IEntity Character, IEntity Player, out string acttext)
-	{
-		GenericEntity ent = GenericEntity.Cast(Character);
-		ChimeraWorld world = ent.GetWorld();
-		TimeAndWeatherManagerEntity weatherManager = world.GetTimeAndWeatherManager();
-		acttext = ActionText;
-		if(TimeChecked == false)
-		{
-			TimeToBeAvailable = weatherManager.GetTime().m_iHours + TimeOffset;
-			DayToBeAvailable = weatherManager.GetDay();
-			if(TimeToBeAvailable > 24)
-			{
-				TimeToBeAvailable = TimeToBeAvailable - 24;
-				DayToBeAvailable = DayToBeAvailable + 1;
-			}
-		}
-		TimeChecked = true;
-		if (CanBePerformed(Character, Player) == false)
-		{
-			acttext = ActionText + " " + m_sCantBePerformedReason;
-			return true;
-		}
-		if (CanBeShown(Character, Player) == false)
-		{
-		 	acttext = STRING_EMPTY;
-			return false;
-		}
-	 	return true;
-	}
-
-};
+}

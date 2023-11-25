@@ -1,12 +1,12 @@
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageRewardAction : DialogueStage
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStageRewardAction : SP_BaseDialogueStageAction
 {
 	[Attribute("", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
 	ref array <ref ResourceName> m_ItemToGive;
 	[Attribute("", UIWidgets.Coords, params: "", desc: "")]
 	vector m_SpawnOffset;
 	
-	bool alreadydone = true;
+	
 	
 	override void Perform(IEntity Character, IEntity Player)
 	{
@@ -24,16 +24,7 @@ class DialogueStageRewardAction : DialogueStage
 				GetGame().SpawnEntityPrefab(res, Character.GetWorld(), params);
 			}
 		}
-		alreadydone = false;
 		super.Perform(Character, Player);
 	};
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{	
-		if (alreadydone == false)
-		{
-			m_sCantBePerformedReason = "Already claimed";
-		}
-		return alreadydone;
-	}
-
+	
 };

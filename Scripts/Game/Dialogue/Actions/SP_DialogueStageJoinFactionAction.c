@@ -1,5 +1,5 @@
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageJoinFactionAction : DialogueStage
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStageJoinFactionAction : SP_BaseDialogueStageAction
 {
 	[Attribute()]
 	FactionKey m_FactionKey;
@@ -12,15 +12,6 @@ class DialogueStageJoinFactionAction : DialogueStage
 		Rankcomp.SetCharacterRank(SCR_ECharacterRank.PRIVATE);
 		super.Perform(Character, Player);
 	};
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{
-		FactionAffiliationComponent FactComp = FactionAffiliationComponent.Cast(Player.FindComponent(FactionAffiliationComponent));
-		if (FactComp.GetAffiliatedFaction().GetFactionKey() == m_FactionKey)
-		{
-			m_sCantBePerformedReason = "Already part of faction";
-			return false;
-		}
-		return true;
-	}
+	
 
 };

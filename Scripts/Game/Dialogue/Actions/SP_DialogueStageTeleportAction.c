@@ -1,5 +1,5 @@
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStageTeleportAction : DialogueStage
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStageTeleportAction : SP_BaseDialogueStageAction
 {
 	[Attribute("", UIWidgets.Coords, params: "inf inf inf purpose=coords space=world", desc: "")]
 	private vector m_TeleportToWorldPosition;
@@ -22,8 +22,4 @@ class DialogueStageTeleportAction : DialogueStage
 		}	
 		super.Perform(Character, Player);	
 	};
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{
-		return true;
-	}
 };

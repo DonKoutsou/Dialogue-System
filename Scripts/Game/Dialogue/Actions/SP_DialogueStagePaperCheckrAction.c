@@ -1,18 +1,7 @@
-[BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStagePaperCheckAction : DialogueStageItemCheckAction
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class SP_DialogueStagePaperCheckAction : SP_DialogueStageItemCheckAction
 {
-	[Attribute(defvalue: "AltAction Text", desc: "Action Title", category: "Dialogue")]
-	string AltActionText;
-	[Attribute(defvalue: "AltDialogue Text", desc: "Dialogue Text", category: "Dialogue")]
-    string AltDialogueText
-	override string GetStageDialogueText(IEntity Character, IEntity Player)
-	{
-		if (IsPossible(Character, Player) == false)
-		{
-			return AltDialogueText;
-		}
-	 	return DialogueText;
-	}
+	
 	override void Perform(IEntity Character, IEntity Player)
 	{
 		InventoryStorageManagerComponent inv = InventoryStorageManagerComponent.Cast(Player.FindComponent(InventoryStorageManagerComponent));
@@ -31,39 +20,5 @@ class DialogueStagePaperCheckAction : DialogueStageItemCheckAction
 		}
 		super.Perform(Character, Player);
 	};
-	override bool CanBePerformed(IEntity Character, IEntity Player)
-	{	
-		return true;
-	}
-	bool IsPossible(IEntity Character, IEntity Player)
-	{	
-		InventoryStorageManagerComponent inv = InventoryStorageManagerComponent.Cast(Player.FindComponent(InventoryStorageManagerComponent));
-		if (!inv)
-			return false;
-		SP_PrefabResource_Predicate pred = new SP_PrefabResource_Predicate(m_WantedItem);
-		array<IEntity> entitiesToDrop = new array<IEntity>;
-		inv.FindItems(entitiesToDrop, pred);
-		if (entitiesToDrop.Count() < m_WantedAmount)
-		{
-			m_sCantBePerformedReason = "[Missing Item]";
-			return false;
-		}
-		return true;
-	}
-	override bool GetActionText(IEntity Character, IEntity Player, out string acttext)
-	{
-		acttext = ActionText;
-		if (IsPossible(Character, Player) == false)
-		{
-			acttext = AltActionText;
-			return true;
-		}
-		if (CanBeShown(Character, Player) == false)
-		{
-		 	acttext = STRING_EMPTY;
-			return false;
-		}
-	 	return true;
-	}
 
 };
