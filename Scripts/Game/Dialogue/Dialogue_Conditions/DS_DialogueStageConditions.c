@@ -2,10 +2,19 @@
 [BaseContainerProps(configRoot:true)]
 class DS_BaseDialogueStageActionCondition
 {
+	DS_DialogueStage OwnerStage;
+	int m_iIndex;
 	string m_sCantBePerformedReason = "(Cant Be Performed)";
 	bool CanBePerformed(IEntity Character, IEntity Player){return true;};
 	void GetCannotPerformReason(out string CantBePReason){CantBePReason = m_sCantBePerformedReason;}
 	void SetCannotPerformReason(string reason){m_sCantBePerformedReason = reason;}
+
+	sealed void Init(DS_DialogueStage Owner,int Index)
+	{
+		if (Owner)
+			OwnerStage = Owner;
+		m_iIndex = Index;
+	};
 }
 //--------------------------------------------------------------------------------------------//
 [BaseContainerProps(configRoot:true)]
@@ -75,11 +84,11 @@ class DS_DialogueStageSingleUseCondition : DS_BaseDialogueStageActionCondition
 {
 	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{	
-		/*if (ParentStage.timesused > 0)
+		if (OwnerStage.m_iTimesPerformed > 0)
 		{
 			m_sCantBePerformedReason = "Already claimed";
 			return false;
-		}*/
+		}
 		return true;
 	}
 };

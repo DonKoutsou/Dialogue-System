@@ -1,8 +1,7 @@
 ButtonWidgetClass {
  Name "ListBoxElement"
  components {
-  SP_ListBoxElementComponent "{5DE4EC0E87274774}" : "{217E1BF1715F9C33}Configs/UI/ListBoxElement_DialogueModularButtonComponent.conf" {
-   m_bFocusOnMouseEnter 1
+  DS_ListBoxElementComponent "{5EF327F7B85DCD7D}" {
   }
  }
  style blank
@@ -50,7 +49,6 @@ ButtonWidgetClass {
          Color 0 0 0 1
          "Blend Mode" Opaque
          "Flip Vertically" 1
-         Saturation 0
          "Transition width" 0
          Progress 0.229
          "Mask Mode" "Include Below"

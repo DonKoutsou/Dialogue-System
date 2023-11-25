@@ -43,7 +43,7 @@ class DS_DialogueComponent: ScriptComponent
 	//all characters player talked too
 	static ref array <IEntity> a_PLcontactList;
 	//----------------------------------------------------------------------------------------------------------------//
-	static SCR_GameModeCampaign GameMode;
+	static SCR_BaseGameMode GameMode;
 	
 	static DS_DialogueComponent GetInstance()
 	{
@@ -281,6 +281,14 @@ class DS_DialogueComponent: ScriptComponent
 		DiagArch.GetActionTitle(BranchID, Character, Player, ActName);
 	}
 	
+	void GetCanBePerformed(int BranchID, IEntity Character, IEntity Player, out bool CanBePerformed)
+	{
+		DS_DialogueArchetype DiagArch = LocateDialogueArchetype(Character, Player);
+		DS_DialogueBranch branch;
+		DiagArch.GetDialogueBranch(BranchID, branch);
+		
+		CanBePerformed = branch.CanBePerformed(Character, Player);
+	}
 	//----------------------------------------------------------------------------------------------------------------//
 	//Locates Archetype using LocateDialogueArchetype function using Ientity provided.
 	//Increments stage of branch in the archetype
@@ -417,7 +425,7 @@ class DS_DialogueComponent: ScriptComponent
 	{
 		if (!GetGame().InPlayMode())
 			return;
-		GameMode = SCR_GameModeCampaign.Cast(GetGame().GetGameMode());
+		GameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
 		for (int i; i < m_CharacterArchetypeList.Count(); i++;)
 		{
 			m_CharacterArchetypeList[i].Init();

@@ -13,6 +13,7 @@ class DS_ListBoxElementComponent : SCR_ListBoxElementComponent
 	{
 		super.HandlerAttached(w);
 		m_bToggledOnlyThroughApi = true;
+		
 	}
 	
 	void SetTextNumber(string Number)
@@ -22,6 +23,18 @@ class DS_ListBoxElementComponent : SCR_ListBoxElementComponent
 		if (w)
 			w.SetText(Number);
 	}
+	void SetCanBePerformed(bool CanBePerf)
+	{
+		ImageWidget w = ImageWidget.Cast(m_wRoot.FindAnyWidget("Image2"));
+		
+		if (!CanBePerf)
+		{
+			w.SetColor(Color.Red);
+		}
+		else
+			w.SetColor(Color.Black);
+		
+	};
 	override bool OnClick(Widget w, int x, int y, int button)
 	{
 		#ifdef DEBUG_MODULAR_BUTTON

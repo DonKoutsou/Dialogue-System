@@ -33,7 +33,9 @@ class DS_DialogueStage
 	DS_DialogueBranch m_Owner;
 	int m_iIndex;
 	
-	void Perform(IEntity Character, IEntity Player){if (m_DialogueAction) {m_DialogueAction.Perform(Character, Player)}};
+	int m_iTimesPerformed;
+	
+	void Perform(IEntity Character, IEntity Player){m_iTimesPerformed += 1;if (m_DialogueAction) {m_DialogueAction.Perform(Character, Player)}};
 	
 	//------------------------------------------------------------------//
 	
@@ -51,7 +53,7 @@ class DS_DialogueStage
 	bool CanBeShown(IEntity Character, IEntity Player)
 	{
 		if (!CanBePerformed(Character, Player))
-			return m_bHideIfCantBePerformed; 
+			return !m_bHideIfCantBePerformed; 
 		return true;
 	}
 	
@@ -156,6 +158,8 @@ class DS_DialogueStage
 		m_iIndex = Index;
 		if (m_DialogueAction)
 			m_DialogueAction.Init(this, Index);
+		if (m_DialogueActionCondition)
+			m_DialogueActionCondition.Init(this, Index);
 		if (m_sActionText)
 			m_sActionText.Init(this, Index);
 		if (m_sDialogueText)
@@ -170,7 +174,6 @@ class DS_DialogueStage
 		}
 	}
 }
-
 //---------------------------------------------------------------------------------------------------//
 class DialogueStageTitleAttribute : BaseContainerCustomTitle
 {

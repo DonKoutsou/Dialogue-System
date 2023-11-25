@@ -3,11 +3,11 @@ SCR_ChimeraCharacter {
  components {
   ActionsManagerComponent "{520EA1D2F659CE02}" {
    additionalActions {
-    SP_DialogueAction "{5D76C2C8573128D5}" {
+    DS_DialogueAction "{5EF3266FB8D81927}" {
      ParentContextList {
-      "default"
+      "Chest"
      }
-     UIInfo UIInfo "{5D76C2CBCDE9DE03}" {
+     UIInfo UIInfo "{5EF3266FBE66DD7E}" {
       Name "Talk"
      }
     }

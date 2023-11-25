@@ -7,6 +7,7 @@ class DS_DialogueAction : ScriptedUserAction
 	//------------------------------------------------------------------//
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
+		DiagComp = DS_DialogueComponent.GetInstance();
 		if (SCR_EntityHelper.IsPlayer(pUserEntity))
 		{
 			ChimeraCharacter Char = ChimeraCharacter.Cast(pUserEntity);
@@ -46,7 +47,7 @@ class DS_DialogueAction : ScriptedUserAction
 	}
 	override event void Init(IEntity pOwnerEntity, GenericComponent pManagerComponent)
 	{
-		DiagComp = DS_DialogueComponent.GetInstance();
+		
 	};
 	//------------------------------------------------------------------//
 	override bool CanBeShownScript(IEntity user)

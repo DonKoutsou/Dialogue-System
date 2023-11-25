@@ -6,6 +6,9 @@ SCR_PlayerController {
     SCR_DialogueWidget "{5E593BAF81632BF1}" {
      m_LayoutPath "{8998563B2B97D6A8}UI/layouts/Damage/DialogueMenuBubble.layout"
     }
+    SCR_IDWidget "{5EF32BF8DACD7C5B}" {
+     m_LayoutPath "{7E4E75B13F626B88}UI/layouts/Damage/IDMenu.layout"
+    }
    }
   }
  }

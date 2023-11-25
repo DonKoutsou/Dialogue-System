@@ -78,8 +78,12 @@ class DialogueUIClass: ChimeraMenuBase
 		for (int i = 0; i < 7; i++)
 		{
 			DiagComp.GetActionName(i, myCallerEntity, Player, DiagText);
+			
 			if (DiagText != STRING_EMPTY)
 			{
+				
+				
+				
 				m_ListBoxComponent.AddItem(DiagText);
 				CurrentBranchID = i;
 				DS_ListBoxElementComponent elComp = DS_ListBoxElementComponent.Cast(m_ListBoxComponent.GetElementComponent(entryamount));
@@ -94,6 +98,11 @@ class DialogueUIClass: ChimeraMenuBase
 				{
 					elComp.SetTextNumber(entrynumber);
 				}
+				
+				bool canbeperf;
+				DiagComp.GetCanBePerformed(i, myCallerEntity, Player, canbeperf);
+				elComp.SetCanBePerformed(canbeperf);
+				
 				DiagText = STRING_EMPTY;
 				GetGame().GetInputManager().AddActionListener(string.Format("Dialogue%1", entryamount.ToString()), EActionTrigger.DOWN, elComp.OnKeyPressed);
 				entryamount = entryamount + 1;

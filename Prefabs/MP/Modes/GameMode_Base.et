@@ -2,6 +2,60 @@ SCR_BaseGameMode {
  ID "56B2B479C6B96951"
  components {
   DS_DialogueComponent "{5EF2BA4E993D1BCA}" {
+   m_CharacterArchetypeList {
+    DS_DialogueArchetype "{5EF3266FC5AF741F}" {
+     ArchetypeIdentifier Faction_Key
+     m_sCharacterFaction "US"
+     m_aArchetypeFactionMatch {
+      "US"
+     }
+     DialogueBranch {
+      DS_DialogueBranch "{5EF3266FF0D608CA}" {
+       m_BranchStages {
+        DS_DialogueStage "{5EF3266FF3DFC622}" {
+         m_sActionText DS_AttributeText "{5EF3266FF427AA7A}" {
+          m_sActionTextOverride "test 1"
+         }
+         m_sDialogueText DS_AttributeText "{5EF3266FF78AFC0A}" {
+          m_sActionTextOverride "test 1"
+         }
+        }
+        DS_DialogueStage "{5EF3266F9092C83A}" {
+         m_sActionText DS_AttributeText "{5EF3266F946A189A}" {
+          m_sActionTextOverride "test 2"
+         }
+         m_sDialogueText DS_AttributeText "{5EF3266F94A5F9DC}" {
+          m_sActionTextOverride "test 2"
+         }
+        }
+        DS_DialogueStage "{5EF32A29C9729F14}" {
+         m_sActionText DS_AttributeText "{5EF32A29C8C8C7A7}" {
+          m_sActionTextOverride "Check ID"
+         }
+         m_sDialogueText DS_AttributeText "{5EF32A29CCCBF479}" {
+         }
+         m_DialogueAction DS_DialogueStageCheckIDAction "{5EF32A29CFB45FA6}" {
+         }
+        }
+        DS_DialogueStage "{5EF32BF8E67A02F4}" {
+         m_sActionText DS_AttributeText "{5EF32BF88D267214}" {
+          m_sActionTextOverride "Buy"
+         }
+         m_sDialogueText DS_AttributeText "{5EF32BF88F804DD6}" {
+          m_sActionTextOverride "fawf"
+         }
+         m_DialogueAction DS_DialogueStageItemCheckAction "{5EF32BF8946821F0}" {
+          m_WantedItem "{513C73CA799C4B34}PrefabsEditable/Auto/Props/Forest/FeedRack/E_FeedRack_01.et"
+         }
+         m_DialogueActionCondition DS_DialogueStageItemCheckActionCondition "{5EF32BFBDEB2787A}" {
+          m_WantedItem "{513C73CA799C4B34}PrefabsEditable/Auto/Props/Forest/FeedRack/E_FeedRack_01.et"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
   }
  }
 }
