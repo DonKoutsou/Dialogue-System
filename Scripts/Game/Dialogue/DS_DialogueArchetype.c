@@ -28,7 +28,6 @@ class DS_DialogueArchetype: ScriptAndConfig
 	//Map to be filled with all the configurations on Init
 	protected ref map<int, ref DS_DialogueBranch> DialogueBranchMap;
     protected DS_DialogueComponent DiagComp;
-	DS_DialogueArchetype OriginalArchetype;
 	IEntity TalkingCharacter;
 	bool IsCharacterBranched;
 	int BranchedID;
@@ -157,11 +156,14 @@ class DS_DialogueArchetype: ScriptAndConfig
 		original.GetDialogueBranchMap(DialogueBranchMap);
 		}
   }
+	void RegisterCurrentChars (IEntity Character, IEntity Player)
+	{
+		TalkingCharacter = Character;
+	}
 	//Mapping all configrations existing uder this character archetype
 	//When using ArchetypeTemplate to create new archetype for specific AI, it is Initialised
-	void Init(IEntity Character)
+	void Init()
 	{
-		OriginalArchetype = this;
 		DialogueBranchMap = new map<int, ref DS_DialogueBranch>();
 		for (int i = 0, count = DialogueBranch.Count(); i < count; i++)
     {
@@ -171,7 +173,5 @@ class DS_DialogueArchetype: ScriptAndConfig
 			int key = (i);
         	DialogueBranchMap.Insert(key, DialogueBranch[i]);
     }
-		TalkingCharacter = Character;
-		
 	}
 };

@@ -38,7 +38,7 @@ class DS_DialogueStageTimedRewardActionCondition : DS_BaseDialogueStageActionCon
 	int TimeToBeAvailable;
 	int DayToBeAvailable;
 	
-	override bool CanBePerformed(IEntity Character, IEntity Player, DialogueStage ParentStage)
+	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{
 		GenericEntity ent = GenericEntity.Cast(Character);
 		ChimeraWorld world = ent.GetWorld();

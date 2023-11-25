@@ -6,7 +6,7 @@ class DS_DialogueBranch
 {
 	//------------------------------------------------------------------//
 	DialogueStage m_Owner;
-	
+	int m_iIndex;
 	[Attribute(desc: "Dialogue Stage, Depending on the stage of the branch the apropriate stage will be selected. Stage = 0 means first entry etc...")]
 	ref array<ref DialogueStage> 						m_BranchStages;
 	
@@ -229,6 +229,7 @@ class DS_DialogueBranch
 	{
 		if (Owner)
 			m_Owner = Owner;
+		m_iIndex = index;
 		if (!m_BranchStages.IsEmpty())
 		{
 			for (int i = 0; i < m_BranchStages.Count(); i++)
@@ -311,7 +312,6 @@ class DialogueBranchConfigTitleAttribute : BaseContainerCustomTitle
 		source.Get("m_BranchStages", Stages);
 		string texttoshow;
 		int StageAmount;
-		string Diagtext;
 		for (int i, count = Stages.Count(); i < count; i++)
 		{
 			if (Stages[i].m_Branch.Count() > 0)
@@ -319,12 +319,8 @@ class DialogueBranchConfigTitleAttribute : BaseContainerCustomTitle
 				texttoshow = "| Branches at stage" + " " + i;
 			}
 			StageAmount = StageAmount + 1;
-			if (!Diagtext)
-			{
-				Diagtext = Stages[i].m_sActionText;
-			}
 		}
-		title = string.Format("Branch: %1 stages | %2 %3", StageAmount ,Diagtext, texttoshow);
+		title = string.Format("Branch: %1 stages | %2 %3", StageAmount , texttoshow);
 		return true;
 	}
 };

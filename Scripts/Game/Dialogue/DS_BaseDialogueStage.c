@@ -1,18 +1,14 @@
 [BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
 class DialogueStage
 {
-	DS_DialogueBranch m_Owner;
 	
-	int timesused;
-	//------------------------------------------------------------------//
-	
-	[Attribute(defvalue: "Action Text", desc: "Action Title", category: "Dialogue")]
-	string m_sActionText;
+	[Attribute(desc: "Action Title", category: "Dialogue")]
+	ref DS_BaseDialogueText m_sActionText;
 	
 	//------------------------------------------------------------------//
 	
-	[Attribute(defvalue: "Dialogue Text", desc: "Dialogue Text", category: "Dialogue")]
-  string m_sDialogueText;
+	[Attribute(desc: "Dialogue Text", category: "Dialogue")]
+  ref DS_BaseDialogueText m_sDialogueText;
 	
 	//------------------------------------------------------------------//
 	
@@ -21,7 +17,7 @@ class DialogueStage
 	
 	//------------------------------------------------------------------//
 	
-	[Attribute(desc : "Action that will be performed ")]
+	[Attribute(desc : "Condition for action to be performable ")]
   ref DS_BaseDialogueStageActionCondition m_DialogueActionCondition;
 	
 	//------------------------------------------------------------------//
@@ -33,11 +29,11 @@ class DialogueStage
 	[Attribute(desc: "Dialogue Branch, if present will cause branch to split instead of progressing its stage. When a branch splits, the dialogue system will only look in the entries of this branch only")]
 	ref array<ref DS_DialogueBranch> m_Branch;
 	
-	
-
 	//------------------------------------------------------------------//
+	DS_DialogueBranch m_Owner;
+	int m_iIndex;
 	
-	void Perform(IEntity Character, IEntity Player){timesused += 1; if (m_DialogueAction) {m_DialogueAction.Perform(Character, Player)}};
+	void Perform(IEntity Character, IEntity Player){if (m_DialogueAction) {m_DialogueAction.Perform(Character, Player)}};
 	
 	//------------------------------------------------------------------//
 	
@@ -45,7 +41,7 @@ class DialogueStage
 	{
 		if (m_DialogueActionCondition)
 		{
-			return m_DialogueActionCondition.CanBePerformed(Character, Player, this);
+			return m_DialogueActionCondition.CanBePerformed(Character, Player);
 		} 
 		else 
 			return true;
@@ -66,16 +62,16 @@ class DialogueStage
 		m_DialogueActionCondition.GetCannotPerformReason(CantBePReason);
 	}
 	
-	void SetActionText(string text)
-	{
-		m_sActionText = text;
-	}
+	//void SetActionText(string text)
+	//{
+	//	m_sActionText.SetText(text);
+	//}
 	
 	//------------------------------------------------------------------//
 	
 	bool GetActionText(IEntity Character, IEntity Player, out string acttext)
 	{
-		acttext = m_sActionText;
+		acttext = m_sActionText.GetText(Character, Player);
 		if (!CanBeShown(Character, Player))
 		{
 			acttext = STRING_EMPTY;
@@ -85,7 +81,7 @@ class DialogueStage
 		{
 			string CantPerformReason;
 			GetCannotPerformReason(CantPerformReason);
-			acttext = m_sActionText + " " + (CantPerformReason);
+			acttext = m_sActionText.GetText(Character, Player) + " " + (CantPerformReason);
 			return true;
 		}
 	 	return true;
@@ -93,15 +89,15 @@ class DialogueStage
 	
 	//------------------------------------------------------------------//
 	
-	void SetDialogueText(string text)
-	{
-		m_sDialogueText = text;
-	}
+	//void SetDialogueText(string text)
+	//{
+	//	m_sDialogueText.SetText(text);
+	//}
 	
 	//------------------------------------------------------------------//
 	string GetStageDialogueText(IEntity Character, IEntity Player)
 	{
-	 return m_sDialogueText;
+	 return m_sDialogueText.GetText(Character, Player);
 	}
 	
 	//------------------------------------------------------------------//
@@ -153,12 +149,17 @@ class DialogueStage
 	
 	//------------------------------------------------------------------//
 	
-	void Init(DS_DialogueBranch Owner = null, int Index = 0)
+	void Init(DS_DialogueBranch OwnerBranch, int Index)
 	{
-		if (Owner)
-			m_Owner = Owner;
+		if (OwnerBranch)
+			m_Owner = OwnerBranch;
+		m_iIndex = Index;
 		if (m_DialogueAction)
-			m_DialogueAction.Init(Owner, Index);
+			m_DialogueAction.Init(this, Index);
+		if (m_sActionText)
+			m_sActionText.Init(this, Index);
+		if (m_sDialogueText)
+			m_sDialogueText.Init(this, Index);
 		if (!m_Branch.IsEmpty())
 		{
 			for (int i = 0; i < m_Branch.Count(); i++)
@@ -169,30 +170,40 @@ class DialogueStage
 		}
 	}
 }
-[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class DS_BaseDialogueStageAction
-{
-	
-	void Perform(IEntity Character, IEntity Player){};
-	void Init(DS_DialogueBranch Owner = null, int Index = 0){};
-}
-[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class DS_BaseDialogueStageActionCondition
-{
-	string m_sCantBePerformedReason = "(Cant Be Performed)";
-	bool CanBePerformed(IEntity Character, IEntity Player, DialogueStage ParentStage){return true;};
-	void GetCannotPerformReason(out string CantBePReason){CantBePReason = m_sCantBePerformedReason;}
-	void SetCannotPerformReason(string reason){m_sCantBePerformedReason = reason;}
-}
+
 //---------------------------------------------------------------------------------------------------//
 class DialogueStageTitleAttribute : BaseContainerCustomTitle
 {
 	override bool _WB_GetCustomTitle(BaseContainer source, out string title)
 	{
 		// Get ActionName
-		string actionName;
+		DS_BaseDialogueText actionName;
 		source.Get("m_sActionText", actionName);
-
+		string ActionText;
+		if (actionName)
+		{
+			ActionText = actionName.ToString();
+			ActionText = ActionText.Substring(3, ActionText.Length() - 23);
+		}
+		else
+		{
+			ActionText = "No action text configured for this stage."
+		}
+		
+		// Get DialogueText
+		DS_BaseDialogueText DiagName;
+		source.Get("m_sDialogueText", DiagName);
+		string DialogueText;
+		if (DiagName)
+		{
+			DialogueText = DiagName.ToString();
+			DialogueText = DialogueText.Substring(3, DialogueText.Length() - 23);
+		}
+		else
+		{
+			DialogueText = "No dialogue text configured for this stage."
+		}
+		
 		// Get selected behavior from EChoiseBehavior enum
 		string branchesStr;
 		array<ref DS_DialogueBranch> branches;
@@ -211,7 +222,7 @@ class DialogueStageTitleAttribute : BaseContainerCustomTitle
 		if (Action)
 		{
 			Actionclassname = Action.ToString();
-			Actionclassname = Actionclassname.Substring(0, Actionclassname.Length() - 20);
+			Actionclassname = Actionclassname.Substring(16, Actionclassname.Length() - 36);
 		}
 		else
 		{
@@ -223,14 +234,14 @@ class DialogueStageTitleAttribute : BaseContainerCustomTitle
 		if (Condition)
 		{
 			Conditionclassname = Condition.ToString();
-			Conditionclassname = Conditionclassname.Substring(0, Conditionclassname.Length() - 20);
+			Conditionclassname = Conditionclassname.Substring(16, Conditionclassname.Length() - 36);
 		}
 		else
 		{
 			Conditionclassname = "No conditions configured for this stage."
 		}
 		string classname = source.GetClassName();
-		title = string.Format("%1: %2 - %3 || ACTION: %4 || CONDITION : %5", classname, actionName, branchesStr, Actionclassname, Conditionclassname);
+		title = string.Format("A : %1 - D : %2 || %3 || ACTION: %4 || CONDITION : %5", ActionText, DialogueText, branchesStr, Actionclassname, Conditionclassname);
 		return true;
 	}
 }

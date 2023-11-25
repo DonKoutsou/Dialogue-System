@@ -1,3 +1,12 @@
+
+[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+class DS_BaseDialogueStageActionCondition
+{
+	string m_sCantBePerformedReason = "(Cant Be Performed)";
+	bool CanBePerformed(IEntity Character, IEntity Player){return true;};
+	void GetCannotPerformReason(out string CantBePReason){CantBePReason = m_sCantBePerformedReason;}
+	void SetCannotPerformReason(string reason){m_sCantBePerformedReason = reason;}
+}
 //--------------------------------------------------------------------------------------------//
 [BaseContainerProps(configRoot:true)]
 class DS_DialogueStageFactionCheckCondition : DS_BaseDialogueStageActionCondition
@@ -31,7 +40,7 @@ class DS_DialogueStageFactionCheckCondition : DS_BaseDialogueStageActionConditio
 	
 	
 	ref SCR_Faction faction;
-	override bool CanBePerformed(IEntity Character, IEntity Player, DialogueStage ParentStage)
+	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{
 		if (!faction)
 		{
@@ -64,13 +73,13 @@ class DS_DialogueStageFactionCheckCondition : DS_BaseDialogueStageActionConditio
 [BaseContainerProps(configRoot:true)]
 class DS_DialogueStageSingleUseCondition : DS_BaseDialogueStageActionCondition
 {
-	override bool CanBePerformed(IEntity Character, IEntity Player, DialogueStage ParentStage)
+	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{	
-		if (ParentStage.timesused > 0)
+		/*if (ParentStage.timesused > 0)
 		{
 			m_sCantBePerformedReason = "Already claimed";
 			return false;
-		}
+		}*/
 		return true;
 	}
 };
@@ -94,7 +103,7 @@ class DS_DialogueStageHealthCondition : DS_BaseDialogueStageActionCondition
 	[Attribute("Used incase above bool is set to false.")]
 	string m_sThreasholdNotMetUnperformableReason;
 	
-	override bool CanBePerformed(IEntity Character, IEntity Player, DialogueStage ParentStage)
+	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{
 		SCR_CharacterDamageManagerComponent dmgmngr = SCR_CharacterDamageManagerComponent.Cast(Player.FindComponent(SCR_CharacterDamageManagerComponent));
 		if (dmgmngr.CanBeHealed() == false)
@@ -115,7 +124,7 @@ class DS_DialogueStageItemCheckActionCondition : DS_BaseDialogueStageActionCondi
 	[Attribute(defvalue: "1", desc : "if set to false character will be checked instead of player")]
 	bool m_bCheckPlayer
 	
-	override bool CanBePerformed(IEntity Character, IEntity Player, DialogueStage ParentStage)
+	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{
 		IEntity CharToCheck;
 		if (m_bCheckPlayer){CharToCheck = Player;}
@@ -154,7 +163,7 @@ class DS_DialogueStageItemTypeCheckActionCondition : DS_BaseDialogueStageActionC
 	[Attribute(defvalue: "1", desc : "if set to false character will be checked instead of player")]
 	bool m_bCheckPlayer
 	
-	override bool CanBePerformed(IEntity Character, IEntity Player, DialogueStage ParentStage)
+	override bool CanBePerformed(IEntity Character, IEntity Player)
 	{
 		IEntity CharToCheck;
 		if (m_bCheckPlayer){CharToCheck = Player;}

@@ -393,7 +393,7 @@ class DS_DialogueComponent: ScriptComponent
 				DS_DialogueArchetype DiagArchNew = CopyArchetype(CharDialogueArch);
 				//-------------------------------------------------------------------------//
 				//initialise the newly made Archetype after its filled with all data
-				DiagArchNew.Init(Owner);
+				DiagArchNew.RegisterCurrentChars(Owner, User);
 				//-------------------------------------------------------------------------//
 				//instert it int the ArchetypeMap
 				DialogueArchetypeMap.Insert(LocCharacterName, DiagArchNew);
@@ -418,9 +418,9 @@ class DS_DialogueComponent: ScriptComponent
 		if (!GetGame().InPlayMode())
 			return;
 		GameMode = SCR_GameModeCampaign.Cast(GetGame().GetGameMode());
-		foreach (DS_DialogueArchetype config: m_CharacterArchetypeList)
+		for (int i; i < m_CharacterArchetypeList.Count(); i++;)
 		{
-			config.Init(owner);
+			m_CharacterArchetypeList[i].Init();
 		}
 		DialogueArchetypeMap = new map<string, ref DS_DialogueArchetype>;
 		m_WorldDirections = m_aWorldDirections;
