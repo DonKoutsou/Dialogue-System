@@ -5,10 +5,10 @@
 class DS_DialogueBranch
 {
 	//------------------------------------------------------------------//
-	DialogueStage m_Owner;
+	DS_DialogueStage m_Owner;
 	int m_iIndex;
 	[Attribute(desc: "Dialogue Stage, Depending on the stage of the branch the apropriate stage will be selected. Stage = 0 means first entry etc...")]
-	ref array<ref DialogueStage> 						m_BranchStages;
+	ref array<ref DS_DialogueStage> 						m_BranchStages;
 	
 	ref DialogueBranchInfo 								BranchInfoConfig;
 	
@@ -88,13 +88,13 @@ class DS_DialogueBranch
 		Conf.IncrementStage(incrementamount);
 	}
 	//------------------------------------------------------------------//
-	//Checks if a DS_MultipleChoiceConfig exists in the current DialogueStage
+	//Checks if a DS_MultipleChoiceConfig exists in the current DS_DialogueStage
 	bool CheckIfStageBranches(IEntity Character, IEntity Player)
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
 		Conf.GetStageOfBranch(Bstage);
-		DialogueStage Diagstage;
+		DS_DialogueStage Diagstage;
 		if (m_BranchStages.Count() >= Bstage)
 		{
 			Diagstage = m_BranchStages[Bstage];
@@ -113,7 +113,7 @@ class DS_DialogueBranch
 	void CauseBranch(int BranchID, IEntity Character)
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
-		DialogueStage DiagStage;
+		DS_DialogueStage DiagStage;
 		GetDialogueStage(Character, DiagStage);
 		//pass data lower down the hierarchy
 		DiagStage.InheritData(Conf.GetOwnerArchetype(), Conf, Character);
@@ -123,7 +123,7 @@ class DS_DialogueBranch
 	void UnBranch(IEntity Character)
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
-		DialogueStage DiagStage;
+		DS_DialogueStage DiagStage;
 		GetDialogueStage(Character, DiagStage);
 		DiagStage.InheritData(Conf.GetOwnerArchetype(), Conf, Character);
 		Conf.Unbranch();
@@ -136,7 +136,7 @@ class DS_DialogueBranch
 		Conf.GetParentConfig(Parent);
 	}
 	//------------------------------------------------------------------//
-	bool GetDialogueStage(IEntity Character, out DialogueStage DiagStage)
+	bool GetDialogueStage(IEntity Character, out DS_DialogueStage DiagStage)
 	{
 		DialogueBranchInfo Conf = LocateConfig(Character);
 		int Bstage;
@@ -225,7 +225,7 @@ class DS_DialogueBranch
 		Conf.SetParent(ParentConfig);
 		Conf.SetOwnerArchetype(Archetype);
 	}
-	void Init(DialogueStage Owner = null, int index = 0)
+	void Init(DS_DialogueStage Owner = null, int index = 0)
 	{
 		if (Owner)
 			m_Owner = Owner;
@@ -234,7 +234,7 @@ class DS_DialogueBranch
 		{
 			for (int i = 0; i < m_BranchStages.Count(); i++)
 			{
-				DialogueStage stage = DialogueStage.Cast(m_BranchStages[i]);
+				DS_DialogueStage stage = DS_DialogueStage.Cast(m_BranchStages[i]);
 				stage.Init(this, index);
 			}
 		}
@@ -308,7 +308,7 @@ class DialogueBranchConfigTitleAttribute : BaseContainerCustomTitle
 {
 	override bool _WB_GetCustomTitle(BaseContainer source, out string title)
 	{
-		array <ref DialogueStage> Stages;
+		array <ref DS_DialogueStage> Stages;
 		source.Get("m_BranchStages", Stages);
 		string texttoshow;
 		int StageAmount;
@@ -320,7 +320,7 @@ class DialogueBranchConfigTitleAttribute : BaseContainerCustomTitle
 			}
 			StageAmount = StageAmount + 1;
 		}
-		title = string.Format("Branch: %1 stages | %2 %3", StageAmount , texttoshow);
+		title = string.Format("Branch: %1 stages | %2", StageAmount , texttoshow);
 		return true;
 	}
 };

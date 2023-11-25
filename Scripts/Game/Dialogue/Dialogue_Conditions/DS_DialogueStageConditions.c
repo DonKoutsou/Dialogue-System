@@ -1,5 +1,5 @@
 
-[BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
+[BaseContainerProps(configRoot:true)]
 class DS_BaseDialogueStageActionCondition
 {
 	string m_sCantBePerformedReason = "(Cant Be Performed)";
@@ -90,17 +90,17 @@ class DS_DialogueStageHealthCondition : DS_BaseDialogueStageActionCondition
 {
 	[Attribute()]
 	bool m_bResaultWhenMaxHP;
-	[Attribute("Used incase above bool is set to false.")]
+	[Attribute(desc :"Used incase above bool is set to false.")]
 	string m_sMaxHPUnperformableReason;
 	[Attribute("10", UIWidgets.Slider, "HP threashold", "0.0 100.0 1.0")]
 	float m_fHPThreashold;
 	[Attribute()]
 	bool m_bResaultWhenThreasholdIsMet;
-	[Attribute("Used incase above bool is set to false.")]
+	[Attribute(desc :"Used incase above bool is set to false.")]
 	string m_sThreasholdMetUnperformableReason;
 	[Attribute()]
 	bool m_bResaultWhenThreasholdIsNotMet;
-	[Attribute("Used incase above bool is set to false.")]
+	[Attribute(desc :"Used incase above bool is set to false.")]
 	string m_sThreasholdNotMetUnperformableReason;
 	
 	override bool CanBePerformed(IEntity Character, IEntity Player)
@@ -189,6 +189,17 @@ class DS_DialogueStageItemTypeCheckActionCondition : DS_BaseDialogueStageActionC
 				
 			return false;
 		}		
+		return true;
+	}
+}
+//---------------------------------------------------------------------------------------------------//
+class DialogueStageActionConditionTitleAttribute : BaseContainerCustomTitleField
+{
+	override bool _WB_GetCustomTitle(BaseContainer source, out string title)
+	{
+		
+		string classname = ToString();
+		title = classname;
 		return true;
 	}
 }

@@ -1,18 +1,18 @@
-[BaseContainerProps(configRoot:true)]
+[BaseContainerProps(configRoot:true), DialogueActionTextTitleAttribute()]
 class DS_BaseDialogueText
 {
-	DialogueStage OwnerStage;
+	DS_DialogueStage OwnerStage;
 	int m_iIndex;
 	string m_sActionText;
 	string GetText(IEntity Character, IEntity Player){return m_sActionText;};
-	sealed void Init(DialogueStage Owner,int Index)
+	sealed void Init(DS_DialogueStage Owner,int Index)
 	{
 		if (Owner)
 			OwnerStage = Owner;
 		m_iIndex = Index;
 	};
 }
-[BaseContainerProps(configRoot:true)]
+[BaseContainerProps(configRoot:true), DialogueActionTextTitleAttribute()]
 class DS_AttributeText : DS_BaseDialogueText
 {
 	[Attribute()]
@@ -20,3 +20,13 @@ class DS_AttributeText : DS_BaseDialogueText
 	
 	override string GetText(IEntity Character, IEntity Player){return m_sActionTextOverride;};
 }
+class DialogueActionTextTitleAttribute : BaseContainerCustomTitle
+{
+	override bool _WB_GetCustomTitle(BaseContainer source, out string title)
+	{
+		string text;
+		source.Get("m_sActionText", text);
+		title = text;
+		return true;
+	}
+};

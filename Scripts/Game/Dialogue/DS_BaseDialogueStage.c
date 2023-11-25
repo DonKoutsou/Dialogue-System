@@ -1,5 +1,5 @@
 [BaseContainerProps(configRoot:true), DialogueStageTitleAttribute()]
-class DialogueStage
+class DS_DialogueStage
 {
 	
 	[Attribute(desc: "Action Title", category: "Dialogue")]
