@@ -13,12 +13,12 @@ class DS_DialogueStage
 	//------------------------------------------------------------------//
 	
 	[Attribute(desc : "Action that will be performed ")]
-  ref DS_BaseDialogueStageAction m_DialogueAction;
+  ref array <ref DS_BaseDialogueStageAction> a_DialogueActions;
 	
 	//------------------------------------------------------------------//
 	
 	[Attribute(desc : "Condition for action to be performable ")]
-  ref DS_BaseDialogueStageActionCondition m_DialogueActionCondition;
+  ref array <ref DS_BaseDialogueStageActionCondition> a_DialogueActionConditions;
 	
 	//------------------------------------------------------------------//
 	
@@ -34,16 +34,37 @@ class DS_DialogueStage
 	int m_iIndex;
 	
 	int m_iTimesPerformed;
-	
-	void Perform(IEntity Character, IEntity Player){m_iTimesPerformed += 1;if (m_DialogueAction) {m_DialogueAction.Perform(Character, Player)}};
+	string m_sCantBePerformedReason;
+	string m_sCantBePerformedDialogue;
+	void Perform(IEntity Character, IEntity Player)
+	{
+		m_iTimesPerformed += 1;
+		if (a_DialogueActions)
+		{
+			foreach (DS_BaseDialogueStageAction action : a_DialogueActions)
+			{
+				action.Perform(Character, Player);
+			}
+		}
+	};
 	
 	//------------------------------------------------------------------//
 	
 	bool CanBePerformed(IEntity Character, IEntity Player)
 	{
-		if (m_DialogueActionCondition)
+		if (a_DialogueActionConditions)
 		{
-			return m_DialogueActionCondition.CanBePerformed(Character, Player);
+			foreach (DS_BaseDialogueStageActionCondition Condition : a_DialogueActionConditions)
+			{
+				if (!Condition.CanBePerformed(Character, Player))
+				{
+					Condition.GetCannotPerformReason(m_sCantBePerformedReason);
+					Condition.GetCannotPerformDialogue(m_sCantBePerformedDialogue);
+					return false;
+				}
+					
+			}
+			return true;
 		} 
 		else 
 			return true;
@@ -61,7 +82,11 @@ class DS_DialogueStage
 	
 	void GetCannotPerformReason(out string CantBePReason)
 	{
-		m_DialogueActionCondition.GetCannotPerformReason(CantBePReason);
+		CantBePReason = m_sCantBePerformedReason;
+	}
+	void GetCannotPerformDialogue(out string CanBePDialogue)
+	{
+		CanBePDialogue = m_sCantBePerformedDialogue;
 	}
 	
 	//void SetActionText(string text)
@@ -156,10 +181,20 @@ class DS_DialogueStage
 		if (OwnerBranch)
 			m_Owner = OwnerBranch;
 		m_iIndex = Index;
-		if (m_DialogueAction)
-			m_DialogueAction.Init(this, Index);
-		if (m_DialogueActionCondition)
-			m_DialogueActionCondition.Init(this, Index);
+		if (a_DialogueActions)
+		{
+			foreach (DS_BaseDialogueStageAction action : a_DialogueActions)
+			{
+				action.Init(this, Index);
+			}
+		}
+		if (a_DialogueActionConditions)
+		{
+			foreach (DS_BaseDialogueStageActionCondition condition : a_DialogueActionConditions)
+			{
+				condition.Init(this, Index);
+			}
+		}
 		if (m_sActionText)
 			m_sActionText.Init(this, Index);
 		if (m_sDialogueText)
@@ -209,9 +244,9 @@ class DialogueStageTitleAttribute : BaseContainerCustomTitle
 		
 		// Get selected behavior from EChoiseBehavior enum
 		string branchesStr;
-		array<ref DS_DialogueBranch> branches;
+		ref array<ref DS_DialogueBranch> branches;
 		source.Get("m_Branch", branches);
-		if (branches.Count() > 0)
+		if (branches && branches.Count() > 0)
 		{
 			branchesStr = "Stage Branches"
 		}
@@ -219,25 +254,33 @@ class DialogueStageTitleAttribute : BaseContainerCustomTitle
 		{
 			branchesStr = "Stage Increments"
 		}
-		Managed Action;
-		source.Get("m_DialogueAction", Action);
+		ref array<ref DS_BaseDialogueStageAction> actions;
+		source.Get("a_DialogueActions", actions);
 		string Actionclassname;
-		if (Action)
+		if (actions)
 		{
-			Actionclassname = Action.ToString();
-			Actionclassname = Actionclassname.Substring(16, Actionclassname.Length() - 36);
+			foreach (DS_BaseDialogueStageAction action : actions)
+			{
+				string name = action.ToString();
+				name = name.Substring(16, name.Length() - 36);
+				Actionclassname = Actionclassname + name;
+			}
 		}
 		else
 		{
 			Actionclassname = "No actions configured for this stage."
 		}
-		Managed Condition;
-		source.Get("m_DialogueActionCondition", Condition);
+		array<ref DS_BaseDialogueStageActionCondition> conditions;
+		source.Get("a_DialogueActionConditions", conditions);
 		string Conditionclassname;
-		if (Condition)
+		if (conditions)
 		{
-			Conditionclassname = Condition.ToString();
-			Conditionclassname = Conditionclassname.Substring(16, Conditionclassname.Length() - 36);
+			foreach (DS_BaseDialogueStageActionCondition condition : conditions)
+			{
+				string name = condition.ToString();
+				name = name.Substring(16, name.Length() - 36);
+				Conditionclassname = Conditionclassname + name;
+			}
 		}
 		else
 		{

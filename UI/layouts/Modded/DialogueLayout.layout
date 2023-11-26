@@ -43,6 +43,8 @@ FrameWidgetClass {
          Name "Image2"
          Slot OverlayWidgetSlot "{5EF3511D2906D8A2}" {
          }
+         "Is Enabled" 0
+         "Is Visible" 0
         }
         BlurWidgetClass "{5D128E0CC9EBE7A5}" {
          Name "Blur0"
@@ -70,6 +72,8 @@ FrameWidgetClass {
           HorizontalAlign 3
           VerticalAlign 3
          }
+         "Is Enabled" 0
+         "Is Visible" 0
          Color 0 0 0 1
          Pivot 0.5 0.5
          "Blend Mode" Opaque
@@ -77,32 +81,47 @@ FrameWidgetClass {
          "Transition width" 1
          Progress 0.511
         }
-        OverlayWidgetClass "{5D10CA10CABF9D5A}" : "{94CAAE4A601195D3}UI/layouts/ListBox/ListBox.layout" {
-         Name "ListBox0"
-         Slot OverlayWidgetSlot {
+        FrameWidgetClass "{5EF48ADB8CC425AC}" {
+         Name "Frame0"
+         Slot OverlayWidgetSlot "{5EF48ADB8CC4258C}" {
           HorizontalAlign 3
           VerticalAlign 3
-          Padding 10 10 10 10
-         }
-         Clipping False
-         components {
-          DS_ListBoxComponent "{5EF2BA4ECB842DBB}" {
-           m_sElementLayout "{E3491D3D0D0DE552}UI/layouts/ListBox/ListBoxElement_TextDialogue.layout"
-          }
          }
          {
-          ScrollLayoutWidgetClass "{56691148E692435A}" {
-           Prefab "{56691148E692435A}"
-           Slot OverlayWidgetSlot "{56691148E692437F}" {
-            Padding 6 6 6 6
+          OverlayWidgetClass "{5D10CA10CABF9D5A}" : "{94CAAE4A601195D3}UI/layouts/ListBox/ListBox.layout" {
+           Name "ListBox0"
+           Slot FrameWidgetSlot "{5EF48ADB8E30722B}" {
+            Anchor 0.5 1 0.5 1
+            OffsetLeft 0
+            OffsetTop 0
+            SizeX 100
+            OffsetRight -100
+            SizeY 30
+            OffsetBottom -30
+            Alignment 0.5 1
+            SizeToContent 1
            }
            Clipping False
-           Color 0.074 0.074 0.074 0
-          }
-          ImageWidgetClass "{5DB6D18100D38307}" {
-           Prefab "{5DB6D18100D38307}"
-           "Is Enabled" 0
-           "Is Visible" 0
+           components {
+            DS_ListBoxComponent "{5EF2BA4ECB842DBB}" {
+             m_sElementLayout "{E3491D3D0D0DE552}UI/layouts/ListBox/ListBoxElement_TextDialogue.layout"
+            }
+           }
+           {
+            ScrollLayoutWidgetClass "{56691148E692435A}" {
+             Prefab "{56691148E692435A}"
+             Slot OverlayWidgetSlot "{56691148E692437F}" {
+              Padding 6 6 6 6
+             }
+             Clipping False
+             Color 0.074 0.074 0.074 0
+            }
+            ImageWidgetClass "{5DB6D18100D38307}" {
+             Prefab "{5DB6D18100D38307}"
+             "Is Enabled" 0
+             "Is Visible" 0
+            }
+           }
           }
          }
         }

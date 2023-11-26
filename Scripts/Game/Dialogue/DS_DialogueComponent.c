@@ -96,10 +96,11 @@ class DS_DialogueComponent: ScriptComponent
 		//------------------------------------------------------------------//
 		BaseChatChannel Channel;
 		//If CanBePerformed is false dialogue wont be executed
-		if (Branch.CanBePerformed(Character, Player) == false)
+		if (!Branch.CanBePerformed(Character, Player))
 		{
 			DiagUI.UpdateEntries(Character, Player);
-			return "Cant do dat.";
+			Branch.GetCantBePerformedReason(Character, Player, m_DialogTexttoshow);
+			return m_DialogTexttoshow;
 		}
 		//------------------------------------------------------------------//
 		//Check if branch has another branch in its current stage. If yes we will have to cause a branch after getting our text

@@ -2,18 +2,33 @@
 [BaseContainerProps(configRoot:true)]
 class DS_BaseDialogueStageActionCondition
 {
+	[Attribute()]
+	string m_sCantBePerformedDialogue;
+	
+	[Attribute()]
+	string m_sCantBePerformedText;
+	
 	DS_DialogueStage OwnerStage;
+	
 	int m_iIndex;
+	
 	string m_sCantBePerformedReason = "(Cant Be Performed)";
+	
 	bool CanBePerformed(IEntity Character, IEntity Player){return true;};
+	
 	void GetCannotPerformReason(out string CantBePReason){CantBePReason = m_sCantBePerformedReason;}
+	
 	void SetCannotPerformReason(string reason){m_sCantBePerformedReason = reason;}
-
+	
+	void GetCannotPerformDialogue(out string CantBePDialogue){CantBePDialogue = m_sCantBePerformedDialogue;}
+	
 	sealed void Init(DS_DialogueStage Owner,int Index)
 	{
 		if (Owner)
 			OwnerStage = Owner;
 		m_iIndex = Index;
+		if (m_sCantBePerformedText)
+			m_sCantBePerformedReason = m_sCantBePerformedText;
 	};
 }
 //--------------------------------------------------------------------------------------------//

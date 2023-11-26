@@ -45,13 +45,18 @@ ButtonWidgetClass {
           Alignment 0.5 0.5
           SizeToContent 1
          }
+         AllowWidthOverride 1
+         WidthOverride 600
          HeightOverride 100
+         AllowMinDesiredWidth 1
+         MinDesiredWidth 800
          AllowMaxDesiredWidth 1
          MaxDesiredWidth 800
          {
           OverlayWidgetClass "{5EF3511EB2158646}" {
            Name "Overlay0"
            Slot AlignableSlot "{5EF3511E7C2C6737}" {
+            HorizontalAlign 3
             VerticalAlign 3
            }
            {
@@ -99,36 +104,20 @@ ButtonWidgetClass {
             }
             HorizontalLayoutWidgetClass "{5EF347EEC53AECA6}" {
              Name "HorizontalLayout0"
-             Slot OverlayWidgetSlot {
+             Slot OverlayWidgetSlot "{5EF48AD9F1781AFB}" {
               HorizontalAlign 3
               VerticalAlign 3
+              Padding 50 20 20 20
              }
              {
-              TextWidgetClass "{5D1303B9CB9C181B}" {
-               Name "TextNumber"
-               Slot LayoutSlot {
-                Padding 10 0 10 0
-                SizeMode Auto
-               }
-               Text "0"
-               "Font Size" 18
-               "Min Font Size" 18
-               "Horizontal Alignment" Center
-               "Vertical Alignment" Center
-               FontProperties FontProperties "{5D1329762D9C23A5}" {
-                Font "{DBE887B44077C90E}UI/Fonts/Greek_Final.fnt"
-                Bold 1
-                ShadowSize 32
-               }
-              }
               TextWidgetClass "{5D10C018F39AE94C}" : "{E64DA8292CD7DBDD}UI/layouts/WidgetLibrary/TextWidgets/Text_InteractiveSmall.layout" {
                Name "Text"
-               Slot LayoutSlot {
-                Padding 20 10 20 10
+               Slot LayoutSlot "{5EF48AD9F1781A45}" {
                 SizeMode Fill
+                FillWeight 1
                }
-               Clipping True
-               Text "Textawuhwaguawghuawhguawhgouqw3hogahoipgahigeagiah jgiawawfafawfawfaweh giahgiaeignpaenginpigaawfwafwaf wawfwafwa fwa waf faw fwa fwa fwa fwa fwawa  afwa afaw fwafwa fwa wa waf f e"
+               Clipping False
+               Text "Textawuh waguawghuawhguawhgouqw 3hogahoipgahigeag iah jgiawawfafawfawfaweh giahgiaeignpaenginpigaawfwafwaf wawfwafwa fwa waf faw fwa fwa fwa fwa fwawa  afwa afaw fwafwa fwa wa waf f e"
                "Font Size" 16
                "Min Font Size" 16
                "Horizontal Alignment" Center
@@ -141,17 +130,26 @@ ButtonWidgetClass {
               }
              }
             }
+            TextWidgetClass "{5D1303B9CB9C181B}" {
+             Name "TextNumber"
+             Slot OverlayWidgetSlot {
+              HorizontalAlign 0
+              Padding 10 0 0 0
+             }
+             Text "[ΤΑΒ]"
+             "Font Size" 18
+             "Min Font Size" 18
+             "Vertical Alignment" Center
+             FontProperties FontProperties "{5D1329762D9C23A5}" {
+              Font "{DBE887B44077C90E}UI/Fonts/Greek_Final.fnt"
+              Bold 1
+              ShadowSize 32
+             }
+            }
            }
           }
          }
         }
-       }
-      }
-      FrameWidgetClass "{5EF347EC6E9055CC}" {
-       Name "Frame2"
-       Slot OverlayWidgetSlot "{5EF347EC6E905539}" {
-        HorizontalAlign 3
-        VerticalAlign 3
        }
       }
      }

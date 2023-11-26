@@ -39,6 +39,20 @@ class DS_DialogueBranch
 		Conf.GetStageOfBranch(Bstage);
 		return m_BranchStages[Bstage].CanBePerformed(Character, Player);
 	}
+	void GetCantBePerformedReason(IEntity Character, IEntity Player, out string Reason)
+	{
+		DialogueBranchInfo Conf = LocateConfig(Character);
+		int Bstage;
+		Conf.GetStageOfBranch(Bstage);
+		m_BranchStages[Bstage].GetCannotPerformReason(Reason);
+	}
+	void GetCantBePerformedDialogue(IEntity Character, IEntity Player, out string Reason)
+	{
+		DialogueBranchInfo Conf = LocateConfig(Character);
+		int Bstage;
+		Conf.GetStageOfBranch(Bstage);
+		m_BranchStages[Bstage].GetCannotPerformReason(Reason);
+	}
 	//------------------------------------------------------------------//
 	bool CanBeShown(IEntity Character, IEntity Player)
 	{

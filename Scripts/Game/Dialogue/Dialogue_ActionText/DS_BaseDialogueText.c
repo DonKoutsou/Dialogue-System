@@ -1,4 +1,4 @@
-[BaseContainerProps(configRoot:true), DialogueActionTextTitleAttribute()]
+[BaseContainerProps(configRoot:true)]
 class DS_BaseDialogueText
 {
 	DS_DialogueStage OwnerStage;
@@ -11,8 +11,9 @@ class DS_BaseDialogueText
 			OwnerStage = Owner;
 		m_iIndex = Index;
 	};
+	
 }
-[BaseContainerProps(configRoot:true), DialogueActionTextTitleAttribute()]
+[BaseContainerProps(configRoot:true)]
 class DS_AttributeText : DS_BaseDialogueText
 {
 	[Attribute()]
