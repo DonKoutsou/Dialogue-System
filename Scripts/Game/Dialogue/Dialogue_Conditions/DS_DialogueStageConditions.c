@@ -139,6 +139,25 @@ class DS_DialogueStageHealthCondition : DS_BaseDialogueStageActionCondition
 	}
 };
 [BaseContainerProps(configRoot:true)]
+class DS_DialogueStageInBaseRangeCondition : DS_BaseDialogueStageActionCondition
+{
+	override bool CanBePerformed(IEntity Character, IEntity Player)
+	{
+		SCR_GameModeCampaign gamemod = SCR_GameModeCampaign.Cast(GetGame().GetGameMode());
+		SCR_CampaignMilitaryBaseManager Baseman = gamemod.GetBaseManager();
+		vector pos = Character.GetOrigin();
+		SCR_CampaignMilitaryBaseComponent base = Baseman.FindClosestBase(pos);
+		if (base)
+		{
+			if (vector.Distance(pos, base.GetOwner().GetOrigin()) < base.GetRadius())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+};
+[BaseContainerProps(configRoot:true)]
 class DS_DialogueStageItemCheckActionCondition : DS_BaseDialogueStageActionCondition
 {
 	[Attribute("Item needed to be delivered", UIWidgets.ResourcePickerThumbnail, params: "et", desc: "")]
