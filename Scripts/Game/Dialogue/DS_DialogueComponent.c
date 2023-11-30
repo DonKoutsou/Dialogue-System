@@ -305,7 +305,11 @@ class DS_DialogueComponent: ScriptComponent
 	{
 		SCR_CharacterIdentityComponent id = SCR_CharacterIdentityComponent.Cast(pOwnerEntity.FindComponent(SCR_CharacterIdentityComponent));
 		if (id.HasArchetype())
+		{
+			id.GetArchetype().Init();
 			return id.GetArchetype();
+		}
+			
 		
 		string senderName = pOwnerEntity.GetName();
 		
