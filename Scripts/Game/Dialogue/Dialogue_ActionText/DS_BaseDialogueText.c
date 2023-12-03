@@ -65,6 +65,55 @@ class DS_NamedAttributeText : DS_BaseDialogueText
 		return string.Format(m_sActionTextOverride, name);;
 	};
 }
+[BaseContainerProps(configRoot:true)]
+class DS_3RDNamedAttributeText : DS_BaseDialogueText
+{
+	[Attribute("0",UIWidgets.ComboBox, enums : ParamEnumArray.FromEnum(SP_BaseEn))]
+	SP_BaseEn m_TaskBaseNameFrom;
+	
+	[Attribute("20",UIWidgets.ComboBox, enums : ParamEnumArray.FromEnum(SCR_ECharacterRank) ,params:  "20 23 1")]
+	SCR_ECharacterRank m_CharPost;
+	
+	[Attribute(desc: "Inclue the %1 sign on the place where character name will be placed")]
+	string m_sActionTextOverride;
+	
+	[Attribute(defvalue:"0")]
+	bool m_bAddRankName;
+	
+	[Attribute(defvalue:"1")]
+	bool m_bAddFirstName;
+	
+	[Attribute(defvalue:"1")]
+	bool m_bAddLastName;
+	
+	
+	override string GetText(IEntity Character, IEntity Player)
+	{
+		SCR_CampaignMilitaryBaseManager baseman = SCR_GameModeCampaign.Cast(GetGame().GetGameMode()).GetBaseManager();
+		SCR_CampaignMilitaryBaseComponent base = baseman.GetNamedBase(SP_BaseNames.Get(m_TaskBaseNameFrom));
+		IEntity char;
+		base.GetCharacterOfPost(m_CharPost, char);
+		
+		string name;
+		
+		if (m_bAddRankName)
+		{
+			string rankname = DS_DialogueComponent.GetCharacterRankName(char);
+			name = rankname + " ";
+		}
+		if (m_bAddFirstName)
+		{
+			string firstkname = DS_DialogueComponent.GetCharacterName(char);
+			name = name + firstkname + " ";
+		}
+		if (m_bAddLastName)
+		{
+			string lastkname = DS_DialogueComponent.GetCharacterSurname(char);
+			name = name + lastkname;
+		}
+		return string.Format(m_sActionTextOverride, name);;
+	};
+}
 class DialogueActionTextTitleAttribute : BaseContainerCustomTitle
 {
 	override bool _WB_GetCustomTitle(BaseContainer source, out string title)

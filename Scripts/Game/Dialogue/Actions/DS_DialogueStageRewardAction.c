@@ -42,8 +42,10 @@ class DS_DialogueStageTakeItemAction : DS_BaseDialogueStageAction
 		array<IEntity> entitiesToDrop = new array<IEntity>;
 		inv.FindItems(entitiesToDrop, pred);
 		InventoryStorageManagerComponent Cinv = InventoryStorageManagerComponent.Cast(Character.FindComponent(InventoryStorageManagerComponent));
-		for (int i; i < entitiesToDrop.Count();i++)
+		for (int i; i < m_WantedAmount;i++)
 		{
+			BaseInventoryStorageComponent pItemComp = BaseInventoryStorageComponent.Cast( entitiesToDrop[i].GetParent().FindComponent( BaseInventoryStorageComponent ) );
+			inv.TryRemoveItemFromStorage(entitiesToDrop[i], pItemComp);
 			Cinv.TryInsertItem(entitiesToDrop[i]);
 		}
 		
