@@ -16,7 +16,8 @@ modded enum SCR_ECharacterRank
 {
 	MEDIC,
 	NAVIGATOR,
-	COMMANDER
+	COMMANDER,
+	MECHANIC,
 }
 class DS_DialogueComponentClass: ScriptComponentClass
 {
@@ -99,7 +100,20 @@ class DS_DialogueComponent: ScriptComponent
 		if (!Branch.CanBePerformed(Character, Player))
 		{
 			DiagUI.UpdateEntries(Character, Player);
-			Branch.GetCantBePerformedReason(Character, Player, m_DialogTexttoshow);
+			Branch.GetCantBePerformedDialogue(Character, Player, m_DialogTexttoshow);
+			PlayDialogueSound();
+			array<BaseInfoDisplay> infoDisplays = {};
+			GetGame().GetPlayerController().GetHUDManagerComponent().GetInfoDisplays(infoDisplays);
+			foreach (BaseInfoDisplay baseInfoDisplays : infoDisplays)
+			{
+				SCR_DialogueWidget DialogueDisplay = SCR_DialogueWidget.Cast(baseInfoDisplays);
+				if (!DialogueDisplay)
+					continue;
+	
+				DialogueDisplay.SetTarget(Character);
+				DialogueDisplay.SetText(m_DialogTexttoshow);
+				DialogueDisplay.ShowInspectCasualtyWidget(Character);
+			}
 			return m_DialogTexttoshow;
 		}
 		//------------------------------------------------------------------//
@@ -149,8 +163,8 @@ class DS_DialogueComponent: ScriptComponent
 		
 		DialogueBranchInfo Conf = Branch.LocateConfig(Character);
 		Branch.GetActionText(Character, Player, actiontext);
-		Branch.OnPerform(Character, Player);
 		Branch.GetDialogueText(Character, Player, m_DialogTexttoshow);
+		Branch.OnPerform(Character, Player);
 		//--------------------------------------//
 		//SendText(m_DialogTexttoshow, Channel, senderID, senderName, GetCharacterRankName(Character));
 		AddLinesToHistory(m_DialogTexttoshow, actiontext);
@@ -272,6 +286,7 @@ class DS_DialogueComponent: ScriptComponent
 	void PlayDialogueSound()
 	{
 		SCR_UISoundEntity.SoundEvent(SCR_SoundEvent.SOUND_RADIO_CHANGEFREQUENCY_ERROR);
+		
 	}
 	
 	//----------------------------------------------------------------------------------------------------------------//
@@ -654,4 +669,8 @@ class DS_DialogueComponent: ScriptComponent
 modded enum ChimeraMenuPreset
 {
 	DialogueMenu,
+}
+modded enum ECommunicationType
+{
+	GREET,
 }

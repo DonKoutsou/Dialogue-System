@@ -235,6 +235,47 @@ class DS_DialogueStageItemTypeCheckActionCondition : DS_BaseDialogueStageActionC
 		return true;
 	}
 }
+[BaseContainerProps(configRoot:true)]
+class DS_DialogueStageVehicleTypeCheckWithinBaseActionCondition : DS_BaseDialogueStageActionCondition
+{
+	[Attribute("0", UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(EVehicleType))]
+	EVehicleType m_VehicleType;
+	[Attribute("1", UIWidgets.EditBox, params: "1 1000", desc: "")]
+	int m_WantedAmount;
+	[Attribute()]
+	int m_iRange;
+	ref array <Vehicle> vehs = {};
+	ref array <Vehicle> correctveh = {};
+	override bool CanBePerformed(IEntity Character, IEntity Player)
+	{
+		GetGame().GetWorld().QueryEntitiesBySphere(Character.GetOrigin(), m_iRange, QueryEntitiesForVeh);
+		if (vehs.IsEmpty())
+			return false;
+		for (int i; i < vehs.Count();i ++)
+		{
+			if (vehs[i].m_eVehicleType == m_VehicleType)
+			{
+				correctveh.Insert(vehs[i]);
+			}
+		}
+		if (correctveh.Count() < m_WantedAmount)
+			return false;
+		return true;
+	}
+	private bool QueryEntitiesForVeh(IEntity e)
+	{
+		Vehicle veh = Vehicle.Cast(e);
+		if (!veh)
+			return true;
+		
+		ScriptedDamageManagerComponent dmg = ScriptedDamageManagerComponent.Cast(e.FindComponent(ScriptedDamageManagerComponent));
+		if (dmg.GetState() == EDamageState.DESTROYED)
+			return true;
+
+		vehs.Insert(veh);
+		return true;
+	}
+}
 //---------------------------------------------------------------------------------------------------//
 class DialogueStageActionConditionTitleAttribute : BaseContainerCustomTitleField
 {
@@ -287,4 +328,9 @@ class DS_DialogueStageResupplyKitActionCondition : DS_BaseDialogueStageActionCon
 		
 		return true;
 	}
+}
+enum SP_EDialogueConditionSet
+{
+	ANY,
+	ALL
 }

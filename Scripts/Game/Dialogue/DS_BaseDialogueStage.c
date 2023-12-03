@@ -29,6 +29,11 @@ class DS_DialogueStage
 	[Attribute(desc: "Dialogue Branch, if present will cause branch to split instead of progressing its stage. When a branch splits, the dialogue system will only look in the entries of this branch only")]
 	ref array<ref DS_DialogueBranch> m_Branch;
 	
+	[Attribute(defvalue: "Voice_HM")]
+	string m_sSoundEventName;
+	
+	[Attribute("1", UIWidgets.ComboBox, enums: ParamEnumArray.FromEnum(SP_EDialogueConditionSet))]
+	SP_EDialogueConditionSet m_ConditionSet
 	//------------------------------------------------------------------//
 	DS_DialogueBranch m_Owner;
 	int m_iIndex;
@@ -46,12 +51,15 @@ class DS_DialogueStage
 				action.Perform(Character, Player);
 			}
 		}
+		CharacterSoundComponent soundc = CharacterSoundComponent.Cast(Character.FindComponent(CharacterSoundComponent));
+		soundc.SoundEvent(m_sSoundEventName);
 	};
 	
 	//------------------------------------------------------------------//
 	
 	bool CanBePerformed(IEntity Character, IEntity Player)
 	{
+		int successfull;
 		if (a_DialogueActionConditions)
 		{
 			foreach (DS_BaseDialogueStageActionCondition Condition : a_DialogueActionConditions)
@@ -59,15 +67,21 @@ class DS_DialogueStage
 				if (!Condition.CanBePerformed(Character, Player))
 				{
 					Condition.GetCannotPerformReason(m_sCantBePerformedReason);
-					Condition.GetCannotPerformDialogue(m_sCantBePerformedDialogue);
-					return false;
+					Condition.GetCannotPerformDialogue(m_sCantBePerformedDialogue)
 				}
-					
+				else
+					successfull++;
 			}
-			return true;
-		} 
-		else 
-			return true;
+		}
+		if (m_ConditionSet == SP_EDialogueConditionSet.ALL && successfull < a_DialogueActionConditions.Count())
+		{
+			return false;
+		}
+		if (m_ConditionSet == SP_EDialogueConditionSet.ANY && successfull == 0)
+		{
+			return false;
+		}
+		return true;
 	}
 	//------------------------------------------------------------------//
 	

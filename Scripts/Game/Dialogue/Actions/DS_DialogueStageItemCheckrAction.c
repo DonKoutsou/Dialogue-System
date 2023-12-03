@@ -5,4 +5,5 @@ class DS_DialogueStageItemCheckAction : DS_BaseDialogueStageAction
 	ResourceName m_WantedItem;
 	[Attribute("1", UIWidgets.EditBox, params: "1 1000", desc: "")]
 	int m_WantedAmount;
+
 };

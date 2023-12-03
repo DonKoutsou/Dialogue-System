@@ -36,6 +36,11 @@ class SCR_AISaluteEachother: AITaskScripted
 		
 		Controller.TryStartCharacterGesture(15, 2000);
 		DController.TryStartCharacterGesture(15, 2000);
+
+		FactionAffiliationComponent aff = FactionAffiliationComponent.Cast(Chimera.FindComponent(FactionAffiliationComponent));
+		string eventname = SCR_Faction.Cast(aff.GetAffiliatedFaction()).GetGreetName();
+		CharacterSoundComponent soundc = CharacterSoundComponent.Cast(Chimera.FindComponent(CharacterSoundComponent));
+		soundc.SoundEvent(eventname);
 		
 		return ENodeResult.SUCCESS;
   };

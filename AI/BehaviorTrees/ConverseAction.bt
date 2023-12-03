@@ -145,7 +145,7 @@ BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
               }
               SCR_AISaluteEachother "SCR_AI Salute Eachother" {
                Name "SCR_AI Salute Eachother"
-               EditorPos 1461.904 1077.5
+               EditorPos 1648.571 1079.167
                InPorts {
                 SingleInputPortContainer SingleInputPortContainer {
                  Port 4
@@ -155,7 +155,7 @@ BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
               }
               AITaskIdle Idle {
                Name "Idle"
-               EditorPos 1702.492 1069.263
+               EditorPos 1887.492 1070.93
                Period 500
               }
              }
@@ -167,6 +167,28 @@ BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
        }
       }
      }
+    }
+   }
+  }
+  SCR_AITalk "SCR_AI Talk" {
+   Name "SCR_AI Talk"
+   EditorPos 826.667 1331.667
+   InPorts {
+    SingleInputPortContainer SingleInputPortContainer {
+     Port -1
+     PortName "SpeakerIn"
+    }
+    SingleInputPortContainer SingleInputPortContainer {
+     Port -1
+     PortName "TargetIn"
+    }
+    SingleInputPortContainer SingleInputPortContainer {
+     Port -1
+     PortName "LocationIn"
+    }
+    SingleInputPortContainer SingleInputPortContainer {
+     Port -1
+     PortName "EnumIn"
     }
    }
   }
