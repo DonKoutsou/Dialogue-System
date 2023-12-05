@@ -61,7 +61,7 @@ class DialogueUIClass: ChimeraMenuBase
 		m_CharIDComp = SCR_CharacterIdentityComponent.Cast(myCallerEntity.FindComponent(SCR_CharacterIdentityComponent));
 	}
 	//------------------------------------------------------------------------------------------------//
-	void UpdateEntries(IEntity Character, IEntity Player)
+	void UpdateEntries(IEntity Character, IEntity Player, bool AllowLeave = 1)
 	{
 		Init(Character, Player);
 		string DiagText;
@@ -108,6 +108,8 @@ class DialogueUIClass: ChimeraMenuBase
 				entryamount = entryamount + 1;
 			}
 		}
+		if (!AllowLeave)
+			return;
 		//Check if Archtype is branched an choose to create a Leave button or a Go Back button
 		DS_DialogueArchetype DArch = DiagComp.LocateDialogueArchetype(myCallerEntity, Player);
 		if (DArch.IsCharacterBranched == true)

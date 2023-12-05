@@ -282,3 +282,4 @@ class SCR_AISetFollowFalse : SCR_AIActionTask
 	}		
 
 };
+

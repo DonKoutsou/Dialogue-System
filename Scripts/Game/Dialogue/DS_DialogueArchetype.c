@@ -24,6 +24,7 @@ class DS_DialogueArchetype: ScriptAndConfig
 	//------------------------------------------------------------------//
 	[Attribute("DialogueBranch")]
 	private ref array<ref DS_DialogueBranch> DialogueBranch;
+
 	//------------------------------------------------------------------//
 	//Map to be filled with all the configurations on Init
 	protected ref map<int, ref DS_DialogueBranch> DialogueBranchMap;

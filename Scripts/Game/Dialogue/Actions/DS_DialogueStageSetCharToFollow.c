@@ -43,38 +43,15 @@ class DS_DialogueStageStopFollowingAction : DS_BaseDialogueStageAction
 	};
 };
 [BaseContainerProps(configRoot:true), DialogueStageActionTitleAttribute()]
-class DS_DialogueStageAssignBaseWPAction : DS_BaseDialogueStageAction
+class DS_DialogueStageEscapeDialogueAction : DS_BaseDialogueStageAction
 {
-	[Attribute(defvalue: "{93291E72AC23930F}Prefabs/AI/Waypoints/AIWaypoint_Defend.et", UIWidgets.ResourceNamePicker, desc: "Default waypoint prefab", "et", category: "Defender Spawner")]
-	ResourceName m_sDefaultWaypointPrefab;
 	
 	override void Perform(IEntity Character, IEntity Player)
 	{
-		vector spawnpos;
-		Resource wpRes;
-		SCR_AIWaypoint wp;
-		EntitySpawnParams params = new EntitySpawnParams();
-		params.TransformMode = ETransformMode.WORLD;
-		SCR_GameModeCampaign gamemod = SCR_GameModeCampaign.Cast(GetGame().GetGameMode());
-		SCR_CampaignMilitaryBaseManager Baseman = gamemod.GetBaseManager();
-		vector pos = Character.GetOrigin();
-		SCR_CampaignMilitaryBaseComponent base = Baseman.FindClosestBase(pos);
-		if (!base)
-			return;
-		base.GetOwner().GetTransform(params.Transform);
-		
-		wpRes = Resource.Load(m_sDefaultWaypointPrefab);
-		if (!wpRes.IsValid())
-			return;
-		wp = SCR_AIWaypoint.Cast(GetGame().SpawnEntityPrefabLocal(wpRes, null, params));
-		if (!wp)
-			return;
-		ChimeraCharacter char = ChimeraCharacter.Cast(Character);
-		
-		SCR_AIGroup group = SCR_AIGroup.Cast(char.GetCharacterController().GetAIControlComponent().GetAIAgent().GetParentGroup());
-		
-		group.AddWaypoint(wp);
+		DS_DialogueComponent.GetInstance().Escape(Character, Player);
 	};
 };
+
+
 
 
