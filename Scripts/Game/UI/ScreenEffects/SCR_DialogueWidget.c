@@ -1,5 +1,8 @@
 class SCR_DialogueWidget : SCR_InfoDisplayExtended
 {
+	[Attribute("10")]
+	int m_iMaxDistance;
+	
 	const ResourceName INSPECT_CASUALTY_LAYOUT = "{8998563B2B97D6A8}UI/layouts/Damage/DialogueMenuBubble.layout";
 	
 	protected SCR_CharacterDamageManagerComponent m_CharDamageManager;
@@ -120,7 +123,7 @@ class SCR_DialogueWidget : SCR_InfoDisplayExtended
 		FrameSlot.SetPos(m_wIDInspectWidget.GetChildren(), pos[0], pos[1]);
 				
 		float dist = vector.Distance(GetGame().GetPlayerController().GetControlledEntity().GetOrigin(), WPPos);
-		if (dist >= 4)
+		if (dist >= m_iMaxDistance)
 		{
 			DisableWidget();
 			return;
@@ -129,10 +132,10 @@ class SCR_DialogueWidget : SCR_InfoDisplayExtended
 		float opacity = 1;
 		float distanceOpacityReduction = 1;
 		
-		if (dist <= 3)
+		if (dist <= m_iMaxDistance * 0.75)
 			distanceOpacityReduction = 0;
 		else
-			distanceOpacityReduction = Math.InverseLerp(3, 4, dist);
+			distanceOpacityReduction = Math.InverseLerp(m_iMaxDistance * 0.75, m_iMaxDistance, dist);
 				
 		m_wIDInspectWidget.SetOpacity(opacity - distanceOpacityReduction);
 	}
