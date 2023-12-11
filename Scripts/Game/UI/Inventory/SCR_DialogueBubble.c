@@ -14,7 +14,7 @@ class SCR_DialogueBubble : ScriptedWidgetComponent
 	string 											rankText;
 	FactionKey 										faction;
 	SCR_CharacterIdentityComponent	m_CharIDComp;
-	ResourceName RANK_ICON_IMAGESET = "{5D7F0C1AB551F610}UI/Textures/MilitaryIcons/MilitaryIcons.imageset";
+
 	
 	protected Widget								m_wInfoWidget;
 	protected TextWidget							m_wTextName;

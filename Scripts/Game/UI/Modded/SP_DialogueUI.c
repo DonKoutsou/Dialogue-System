@@ -26,7 +26,7 @@ class DialogueUIClass: ChimeraMenuBase
 	SCR_CharacterIdentityComponent	m_CharIDComp;
 	protected BaseGameMode 					GameMode = BaseGameMode.Cast(GetGame().GetGameMode());
 	int 														CurrentBranchID;
-	ResourceName RANK_ICON_IMAGESET = "{5D7F0C1AB551F610}UI/Textures/MilitaryIcons/MilitaryIcons.imageset";
+
     //------------------------------------------------------------------------------------------------//
 	override void OnMenuUpdate(float tDelta)
 	{
