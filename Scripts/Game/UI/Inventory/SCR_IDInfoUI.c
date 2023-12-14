@@ -73,7 +73,7 @@ class SCR_IDInfoUI : ScriptedWidgetComponent
 		
 		m_TextCharacterRank.SetText( rankText );
 		m_TextCharacterRank.SetVisible( true );
-		int CharRep = m_CharIDComp.GetRep();
+		/*int CharRep = m_CharIDComp.GetRep();
 		
 		if(CharRep > 80)
 		{
@@ -100,7 +100,7 @@ class SCR_IDInfoUI : ScriptedWidgetComponent
 			m_CharacterRep.SetColor( Color.DarkRed );
 			m_CharacterRep.SetText( "Horrible" );
 		}
-		m_CharacterRep.SetVisible( true );		
+		m_CharacterRep.SetVisible( true );	*/
 		m_CharacterName.SetText( CharName );
 		m_CharacterName.SetVisible( true );
 	}

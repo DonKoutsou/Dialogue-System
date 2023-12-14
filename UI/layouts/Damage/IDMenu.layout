@@ -65,12 +65,12 @@ FrameWidgetClass {
           Anchor 0 0 0 0
           PositionX 0
           OffsetLeft 0
-          PositionY -130
-          OffsetTop -130
+          OffsetTop 0
           SizeX 0
           OffsetRight 0
           SizeY 0
-          OffsetBottom 130
+          OffsetBottom 0
+          Alignment 0 1
           SizeToContent 1
          }
          {
@@ -117,6 +117,8 @@ FrameWidgetClass {
               SizeY 60
               OffsetBottom -66
              }
+             "Is Enabled" 0
+             "Is Visible" 0
              {
               ImageWidgetClass "{5E59018C671E2E5B}" {
                Name "RankIcon"
@@ -149,6 +151,7 @@ FrameWidgetClass {
               SizeY 30
               OffsetBottom -126
              }
+             "Is Visible" 0
              {
               TextWidgetClass "{5E59018C671E2E5E}" {
                Name "CharReputationText"
@@ -227,6 +230,8 @@ FrameWidgetClass {
               SizeY 60
               OffsetBottom -130
              }
+             "Is Enabled" 0
+             "Is Visible" 0
              {
               ImageWidgetClass "{5E59018C671E2FA4}" {
                Name "FactionIcon"
@@ -246,37 +251,45 @@ FrameWidgetClass {
               }
              }
             }
-            TextWidgetClass "{5E59018C671E2FAA}" {
-             Name "CharacterName"
-             Slot FrameWidgetSlot "{5D10CA1D63DBBA3C}" {
-              PositionX 8
-              OffsetLeft 8
-              PositionY 8
-              OffsetTop 8
-              SizeX -649.801
-              OffsetRight 641.801
-              SizeY -33.8
-              OffsetBottom 25.8
+            FrameWidgetClass "{5F1D0BF763D5C479}" {
+             Name "Frame3"
+             Slot FrameWidgetSlot "{5F1D0BF763D5C44E}" {
               SizeToContent 1
              }
-             Text "Ch"
-             Wrap 1
-             FontProperties FontProperties "{5D132977C36A3649}" {
-              Font "{DBE887B44077C90E}UI/Fonts/Greek_Final.fnt"
-              Bold 1
+             {
+              OverlayWidgetClass "{5F1D0BF7056918CD}" {
+               Name "Overlay0"
+               Slot FrameWidgetSlot "{5F1D0BF705691820}" {
+                SizeToContent 1
+               }
+               {
+                TextWidgetClass "{5E59018C671E2FAA}" {
+                 Name "CharacterName"
+                 Slot OverlayWidgetSlot {
+                  Padding 5 5 5 5
+                 }
+                 Text "Chawawighawighawig"
+                 Wrap 1
+                 FontProperties FontProperties "{5D132977C36A3649}" {
+                  Font "{DBE887B44077C90E}UI/Fonts/Greek_Final.fnt"
+                  Bold 1
+                 }
+                }
+               }
+              }
              }
             }
             FrameWidgetClass "{5E59018C671E2FAF}" {
              Name "Frame2"
              Slot FrameWidgetSlot "{5E0CC94FCD3019EA}" {
-              PositionX 8
-              OffsetLeft 8
-              PositionY 50
-              OffsetTop 50
+              PositionX 5
+              OffsetLeft 5
+              PositionY 30
+              OffsetTop 30
               SizeX 150
-              OffsetRight -158
+              OffsetRight -155
               SizeY 30
-              OffsetBottom -80
+              OffsetBottom -60
              }
              {
               TextWidgetClass "{5E59018C671E2FAD}" {

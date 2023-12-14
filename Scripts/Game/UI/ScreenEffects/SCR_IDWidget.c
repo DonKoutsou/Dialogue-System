@@ -91,8 +91,8 @@ class SCR_IDWidget : SCR_InfoDisplayExtended
 		SCR_IDInfoUI IDInfoUI = SCR_IDInfoUI.Cast(m_wIDInspectWidget.FindHandler(SCR_IDInfoUI));
 		if (IDInfoUI)
 		{
-			IDInfoUI.AssignFactionIcons(faction);
-			IDInfoUI.AssignRankIcons(rank);
+			//IDInfoUI.AssignFactionIcons(faction);
+			//IDInfoUI.AssignRankIcons(rank);
 			IDInfoUI.SetCharacterName(m_Target);
 			
 		}
