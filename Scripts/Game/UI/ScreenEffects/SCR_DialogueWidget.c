@@ -10,7 +10,8 @@ class SCR_DialogueWidget : SCR_InfoDisplayExtended
 
 	IEntity m_Target;
 	string m_sText;
-	protected const float UPDATE_FREQ = 0.5;
+	int m_iStringFrame;
+	protected const float UPDATE_FREQ = 0.05;
 	protected const string TARGET_BONE = "Spine4";
 	protected float m_fTimeTillUpdate;
 	protected bool m_bShouldBeVisible;
@@ -90,7 +91,9 @@ class SCR_DialogueWidget : SCR_InfoDisplayExtended
 		SCR_DialogueBubble IDInfoUI = SCR_DialogueBubble.Cast(m_wIDInspectWidget.FindHandler(SCR_DialogueBubble));
 		if (IDInfoUI)
 		{
-			IDInfoUI.SetText(m_sText);
+			if (m_iStringFrame < m_sText.Length())
+				m_iStringFrame += 1;
+			IDInfoUI.SetText(m_sText.Substring(0, m_iStringFrame));
 		}
 	}
 	
@@ -154,6 +157,7 @@ class SCR_DialogueWidget : SCR_InfoDisplayExtended
 	void SetText(string text)
 	{
 		m_sText = text;
+		m_iStringFrame = 0;
 	}
 	//------------------------------------------------------------------------------------------------			
 	bool IsActive()
