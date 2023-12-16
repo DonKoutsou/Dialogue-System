@@ -11,7 +11,7 @@ class SCR_DialogueWidget : SCR_InfoDisplayExtended
 	IEntity m_Target;
 	string m_sText;
 	int m_iStringFrame;
-	protected const float UPDATE_FREQ = 0.01;
+	protected const float UPDATE_FREQ = 0.001;
 	protected const string TARGET_BONE = "Spine4";
 	protected float m_fTimeTillUpdate;
 	protected bool m_bShouldBeVisible;
