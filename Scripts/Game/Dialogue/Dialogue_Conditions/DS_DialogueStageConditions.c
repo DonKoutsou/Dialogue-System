@@ -8,6 +8,11 @@ class DS_BaseDialogueStageActionCondition
 	[Attribute()]
 	string m_sCantBePerformedText;
 	
+	[Attribute(defvalue: "0")]
+	bool m_bUseCustomIndex;
+	[Attribute(defvalue: "0")]
+	int m_iCustomIndex;
+	
 	DS_DialogueStage OwnerStage;
 	
 	int m_iIndex;
@@ -26,7 +31,10 @@ class DS_BaseDialogueStageActionCondition
 	{
 		if (Owner)
 			OwnerStage = Owner;
-		m_iIndex = Index;
+		if (m_bUseCustomIndex)
+			m_iIndex = m_iCustomIndex;
+		else
+			m_iIndex = Index;
 		if (m_sCantBePerformedText)
 			m_sCantBePerformedReason = m_sCantBePerformedText;
 	};

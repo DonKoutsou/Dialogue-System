@@ -28,7 +28,7 @@ class DS_DialogueComponent: ScriptComponent
 	[Attribute()]
 	protected ref array<ref DS_DialogueArchetype> m_CharacterArchetypeList;
 	//----------------------------------------------------------------------------------------------------------------//
-	protected ref map<string, ref DS_DialogueArchetype> DialogueArchetypeMap;
+	protected ref map<EntityID, ref DS_DialogueArchetype> DialogueArchetypeMap;
 	//----------------------------------------------------------------------------------------------------------------//
 	[Attribute(desc : "Used when figuring out strings for locations")]
 	protected ref SCR_MapLocationQuadHint m_aWorldDirections;
@@ -45,6 +45,16 @@ class DS_DialogueComponent: ScriptComponent
 	static ref array <IEntity> a_PLcontactList;
 	//----------------------------------------------------------------------------------------------------------------//
 	static SCR_BaseGameMode GameMode;
+	
+	void DS_DialogueComponent(IEntityComponentSource src, IEntity ent, IEntity parent)
+	{
+	};
+	//Destructor
+	void ~DS_DialogueComponent()
+	{
+		if (DialogueArchetypeMap)
+			DialogueArchetypeMap.Clear();
+	};
 	
 	static DS_DialogueComponent GetInstance()
 	{
@@ -173,10 +183,25 @@ class DS_DialogueComponent: ScriptComponent
 		int Bstage;
 		
 		Conf.GetStageOfBranch(Bstage);
+		DialogueBranchInfo ParentBranch;
+		Branch.GetParent(Character, ParentBranch);
 		//If a stage exists it means that dialogue can increment
-		if (Branch.CheckNextStage(Bstage + 1) == true)
+		if (Branch.CheckNextStage(Bstage + 1))
 		{
 			IncrementDiagStage(Character, Player, BranchID, IncrementAmount);
+		}
+		else if (ParentBranch)
+		{
+			DS_DialogueBranch branch = ParentBranch.GetOwnerBranch();
+			if (branch)
+			{
+				int stage;
+				ParentBranch.GetStageOfBranch(stage);
+				if (branch.CheckNextStage(stage + 1))
+				{
+					ParentBranch.IncrementStage(1);
+				}
+			}
 		}
 		//--------------------------------------//
 		DiagUI.UpdateEntries(Character, Player);
@@ -401,13 +426,13 @@ class DS_DialogueComponent: ScriptComponent
 			return CharDialogueArch;
 		}
 		//using character full name atm to match Owner with Archetype
-		string LocCharacterName = GetCharacterName(Owner);
+		EntityID Name = Owner.GetID();
 		//Check if an Archetype with out character's name exists
-		if (DialogueArchetypeMap.Contains(LocCharacterName))
+		if (DialogueArchetypeMap.Contains(Name))
 			{
 				//--------------------------------------------------------//
 				//if yes assign it to CharDialogueArch so we can return it
-			    CharDialogueArch = DialogueArchetypeMap[LocCharacterName];
+			    CharDialogueArch = DialogueArchetypeMap[Name];
 			}
 			else
 			{
@@ -424,13 +449,20 @@ class DS_DialogueComponent: ScriptComponent
 				DiagArchNew.RegisterCurrentChars(Owner, User);
 				//-------------------------------------------------------------------------//
 				//instert it int the ArchetypeMap
-				DialogueArchetypeMap.Insert(LocCharacterName, DiagArchNew);
+				DialogueArchetypeMap.Insert(Name, DiagArchNew);
 				return DiagArchNew;
 				//-------------------------------------------------------------------------//
 			}
-	return CharDialogueArch;
+		return CharDialogueArch;
 	}
-	
+	void UnregisterArchtype(IEntity Owner)
+	{
+		EntityID Name = Owner.GetID();
+		if (DialogueArchetypeMap.Contains(Name))
+		{
+			DialogueArchetypeMap.Remove(Name);
+		}
+	}
 	//-----------------------------------------------------------------------------------------------------------//
 	//takes all info requred from Archetype and returns a newly made Archetype with the copied info
 	DS_DialogueArchetype CopyArchetype(DS_DialogueArchetype OriginalArchetype)
@@ -450,7 +482,7 @@ class DS_DialogueComponent: ScriptComponent
 		{
 			m_CharacterArchetypeList[i].Init();
 		}
-		DialogueArchetypeMap = new map<string, ref DS_DialogueArchetype>;
+		DialogueArchetypeMap = new map<EntityID, ref DS_DialogueArchetype>;
 		m_WorldDirections = m_aWorldDirections;
 		if	(!a_texthistory)
 			a_texthistory = new array <string>();

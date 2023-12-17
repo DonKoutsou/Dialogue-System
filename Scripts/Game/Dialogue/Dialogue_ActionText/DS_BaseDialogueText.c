@@ -1,6 +1,10 @@
 [BaseContainerProps(configRoot:true)]
 class DS_BaseDialogueText
 {
+	[Attribute(defvalue: "0")]
+	bool m_bUseCustomIndex;
+	[Attribute(defvalue: "0")]
+	int m_iCustomIndex;
 	DS_DialogueStage OwnerStage;
 	int m_iIndex;
 	string m_sActionText;
@@ -9,7 +13,10 @@ class DS_BaseDialogueText
 	{
 		if (Owner)
 			OwnerStage = Owner;
-		m_iIndex = Index;
+		if (m_bUseCustomIndex)
+			m_iIndex = m_iCustomIndex;
+		else
+			m_iIndex = Index;
 	};
 	
 }

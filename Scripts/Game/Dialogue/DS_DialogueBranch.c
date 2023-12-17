@@ -238,6 +238,7 @@ class DS_DialogueBranch
 		DialogueBranchInfo Conf = LocateConfig(Char);
 		Conf.SetParent(ParentConfig);
 		Conf.SetOwnerArchetype(Archetype);
+		Conf.SetOwnerBranch (this);
 	}
 	void Init(DS_DialogueStage Owner = null, int index = 0)
 	{
@@ -260,6 +261,8 @@ class DialogueBranchInfo
 	//------------------------------------------------------------------//
 	//Archetype wich this cofig belongs to
 	DS_DialogueArchetype m_OwnerArchetype;
+	
+	DS_DialogueBranch m_OwnerBranch;
 	//------------------------------------------------------------------//
 	//DS_MultipleChoiceConfig that come before this one in a hierarchy. Used for DoBackDialogue in DS_DialogueComponent
 	DialogueBranchInfo ParentConfig;
@@ -282,7 +285,9 @@ class DialogueBranchInfo
 	//------------------------------------------------------------------//
 	//setter and getter of parent archetype, top of the hierarchy
 	void SetOwnerArchetype(DS_DialogueArchetype Archetype){m_OwnerArchetype = Archetype;}
+	void SetOwnerBranch(DS_DialogueBranch Branch){m_OwnerBranch = Branch;}
 	DS_DialogueArchetype GetOwnerArchetype () {return m_OwnerArchetype;}
+	DS_DialogueBranch GetOwnerBranch () {return m_OwnerBranch;}
 	//------------------------------------------------------------------//
 	void GetStageOfBranch(out int BStage){BStage = m_iDialogueBranchStage;}
 	//------------------------------------------------------------------//

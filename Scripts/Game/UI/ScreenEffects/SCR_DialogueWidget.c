@@ -87,12 +87,14 @@ class SCR_DialogueWidget : SCR_InfoDisplayExtended
 	{
 		if (!m_Target || !m_wIDInspectWidget)
 			return;
-
+		
+		if (m_iStringFrame >= m_sText.Length())
+			return;
 		SCR_DialogueBubble IDInfoUI = SCR_DialogueBubble.Cast(m_wIDInspectWidget.FindHandler(SCR_DialogueBubble));
 		if (IDInfoUI)
 		{
-			if (m_iStringFrame < m_sText.Length())
-				m_iStringFrame += 1;
+			m_iStringFrame += 1;
+			
 			IDInfoUI.SetText(m_sText.Substring(0, m_iStringFrame));
 		}
 	}
@@ -156,7 +158,7 @@ class SCR_DialogueWidget : SCR_InfoDisplayExtended
 	}
 	void SetText(string text)
 	{
-		m_sText = text;
+		m_sText = SCR_StringHelper.Translate(text);
 		m_iStringFrame = 0;
 	}
 	//------------------------------------------------------------------------------------------------			
