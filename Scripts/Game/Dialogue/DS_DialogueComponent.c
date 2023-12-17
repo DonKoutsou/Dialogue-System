@@ -46,7 +46,7 @@ class DS_DialogueComponent: ScriptComponent
 	//----------------------------------------------------------------------------------------------------------------//
 	static SCR_BaseGameMode GameMode;
 	
-	void DS_DialogueComponent(IEntityComponentSource src, IEntity ent, IEntity parent)
+	/*void DS_DialogueComponent(IEntityComponentSource src, IEntity ent, IEntity parent)
 	{
 	};
 	//Destructor
@@ -54,7 +54,7 @@ class DS_DialogueComponent: ScriptComponent
 	{
 		if (DialogueArchetypeMap)
 			DialogueArchetypeMap.Clear();
-	};
+	};*/
 	
 	static DS_DialogueComponent GetInstance()
 	{
@@ -99,7 +99,7 @@ class DS_DialogueComponent: ScriptComponent
 		DS_DialogueArchetype 	DiagArch = LocateDialogueArchetype(Character, Player);
 		//Get branch located in found archetype using ID
 		DS_DialogueBranch 		Branch;
-		DiagArch.GetDialogueBranch(BranchID, Branch);
+		DiagArch.GetDialogueBranch(BranchID, Branch, Character);
 		//------------------------------------------------------------------//
 		//For UI
 		MenuBase 				myMenu = GetGame().GetMenuManager().OpenMenu(ChimeraMenuPreset.DialogueMenu);
@@ -230,7 +230,7 @@ class DS_DialogueComponent: ScriptComponent
 		int BranchID;
 		DiagArch.GetBranchedID(BranchID);
 		DS_DialogueBranch Branch;
-		DiagArch.GetDialogueBranch(0, Branch);
+		DiagArch.GetDialogueBranch(0, Branch, Character);
 		DialogueBranchInfo ParentBranch;
 		Branch.GetParent(Character, ParentBranch);
 		if (!Branch)
@@ -326,7 +326,7 @@ class DS_DialogueComponent: ScriptComponent
 	{
 		DS_DialogueArchetype DiagArch = LocateDialogueArchetype(Character, Player);
 		DS_DialogueBranch branch;
-		DiagArch.GetDialogueBranch(BranchID, branch);
+		DiagArch.GetDialogueBranch(BranchID, branch, Character);
 		
 		CanBePerformed = branch.CanBePerformed(Character, Player);
 	}
@@ -419,9 +419,9 @@ class DS_DialogueComponent: ScriptComponent
 	// locate if there is already an Archetype instace for this specific charater and if not initiates the creation of one
 	DS_DialogueArchetype LocateDialogueArchetype(IEntity Owner, IEntity User)
 	{
-		DS_DialogueArchetype CharDialogueArch;
+		DS_DialogueArchetype CharDialogueArch = GetArchetypeTemplate(Owner, User);
 		
-		if (!GetArchetypeTemplate(Owner, User))
+		if (!CharDialogueArch)
 		{
 			return CharDialogueArch;
 		}
@@ -432,21 +432,17 @@ class DS_DialogueComponent: ScriptComponent
 			{
 				//--------------------------------------------------------//
 				//if yes assign it to CharDialogueArch so we can return it
-			    CharDialogueArch = DialogueArchetypeMap[Name];
+			    DialogueArchetypeMap[Name] = CharDialogueArch;
 			}
 			else
 			{
-				//-------------------------------------------------------------------------//
-				//if not find an ArchetypeTemplate, make a copy of it and instet it in DialogueArchetypeMap
-				//find character template using our character entity
-				CharDialogueArch = GetArchetypeTemplate(Owner, User);
 				
 				//-------------------------------------------------------------------------//
 				//create a new archetype and copy the stuff in it
 				DS_DialogueArchetype DiagArchNew = CopyArchetype(CharDialogueArch);
 				//-------------------------------------------------------------------------//
 				//initialise the newly made Archetype after its filled with all data
-				DiagArchNew.RegisterCurrentChars(Owner, User);
+				//DiagArchNew.RegisterCurrentChars(Owner, User);
 				//-------------------------------------------------------------------------//
 				//instert it int the ArchetypeMap
 				DialogueArchetypeMap.Insert(Name, DiagArchNew);
@@ -455,12 +451,13 @@ class DS_DialogueComponent: ScriptComponent
 			}
 		return CharDialogueArch;
 	}
-	void UnregisterArchtype(IEntity Owner)
+	void UnregisterArchtype(IEntity Owner, DS_DialogueArchetype newArch)
 	{
 		EntityID Name = Owner.GetID();
 		if (DialogueArchetypeMap.Contains(Name))
 		{
 			DialogueArchetypeMap.Remove(Name);
+			DialogueArchetypeMap.Insert(Name, newArch);
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------//

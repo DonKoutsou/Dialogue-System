@@ -15,5 +15,8 @@ class DS_BaseDialogueStageAction
 			m_iIndex = m_iCustomIndex;
 		else
 			m_iIndex = Index;
+		
+		PostInit();
 	};
+	void PostInit(){};
 }

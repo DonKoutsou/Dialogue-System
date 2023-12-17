@@ -75,7 +75,7 @@ class DS_DialogueArchetype: ScriptAndConfig
 	//------------------------------------------------------------------//
 	//Find Branch using Branch ID
 	//If character is branched we look for a branch using our BranchedID that we got once this Archetype got branched and we keep looking deeper using GetCurrentDialogueBranch
-	bool GetDialogueBranch(int BranchKey, out DS_DialogueBranch branch)
+	bool GetDialogueBranch(int BranchKey, out DS_DialogueBranch branch, IEntity Char)
     {
 		if (IsCharacterBranched == true)
 		{
@@ -83,7 +83,7 @@ class DS_DialogueArchetype: ScriptAndConfig
 			{
 	        	return false;
 	    	}
-			branch.GetCurrentDialogueBranch(TalkingCharacter, BranchKey, branch);
+			branch.GetCurrentDialogueBranch(Char, BranchKey, branch);
 			return true;
 		}
 		if (!DialogueBranchMap.Find(BranchKey, branch))
@@ -101,10 +101,10 @@ class DS_DialogueArchetype: ScriptAndConfig
 	bool GetDialogueText(int BranchID, IEntity Character, IEntity Player, out string DiagText)
 	{
 		DS_DialogueBranch branch;
-		GetDialogueBranch(BranchID, branch);
+		GetDialogueBranch(BranchID, branch, Character);
 		if (branch)
 		{
-			branch.GetDialogueText(TalkingCharacter, Player, DiagText);
+			branch.GetDialogueText(Character, Player, DiagText);
 			return true;
 		}
 		else
@@ -119,7 +119,7 @@ class DS_DialogueArchetype: ScriptAndConfig
 	bool GetActionTitle(int BranchID, IEntity Character, IEntity Player, out string ActText)
 	{
 		DS_DialogueBranch Branch;
-		GetDialogueBranch(BranchID, Branch);
+		GetDialogueBranch(BranchID, Branch, Character);
 		if (Branch)
 		{
 			Branch.GetActionText(Character, Player, ActText);
@@ -137,7 +137,7 @@ class DS_DialogueArchetype: ScriptAndConfig
 	bool IncrementStage(int BranchID, int incrementamount, IEntity Character)
 	{	
 		DS_DialogueBranch branch
-		GetDialogueBranch(BranchID, branch);
+		GetDialogueBranch(BranchID, branch, Character);
 		branch.IncrementBranchStage(incrementamount, Character);
 		return true;
 	}
