@@ -119,11 +119,11 @@ class SCR_DialogueWidget : SCR_InfoDisplayExtended
 		int posY = workspace.DPIScale(pos[1]);
 
 		// If widget off screen, remove widget
-		if (posX < 0 || posX > winX || posY > winY || posY < 0)
+		/*if (posX < 0 || posX > winX || posY > winY || posY < 0)
 		{
 			DisableWidget();
 			return;
-		}
+		}*/
 		
 		FrameSlot.SetPos(m_wIDInspectWidget.GetChildren(), pos[0], pos[1]);
 				
