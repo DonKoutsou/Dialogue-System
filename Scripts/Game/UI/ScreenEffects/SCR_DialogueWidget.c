@@ -14,6 +14,7 @@ class SCR_DialogueWidget : SCR_InfoDisplayExtended
 	protected const float UPDATE_FREQ = 0.001;
 	protected const string TARGET_BONE = "Spine4";
 	protected float m_fTimeTillUpdate;
+	protected float m_fLifetime;
 	protected bool m_bShouldBeVisible;
 
 	//------------------------------------------------------------------------------------------------	
@@ -124,6 +125,16 @@ class SCR_DialogueWidget : SCR_InfoDisplayExtended
 			DisableWidget();
 			return;
 		}*/
+		if (!m_fLifetime)
+		{
+			m_fLifetime = m_sText.Length() * 4;
+		}
+		m_fLifetime = m_fLifetime - 1;
+		if (m_fLifetime <= 0)
+		{
+			DisableWidget();
+			return;
+		}
 		
 		FrameSlot.SetPos(m_wIDInspectWidget.GetChildren(), pos[0], pos[1]);
 				
@@ -173,6 +184,7 @@ class SCR_DialogueWidget : SCR_InfoDisplayExtended
 		if (m_wIDInspectWidget)
 			m_wIDInspectWidget.SetVisible(false);
 		
+		m_fLifetime = 0;
 		m_Target = null;
 		SetEnabled(false);		
 		m_bShouldBeVisible = false;
