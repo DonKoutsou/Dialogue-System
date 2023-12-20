@@ -601,8 +601,7 @@ class DS_DialogueComponent: ScriptComponent
 		if(IdentityComponent)
 		{
 			Identity ID = IdentityComponent.GetIdentity();
-			CharacterFullName = ID.GetName();
-			CharacterFullName = CharacterFullName.Substring(17, CharacterFullName.Length() - 17);
+			CharacterFullName = SCR_StringHelper.Translate(ID.GetName());
 		}
 		return CharacterFullName;
 	}
@@ -618,8 +617,7 @@ class DS_DialogueComponent: ScriptComponent
 			Identity ID = IdentityComponent.GetIdentity();
 			if(ID)
 			{
-				CharacterFullName = ID.GetSurname();
-				CharacterFullName = CharacterFullName.Substring(15, CharacterFullName.Length() - 15)
+				CharacterFullName = SCR_StringHelper.Translate(ID.GetSurname());
 			}
 		}
 		return CharacterFullName;

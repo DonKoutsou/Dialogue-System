@@ -109,7 +109,7 @@ BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
            }
            OutPorts {
             SingleOutputPortContainer SingleOutputPortContainer {
-             Port 5
+             Port 4
              PortName "PositionOut"
             }
            }
@@ -121,7 +121,7 @@ BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
             AITaskCharacterAim "Character Aim" {
              Name "Character Aim"
              EditorPos 775.535 1001.429
-             InAimAtPosition 5
+             InAimAtPosition 4
              PrecisionXZ 0
              PrecisionY 0
              Timeout 2
@@ -143,19 +143,9 @@ BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
                OrientationType ToPoint
                InEntity 3
               }
-              SCR_AISaluteEachother "SCR_AI Salute Eachother" {
-               Name "SCR_AI Salute Eachother"
-               EditorPos 1648.571 1079.167
-               InPorts {
-                SingleInputPortContainer SingleInputPortContainer {
-                 Port 4
-                 PortName "EntityIn"
-                }
-               }
-              }
               AITaskIdle Idle {
                Name "Idle"
-               EditorPos 1887.492 1070.93
+               EditorPos 1591.778 1113.787
                Period 500
               }
              }
@@ -229,10 +219,6 @@ BehaviorTree "{D65DC09987CECE37}AI/BehaviorTrees/ConverseAction.bt" {
   VariableReference CharToTalk {
    VariableType 2
    EditorPos -95.714 918.571
-  }
-  VariableReference CharToTalk {
-   VariableType 2
-   EditorPos 1088.571 1237.5
   }
   VariableReference posToLook {
    VariableType 1
