@@ -18,6 +18,7 @@ modded enum SCR_ECharacterRank
 	NAVIGATOR,
 	COMMANDER,
 	MECHANIC,
+	FOOD_VENDOR,
 }
 class DS_DialogueComponentClass: ScriptComponentClass
 {

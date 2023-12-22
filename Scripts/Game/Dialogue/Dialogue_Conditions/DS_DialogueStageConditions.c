@@ -192,7 +192,7 @@ class DS_DialogueStageItemCheckActionCondition : DS_BaseDialogueStageActionCondi
 		if (entitiesToDrop.Count() < m_WantedAmount)
 		{
 			if (m_bCheckPlayer)
-				m_sCantBePerformedReason = string.Format("  [Missing X%1 %2] ", m_WantedAmount - entitiesToDrop.Count() , FilePath.StripPath( m_WantedItem ));
+				m_sCantBePerformedReason = string.Format("  [Missing X%1 %2] ", m_WantedAmount - entitiesToDrop.Count() , FilePath.StripPath( m_WantedItem )); 
 			else
 			{
 				string Name = DS_DialogueComponent.GetCharacterName(Character);

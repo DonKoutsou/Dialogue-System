@@ -66,8 +66,11 @@ class DS_DialogueStage
 			{
 				if (!Condition.CanBePerformed(Character, Player))
 				{
-					Condition.GetCannotPerformReason(m_sCantBePerformedReason);
-					Condition.GetCannotPerformDialogue(m_sCantBePerformedDialogue)
+					if (successfull == 0)
+					{
+						Condition.GetCannotPerformReason(m_sCantBePerformedReason);
+						Condition.GetCannotPerformDialogue(m_sCantBePerformedDialogue);
+					}
 				}
 				else
 					successfull++;
